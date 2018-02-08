@@ -3,6 +3,24 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# dq add
+cocos2d/
+proj.android/
+proj.android-studio/
+proj.ios_mac/
+proj.linux/
+proj.android/
+*.lib
+*.dll
+*.tlog
+*.lastbuildstate
+*.idb
+*.exp
+*.sln
+*.filters
+*.vcxproj
+
+
 # User-specific files
 *.suo
 *.user
