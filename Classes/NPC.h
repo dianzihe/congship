@@ -1,20 +1,22 @@
-#include "behaviac/agent/agent.h"
-#include "behaviac/agent/registermacros.h"
+//#include "behaviac_generated/types/behaviac_types.h"
+
 #pragma once
 
+#include "behaviac/behaviac.h"
 class PlaneEnemy;
-class NPC : public behaviac::Agent
+class NPC :
+    public behaviac::Agent
 {
 public:
 	BEHAVIAC_DECLARE_AGENTTYPE(NPC, behaviac::Agent);
 
     //typedef struct  refresh_delay
     //{
-    int level0_daly;
-    int level1_daly;
-    int level2_daly;
-    int level3_daly;
-    int level4_daly;
+    int level0_daly = 20;
+    int level1_daly = 15;
+    int level2_daly = 10;
+    int level3_daly = 5;
+    int level4_daly = 2;
     //    void reset()
     //    {
 
@@ -24,10 +26,10 @@ public:
     //}refresh_delay_type;
 
     //level提升所需的分数
-	int  Level1Up_Score;
-	int  Level2Up_Score;
-	int  Level3Up_Score;
-	int  Level4Up_Score;
+    int  Level1Up_Score = 0;
+    int  Level2Up_Score = 200;
+    int  Level3Up_Score = 500;
+    int  Level4Up_Score = 1000;
     NPC();
     ~NPC();
     NPC(void* parent);
@@ -43,15 +45,15 @@ public:
 
     //create method for behaviac
     void Update();
-	//const char* (*enemyBrain)(Projectile* s);
+	void m1();
 
 private:
     void* m_parent;
+
    
 public:
 
     bool m_canBossRefresh;
     int m_level;
 	behaviac::vector<int> delayTime;
-	//int delayTime;
 };

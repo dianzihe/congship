@@ -16,6 +16,20 @@ enum AnimaEventType
 	eAnimaEventType_Count,
 };
 
+typedef struct _ccVertex4F
+{
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+	GLfloat w;
+} ccVertex4F;
+
+static inline ccVertex4F vertex4(const float x, const float y, const float z, const float w)
+{
+	ccVertex4F c = { x, y, z, w };
+	return c;
+}
+
 struct AnimaEvent
 {
 	AnimaEventType _EventType;

@@ -1,11 +1,11 @@
 #include "CCResourceThread.h"
-#include "CCDirector.h"
+//#include "CCDirector.h"
 #include "platform/CCImage.h"
-#include "textures/CCTextureCache.h"
-#include "textures/CCTexturePVR.h"
-#include "platform/CCFileUtils.h"
-#include "CCScheduler.h"
-
+//#include "textures/CCTextureCache.h"
+//#include "textures/CCTexturePVR.h"
+//#include "platform/CCFileUtils.h"
+//#include "CCScheduler.h"
+//#include <cocos2d\external\
 
 NS_CC_BEGIN
 
@@ -23,27 +23,26 @@ static sem_t s_sem;
 #endif
 
 
-static CCImage::EImageFormat computeImageFormatType(std::string& filename)
+
+static CCImage::Format computeImageFormatType(std::string& filename)
 {
-	CCImage::EImageFormat ret = CCImage::kFmtUnKnown;
+	CCImage::Format ret = CCImage::Format::UNKNOWN;
 
 	if ((std::string::npos != filename.find(".jpg")) || (std::string::npos != filename.find(".jpeg")) || (std::string::npos != filename.find(".wen")))
 	{
-		ret = CCImage::kFmtJpg;
+		ret = CCImage::Format::JPG;
 	}
 	else if ((std::string::npos != filename.find(".png")) || (std::string::npos != filename.find(".PNG")) || (std::string::npos != filename.find(".ttf")))
 	{
-		ret = CCImage::kFmtPng;
+		ret = CCImage::Format::PNG;
 	}
 	else if ((std::string::npos != filename.find(".tiff")) || (std::string::npos != filename.find(".TIFF")))
 	{
-		ret = CCImage::kFmtTiff;
+		ret = CCImage::Format::TIFF;
 	}
 
 	return ret;	
 }
-
-
 CCResourceThread::CCResourceThread()
 {
 
@@ -60,23 +59,19 @@ void* CCResourceThread::threadProcedure( void* data )
 	
 	LoadingCommand* loadingCmd = NULL;
 
-	while (true)
-	{
+	while (true){
 		int ret = sem_wait(rt->m_sem);
 		if (ret < 0)
 			break;
 
 		pthread_mutex_lock(&rt->m_loadingQueueMutex);
-		if (rt->m_loadingQueue.empty())
-		{
+		if (rt->m_loadingQueue.empty()){
 			pthread_mutex_unlock(&rt->m_loadingQueueMutex);
 			if (rt->m_exit)
 				break;
 			else
 				continue;
-		}
-		else
-		{
+		}else{
 			loadingCmd = rt->m_loadingQueue.front();
 			rt->m_loadingQueue.pop();
 			pthread_mutex_unlock(&rt->m_loadingQueueMutex);
@@ -84,17 +79,14 @@ void* CCResourceThread::threadProcedure( void* data )
 
 		const std::string& fileName = loadingCmd->filePath;
 		std::string lowerCase(fileName);
-		for (size_t n = 0; n < lowerCase.size(); ++n)
-		{
+		for (size_t n = 0; n < lowerCase.size(); ++n){
 			lowerCase[n] = tolower(lowerCase[n]);
 		}
 		
-		if (std::string::npos != lowerCase.find("pvr"))
-		{
+		if (std::string::npos != lowerCase.find("pvr")){
 			CCTexturePVR *pvr = new CCTexturePVR();
 			bool result = pvr->initWithContentsOfFileNotCreate(fileName.c_str());
-			if (!result)
-			{
+			if (!result){
 				pvr->release();
 				delete loadingCmd;
 				continue;
@@ -108,21 +100,18 @@ void* CCResourceThread::threadProcedure( void* data )
 			pthread_mutex_lock(&rt->m_loadedQueueMutex);
 			rt->m_loadedQueue.push(pLoadedInfo);
 			pthread_mutex_unlock(&rt->m_loadedQueueMutex);
-		}
-		else
-		{
-			if (!loadingCmd->loader)
-			{
-				CCImage::EImageFormat ret = computeImageFormatType(loadingCmd->filePath);
+		}else{
+			if (!loadingCmd->loader){
+				CCImage::Format ret = computeImageFormatType(loadingCmd->filePath);
 
-				if (ret == CCImage::kFmtUnKnown)
+				if (ret == CCImage::Format::UNKNOWN)
 				{
 					delete loadingCmd;
 					continue;
 				}
 
 				CCImage* pImage = new CCImage();
-				if (!pImage->initWithImageFileThreadSafe(loadingCmd->filePath.c_str(), ret))
+				if (!pImage->initWithImageFileThreadSafe(loadingCmd->filePath.c_str()))
 				{
 					delete pImage;
 					delete loadingCmd;
@@ -137,22 +126,16 @@ void* CCResourceThread::threadProcedure( void* data )
 				pthread_mutex_lock(&rt->m_loadedQueueMutex);
 				rt->m_loadedQueue.push(pLoadedInfo);	
 				pthread_mutex_unlock(&rt->m_loadedQueueMutex);
-				
-
-			}
-			else
-			{
-				unsigned long length = 0;
-				char *data = (char*)CCFileUtils::sharedFileUtils()->getFileData(loadingCmd->filePath.c_str(), "rb", &length);
-				if (!data)
-				{
+			}else{
+				ssize_t length = 0;
+				char *data = (char*)FileUtils::getInstance()->getFileData(loadingCmd->filePath.c_str(), "rb", &length);
+				if (!data){
 					pthread_mutex_lock(&rt->m_loadingQueueMutex);
 					rt->m_loadingQueue.push(loadingCmd);
 					pthread_mutex_unlock(&rt->m_loadingQueueMutex);
 					continue;
 				}
-				if (data && loadingCmd->target && loadingCmd->loader)
-				{
+				if (data && loadingCmd->target && loadingCmd->loader){
 					(loadingCmd->target->*(loadingCmd->loader))(data);
 				}
 				if (data)
@@ -174,8 +157,7 @@ void* CCResourceThread::threadProcedure( void* data )
 		}
 	}
 
-	if (rt->m_sem)
-	{
+	if (rt->m_sem){
 #if CC_ASYNC_USE_NAMED_SEMAPHORE
 		sem_unlink(CC_ASYNC_SEMAPHORE);
 		sem_close(rt->m_sem);
@@ -196,8 +178,7 @@ static CCResourceThread* s_sharedResourceThread = NULL;
 
 CCResourceThread* CCResourceThread::instance()
 {
-	if (!s_sharedResourceThread)
-	{
+	if (!s_sharedResourceThread){
 		s_sharedResourceThread = new CCResourceThread();
 		s_sharedResourceThread->initilize();
 	}
@@ -207,8 +188,7 @@ CCResourceThread* CCResourceThread::instance()
 
 void CCResourceThread::postCommand(LoadingCommand* pLoadingCmd)
 {
-	if (m_asyncRefCount == 0 && pLoadingCmd->afterProcess)
-	{
+	if (m_asyncRefCount == 0 && pLoadingCmd->afterProcess){
 		CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(CCResourceThread::tick), this, 0, false);
 	}
 	
@@ -233,12 +213,9 @@ void CCResourceThread::postCommand(LoadingCommand* pLoadingCmd)
 void CCResourceThread::tick(float dt)
 {
 	pthread_mutex_lock(&m_loadedQueueMutex);
-	if (m_loadedQueue.empty())
-	{
+	if (m_loadedQueue.empty()){
 		pthread_mutex_unlock(&m_loadedQueueMutex);
-	}
-	else
-	{
+	}else{
 		LoadedInfo *pInfo = m_loadedQueue.front();
 		m_loadedQueue.pop();
 		pthread_mutex_unlock(&m_loadedQueueMutex);
@@ -250,58 +227,48 @@ void CCResourceThread::tick(float dt)
 		
 		if (pInfo->type == LoadedInfo::IMAGE || pInfo->type == LoadedInfo::PVR)
 		{
-			CCTexture2D *texture = new CCTexture2D();
+			Texture2D *texture = new Texture2D();
 
-			if (pInfo->type == LoadedInfo::IMAGE)
-			{
+			if (pInfo->type == LoadedInfo::IMAGE){
 				CCImage* pImage = (CCImage*)pInfo->data; 
 				texture->initWithImage(pImage);
-			}
-			else
-			{
+			}else{
+				/*
 				CCTexturePVR* pPVR = (CCTexturePVR*)pInfo->data;
 				pPVR->createGLTexture();
 				texture->initWithPVRTexture(pPVR);
+				*/
 			}
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA
 			// cache the texture file name
-			if (pInfo->type == LoadedInfo::IMAGE)
-			{
+			if (pInfo->type == LoadedInfo::IMAGE){
 				CCImage::EImageFormat formatType = computeImageFormatType(pInfo->src->filePath);
 				VolatileTexture::addImageTexture(texture, pInfo->src->filePath.c_str(), formatType);
-			}
-			else
-			{
+			}else{
 				VolatileTexture::addImageTexture(texture,  pInfo->src->filePath.c_str(), CCImage::kFmtRawData);
 			}
 #endif
 
-			CCTextureCache::sharedTextureCache()->cacheTexture(texture, pInfo->src->filePath);
+			//TextureCache::getInstance()->cacheTexture(texture, pInfo->src->filePath);
+			texture = Director::getInstance()->getTextureCache()->addImage(pInfo->src->filePath);
 
-			if (target && afterProcess)
-			{
+			if (target && afterProcess){
 				(target->*afterProcess)(texture);
 			}
 
-			if (target)
-			{
+			if (target){
 				target->release();
 			}
 
-			if (pInfo->type == LoadedInfo::IMAGE)
-			{
+			if (pInfo->type == LoadedInfo::IMAGE){
 				((CCImage*)(pInfo->data))->release();
 			}
-		}
-		else
-		{
-			if (target && afterProcess)
-			{
+		}else{
+			if (target && afterProcess){
 				(target->*afterProcess)(NULL);
 			}
-			if (target)
-			{
+			if (target){
 				target->release();
 			}
 		}
@@ -310,9 +277,8 @@ void CCResourceThread::tick(float dt)
 		delete pInfo;
 
 		m_asyncRefCount--;
-		if (m_asyncRefCount == 0)
-		{
-			CCDirector::sharedDirector()->getScheduler()->unscheduleSelector(schedule_selector(CCResourceThread::tick), this);
+		if (m_asyncRefCount == 0){
+			Director::getInstance()->getScheduler()->unscheduleSelector(schedule_selector(CCResourceThread::tick), this);
 		}
 	}
 }
@@ -338,8 +304,7 @@ void CCResourceThread::initilize()
 	}
 #else
 	int result = sem_init(&s_sem, 0, 0);
-	if (result < 0)
-	{
+	if (result < 0){
 		return;
 	}
 	m_sem = &s_sem;
@@ -348,7 +313,6 @@ void CCResourceThread::initilize()
 	pthread_mutex_init(&m_loadingQueueMutex, NULL);
 	pthread_mutex_init(&m_loadedQueueMutex, NULL);
 	
-
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
 	

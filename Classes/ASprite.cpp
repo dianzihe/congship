@@ -2,16 +2,16 @@
 #include "ASprite.h"
 #include "Actor.h"
 #include "GameScene.h"
-#include "Player.h"
+//#include "Player.h"
 #include "ActorManager.h"
 #include "Hero.h"
 #include "base.h"
 #include "assert.h"
-#include "CCFileUtils.h"
-#include "CCMemoryMonitor.h"
+//#include "CCFileUtils.h"
+//#include "CCMemoryMonitor.h"
 #include "ASpriteManager.h"
-#include "CCResourceThread.h"
-#include "../BaseModule/DelayASpriteLoad/DelayASpriteLoadManager.h"
+//#include "CCResourceThread.h"
+//#include "../BaseModule/DelayASpriteLoad/DelayASpriteLoadManager.h"
 
 #define ALWAYS_BS_NFM_1_BYTE	0
 #define ALWAYS_BS_NAF_1_BYTE    0
@@ -72,7 +72,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 	kmMat4 out;
 	kmMat4Multiply(&out, &modelView, &proj);
  
- 	ccVertex4F bl, br, tl, tr;
+ 	Vertex4F bl, br, tl, tr;
  	
  	float x1 = rect.origin.x;
  	float y1 = rect.origin.y;

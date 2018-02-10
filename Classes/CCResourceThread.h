@@ -3,11 +3,10 @@
 #include "cocos2d.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_WIN32
-//#include "platform/platform.h"
-//#include "cocoa/CCObject.h"
 
-//#include "platform/third_party/win32/pthread/semaphore.h"
-//#include "platform/third_party/win32/pthread/pthread.h"
+#include "pthread/semaphore.h"
+#include "pthread/pthread.h"
+
 #else
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <semaphore.h>
@@ -15,14 +14,15 @@
 #include <pthread.h>
 #endif
 
-#include <semaphore.h>
-#include <pthread.h>
 #include <string>
 #include <queue>
+#include <thread>
+
+typedef void (*SEL_LoadDataFunc)(const char* data);
 
 NS_CC_BEGIN
 
-class CC_DLL CCResourceThread : public CCObject
+class CC_DLL CCResourceThread : public Ref
 {
 	static void* threadProcedure(void* data);
 public:
@@ -32,13 +32,15 @@ public:
 	class CC_DLL LoadingCommand
 	{
 	public:
+
 		LoadingCommand()
 			: target(NULL)
 			, afterProcess(NULL)
 			, loader(NULL)
+
 		{}
 		std::string		 filePath;
-		CCObject*		 target;
+		Ref*			 target;
 		SEL_CallFuncO	 afterProcess;
 		SEL_LoadDataFunc loader;
 	};

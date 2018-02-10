@@ -3,12 +3,13 @@
 #include "ASprite.h"
 //#include "Player.h"
 #include "PlayerLayerCfg.h"
-//#include "../BaseModule/DelayASpriteLoad/DelayASpriteLoadManager.h"
+#include "DelayASpriteLoadManager.h"
 //#include "Pet.h"
 //#include "SitDown.h"
 //#include "GameScene.h"
 #include "ActorManager.h"
 //#include "HeroPet.h"
+#include "SimpleEventDefine.h"
 
 DQAnimation::DQAnimation(void)
 : m_pHostEventHandler(NULL)
@@ -92,7 +93,7 @@ void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* 
 
 void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 {
-	CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
+	//CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
 	if(type == ACTORTYPE_WEAPON)
 	{
 		if (m_sprite[eAnimPart_Weapon])
@@ -122,7 +123,7 @@ void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 		m_sprite[eAnimPart_Wing] = p;
 		mIsMutiAsprite = true;
 	}
-	else if(type == ACTORTYPE_PET&&pPlayer/*&&pPlayer->IsInMount()*/)				//如果玩家在坐骑上,添加小师妹模型
+	else if(type == ACTORTYPE_PET/*&&pPlayer&&pPlayer->IsInMount()*/)				//如果玩家在坐骑上,添加小师妹模型
 	{
 		if(m_sprite[eAnimPart_Pet])
 		{
@@ -238,11 +239,6 @@ void DQAnimation::update(float dt)
 	}
 }
 
-void DQAnimation::draw()
-{
-	draw(0, 0, mIsGray);
-}
-
 void DQAnimation::MarkBeingCall(CCPoint pos, const char* desc)
 {
 	if(m_pHostEventHandler)
@@ -266,7 +262,7 @@ void DQAnimation::MarkBeingCall(CCPoint pos, const char* desc)
 		marker._EventParamList.push_back(param1);
 		marker._EventParamList.push_back(param2);
 		marker._EventParamList.push_back(param3);
-		m_pHostEventHandler->ProcessAnimaEvent(&marker);
+		//m_pHostEventHandler->ProcessAnimaEvent(&marker);
 		SAFE_DELETE(param3._Data._pStrData);
 	}
 }
@@ -287,6 +283,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 		bool isShowPet = true;				//小师妹出战，坐骑上才显示小师妹
 		if(m_pHostEventHandler)
 		{
+#if 0
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
 			if(pPlayer)
 			{
@@ -300,6 +297,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 				if(pPlayer->getFightPetModelId() < 0)
 					isShowPet = false;
 			}
+#endif
 		}
 		for (int i = eAnimPart_Body; i < eAnimPart_Count; ++i)
 		{
@@ -361,6 +359,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 		//如果是小师妹，根据主人性别与打坐类型，改变小师妹打坐方向
 		if(m_pHostEventHandler&&m_pHostEventHandler->getActorType() ==  ACTORTYPE_PET&&m_animID == ANIM_XSM_SIT2_LEFT)
 		{
+#if 0
 			CPet* pPet = dynamic_cast<CPet*>(m_pHostEventHandler);
 			if(pPet)
 			{
@@ -382,7 +381,8 @@ void DQAnimation::draw(int x, int y, bool isGray)
 							m_flipFlag = 1;
 					}
 				}
-			}		
+			}
+#endif
 		}
 		m_sprite[eAnimPart_Body]->PaintAFrame(m_animID,m_frame,x,y,m_flipFlag,0,0, m_opacity, isGray);
 	}
@@ -631,6 +631,6 @@ float DQAnimation::GetBaseFrameTime( int animId )
 	return 0.1f;
 }
 
-DQAnimation::AnimMatcher Animation::_AnimMatcher;
+//DQAnimation::AnimMatcher Animation::_AnimMatcher;
 
 

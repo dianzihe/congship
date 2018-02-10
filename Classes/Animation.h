@@ -33,7 +33,7 @@ public:
 	int    getAnim(){ return m_animID;};
 	void   setAnimID(int animID) { m_animID = animID; }
 	virtual void update(float dt);
-	virtual void draw();
+	//virtual void draw();
 	virtual void draw(int x, int y, bool isGray = false);
 	float getAnimTime( int id );
 	int	 getFrame() { return m_frame; }

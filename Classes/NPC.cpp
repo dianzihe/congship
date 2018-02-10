@@ -3,27 +3,39 @@
 #include "GameScene.h"
 #include "enemy.h"
 
+/*
+BEGIN_PROPERTIES_DESCRIPTION(NPC)
+{
+    REGISTER_PROPERTY(Level1Up_Score);
+    REGISTER_PROPERTY(Level2Up_Score);
+    REGISTER_PROPERTY(Level3Up_Score);
+    REGISTER_PROPERTY(Level4Up_Score);
+    REGISTER_PROPERTY(m_canBossRefresh);
+    REGISTER_PROPERTY(m_level);
+
+    REGISTER_METHOD(getLevel).PARAM_DISPLAY_INFO(L"score");
+    REGISTER_METHOD(setLeveUpScore).PARAM_DISPLAY_INFO(L"level").PARAM_DISPLAY_INFO(L"score");
+    REGISTER_METHOD(spawnEnemy);
+}
+END_PROPERTIES_DESCRIPTION()
+*/
+
+//BEGIN_PROPERTIES_DESCRIPTION(NPC::refresh_delay_type)
+//{
+//    //CLASS_DISPLAYNAME(L"测试Struct")
+//    //CLASS_DESC(L"测试Struct的说明")
+//
+//    REGISTER_PROPERTY(level0_daly);
+//    REGISTER_PROPERTY(level1_daly);
+//    REGISTER_PROPERTY(level2_daly);
+//    REGISTER_PROPERTY(level3_daly);
+//    REGISTER_PROPERTY(level4_daly);
+//}
+//END_PROPERTIES_DESCRIPTION()
+
+
 NPC::NPC()
 {
-	level0_daly = 20;
-	level1_daly = 15;
-	level2_daly = 10;
-	level3_daly = 5;
-	level4_daly = 2;
-	//    void reset()
-	//    {
-
-	//    }
-
-	//    DECLARE_BEHAVIAC_OBJECT_STRUCT(NPC::refresh_delay);
-	//}refresh_delay_type;
-
-	//level提升所需的分数
-	Level1Up_Score = 0;
-	Level2Up_Score = 200;
-	Level3Up_Score = 500;
-	Level4Up_Score = 1000;
-
     this->initData();
 }
 
@@ -32,9 +44,18 @@ NPC::~NPC()
 {
 }
 
+
+/******************************************************************
+Function    : void NPC::spawnEnemy()
+Date        : 2015-11-13 14:13:03
+Author      : Quinn Pan
+Parameter   : 
+Return      : 
+Desc        : Spawn an enemy
+******************************************************************/
 void NPC::spawnEnemy()
 {
-    log("==============refresh an enemy");
+    //log("refresh an enemy");
 
     auto winSize = Director::getInstance()->getWinSize();
 
@@ -70,19 +91,9 @@ void NPC::spawnEnemy()
 
     auto enemy = behaviac::Agent::Create<Enemy>();
     enemy->createAnEnemyWithType(enemy_type);
-    //根据战机类型加入战机
+    ////根据战机类型加入战机
     PlaneEnemy* enemy_plane = enemy->getPlane();
-	//PlaneEnemyPtr enemy_plane = PlaneEnemy::createWithEnemyType(enemy_type);
-	((Node*)this->getParent())->addChild(enemy_plane, 0, GameScene::ENEMY_TAG);
-
-	/*
-	PlaneEnemy* p = behaviac::Agent::Create<PlaneEnemy>();
-	p->init(enemy_type);
-	p->SetIdFlag(kIdMask_Projectile);
-	p->setBrain("fish");
-	((Node*)this->getParent())->addChild(p->root, 0, GameScene::ENEMY_TAG);
-	*/
-
+    ((Node*)this->getParent())->addChild(enemy_plane, 0, GameScene::ENEMY_TAG);
     //behaviac::Agent::Destroy(enemy);
 
     //enemy->SetActive(false);
@@ -92,12 +103,9 @@ void NPC::spawnEnemy()
     //((Node*)this->getParent())->addChild(enemy_plane, 0, GameScene::ENEMY_TAG);
 
     //设定战机初始位置的X轴的取值范围，根据这个范围随机设置战机初始X轴位置
-    //int min = p->root->getContentSize().width / 2;
-    //int max = winSize.width - p->root->getContentSize().width / 2;
-	//log("[%d, %d] x=%d y=%d", min, max, random(min, max), winSize.height + p->root->getContentSize().height / 2);
-	//log("winsize [%d, %d]  content size [%d, %d]", winSize.width, winSize.height, p->root->getContentSize().width, p->root->getContentSize().height);
-    //p->root->setPosition(Vec2(random(min, max), winSize.height + p->root->getContentSize().height / 2));
-	enemy_plane->root->setPosition(Vec2(300, 400));
+    int min = enemy_plane->getContentSize().width / 2;
+    int max = winSize.width - enemy_plane->getContentSize().width / 2;
+    enemy_plane->setPosition(Vec2(random(min, max), winSize.height + enemy_plane->getContentSize().height / 2));
 
     //给敌机一个body
     Vec2 vec[10]; //存放敌方战机的多边形点
@@ -133,10 +141,9 @@ void NPC::spawnEnemy()
     enemybody->addShape(PhysicsShapePolygon::create(vec, vec_count));
     enemybody->setCollisionBitmask(0x0); //不进行碰撞模拟，因为不需要
     enemybody->setContactTestBitmask(GameScene::ENEMY_CONTACTMASKBIT);
-    //p->root->setPhysicsBody(enemybody);
-	enemy_plane->setPhysicsBody(enemybody);
+    enemy_plane->setPhysicsBody(enemybody);
 }
-
+void NPC::m1(){}
 void* NPC::getParent()
 {
     return m_parent;
@@ -150,7 +157,6 @@ void NPC::setParent(const void* parent)
 
 void NPC::setLeveUpScore(int level, int score)
 {
-	log("--------------setLeveUpScore");
     switch (level)
     {
     case 1:
@@ -216,5 +222,5 @@ int NPC::getLevel(int m_score)
 void NPC::Update()
 {
     //call behaviac exec method
-    //this->btexec();
+    this->btexec();
 }

@@ -4,21 +4,40 @@
 #include "GameScene.h"
 USING_NS_CC;
 
+/*
+BEGIN_PROPERTIES_DESCRIPTION(Enemy)
+{
+    //REGISTER_PROPERTY(m_isAI);
+
+    REGISTER_METHOD(getSpeed);
+    REGISTER_METHOD(getEnemyType);
+    REGISTER_METHOD(isAlive);
+    REGISTER_METHOD(setSpeed).PARAM_DISPLAY_INFO(L"speed");
+    REGISTER_METHOD(getRandomSpeedByInitSpeed).PARAM_DISPLAY_INFO(L"iniSpeed");
+    //REGISTER_METHOD(AdjustHeroPosition).PARAM_DISPLAY_INFO(L"hero");
+    //REGISTER_METHOD(setHeroPlaneUnderPosition).PARAM_DISPLAY_INFO(L"_targetPosition");
+
+}
+END_PROPERTIES_DESCRIPTION()
+*/
 Enemy::Enemy()
 {
-    //this->btload("enemy_fsm");
-    //this->btsetcurrent("enemy_fsm");
     this->btload("enemy");
     this->btsetcurrent("enemy");
-	speed = 20.0f;
-	m_init_speed[0] = 50;
-	m_init_speed[1] = 50;
-	m_init_speed[2] = 100;
-	m_init_speed[3] = 150;
+    speed = 20.0f;
+}
+void Enemy::m1(){}
+Enemy::Enemy(int type)
+{
+    m_plane = PlaneEnemy::createWithEnemyType(type);
+    m_plane->myAgent = this;
+    this->btload("enemy");
+    this->btsetcurrent("enemy");
 }
 
 Enemy::~Enemy()
 {
+
 }
 
 //create an enemy with type
@@ -33,14 +52,24 @@ PlaneEnemy* Enemy::getPlane()
     return m_plane;
 }
 
+
 void Enemy::setPlane(Node* plane)
 {
     this->m_plane = (PlaneEnemy*)plane;
 }
 
+
+/******************************************************************
+Function    : void Enemy::setSpeed(float speed)
+Date        : 2015-11-13 10:41:44
+Author      : Quinn Pan
+Parameter   :
+Return      :
+Desc        : set the plane's speed
+******************************************************************/
 void Enemy::setSpeed(float speed)
 {
-	this->speed = speed;//fix crash bug
+    this->speed = speed;//fix crash bug
     
     //if (this->m_plane)
     //{
@@ -49,11 +78,20 @@ void Enemy::setSpeed(float speed)
     //this->m_plane->setSpeed(speed);
 }
 
+
+
+/******************************************************************
+Function    : float getSpeed::Enemy()
+Date        : 2015-11-13 10:41:23
+Author      : Quinn Pan
+Parameter   :
+Return      :
+Desc        : Get the enemy's speed
+******************************************************************/
 float Enemy::getSpeed()
 {
     if (this->m_plane){
-        //return this->m_plane->getSpeed();
-		return 0.0f;
+        return this->m_plane->getSpeed();
     }
     else{
         return 0.0f;
@@ -61,28 +99,66 @@ float Enemy::getSpeed()
    
 }
 
+/******************************************************************
+Function    : int Enemy::getEnemyType()
+Date        : 2015-11-13 10:27:26
+Author      : Quinn Pan
+Parameter   : NULL
+Return      : NULL
+Desc        : get the enemy type
+******************************************************************/
 int Enemy::getEnemyType()
 {
     return this->m_plane->getType();
 }
 
 
+/******************************************************************
+Function    : float Enemy::getRandomSpeedByInitSpeed(float initSpeed)
+Date        : 2015-11-13 11:47:32
+Author      : Quinn Pan
+Parameter   : float initSpeed
+Return      : random speed
+Desc        : random value large than half of initSpeed and below 1.2 times of initSpeed
+******************************************************************/
 float Enemy::getRandomSpeedByInitSpeed(float initSpeed)
 {
     return  random(0.5, 1.3)*initSpeed;
 }
 
+/******************************************************************
+Function    : void Enemy::init()
+Date        : 2015-11-13 10:42:58
+Author      : Quinn Pan
+Parameter   :
+Return      :
+Desc        : init the behaviac's config
+******************************************************************/
 void Enemy::init()
 {
 
 }
 
+/******************************************************************
+Function    : bool Enemy::isAlive()
+Date        : 2015-11-13 11:59:26
+Author      : Quinn Pan
+Parameter   :
+Return      : bool
+Desc        : tell the enemy is live or not
+******************************************************************/
 bool Enemy::isAlive()
 {
-    if (this->m_plane){
+    
+    
+    if (this->m_plane)
+    {
         return true;
-    }else{
-        //if the enemy is dead, then add this agent's behaviac to GanmeScene's agent delete queue.
+    }
+    else
+    {
+        //this->SetActive(false);
+        
         GameScene::addBehaviacAgentDeleteQueue((behaviac::Agent*)this);
         return false;
     }

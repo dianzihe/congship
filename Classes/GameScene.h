@@ -2,43 +2,18 @@
 #define GAMESCENE_H
 
 #include "cocos2d.h"
-#include "PlaneHero.h"
-#include "WorldState.h"
-
+#include "behaviac\behaviac.h"
+#include "SecondAgent.h"
+//#include "behaviac/base/core/container/vector_t.h"
 USING_NS_CC;
 
 class PlaneEnemy;
 class PlaneHero;
 class NPC;
 class Hero;
-
 namespace behaviac{
     class Agent;
 }
-
-
-#define READ_BEGIN( file ) while(1) { unsigned long _len; int _pos=0;\
-	char* _buf = (char*)CCFileUtils::sharedFileUtils()->getFileData( CCFileUtils::sharedFileUtils()->fullPathFromRelativePath( file ).c_str(), "rb", &_len );
-
-#define READ_END() if ( _buf ) delete[] _buf; break;}
-
-#define READ_INT( data ) data = *((int*)&_buf[_pos]); _pos+=4;
-#define READ_INT16( data ) data = *((short*)&_buf[_pos]); _pos+=2;
-
-#define READ_STRING( data ) while(1){\
-	int _size;\
-	char _data[1024];\
-	READ_INT(_size);\
-	memcpy(_data, &_buf[_pos], _size);\
-	_data[_size] = '\0';\
-	data = _data;\
-	_pos+=_size;\
-	break;\
-	}
-	
-
-//static GameLogic* gl = NULL;
-
 //游戏主场景层
 class GameScene : public Layer
 {
@@ -84,16 +59,13 @@ public:
     static const float refresh_delay[]; //战机刷新间隔
 
 public:
-	CCNode*			m_uiNode;
-	static GameScene* GetScene();
     static Scene* createScene();
     CREATE_FUNC(GameScene);
     bool init();
-	WorldState *ws = NULL;
+
 public:
     static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
-	void removeBullet(float dt);
-	void beginShooting(float dt);
+
 private:
     static GameScene* m_gamelayer; //游戏场景层的单例对象
 public:
@@ -107,7 +79,7 @@ private:
     int m_level; //当前游戏level
     int m_score; //当前游戏分数
 
-public:
+private:
     void playBackground(); //创建并移动游戏背景
     void publishScore(); //存储游戏分数
 
@@ -125,11 +97,13 @@ public:
     //void setHeroPlaneUnderPosition(CCPoint _targetPosition);
     //m_isAI表示是否使用AI
     bool m_isAI;
+    //ai动作
+    void AIAction(float level);
     //m_canBossRefresh表示可否刷新boss，每隔dt秒可以刷新一次
     void resetBoss(float dt);
     NPC * m_NPC;
     Hero* m_Hero;
-	PlaneHeroPtr dq;
+	SecondAgent* g_SecondAgent = NULL;
 public:
     // //create Update for behaviac
     void Update(float dt);
@@ -142,7 +116,7 @@ private:
     Author      : Quinn Pan
     Desc        : add some behaviac into the queue , and delete it
     ******************************************************************/
-    static std::vector<behaviac::Agent*> m_bt_agent_delete_queue;
+    static behaviac::vector<behaviac::Agent*> m_bt_agent_delete_queue;
 };
 
 #endif
