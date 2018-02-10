@@ -84,6 +84,7 @@ void* CCResourceThread::threadProcedure( void* data )
 		}
 		
 		if (std::string::npos != lowerCase.find("pvr")){
+			/*
 			CCTexturePVR *pvr = new CCTexturePVR();
 			bool result = pvr->initWithContentsOfFileNotCreate(fileName.c_str());
 			if (!result){
@@ -91,7 +92,8 @@ void* CCResourceThread::threadProcedure( void* data )
 				delete loadingCmd;
 				continue;
 			}
-			
+			*/
+			Texture2D *pvr = Director::getInstance()->getTextureCache()->addImage(fileName.c_str());
 			LoadedInfo* pLoadedInfo = new LoadedInfo();
 			pLoadedInfo->type = LoadedInfo::PVR;
 			pLoadedInfo->data = (void*)pvr;
@@ -111,8 +113,7 @@ void* CCResourceThread::threadProcedure( void* data )
 				}
 
 				CCImage* pImage = new CCImage();
-				if (!pImage->initWithImageFileThreadSafe(loadingCmd->filePath.c_str()))
-				{
+				if (!pImage->initWithImageFile(loadingCmd->filePath)){
 					delete pImage;
 					delete loadingCmd;
 					continue;
@@ -225,8 +226,7 @@ void CCResourceThread::tick(float dt)
 		SEL_CallFuncO afterProcess = srcCmd->afterProcess;
 		std::string fileName = srcCmd->filePath;
 		
-		if (pInfo->type == LoadedInfo::IMAGE || pInfo->type == LoadedInfo::PVR)
-		{
+		if (pInfo->type == LoadedInfo::IMAGE || pInfo->type == LoadedInfo::PVR){
 			Texture2D *texture = new Texture2D();
 
 			if (pInfo->type == LoadedInfo::IMAGE){
