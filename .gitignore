@@ -19,7 +19,9 @@ proj.android/
 *.sln
 *.filters
 *.vcxproj
-
+.cocos-project.json
+CMakeLists.txt
+build-cfg.json
 
 # User-specific files
 *.suo
