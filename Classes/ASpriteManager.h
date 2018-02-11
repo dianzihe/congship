@@ -18,7 +18,7 @@ struct SpriteInfo
 	SpriteInfo(): _ActorID(0), _EquipLevel(1), _ActorGender(0), _ActorType(ACTORTYPE_ANIMATION) {}
 };
 
-class Animation;
+class DQAnimation;
 struct DelayAnimInfo
 {
 	DQAnimation* _HostAnimation;

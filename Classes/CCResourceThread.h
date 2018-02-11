@@ -6,7 +6,7 @@
 
 #include "pthread/semaphore.h"
 #include "pthread/pthread.h"
-
+#include "ASprite.h"
 #else
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <semaphore.h>
@@ -18,10 +18,20 @@
 #include <queue>
 #include <thread>
 
-typedef void (*SEL_LoadDataFunc)(const char* data);
-
 NS_CC_BEGIN
 
+//typedef void(*SEL_LoadDataFunc)(const char* data);
+
+/*example class function pointer*/
+/*
+typedef void (T::*B)(int x, int y, int z);
+B b = &T::foo;
+T t;
+t.*b(x, y, z); // ±ÿ–Î÷∏∂®t
+*/
+//class ASprite;
+typedef void(*ASprite::*DQ_LoadDataFunc)(const char* data);
+typedef void(*ASprite::*DQ_CallFuncO)(CCObject* data);
 class CC_DLL CCResourceThread : public Ref
 {
 	static void* threadProcedure(void* data);
@@ -39,10 +49,10 @@ public:
 			, loader(NULL)
 
 		{}
-		std::string		 filePath;
-		Ref*			 target;
-		SEL_CallFuncO	 afterProcess;
-		SEL_LoadDataFunc loader;
+		std::string		filePath;
+		ASprite*		target;
+		DQ_CallFuncO	afterProcess;
+		DQ_LoadDataFunc loader;
 	};
 	
 	class LoadedInfo

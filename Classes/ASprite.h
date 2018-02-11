@@ -3,7 +3,7 @@
 #include "base.h"
 #include "ActorType.h"
 #include "SimpleEventDefine.h"
-
+using namespace std;
 enum MOUDLE_TYPE
 {
 	MOUDLE_NORMAL = 0,
@@ -74,7 +74,7 @@ struct TextureWrap
 	
 };
 
-class ASprite : public CCObject
+class ASprite : public Ref
 {
 public:	
 	typedef std::vector<TextureWrap*> TextureVector;

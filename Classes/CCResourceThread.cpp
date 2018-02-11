@@ -222,8 +222,8 @@ void CCResourceThread::tick(float dt)
 		pthread_mutex_unlock(&m_loadedQueueMutex);
 
 		LoadingCommand* srcCmd = pInfo->src;
-		CCObject* target = srcCmd->target;
-		SEL_CallFuncO afterProcess = srcCmd->afterProcess;
+		ASprite* target = srcCmd->target;
+		DQ_CallFuncO afterProcess = srcCmd->afterProcess;
 		std::string fileName = srcCmd->filePath;
 		
 		if (pInfo->type == LoadedInfo::IMAGE || pInfo->type == LoadedInfo::PVR){

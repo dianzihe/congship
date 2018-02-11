@@ -14,6 +14,7 @@ PlayerLayerCfg::~PlayerLayerCfg()
 
 bool PlayerLayerCfg::init( const char* pszPlayerLayerCfgName )
 {
+	/*
 	mAnimIndexMap["p"] = eAnimPart_Body;
 	mAnimIndexMap["P"] = eAnimPart_Body;
 	mAnimIndexMap["w"] = eAnimPart_Weapon;
@@ -106,6 +107,7 @@ bool PlayerLayerCfg::init( const char* pszPlayerLayerCfgName )
 
 	mAnimIndexMap.clear();
 	mAnimActionMap.clear();
+	*/
 	return true;
 }
 

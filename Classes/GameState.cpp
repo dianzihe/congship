@@ -330,9 +330,10 @@ void	ClientToGSOnHeart();
 
 static void __ClientToGSOnHeart()
 {
+	/*
 	if( !GameScene::GetScene() ) return;
 	static unsigned long timeCounter = 0;
-	/*
+	
 	cc_timeval now;
 	CCTime::gettimeofdayCocos2d(&now,NULL);
 	if( now.tv_sec-timeCounter >= GAME_HEART_TIME )

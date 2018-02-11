@@ -10,8 +10,8 @@
 //#include "CCFileUtils.h"
 //#include "CCMemoryMonitor.h"
 #include "ASpriteManager.h"
-//#include "CCResourceThread.h"
-//#include "../BaseModule/DelayASpriteLoad/DelayASpriteLoadManager.h"
+#include "CCResourceThread.h"
+#include "DelayASpriteLoadManager.h"
 
 #define ALWAYS_BS_NFM_1_BYTE	0
 #define ALWAYS_BS_NAF_1_BYTE    0
@@ -42,26 +42,23 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 	if (!mIsTexAllLoaded)
 		return;
 
-	CCSprite _RenderSprite;
+	Sprite _RenderSprite;
 	
-	CCRect rect;
+	Rect rect;
 	rect.origin.x = (float)texX;
 	rect.origin.y = (float)texY;
 
 	rect.size.width = (float)texSizeX;
 	rect.size.height = (float)texSizeY;
 
-	if(flag&FLAG_FLIP_X)
-	{
+	if(flag&FLAG_FLIP_X){
 		rect.origin.x = (float)(texX + texSizeX);
 		rect.size.width = (float)-texSizeX;
 	}
-	if(flag&FLAG_FLIP_Y)
-	{
+	if(flag&FLAG_FLIP_Y){
 		rect.origin.y = (float)(texY + texSizeY);
 		rect.size.height = (float)-texSizeY;
 	}
-
 
  	kmMat4 modelView;
  	kmGLGetMatrix(KM_GL_MODELVIEW, &modelView);
@@ -79,33 +76,32 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
  	float x2 = x1 + rect.size.width;
  	float y2 = y1 + rect.size.height;
 
-	float cameraFar = CCDirector::sharedDirector()->getZEye();
+	float cameraFar = Director::getInstance()->getZEye();
  
  	bl = vertex4(x1, y1, cameraFar, 1);
  	br = vertex4(x2, y1, cameraFar, 1);
  	tl = vertex4(x1, y2, cameraFar, 1);
  	tr = vertex4(x2, y2, cameraFar, 1);
 	
+	bl.x = RENDER_IN_SUBPIXEL(bl.x * out.m[0] + bl.y * out.m[4] + bl.z * out.m[8] + bl.w * out.m[12]);
+	bl.y = RENDER_IN_SUBPIXEL(bl.x * out.m[1] + bl.y * out.m[5] + bl.z * out.m[9] + bl.w * out.m[13]);
+	bl.z = RENDER_IN_SUBPIXEL(bl.x * out.m[2] + bl.y * out.m[6] + bl.z * out.m[10] + bl.w *out.m[14]);
+	bl.w = RENDER_IN_SUBPIXEL(bl.x * out.m[3] + bl.y * out.m[7] + bl.z * out.m[11] + bl.w *out.m[15]);
 
-	bl.x = RENDER_IN_SUBPIXEL(bl.x * out.mat[0] + bl.y * out.mat[4] + bl.z * out.mat[8] + bl.w * out.mat[12]);
-	bl.y = RENDER_IN_SUBPIXEL(bl.x * out.mat[1] + bl.y * out.mat[5] + bl.z * out.mat[9] + bl.w * out.mat[13]);
-	bl.z = RENDER_IN_SUBPIXEL(bl.x * out.mat[2] + bl.y * out.mat[6] + bl.z * out.mat[10] + bl.w *out.mat[14]);
-	bl.w = RENDER_IN_SUBPIXEL(bl.x * out.mat[3] + bl.y * out.mat[7] + bl.z * out.mat[11] + bl.w *out.mat[15]);
+	br.x = RENDER_IN_SUBPIXEL(br.x * out.m[0] + br.y * out.m[4] + br.z * out.m[8] + br.w * out.m[12]);
+	br.y = RENDER_IN_SUBPIXEL(br.x * out.m[1] + br.y * out.m[5] + br.z * out.m[9] + br.w * out.m[13]);
+	br.z = RENDER_IN_SUBPIXEL(br.x * out.m[2] + br.y * out.m[6] + br.z * out.m[10] + br.w *out.m[14]);
+	br.w = RENDER_IN_SUBPIXEL(br.x * out.m[3] + br.y * out.m[7] + br.z * out.m[11] + br.w *out.m[15]);
 
-	br.x = RENDER_IN_SUBPIXEL(br.x * out.mat[0] + br.y * out.mat[4] + br.z * out.mat[8] + br.w * out.mat[12]);
-	br.y = RENDER_IN_SUBPIXEL(br.x * out.mat[1] + br.y * out.mat[5] + br.z * out.mat[9] + br.w * out.mat[13]);
-	br.z = RENDER_IN_SUBPIXEL(br.x * out.mat[2] + br.y * out.mat[6] + br.z * out.mat[10] + br.w *out.mat[14]);
-	br.w = RENDER_IN_SUBPIXEL(br.x * out.mat[3] + br.y * out.mat[7] + br.z * out.mat[11] + br.w *out.mat[15]);
+	tl.x = RENDER_IN_SUBPIXEL(tl.x * out.m[0] + tl.y * out.m[4] + tl.z * out.m[8] + tl.w * out.m[12]);
+	tl.y = RENDER_IN_SUBPIXEL(tl.x * out.m[1] + tl.y * out.m[5] + tl.z * out.m[9] + tl.w * out.m[13]);
+	tl.z = RENDER_IN_SUBPIXEL(tl.x * out.m[2] + tl.y * out.m[6] + tl.z * out.m[10] + tl.w * out.m[14]);
+	tl.w = RENDER_IN_SUBPIXEL(tl.x * out.m[3] + tl.y * out.m[7] + tl.z * out.m[11] + tl.w * out.m[15]);
 
-	tl.x = RENDER_IN_SUBPIXEL(tl.x * out.mat[0] + tl.y * out.mat[4] + tl.z * out.mat[8] + tl.w * out.mat[12]);
-	tl.y = RENDER_IN_SUBPIXEL(tl.x * out.mat[1] + tl.y * out.mat[5] + tl.z * out.mat[9] + tl.w * out.mat[13]);
-	tl.z = RENDER_IN_SUBPIXEL(tl.x * out.mat[2] + tl.y * out.mat[6] + tl.z * out.mat[10] + tl.w * out.mat[14]);
-	tl.w = RENDER_IN_SUBPIXEL(tl.x * out.mat[3] + tl.y * out.mat[7] + tl.z * out.mat[11] + tl.w * out.mat[15]);
-
-	tr.x = RENDER_IN_SUBPIXEL(tr.x * out.mat[0] + tr.y * out.mat[4] + tr.z * out.mat[8] + tr.w * out.mat[12]);
-	tr.y = RENDER_IN_SUBPIXEL(tr.x * out.mat[1] + tr.y * out.mat[5] + tr.z * out.mat[9] + tr.w * out.mat[13]);
-	tr.z = RENDER_IN_SUBPIXEL(tr.x * out.mat[2] + tr.y * out.mat[6] + tr.z * out.mat[10] + tr.w * out.mat[14]);
-	tr.w = RENDER_IN_SUBPIXEL(tr.x * out.mat[3] + tr.y * out.mat[7] + tr.z * out.mat[11] + tr.w * out.mat[15]);
+	tr.x = RENDER_IN_SUBPIXEL(tr.x * out.m[0] + tr.y * out.m[4] + tr.z * out.m[8] + tr.w * out.m[12]);
+	tr.y = RENDER_IN_SUBPIXEL(tr.x * out.m[1] + tr.y * out.m[5] + tr.z * out.m[9] + tr.w * out.m[13]);
+	tr.z = RENDER_IN_SUBPIXEL(tr.x * out.m[2] + tr.y * out.m[6] + tr.z * out.m[10] + tr.w * out.m[14]);
+	tr.w = RENDER_IN_SUBPIXEL(tr.x * out.m[3] + tr.y * out.m[7] + tr.z * out.m[11] + tr.w * out.m[15]);
 
 	bl.x = bl.x/bl.w;
 	bl.y = bl.y/bl.w;
@@ -127,15 +123,11 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 	tr.z = tr.z/tr.w;
 	tr.w = tr.w/tr.w;
 
-	if (tl.x>= -1.f && tr.x <= 1.f && tl.y <= 1.f && bl.y>=-1.f)
-	{
+	if (tl.x>= -1.f && tr.x <= 1.f && tl.y <= 1.f && bl.y>=-1.f){
 		CCTexture2D *tex(NULL);
-		if (m_textures.empty())
-		{
+		if (m_textures.empty()){
 			tex = m_texture->texture;
-		}
-		else if(texIdx < (int)m_textures.size())
-		{
+		}else if(texIdx < (int)m_textures.size()){
 			tex = m_textures[texIdx]->texture;
 		}
 	#if defined _WIN32 | WIN32
@@ -146,18 +138,15 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 		if(tex == NULL)
 			return;
 
-		if(modelView.mat[0] == 1 && modelView.mat[5] == 1)
-		{
-			if(!tex->isAliasTexParameter() && mSpriteName != "otherSFX")
+		if(modelView.m[0] == 1 && modelView.m[5] == 1){
+			if(mSpriteName != "otherSFX")
 				tex->setAliasTexParameters();
-		}
-		else
-		{
-			if(tex->isAliasTexParameter())
+		}else{
+			//if(tex->isAliasTexParameter())
 				tex->setAntiAliasTexParameters();
 		}
 
-		_RenderSprite.initWithTexture(tex, rect, false);
+		//_RenderSprite.initWithTexture(tex, rect, false);
 
 		rect.origin.x = (float)posX;
 		rect.origin.y = (float)posY;
@@ -165,14 +154,11 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 		rect.size.width = (float)rectWidth;
 		rect.size.height = (float)rectHeight;
 
-
-
 		_RenderSprite.setVertexCoords(rect);
 
-		if ( m_clipRect )
-		{
+		if ( m_clipRect ){
 			//glEnable(GL_SCISSOR_TEST);
-			myGLEnableScissorTest();
+			//myGLEnableScissorTest();
 
 			glScissor( (GLint)m_clipRect->origin.x,
 				(GLint)m_clipRect->origin.y,
@@ -180,8 +166,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 				(GLsizei)m_clipRect->size.height);
 		}
 
-		if (isGray)
-		{
+		if (isGray){
 			ccColor3B color;
 			color.r = 22;
 			color.g = 22;
@@ -199,10 +184,9 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 
 		_RenderSprite.draw();
 
-		if ( m_clipRect )
-		{
+		if ( m_clipRect ){
 			//glDisable(GL_SCISSOR_TEST);
-			myGLDisableScissorTest();
+			//myGLDisableScissorTest();
 		}
 	}
 }
@@ -294,13 +278,13 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 	char fileNameBuffer[256];
 	unsigned long len = 0;
 	sprintf(fileNameBuffer, "%s.bsprite" ,resName );
-	if (!CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(fileNameBuffer).c_str()))
+	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str()))
 		return false;
 
 	CCResourceThread::LoadingCommand *loadingCmd = new CCResourceThread::LoadingCommand();
 	loadingCmd->filePath = fileNameBuffer;
-	loadingCmd->loader = (SEL_LoadDataFunc)&ASprite::LoadData;
-	loadingCmd->afterProcess = (SEL_CallFuncO)&ASprite::onLoadData;
+	loadingCmd->loader = (DQ_LoadDataFunc)&ASprite::LoadData;
+	loadingCmd->afterProcess = (DQ_CallFuncO)&ASprite::onLoadData;
 	loadingCmd->target = this;
 	CCResourceThread::instance()->postCommand(loadingCmd);
 
@@ -315,27 +299,26 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 		
 		mIsTexAllLoaded = false;
 
-		if (CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(path.c_str()).c_str()))
+		if (FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(path)))
 		{
 			TextureWrap* tw = new TextureWrap();
 			tw->fileName = fileNameBuffer;
-			
-			if (!CCMemoryMonitor::sharedMemoryMonitor()->isMemoryLackEmergence() || isMustLoad)
-			{
+			/*
+			if (!CCMemoryMonitor::sharedMemoryMonitor()->isMemoryLackEmergence() || isMustLoad){
 				CCTextureCache::sharedTextureCache()->addImageAsync(fileNameBuffer, this, (SEL_CallFuncO)(&ASprite::onAsyncLoadedTexture));
 				tw->isLoaded = true;
-			}
-			else
-			{
+			}else{
 				tw->isLoaded = false;
 			}
+			*/
+			tw->isLoaded = false;
 			m_textures.push_back(tw);
 		}
 		else
 		{
 			char logError[512];
 			sprintf(logError, "File not found: %s", path.c_str());
-			Log::PrintAndroidErrorLog(logError, "File not found");
+			//Log::PrintAndroidErrorLog(logError, "File not found");
 			break;
 		}
 		++imageIndex;
@@ -351,11 +334,11 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 #endif
 
 		std::string path = fileNameBuffer;
-		if (CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(path.c_str()).c_str()))
+		if (FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(path.c_str())))
 		{	
 			m_texture = new TextureWrap();
 			m_texture->fileName = fileNameBuffer;
-			
+			/*
 			if (!CCMemoryMonitor::sharedMemoryMonitor()->isMemoryLackEmergence() || isMustLoad)
 			{
 				CCTextureCache::sharedTextureCache()->addImageAsync(fileNameBuffer, this, (SEL_CallFuncO)(&ASprite::onAsyncLoadedTexture));
@@ -365,6 +348,8 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 			{
 				m_texture->isLoaded = false;
 			}
+			*/
+			m_texture->isLoaded = false;
 			mIsTexAllLoaded = false;
 		}
 		else
@@ -771,6 +756,7 @@ void ASprite::tick(float deltaTime)
  	{
  		m_lastUpdateTime = m_totalUpdateTime;
  		
+		/*
  		if (!CCMemoryMonitor::sharedMemoryMonitor()->isMemoryLackEmergence())
  		{
  			if (m_texture)
@@ -794,6 +780,7 @@ void ASprite::tick(float deltaTime)
  				}
  			}
  		}
+		*/
  	}
 }
 
@@ -1227,7 +1214,7 @@ void ASprite::ForceLoadTexture()
 	{
 		if (!m_texture->isLoaded)
 		{
-			CCTextureCache::sharedTextureCache()->addImageAsync(m_texture->fileName.c_str(), this, (SEL_CallFuncO)(&ASprite::onAsyncLoadedTexture));
+			TextureCache::getInstance()->addImageAsync(m_texture->fileName.c_str(), (SEL_CallFuncO)(&ASprite::onAsyncLoadedTexture));
 			m_texture->isLoaded = true;
 		}
 	}
@@ -1238,7 +1225,7 @@ void ASprite::ForceLoadTexture()
 			TextureWrap* tw = m_textures[n];
 			if (!tw->isLoaded)
 			{
-				CCTextureCache::sharedTextureCache()->addImageAsync(tw->fileName.c_str(), this, (SEL_CallFuncO)(&ASprite::onAsyncLoadedTexture));
+				TextureCache::getInstance()->addImageAsync(tw->fileName.c_str(), (SEL_CallFuncO)(&ASprite::onAsyncLoadedTexture));
 				tw->isLoaded = true;
 			}
 		}
