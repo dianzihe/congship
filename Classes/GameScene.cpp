@@ -25,7 +25,6 @@ Scene* GameScene::createScene()
     m_gamelayer = GameScene::create();
     scene->addChild(m_gamelayer);
 
-
     return scene;
 }
 
@@ -34,7 +33,7 @@ bool GameScene::init()
     Layer::init();
     log("Game init!");
 
-
+	//m_actorManager = new ActorManager();
     //m_isAI = false;
 
     auto winSize = Director::getInstance()->getWinSize();
@@ -215,7 +214,12 @@ bool GameScene::init()
 #endif
     return true;
 }
-
+/*
+ActorManager* GameScene::GetActorManager()
+{
+	return GameScene::sharedGameLayer()->m_actorManager;
+}
+*/
 void GameScene::playBackground()
 {
     auto winSize = Director::getInstance()->getWinSize();

@@ -30,8 +30,9 @@ T t;
 t.*b(x, y, z); // ±ÿ–Î÷∏∂®t
 */
 //class ASprite;
-typedef void(*ASprite::*DQ_LoadDataFunc)(const char* data);
-typedef void(*ASprite::*DQ_CallFuncO)(CCObject* data);
+typedef void(ASprite::*DQ_LoadDataFunc)(const char* data);
+typedef void(ASprite::*DQ_CallFuncO)(CCObject* data);
+
 class CC_DLL CCResourceThread : public Ref
 {
 	static void* threadProcedure(void* data);

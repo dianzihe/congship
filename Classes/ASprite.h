@@ -1,8 +1,8 @@
 #pragma  once
 
-#include "base.h"
+//#include "base.h"
 #include "ActorType.h"
-#include "SimpleEventDefine.h"
+//#include "SimpleEventDefine.h"
 using namespace std;
 enum MOUDLE_TYPE
 {
@@ -33,7 +33,7 @@ static inline ccVertex4F vertex4(const float x, const float y, const float z, co
 struct AnimaEvent
 {
 	AnimaEventType _EventType;
-	std::vector<EventParam> _EventParamList;
+	//std::vector<EventParam> _EventParamList;
 };
 
 struct mark_info

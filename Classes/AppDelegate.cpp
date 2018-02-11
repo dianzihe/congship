@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
-
+#include "GameScene.h"
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -44,6 +44,8 @@ void AppDelegate::initGLContextAttrs()
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
 
     GLView::setGLContextAttrs(glContextAttrs);
+	behaviac::Workspace::GetInstance()->SetFilePath("./exported");
+	behaviac::Workspace::GetInstance()->SetFileFormat(behaviac::Workspace::EFF_xml);
 }
 
 // if you want to use the package manager to install more packages,  
@@ -54,51 +56,23 @@ static int register_all_packages()
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
-    // initialize director
-    auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    if(!glview) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect("ship", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
-#else
-        glview = GLViewImpl::create("ship");
-#endif
-        director->setOpenGLView(glview);
-    }
+	// initialize director
+	auto director = Director::getInstance();
+	auto glview = director->getOpenGLView();
+	if (!glview) {
+		glview = GLViewImpl::createWithRect("AirBattleDemo", Rect(0, 0, 540, 960)); //设置PC端的设备分辨率，窗口名。在移动端这行代码无效。
+		director->setOpenGLView(glview);
+	}
 
-    // turn on display FPS
-    director->setDisplayStats(true);
+	glview->setDesignResolutionSize(540, 960, ResolutionPolicy::SHOW_ALL); //设置游戏分辨率，尚未适配移动设备屏幕。
 
-    // set FPS. the default value is 1.0/60 if you don't call this
-    director->setAnimationInterval(1.0f / 60);
+	director->setDisplayStats(true);
 
-    // Set the design resolution
-    glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, ResolutionPolicy::NO_BORDER);
-    auto frameSize = glview->getFrameSize();
-    // if the frame's height is larger than the height of medium size.
-    if (frameSize.height > mediumResolutionSize.height)
-    {        
-        director->setContentScaleFactor(MIN(largeResolutionSize.height/designResolutionSize.height, largeResolutionSize.width/designResolutionSize.width));
-    }
-    // if the frame's height is larger than the height of small size.
-    else if (frameSize.height > smallResolutionSize.height)
-    {        
-        director->setContentScaleFactor(MIN(mediumResolutionSize.height/designResolutionSize.height, mediumResolutionSize.width/designResolutionSize.width));
-    }
-    // if the frame's height is smaller than the height of medium size.
-    else
-    {        
-        director->setContentScaleFactor(MIN(smallResolutionSize.height/designResolutionSize.height, smallResolutionSize.width/designResolutionSize.width));
-    }
+	director->setAnimationInterval(1.0 / 60);
 
-    register_all_packages();
+	auto scene = GameScene::createScene();
 
-    // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
-
-    // run
-    director->runWithScene(scene);
-
+	director->runWithScene(scene);
     return true;
 }
 

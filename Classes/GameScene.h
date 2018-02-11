@@ -4,7 +4,8 @@
 #include "cocos2d.h"
 #include "behaviac\behaviac.h"
 #include "SecondAgent.h"
-//#include "behaviac/base/core/container/vector_t.h"
+//#include "ActorManager.h"
+
 USING_NS_CC;
 
 class PlaneEnemy;
@@ -60,9 +61,11 @@ public:
 
 public:
     static Scene* createScene();
+	//ActorManager*	m_actorManager;
+	//static ActorManager* GetActorManager();
     CREATE_FUNC(GameScene);
     bool init();
-
+	
 public:
     static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
 

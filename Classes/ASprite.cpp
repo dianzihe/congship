@@ -1,17 +1,17 @@
 ﻿
 #include "ASprite.h"
-#include "Actor.h"
+//#include "Actor.h"
 #include "GameScene.h"
 //#include "Player.h"
 #include "ActorManager.h"
-#include "Hero.h"
-#include "base.h"
-#include "assert.h"
+//#include "Hero.h"
+//#include "base.h"
+//#include "assert.h"
 //#include "CCFileUtils.h"
 //#include "CCMemoryMonitor.h"
-#include "ASpriteManager.h"
-#include "CCResourceThread.h"
-#include "DelayASpriteLoadManager.h"
+//#include "ASpriteManager.h"
+//#include "CCResourceThread.h"
+//#include "DelayASpriteLoadManager.h"
 
 #define ALWAYS_BS_NFM_1_BYTE	0
 #define ALWAYS_BS_NAF_1_BYTE    0
@@ -39,6 +39,7 @@ void arraycopy( char * src, int srcPos, char * dest, int destPos, int length )
 
 void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray)
 {
+	/*
 	if (!mIsTexAllLoaded)
 		return;
 
@@ -189,6 +190,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 			//myGLDisableScissorTest();
 		}
 	}
+	*/
 }
 
 ASprite::ASprite()
@@ -283,7 +285,7 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 
 	CCResourceThread::LoadingCommand *loadingCmd = new CCResourceThread::LoadingCommand();
 	loadingCmd->filePath = fileNameBuffer;
-	loadingCmd->loader = (DQ_LoadDataFunc)&ASprite::LoadData;
+	loadingCmd->loader = (DQ_LoadDataFunc)&(ASprite::LoadData);
 	loadingCmd->afterProcess = (DQ_CallFuncO)&ASprite::onLoadData;
 	loadingCmd->target = this;
 	CCResourceThread::instance()->postCommand(loadingCmd);
