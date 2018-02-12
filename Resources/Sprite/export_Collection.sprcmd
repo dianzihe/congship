@@ -1,0 +1,240 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("Collection\c1.sprite")
+ExportBSpriteEx("Collection\c1.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c10.sprite")
+ExportBSpriteEx("Collection\c10.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c11.sprite")
+ExportBSpriteEx("Collection\c11.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c12.sprite")
+ExportBSpriteEx("Collection\c12.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c13.sprite")
+ExportBSpriteEx("Collection\c13.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c14.sprite")
+ExportBSpriteEx("Collection\c14.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c15.sprite")
+ExportBSpriteEx("Collection\c15.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c16.sprite")
+ExportBSpriteEx("Collection\c16.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c17.sprite")
+ExportBSpriteEx("Collection\c17.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c18.sprite")
+ExportBSpriteEx("Collection\c18.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c19.sprite")
+ExportBSpriteEx("Collection\c19.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c2.sprite")
+ExportBSpriteEx("Collection\c2.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c20.sprite")
+ExportBSpriteEx("Collection\c20.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c21.sprite")
+ExportBSpriteEx("Collection\c21.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c22.sprite")
+ExportBSpriteEx("Collection\c22.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c23.sprite")
+ExportBSpriteEx("Collection\c23.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c24.sprite")
+ExportBSpriteEx("Collection\c24.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c25.sprite")
+ExportBSpriteEx("Collection\c25.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c26.sprite")
+ExportBSpriteEx("Collection\c26.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c27.sprite")
+ExportBSpriteEx("Collection\c27.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c28.sprite")
+ExportBSpriteEx("Collection\c28.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c29.sprite")
+ExportBSpriteEx("Collection\c29.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c3.sprite")
+ExportBSpriteEx("Collection\c3.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c30.sprite")
+ExportBSpriteEx("Collection\c30.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c31.sprite")
+ExportBSpriteEx("Collection\c31.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c32.sprite")
+ExportBSpriteEx("Collection\c32.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c33.sprite")
+ExportBSpriteEx("Collection\c33.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c34.sprite")
+ExportBSpriteEx("Collection\c34.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c35.sprite")
+ExportBSpriteEx("Collection\c35.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c36.sprite")
+ExportBSpriteEx("Collection\c36.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c37.sprite")
+ExportBSpriteEx("Collection\c37.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c38.sprite")
+ExportBSpriteEx("Collection\c38.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c39.sprite")
+ExportBSpriteEx("Collection\c39.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c4.sprite")
+ExportBSpriteEx("Collection\c4.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c40.sprite")
+ExportBSpriteEx("Collection\c40.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c41.sprite")
+ExportBSpriteEx("Collection\c41.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c42.sprite")
+ExportBSpriteEx("Collection\c42.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c43.sprite")
+ExportBSpriteEx("Collection\c43.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c44.sprite")
+ExportBSpriteEx("Collection\c44.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c45.sprite")
+ExportBSpriteEx("Collection\c45.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c46.sprite")
+ExportBSpriteEx("Collection\c46.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c47.sprite")
+ExportBSpriteEx("Collection\c47.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c5.sprite")
+ExportBSpriteEx("Collection\c5.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c6.sprite")
+ExportBSpriteEx("Collection\c6.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c7.sprite")
+ExportBSpriteEx("Collection\c7.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c8.sprite")
+ExportBSpriteEx("Collection\c8.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c9.sprite")
+ExportBSpriteEx("Collection\c9.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c1.sprite")
+ExportBSpriteEx("Collection\c1.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c10.sprite")
+ExportBSpriteEx("Collection\c10.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c11.sprite")
+ExportBSpriteEx("Collection\c11.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c12.sprite")
+ExportBSpriteEx("Collection\c12.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c13.sprite")
+ExportBSpriteEx("Collection\c13.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c14.sprite")
+ExportBSpriteEx("Collection\c14.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c15.sprite")
+ExportBSpriteEx("Collection\c15.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c16.sprite")
+ExportBSpriteEx("Collection\c16.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c17.sprite")
+ExportBSpriteEx("Collection\c17.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c18.sprite")
+ExportBSpriteEx("Collection\c18.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c19.sprite")
+ExportBSpriteEx("Collection\c19.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c2.sprite")
+ExportBSpriteEx("Collection\c2.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c20.sprite")
+ExportBSpriteEx("Collection\c20.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c21.sprite")
+ExportBSpriteEx("Collection\c21.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c22.sprite")
+ExportBSpriteEx("Collection\c22.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c23.sprite")
+ExportBSpriteEx("Collection\c23.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c24.sprite")
+ExportBSpriteEx("Collection\c24.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c25.sprite")
+ExportBSpriteEx("Collection\c25.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c26.sprite")
+ExportBSpriteEx("Collection\c26.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c27.sprite")
+ExportBSpriteEx("Collection\c27.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c28.sprite")
+ExportBSpriteEx("Collection\c28.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c29.sprite")
+ExportBSpriteEx("Collection\c29.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c3.sprite")
+ExportBSpriteEx("Collection\c3.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c30.sprite")
+ExportBSpriteEx("Collection\c30.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c31.sprite")
+ExportBSpriteEx("Collection\c31.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c32.sprite")
+ExportBSpriteEx("Collection\c32.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c33.sprite")
+ExportBSpriteEx("Collection\c33.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c34.sprite")
+ExportBSpriteEx("Collection\c34.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c35.sprite")
+ExportBSpriteEx("Collection\c35.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c36.sprite")
+ExportBSpriteEx("Collection\c36.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c37.sprite")
+ExportBSpriteEx("Collection\c37.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c38.sprite")
+ExportBSpriteEx("Collection\c38.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("Collection\c39.sprite")

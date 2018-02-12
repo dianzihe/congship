@@ -1,0 +1,260 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("monster\m1.sprite")
+ExportBSpriteEx("monster\m1.bsprite",GLOBAL, I256RLE, _8888)
+
+JavaCreateInterface("java\Imonster.java","AinmMonster")
+JavaExportAnimsID("java\Imonster.java", "ANIM_MONSTER_", APPEND|TOUPPER)
+JavaCloseInterface("java\Imonster.java")
+
+Load("monster\m10.sprite")
+ExportBSpriteEx("monster\m10.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m11.sprite")
+ExportBSpriteEx("monster\m11.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m13.sprite")
+ExportBSpriteEx("monster\m13.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m14.sprite")
+ExportBSpriteEx("monster\m14.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m15.sprite")
+ExportBSpriteEx("monster\m15.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m16.sprite")
+ExportBSpriteEx("monster\m16.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m17.sprite")
+ExportBSpriteEx("monster\m17.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m18.sprite")
+ExportBSpriteEx("monster\m18.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m19.sprite")
+ExportBSpriteEx("monster\m19.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m2.sprite")
+ExportBSpriteEx("monster\m2.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m20.sprite")
+ExportBSpriteEx("monster\m20.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m21.sprite")
+ExportBSpriteEx("monster\m21.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m22.sprite")
+ExportBSpriteEx("monster\m22.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m23.sprite")
+ExportBSpriteEx("monster\m23.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m24.sprite")
+ExportBSpriteEx("monster\m24.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m25.sprite")
+ExportBSpriteEx("monster\m25.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m26.sprite")
+ExportBSpriteEx("monster\m26.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m27.sprite")
+ExportBSpriteEx("monster\m27.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m28.sprite")
+ExportBSpriteEx("monster\m28.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m29.sprite")
+ExportBSpriteEx("monster\m29.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m3.sprite")
+ExportBSpriteEx("monster\m3.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m30.sprite")
+ExportBSpriteEx("monster\m30.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m31.sprite")
+ExportBSpriteEx("monster\m31.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m32.sprite")
+ExportBSpriteEx("monster\m32.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m33.sprite")
+ExportBSpriteEx("monster\m33.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m34.sprite")
+ExportBSpriteEx("monster\m34.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m35.sprite")
+ExportBSpriteEx("monster\m35.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m36.sprite")
+ExportBSpriteEx("monster\m36.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m37.sprite")
+ExportBSpriteEx("monster\m37.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m4.sprite")
+ExportBSpriteEx("monster\m4.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m40.sprite")
+ExportBSpriteEx("monster\m40.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m41.sprite")
+ExportBSpriteEx("monster\m41.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m42.sprite")
+ExportBSpriteEx("monster\m42.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m43.sprite")
+ExportBSpriteEx("monster\m43.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m44.sprite")
+ExportBSpriteEx("monster\m44.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m45.sprite")
+ExportBSpriteEx("monster\m45.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m46.sprite")
+ExportBSpriteEx("monster\m46.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m47.sprite")
+ExportBSpriteEx("monster\m47.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m48.sprite")
+ExportBSpriteEx("monster\m48.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m49.sprite")
+ExportBSpriteEx("monster\m49.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m5.sprite")
+ExportBSpriteEx("monster\m5.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m50.sprite")
+ExportBSpriteEx("monster\m50.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m51.sprite")
+ExportBSpriteEx("monster\m51.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m52.sprite")
+ExportBSpriteEx("monster\m52.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m53.sprite")
+ExportBSpriteEx("monster\m53.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m54.sprite")
+ExportBSpriteEx("monster\m54.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m55.sprite")
+ExportBSpriteEx("monster\m55.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m56.sprite")
+ExportBSpriteEx("monster\m56.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m57.sprite")
+ExportBSpriteEx("monster\m57.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m58.sprite")
+ExportBSpriteEx("monster\m58.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m59.sprite")
+ExportBSpriteEx("monster\m59.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m6.sprite")
+ExportBSpriteEx("monster\m6.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m60.sprite")
+ExportBSpriteEx("monster\m60.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m61.sprite")
+ExportBSpriteEx("monster\m61.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m62.sprite")
+ExportBSpriteEx("monster\m62.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m63.sprite")
+ExportBSpriteEx("monster\m63.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m64.sprite")
+ExportBSpriteEx("monster\m64.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m65.sprite")
+ExportBSpriteEx("monster\m65.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m66.sprite")
+ExportBSpriteEx("monster\m66.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m67.sprite")
+ExportBSpriteEx("monster\m67.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m68.sprite")
+ExportBSpriteEx("monster\m68.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m69.sprite")
+ExportBSpriteEx("monster\m69.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m70.sprite")
+ExportBSpriteEx("monster\m70.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m71.sprite")
+ExportBSpriteEx("monster\m71.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m72.sprite")
+ExportBSpriteEx("monster\m72.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m73.sprite")
+ExportBSpriteEx("monster\m73.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m74.sprite")
+ExportBSpriteEx("monster\m74.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m75.sprite")
+ExportBSpriteEx("monster\m75.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m76.sprite")
+ExportBSpriteEx("monster\m76.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m77.sprite")
+ExportBSpriteEx("monster\m77.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m78.sprite")
+ExportBSpriteEx("monster\m78.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m79.sprite")
+ExportBSpriteEx("monster\m79.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m8.sprite")
+ExportBSpriteEx("monster\m8.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m80.sprite")
+ExportBSpriteEx("monster\m80.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m81.sprite")
+ExportBSpriteEx("monster\m81.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m82.sprite")
+ExportBSpriteEx("monster\m82.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m83.sprite")
+ExportBSpriteEx("monster\m83.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m85.sprite")
+ExportBSpriteEx("monster\m85.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m86.sprite")
+ExportBSpriteEx("monster\m86.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m87.sprite")
+ExportBSpriteEx("monster\m87.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m88.sprite")
+ExportBSpriteEx("monster\m88.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m89.sprite")
+ExportBSpriteEx("monster\m89.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\m9.sprite")
+ExportBSpriteEx("monster\m9.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("monster\monster_null.sprite")
+ExportBSpriteEx("monster\monster_null.bsprite",GLOBAL, I256RLE, _8888)

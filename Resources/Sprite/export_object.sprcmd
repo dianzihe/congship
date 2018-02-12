@@ -1,0 +1,36 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("object\Aoe.sprite")
+ExportBSpriteEx("object\Aoe.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\expression.sprite")
+ExportBSpriteEx("object\expression.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\LogoSFX.sprite")
+ExportBSpriteEx("object\LogoSFX.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\NPCmission.sprite")
+ExportBSpriteEx("object\NPCmission.bsprite",GLOBAL, I256RLE, _8888)
+
+JavaCreateInterface("java\TakIcon.java","TakIcon")
+JavaExportAnimsID("java\TakIcon.java", "ANIM_", APPEND|TOUPPER)
+JavaCloseInterface("java\TakIcon.java")
+ 
+
+Load("object\PlayerHP.sprite")
+ExportBSpriteEx("object\PlayerHP.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\PlayerShadow1.sprite")
+ExportBSpriteEx("object\PlayerShadow1.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\reslostall.sprite")
+ExportBSpriteEx("object\reslostall.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\Shadow.sprite")
+ExportBSpriteEx("object\Shadow.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\tongyong.sprite")
+ExportBSpriteEx("object\tongyong.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("object\transport.sprite")
+ExportBSpriteEx("object\transport.bsprite",GLOBAL, I256RLE, _8888)

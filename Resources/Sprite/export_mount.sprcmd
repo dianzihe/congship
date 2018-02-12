@@ -1,0 +1,20 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("mount\mot1.sprite")
+ExportBSpriteEx("mount\mot1.bsprite",GLOBAL, I256RLE, _8888)
+
+JavaCreateInterface("java\IMONT.java","AinmMont")
+JavaExportAnimsID("java\IMONT.java", "ANIM_MONT_", APPEND|TOUPPER)
+JavaCloseInterface("java\IMONT.java")
+
+Load("mount\mot2.sprite")
+ExportBSpriteEx("mount\mot2.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("mount\mot3.sprite")
+ExportBSpriteEx("mount\mot3.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("mount\mot4.sprite")
+ExportBSpriteEx("mount\mot4.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("mount\mot5.sprite")
+ExportBSpriteEx("mount\mot5.bsprite",GLOBAL, I256RLE, _8888)

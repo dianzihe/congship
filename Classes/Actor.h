@@ -1,12 +1,12 @@
 #pragma once
 
-//#include "base.h"
+#include "base.h"
 //#include "Animation.h"
 //#include "PlayerDefine.h"
 #include "ActorType.h"
 #include "cocos2d.h"
 #include "AnimDef.h"
-//#include "Animation.h"
+#include "Animation.h"
 //#include "AbnormalStateModule.h"
 //#include "CreatePlayerState.h"
 //#include "UI.h"
@@ -178,7 +178,7 @@ protected:
 	void updateShowNamePos();
 
 protected:
-	cocos2d::Animation m_animation;
+	DQAnimation m_animation;
 
 	//SFXModule* m_SFXModule;
 
@@ -222,7 +222,7 @@ public:
 public:
 	//ASprite*			GetSprite()				{return m_animation.GetSprite();}
 	
-	inline cocos2d::Animation*	GetAnimation()			{ return &m_animation; }
+	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
 
 	void				addAnimationSprite( int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false );
 

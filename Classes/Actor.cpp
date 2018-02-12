@@ -3,7 +3,7 @@
 #include "GameScene.h"
 //#include "UIText.h"
 //#include "Hero.h"
-#include "ActorManager.h"
+//#include "ActorManager.h"
 #include "AnimDef.h"
 
 //#include "CharacterStateTransTable.h"

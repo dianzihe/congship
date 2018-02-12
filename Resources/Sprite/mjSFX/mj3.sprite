@@ -1,0 +1,121 @@
+
+/*SPRITE*/ {
+    VERSION 0001
+    IMAGE 0x0000 "mj3.png" TRANSP 0x00FFFFFF
+    MODULES
+    {
+        MD	0x1000 MD_IMAGE 0 0 0 0 0
+        MD	0x1001 MD_IMAGE 0 0 0 0 0
+        MD	0x1002 MD_IMAGE 0 0 4092 552 346
+        MD	0x1003 MD_IMAGE 0 0 2518 710 502
+        MD	0x1004 MD_IMAGE 0 0 0 874 530
+        MD	0x1005 MD_IMAGE 0 0 1032 824 496
+        MD	0x1006 MD_IMAGE 0 0 1528 812 480
+        MD	0x1007 MD_IMAGE 0 0 530 824 502
+        MD	0x1008 MD_IMAGE 0 0 2008 732 510
+        MD	0x1009 MD_IMAGE 0 0 3020 636 516
+        MD	0x1010 MD_IMAGE 0 0 3536 632 556
+        MD	0x1011 MD_IMAGE 0 732 2008 278 442
+        MD	0x1012 MD_IMAGE 0 732 2450 268 228
+        MAPPING "(null)"
+        {
+            0x4000
+        }
+    }
+    FRAME ""
+    {
+        0x2000
+        FM 0x1000 0 0
+ 
+    }
+    FRAME ""
+    {
+        0x2001
+        FM 0x1001 0 0
+ 
+    }
+    FRAME ""
+    {
+        0x2002
+        FM 0x1002 228 238
+ 
+    }
+    FRAME ""
+    {
+        0x2003
+        FM 0x1003 53 52
+ 
+    }
+    FRAME ""
+    {
+        0x2004
+        FM 0x1004 82 29
+ 
+    }
+    FRAME ""
+    {
+        0x2005
+        FM 0x1005 107 57
+ 
+    }
+    FRAME ""
+    {
+        0x2006
+        FM 0x1006 121 146
+ 
+    }
+    FRAME ""
+    {
+        0x2007
+        FM 0x1007 118 152
+ 
+    }
+    FRAME ""
+    {
+        0x2008
+        FM 0x1008 213 152
+ 
+    }
+    FRAME ""
+    {
+        0x2009
+        FM 0x1009 212 153
+ 
+    }
+    FRAME ""
+    {
+        0x2010
+        FM 0x1010 227 115
+ 
+    }
+    FRAME ""
+    {
+        0x2011
+        FM 0x1011 390 180
+ 
+    }
+    FRAME ""
+    {
+        0x2012
+        FM 0x1012 411 381
+ 
+    }
+    ANIM "mj"
+    {
+        0x3000
+        AF 0x2000 1	-515	-425
+        AF 0x2001 1	-515	-425
+        AF 0x2002 1	-515	-425
+        AF 0x2003 1	-515	-425
+        AF 0x2004 1	-515	-425
+        AF 0x2005 1	-515	-425
+        AF 0x2006 1	-515	-425
+        AF 0x2007 1	-515	-425
+        AF 0x2008 1	-515	-425
+        AF 0x2009 1	-515	-425
+        AF 0x2010 1	-515	-425
+        AF 0x2011 1	-515	-425
+        AF 0x2012 1	-515	-425
+    }
+    SPRITE_END
+}

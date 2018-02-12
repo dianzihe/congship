@@ -12,6 +12,6 @@ const char* GetLanguageTypeString(Language type)
 		"kor",
 		"yhz"
 	};
-	assert(type >= 0 && type < LT_MAX);
+//	assert(type >= 0 && type < LT_MAX);
 	return s[type];
 }

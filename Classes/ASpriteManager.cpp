@@ -44,27 +44,20 @@ ASprite* AspriteManager::LoadSprite(SpriteInfo& nSpriteInfo, bool nIsMustLoad, b
 	std::string spriteName = GetSpriteName(nSpriteInfo);
 	std::string spriteFile = GetSpritePath(nSpriteInfo._ActorType) + spriteName;
 	ASprite* sprite = GetSprite(spriteName);
-	if ( sprite == NULL)
-	{
+	if ( sprite == NULL){
 		sprite = new ASprite();
 
-		if( sprite->Load(spriteFile.c_str(), nSpriteInfo._ActorType, nIsMustLoad | isMustLoad(nSpriteInfo._ActorType)) )
-		{
+		if( sprite->Load(spriteFile.c_str(), nSpriteInfo._ActorType, nIsMustLoad | isMustLoad(nSpriteInfo._ActorType)) ){
 			sprite->setSpriteName(spriteName);
 			gSprites[spriteName] = sprite;
-		}
-		else
-		{
-			//SAFE_DELETE(sprite);
+		}else{
 			sprite->release();
 			sprite = NULL;
 
 			if(!isRecursiveCall) //·ÀµÝ¹éµ÷ÓÃ
 				sprite = FindReplaceSpriteWhenResourceMiss(nSpriteInfo);
 		}
-	}
-	else
-	{
+	}else{
 		if(nIsMustLoad)
 			sprite->ForceLoadTexture();
 		sprite->retain();
@@ -86,9 +79,9 @@ bool AspriteManager::IsSpriteLoaded(SpriteInfo& nSpriteInfo)
 
 ASprite* AspriteManager::GetSprite( const std::string& nSpriteName )
 {
+	log("get sprint %s", nSpriteName.c_str());
 	SpriteContainer::iterator it = gSprites.find(nSpriteName);
-	if(it != gSprites.end())
-	{
+	if(it != gSprites.end()){
 		return it->second;
 	}
 	return NULL;
@@ -159,12 +152,9 @@ std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
 		break;
 	case ACTORTYPE_SKILLSFX:
 		{
-			if(nSpriteInfo._ActorID <= 4)
-			{
+			if(nSpriteInfo._ActorID <= 4){
 				sprintf(name, "%s%s%d", "Sprite/playerSFX/", nameStart, nSpriteInfo._ActorID );
-			}
-			else
-			{
+			}else{
 				sprintf(name, "%s%s%d", "Sprite/monsterSFX/", nameStart, nSpriteInfo._ActorID );
 			}
 		}
@@ -187,48 +177,48 @@ std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
 
 AspriteManager::AspriteManager()
 {
-	ResPath[ACTORTYPE_ANIMATION] = "Sprite/object/";
-	ResPath[ACTORTYPE_PLAYER] = "Sprite/player/";
-	ResPath[ACTORTYPE_WEAPON] = "Sprite/weapon/";
-	ResPath[ACTORTYPE_WEAPONSFX] = "Sprite/weaponSFX/";
-	ResPath[ACTORTYPE_MOUNT] = "Sprite/mount/";
-	ResPath[ACTORTYPE_WING] = "Sprite/wing/";
-	ResPath[ACTORTYPE_NPC] = "Sprite/npc/";
-	ResPath[ACTORTYPE_MONSTER] = "Sprite/monster/";
-	ResPath[ACTORTYPE_HERO] = ResPath[ACTORTYPE_PLAYER];
-	ResPath[ACTORTYPE_SKILLSFX] = "";
-	ResPath[ACTORTYPE_OTHERSFX] = "Sprite/otherSFX/";
+	ResPath[ACTORTYPE_ANIMATION]	= "Sprite/object/";
+	ResPath[ACTORTYPE_PLAYER]		= "Sprite/player/";
+	ResPath[ACTORTYPE_WEAPON]		= "Sprite/weapon/";
+	ResPath[ACTORTYPE_WEAPONSFX]	= "Sprite/weaponSFX/";
+	ResPath[ACTORTYPE_MOUNT]		= "Sprite/mount/";
+	ResPath[ACTORTYPE_WING]			= "Sprite/wing/";
+	ResPath[ACTORTYPE_NPC]			= "Sprite/npc/";
+	ResPath[ACTORTYPE_MONSTER]		= "Sprite/monster/";
+	ResPath[ACTORTYPE_HERO]			= ResPath[ACTORTYPE_PLAYER];
+	ResPath[ACTORTYPE_SKILLSFX]		= "";
+	ResPath[ACTORTYPE_OTHERSFX]		= "Sprite/otherSFX/";
 	//ResPath[ACTORTYPE_PETSFX] = "Sprite/object/";
-	ResPath[ACTORTYPE_TRANSPORT] = ResPath[ACTORTYPE_ANIMATION];
-	ResPath[ACTORTYPE_COLLECT] = "Sprite/Collection/";
-	ResPath[ACTORTYPE_FLAG] = "Sprite/Collection/";
+	ResPath[ACTORTYPE_TRANSPORT]	= ResPath[ACTORTYPE_ANIMATION];
+	ResPath[ACTORTYPE_COLLECT]		= "Sprite/Collection/";
+	ResPath[ACTORTYPE_FLAG]			= "Sprite/Collection/";
 	ResPath[ACTORTYPE_PATHFIND_POINT] = ResPath[ACTORTYPE_ANIMATION];
-	ResPath[ACTORTYPE_PET] = "Sprite/xsm/";
+	ResPath[ACTORTYPE_PET]			= "Sprite/xsm/";
 	ResPath[ACTORTYPE_OBJECT_NORMAL] = ResPath[ACTORTYPE_ANIMATION];
-	ResPath[ACTORTYPE_SCENEOBJECT] = "Sprite/sceneObject/";
-	ResPath[ACTORTYPE_CONVOY] = ResPath[ACTORTYPE_MONSTER];
+	ResPath[ACTORTYPE_SCENEOBJECT]	= "Sprite/sceneObject/";
+	ResPath[ACTORTYPE_CONVOY]		= ResPath[ACTORTYPE_MONSTER];
 	ResPath[ACTORTYPE_MAGICWEAPONSFX] = "Sprite/MagicWeaponSFX/";
 
-	ResNameStart[ACTORTYPE_ANIMATION] = "";
-	ResNameStart[ACTORTYPE_PLAYER] = "p";
-	ResNameStart[ACTORTYPE_WEAPON] = "w";
-	ResNameStart[ACTORTYPE_WEAPONSFX] = "d";
-	ResNameStart[ACTORTYPE_MOUNT] = "mot";
-	ResNameStart[ACTORTYPE_WING] = "w";
-	ResNameStart[ACTORTYPE_NPC] = "n";
-	ResNameStart[ACTORTYPE_MONSTER] = "m";
-	ResNameStart[ACTORTYPE_HERO] = ResNameStart[ACTORTYPE_PLAYER];
-	ResNameStart[ACTORTYPE_SKILLSFX] = "e";
-	ResNameStart[ACTORTYPE_OTHERSFX] = "otherSFX";
+	ResNameStart[ACTORTYPE_ANIMATION]	= "";
+	ResNameStart[ACTORTYPE_PLAYER]		= "p";
+	ResNameStart[ACTORTYPE_WEAPON]		= "w";
+	ResNameStart[ACTORTYPE_WEAPONSFX]	= "d";
+	ResNameStart[ACTORTYPE_MOUNT]		= "mot";
+	ResNameStart[ACTORTYPE_WING]		= "w";
+	ResNameStart[ACTORTYPE_NPC]			= "n";
+	ResNameStart[ACTORTYPE_MONSTER]		= "m";
+	ResNameStart[ACTORTYPE_HERO]		= ResNameStart[ACTORTYPE_PLAYER];
+	ResNameStart[ACTORTYPE_SKILLSFX]	= "e";
+	ResNameStart[ACTORTYPE_OTHERSFX]	= "otherSFX";
 	//ResNameStart[ACTORTYPE_PETSFX] = "eye";
-	ResNameStart[ACTORTYPE_TRANSPORT] = "transport";
-	ResNameStart[ACTORTYPE_COLLECT] = "c";
-	ResNameStart[ACTORTYPE_FLAG] = "c";
+	ResNameStart[ACTORTYPE_TRANSPORT]	= "transport";
+	ResNameStart[ACTORTYPE_COLLECT]		= "c";
+	ResNameStart[ACTORTYPE_FLAG]		= "c";
 	ResNameStart[ACTORTYPE_PATHFIND_POINT] = "";
-	ResNameStart[ACTORTYPE_PET] = "xsm";
+	ResNameStart[ACTORTYPE_PET]			= "xsm";
 	ResNameStart[ACTORTYPE_OBJECT_NORMAL] = "tongyong";
 	ResNameStart[ACTORTYPE_SCENEOBJECT] = "sceneObj";
-	ResNameStart[ACTORTYPE_CONVOY] = ResNameStart[ACTORTYPE_MONSTER];
+	ResNameStart[ACTORTYPE_CONVOY]		= ResNameStart[ACTORTYPE_MONSTER];
 	ResNameStart[ACTORTYPE_MAGICWEAPONSFX] = "fb_";
 
 	m_preLoad[0] = NULL;
@@ -275,8 +265,7 @@ void AspriteManager::initilize()
 
 void AspriteManager::uninitilize()
 {
-	for (int n = 0; n <= 5; ++n)
-	{
+	for (int n = 0; n <= 5; ++n){
 		if (m_preLoad[n])
 			m_preLoad[n]->release();
 	}
@@ -287,11 +276,9 @@ void AspriteManager::tick(float deltaTime)
 {
 	SpriteContainer::iterator iter = gSprites.begin();
 	SpriteContainer::iterator end = gSprites.end();
-	for (; iter != end; ++iter)
-	{
+	for (; iter != end; ++iter){
 		ASprite* pSprite = iter->second;
-		if(pSprite && !pSprite->IsTextureLoaded())
-		{
+		if(pSprite && !pSprite->IsTextureLoaded()){
 			pSprite->tick(deltaTime);
 		}
 	}
@@ -393,8 +380,7 @@ ASprite* AspriteManager::FindReplaceSpriteWhenResourceMiss( SpriteInfo& nSpriteI
 	case ACTORTYPE_PET:
 		{
 			replaceSprite = gSprites["monster_null"];
-			if( replaceSprite == NULL )
-			{
+			if( replaceSprite == NULL ){
 				ASprite* pSprite = new ASprite();
 
 				if( pSprite->Load("Sprite/monster/monster_null", nSpriteInfo._ActorType, false) )
@@ -402,14 +388,10 @@ ASprite* AspriteManager::FindReplaceSpriteWhenResourceMiss( SpriteInfo& nSpriteI
 					gSprites["monster_null"] = pSprite;
 					pSprite->setSpriteName("monster_null");
 					replaceSprite = pSprite;
-				}
-				else
-				{
+				}else{
 					pSprite->release();
 				}
-			}
-			else
-			{
+			}else{
 				replaceSprite->retain();
 			}
 		}
@@ -417,8 +399,7 @@ ASprite* AspriteManager::FindReplaceSpriteWhenResourceMiss( SpriteInfo& nSpriteI
 	case ACTORTYPE_NPC:
 		{
 			replaceSprite = gSprites["npc_null"];
-			if( replaceSprite == NULL )
-			{
+			if( replaceSprite == NULL ){
 				ASprite* pSprite = new ASprite();
 
 				if( pSprite->Load("Sprite/npc/npc_null", nSpriteInfo._ActorType, false) )
@@ -426,14 +407,10 @@ ASprite* AspriteManager::FindReplaceSpriteWhenResourceMiss( SpriteInfo& nSpriteI
 					gSprites["npc_null"] = pSprite;
 					pSprite->setSpriteName("npc_null");
 					replaceSprite = pSprite;
-				}
-				else
-				{
+				}else{
 					pSprite->release();
 				}
-			}
-			else
-			{
+			}else{
 				replaceSprite->retain();
 			}
 		}
@@ -455,15 +432,11 @@ void AspriteManager::RemoveAnimationDelayLoad( DQAnimation* pAnima )
 {
 	DelayAnimationMap::iterator it = mAnimationDelayLoadMap.begin();
 	DelayAnimationMap::iterator end = mAnimationDelayLoadMap.end();
-	while(it != end)
-	{
-		if(it->second._HostAnimation == pAnima)
-		{
+	while(it != end){
+		if(it->second._HostAnimation == pAnima){
 			it->first->release();
 			mAnimationDelayLoadMap.erase(it++);
-		}
-		else
-		{
+		}else{
 			++it;
 		}
 	}
@@ -472,8 +445,7 @@ void AspriteManager::RemoveAnimationDelayLoad( DQAnimation* pAnima )
 void AspriteManager::RemoveAnimationDelayLoad( ASprite* pSprite )
 {
 	DelayAnimationMap::iterator it = mAnimationDelayLoadMap.find(pSprite);
-	if(it != mAnimationDelayLoadMap.end())
-	{
+	if(it != mAnimationDelayLoadMap.end()){
 		mAnimationDelayLoadMap.erase(it);
 	}
 }
@@ -481,8 +453,7 @@ void AspriteManager::RemoveAnimationDelayLoad( ASprite* pSprite )
 void AspriteManager::AnimationDelayLoadCall( ASprite* pSprite )
 {
 	DelayAnimationMap::iterator it = mAnimationDelayLoadMap.find(pSprite);
-	if(it != mAnimationDelayLoadMap.end())
-	{
+	if(it != mAnimationDelayLoadMap.end()){
 		it->second._HostAnimation->AddASprite(pSprite, it->second._ActorType);
 		it->second._HostAnimation->m_pHostEventHandler->setGray(it->second._GrayPart, false);
 		mAnimationDelayLoadMap.erase(it);

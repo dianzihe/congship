@@ -1,0 +1,127 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("npc\n1.sprite")
+ExportBSpriteEx("npc\n1.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n10.sprite")
+ExportBSpriteEx("npc\n10.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n11.sprite")
+ExportBSpriteEx("npc\n11.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n12.sprite")
+ExportBSpriteEx("npc\n12.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n14.sprite")
+ExportBSpriteEx("npc\n14.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n15.sprite")
+ExportBSpriteEx("npc\n15.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n18.sprite")
+ExportBSpriteEx("npc\n18.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n19.sprite")
+ExportBSpriteEx("npc\n19.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n2.sprite")
+ExportBSpriteEx("npc\n2.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n21.sprite")
+ExportBSpriteEx("npc\n21.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n22.sprite")
+ExportBSpriteEx("npc\n22.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n23.sprite")
+ExportBSpriteEx("npc\n23.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n24.sprite")
+ExportBSpriteEx("npc\n24.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n25.sprite")
+ExportBSpriteEx("npc\n25.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n26.sprite")
+ExportBSpriteEx("npc\n26.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n27.sprite")
+ExportBSpriteEx("npc\n27.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n28.sprite")
+ExportBSpriteEx("npc\n28.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n29.sprite")
+ExportBSpriteEx("npc\n29.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n30.sprite")
+ExportBSpriteEx("npc\n30.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n300.sprite")
+ExportBSpriteEx("npc\n300.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n31.sprite")
+ExportBSpriteEx("npc\n31.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n34.sprite")
+ExportBSpriteEx("npc\n34.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n4.sprite")
+ExportBSpriteEx("npc\n4.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n40.sprite")
+ExportBSpriteEx("npc\n40.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n400.sprite")
+ExportBSpriteEx("npc\n400.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n41.sprite")
+ExportBSpriteEx("npc\n41.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n42.sprite")
+ExportBSpriteEx("npc\n42.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n49.sprite")
+ExportBSpriteEx("npc\n49.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n5.sprite")
+ExportBSpriteEx("npc\n5.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n55.sprite")
+ExportBSpriteEx("npc\n55.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n57.sprite")
+ExportBSpriteEx("npc\n57.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n58.sprite")
+ExportBSpriteEx("npc\n58.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n59.sprite")
+ExportBSpriteEx("npc\n59.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n60.sprite")
+ExportBSpriteEx("npc\n60.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n61.sprite")
+ExportBSpriteEx("npc\n61.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n62.sprite")
+ExportBSpriteEx("npc\n62.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n65.sprite")
+ExportBSpriteEx("npc\n65.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n66.sprite")
+ExportBSpriteEx("npc\n66.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n7.sprite")
+ExportBSpriteEx("npc\n7.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n8.sprite")
+ExportBSpriteEx("npc\n8.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\n9.sprite")
+ExportBSpriteEx("npc\n9.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("npc\npc_null.sprite")
+ExportBSpriteEx("npc\npc_null.bsprite",GLOBAL, I256RLE, _8888)

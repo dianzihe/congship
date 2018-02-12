@@ -6,6 +6,7 @@
 #include <2d/CCSprite.h>
 #include "NPC.h"
 #include "hero.h"
+#include "ASpriteManager.h"
 
 using namespace CocosDenshion;
 
@@ -106,6 +107,14 @@ bool GameScene::init()
 	g_SecondAgent->btsetcurrent("fish");
 	//g_SecondAgent->btexec();
 	//schedule(schedule_selector(GameScene::Update), 1.f);
+
+	
+	AspriteManager::instance().initilize();
+	ASprite* m_cacheSkillSprite;
+	SpriteInfo _SpriteInfo;
+	_SpriteInfo._ActorType = ACTORTYPE_SKILLSFX;
+	_SpriteInfo._ActorID = 5;
+	m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
 
 #if 0
     //create NPC and hero
@@ -322,16 +331,13 @@ void GameScene::pauseButtonCallBack(Ref* pSender)
 
         ((Scene*)this->getParent())->getPhysicsWorld()->setAutoStep(false);
 
-    }
-    else
-    {
+    }else{
         i = 0;
 
         _eventDispatcher->resumeEventListenersForTarget(this);
 
         auto vec = this->getChildren();
-        for (auto &child : vec)
-        {
+        for (auto &child : vec){
             if (child->getTag() != PAUSE_MENU)
                 child->onEnter();
         }
@@ -360,13 +366,10 @@ bool GameScene::dealWithContact(PhysicsContact& contact)
     if ((tag1 == HERO_BULLET_TAG && tag2 == ENEMY_TAG) || (tag2 == HERO_BULLET_TAG && tag1 == ENEMY_TAG))
     {
         PlaneEnemy* enemy = nullptr;
-        if (tag1 == HERO_BULLET_TAG)
-        {
+        if (tag1 == HERO_BULLET_TAG){
             node1->removeFromParent();
             enemy = ((PlaneEnemy*)node2);
-        }
-        else
-        {
+        }else{
             node2->removeFromParent();
             enemy = ((PlaneEnemy*)node1);
         }
@@ -381,13 +384,10 @@ bool GameScene::dealWithContact(PhysicsContact& contact)
 
         PlaneHero *hero = nullptr;
         PlaneEnemy *enemy = nullptr;
-        if (tag1 == HERO_TAG)
-        {
+        if (tag1 == HERO_TAG){
             hero = ((PlaneHero*)node1);
             enemy = ((PlaneEnemy*)node2);
-        }
-        else
-        {
+        }else{
             hero = ((PlaneHero*)node2);
             enemy = ((PlaneEnemy*)node1);
         }
@@ -404,8 +404,7 @@ void GameScene::hitEnemy(PlaneEnemy* enemy)
     enemy->getHurt();
 
     //如果敌方飞机挂了，增加分数
-    if (!enemy->isLive())
-    {
+    if (!enemy->isLive()){
         m_score += enemy->getPoints();
         char buf[100] = { 0 };
         sprintf(buf, "Score: %d", m_score);
@@ -495,7 +494,9 @@ void GameScene::Update(float dt)
     //behaviac::Workspace::GetInstance()->HandleRequests();
     //m_NPC->btexec();
 	log("UpdateLoop\n");
-
+	{
+		AspriteManager::instance().tick(dt);
+	}
 #if 0
 	int frames = 0;
 	behaviac::EBTStatus status = behaviac::BT_RUNNING;

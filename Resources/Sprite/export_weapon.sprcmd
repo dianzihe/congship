@@ -1,0 +1,23 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("weapon\w1_1_f.sprite")
+ExportBSpriteEx("weapon\w1_1_f.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("weapon\w1_1_m.sprite")
+ExportBSpriteEx("weapon\w1_1_m.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("weapon\w2_1_f.sprite")
+ExportBSpriteEx("weapon\w2_1_f.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("weapon\w2_1_m.sprite")
+ExportBSpriteEx("weapon\w2_1_m.bsprite",GLOBAL, I256RLE, _8888)
+
+JavaCreateInterface("java\IWP.java","AinmWeapon")
+JavaExportAnimsID("java\IWP.java", "ANIM_WEAPON_", APPEND|TOUPPER)
+JavaCloseInterface("java\IWP.java")
+
+Load("weapon\w3_1_f.sprite")
+ExportBSpriteEx("weapon\w3_1_f.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("weapon\w3_1_m.sprite")
+ExportBSpriteEx("weapon\w3_1_m.bsprite",GLOBAL, I256RLE, _8888)

@@ -1,9 +1,15 @@
 #pragma  once
 
-//#include "base.h"
+#include "base.h"
 #include "ActorType.h"
-//#include "SimpleEventDefine.h"
+#include "SimpleEventDefine.h"
+
 using namespace std;
+
+#include "cocos2d.h"
+using namespace cocos2d;
+
+
 enum MOUDLE_TYPE
 {
 	MOUDLE_NORMAL = 0,
@@ -33,7 +39,7 @@ static inline ccVertex4F vertex4(const float x, const float y, const float z, co
 struct AnimaEvent
 {
 	AnimaEventType _EventType;
-	//std::vector<EventParam> _EventParamList;
+	std::vector<EventParam> _EventParamList;
 };
 
 struct mark_info
@@ -58,18 +64,18 @@ struct IAnimaEventHandler
 
 struct TextureWrap
 {
-	TextureWrap() : texture(NULL)
+	TextureWrap() : texture(nullptr)
 		, isLoaded(false)
 	{}
 	
 	~TextureWrap()
 	{
-		//CCTextureCache::sharedTextureCache()->removeTexture(texture);
+		Director::getInstance()->getTextureCache()->removeTexture(texture);
 		CC_SAFE_RELEASE(texture);
 	}
 
 	std::string fileName;
-	CCTexture2D* texture;
+	Texture2D* texture;
 	bool isLoaded;
 	
 };
@@ -117,24 +123,19 @@ public:
 	void clear_patch();
 	
 	mark_info CheckMarkExs(int ainmID,int aframe);
-	void SetClip(const CCRect& rect  ) ;
+	void SetClip(const Rect& rect  ) ;
 	void ResetClip();
 
-	const CCRect&				getRectSelect( void )		{ return m_rcSelect; }
+	const Rect& getRectSelect( void ) { return m_rcSelect; }
 
-	const std::string&			getSpriteName()				{ return mSpriteName; }
-
-	void						setSpriteName( const std::string& name) { mSpriteName = name; }
+	const std::string& getSpriteName() { return mSpriteName; }
+	void setSpriteName( const std::string& name) { mSpriteName = name; }
 
 public:
 	void LoadData(char* data);
-
-	void onLoadData(CCObject* obj);
-	
-	void onAsyncLoadedTexture(CCTexture2D* pTexture);
-
+	void onLoadData(Ref* obj);
+	void onAsyncLoadedTexture(Texture2D* pTexture);
 	void ReleaseTextureToDelayLoad();
-
 	void tick(float deltaTime);
 
 	// To Be Abandon
@@ -170,9 +171,8 @@ public:
 	
 	void DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray = false);
 
-	CCRect* m_clipRect;
-
-	CCRect			m_rcSelect;
+	Rect* m_clipRect;
+	Rect m_rcSelect;
 
 	std::string		mSpriteName;
 

@@ -1,0 +1,23 @@
+SetGlobalBSpriteFlags(BS_MODULES | BS_MODULES_XY_SHORT | BS_MODULES_WH_SHORT | BS_FRAMES | BS_SKIP_FRAME_RC | BS_FM_OFF_SHORT | BS_ANIMS | BS_AF_OFF_SHORT)
+
+Load("player\p1_1_f.sprite")
+ExportBSpriteEx("player\p1_1_f.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("player\p1_1_m.sprite")
+ExportBSpriteEx("player\p1_1_m.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("player\p2_1_f.sprite")
+ExportBSpriteEx("player\p2_1_f.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("player\p2_1_m.sprite")
+ExportBSpriteEx("player\p2_1_m.bsprite",GLOBAL, I256RLE, _8888)
+
+JavaCreateInterface("java\IPlayer.java","AnimPlayer")
+JavaExportAnimsID("java\IPlayer.java", "ANIM_PLAYER_", APPEND|TOUPPER)
+JavaCloseInterface("java\IPlayer.java")
+
+Load("player\p3_1_f.sprite")
+ExportBSpriteEx("player\p3_1_f.bsprite",GLOBAL, I256RLE, _8888)
+
+Load("player\p3_1_m.sprite")
+ExportBSpriteEx("player\p3_1_m.bsprite",GLOBAL, I256RLE, _8888)

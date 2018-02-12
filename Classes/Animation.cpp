@@ -2,12 +2,12 @@
 #include "Actor.h"
 #include "ASprite.h"
 //#include "Player.h"
-#include "PlayerLayerCfg.h"
-#include "DelayASpriteLoadManager.h"
+//#include "PlayerLayerCfg.h"
+//#include "DelayASpriteLoadManager.h"
 //#include "Pet.h"
 //#include "SitDown.h"
 //#include "GameScene.h"
-#include "ActorManager.h"
+//#include "ActorManager.h"
 //#include "HeroPet.h"
 #include "SimpleEventDefine.h"
 
@@ -87,7 +87,7 @@ void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* 
 	origin->retain();
 	origin->ReleaseTextureToDelayLoad();
 	AspriteManager::instance().AddAnimationDelayLoad( this, origin, type, gpart );
-	m_pHostEventHandler->setGray(gpart, true);
+	//m_pHostEventHandler->setGray(gpart, true);
 	AddASprite(pReplace, type);
 }
 
@@ -140,7 +140,7 @@ void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 		}
 		if(p && m_pHostEventHandler && p->IsDataLoaded() == false)
 		{
-			DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( p, m_pHostEventHandler->getActorID() );
+			//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( p, m_pHostEventHandler->getActorID() );
 		}
 		m_sprite[eAnimPart_Body] = p;
 	}
@@ -154,7 +154,7 @@ void DQAnimation::setAnim( int id, int flag, int loop, int animaLayerIndex )
 	}
 	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false && m_pHostEventHandler ) 
 	{
-		DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
+		//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
 	}
 	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id+1) > m_sprite[eAnimPart_Body]->GetAnimNumber() )
 	{
@@ -301,6 +301,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 		}
 		for (int i = eAnimPart_Body; i < eAnimPart_Count; ++i)
 		{
+#if 0
 			AnimPart curPart = PlayerLayerCfg::instance().GetAnimPartBySequence(
 				m_HostCamp,
 				m_HostSex,
@@ -352,7 +353,9 @@ void DQAnimation::draw(int x, int y, bool isGray)
 					}
 				}
 			}
+#endif
 		}
+
 	}
 	else
 	{
@@ -393,8 +396,8 @@ float DQAnimation::getAnimTime( int id )
 	if ( m_sprite[eAnimPart_Body] == NULL ) return 0.0f;
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false)
 	{
-		if(m_pHostEventHandler)
-			DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
+		//if(m_pHostEventHandler)
+		//	DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
 		return 0.6f;
 	}
 	int frameCount	= m_sprite[eAnimPart_Body]->GetRealAFrames(id);  //

@@ -1,0 +1,4553 @@
+// saved by AuroraGT v0.1.0.2 (SpriteEditor v0.1.0.5)
+////////////////////////////////////////////////////////////////////////////////
+/*SPRITE*/ {
+
+    VERSION 0001
+
+    // Images:  1
+    // Modules: 507
+    // Frames:  507
+    // Anims:   80
+
+////////////////////////////////////////////////////////////////////////////////
+// Images...
+// <Image> := IMAGE [id] "file" [ALPHA "alpha_file"] [TRANSP transp_color]
+
+    IMAGE 0x0000 "otherSFX.png" TRANSP 0x00FFFFFF // 0  size: 1024 x 5589  palettes: 1
+
+////////////////////////////////////////////////////////////////////////////////
+// Modules...
+// <Modules> := MODULES { <MD1> <MD2> ... }
+// <MDi>     := MD id Type [params] ["desc"]
+// Type      := MD_IMAGE | MD_RECT | ...
+// [params]  := if (Type == MD_IMAGE)     -> image x y width height
+//              if (Type == MD_RECT)      -> color width height
+//              if (Type == MD_FILL_RECT) -> color width height
+//              if (Type == MD_ARC)       -> color width height startAngle arcAngle
+//              if (Type == MD_FILL_ARC)  -> color width height startAngle arcAngle
+//              if (Type == MD_MARKER)    -> color width height
+//              if (Type == MD_TRIANGLE)  -> color p2X p2Y p3X p3Y
+//              if (Type == MD_FILL_TRIANGLE)  -> color p2X p2Y p3X p3Y
+
+    MODULES
+    {
+        MD	0x1000	MD_IMAGE	0	506	5443	55	23
+        MD	0x1001	MD_IMAGE	0	0	5566	55	23
+        MD	0x1002	MD_IMAGE	0	780	1088	37	43
+        MD	0x1003	MD_IMAGE	0	171	1701	25	55
+        MD	0x1004	MD_IMAGE	0	171	1647	29	53
+        MD	0x1005	MD_IMAGE	0	785	4053	41	43
+        MD	0x1006	MD_IMAGE	0	63	5560	55	23
+        MD	0x1007	MD_IMAGE	0	63	5534	55	25
+        MD	0x1008	MD_IMAGE	0	707	1511	35	45
+        MD	0x1009	MD_IMAGE	0	996	1638	25	55
+        MD	0x1010	MD_IMAGE	0	996	1584	27	53
+        MD	0x1011	MD_IMAGE	0	695	1859	43	41
+        MD	0x1012	MD_IMAGE	0	826	4149	100	42
+        MD	0x1013	MD_IMAGE	0	684	4163	100	42
+        MD	0x1014	MD_IMAGE	0	956	5152	64	78
+        MD	0x1015	MD_IMAGE	0	426	4077	46	96
+        MD	0x1016	MD_IMAGE	0	913	5343	52	92
+        MD	0x1017	MD_IMAGE	0	0	5209	74	76
+        MD	0x1018	MD_IMAGE	0	826	4106	100	42
+        MD	0x1019	MD_IMAGE	0	684	4116	100	46
+        MD	0x1020	MD_IMAGE	0	960	4973	64	80
+        MD	0x1021	MD_IMAGE	0	695	1707	44	100
+        MD	0x1022	MD_IMAGE	0	424	4285	48	94
+        MD	0x1023	MD_IMAGE	0	0	5286	74	72
+        MD	0x1024	MD_IMAGE	0	796	950	18	22
+        MD	0x1025	MD_IMAGE	0	785	4097	40	48
+        MD	0x1026	MD_IMAGE	0	298	5396	64	76
+        MD	0x1027	MD_IMAGE	0	421	4641	82	104
+        MD	0x1028	MD_IMAGE	0	0	4622	88	116
+        MD	0x1029	MD_IMAGE	0	257	446	66	80
+        MD	0x1030	MD_IMAGE	0	85	4841	78	102
+        MD	0x1031	MD_IMAGE	0	79	4944	76	38
+        MD	0x1032	MD_IMAGE	0	421	4582	86	58
+        MD	0x1033	MD_IMAGE	0	822	4772	86	70
+        MD	0x1034	MD_IMAGE	0	174	4739	80	80
+        MD	0x1035	MD_IMAGE	0	674	5275	70	86
+        MD	0x1036	MD_IMAGE	0	370	4609	50	76
+        MD	0x1037	MD_IMAGE	0	581	402	256	92
+        MD	0x1038	MD_IMAGE	0	324	496	256	84
+        MD	0x1039	MD_IMAGE	0	0	546	256	76
+        MD	0x1040	MD_IMAGE	0	581	495	256	84
+        MD	0x1041	MD_IMAGE	0	0	453	256	92
+        MD	0x1042	MD_IMAGE	0	0	1201	218	72
+        MD	0x1043	MD_IMAGE	0	322	986	232	78
+        MD	0x1044	MD_IMAGE	0	575	722	246	80
+        MD	0x1045	MD_IMAGE	0	575	647	248	74
+        MD	0x1046	MD_IMAGE	0	819	1075	204	78
+        MD	0x1047	MD_IMAGE	0	322	1360	212	100
+        MD	0x1048	MD_IMAGE	0	322	1065	218	98
+        MD	0x1049	MD_IMAGE	0	0	1011	226	98
+        MD	0x1050	MD_IMAGE	0	322	1164	214	94
+        MD	0x1051	MD_IMAGE	0	322	1259	212	100
+        MD	0x1052	MD_IMAGE	0	224	4055	102	134
+        MD	0x1053	MD_IMAGE	0	211	1637	106	136
+        MD	0x1054	MD_IMAGE	0	644	2215	94	146
+        MD	0x1055	MD_IMAGE	0	89	4597	88	128
+        MD	0x1056	MD_IMAGE	0	667	4334	94	134
+        MD	0x1057	MD_IMAGE	0	0	2976	148	112
+        MD	0x1058	MD_IMAGE	0	475	2416	154	114
+        MD	0x1059	MD_IMAGE	0	294	3329	146	114
+        MD	0x1060	MD_IMAGE	0	737	2479	152	112
+        MD	0x1061	MD_IMAGE	0	318	2194	160	114
+        MD	0x1062	MD_IMAGE	0	518	5390	62	52
+        MD	0x1063	MD_IMAGE	0	593	5387	62	56
+        MD	0x1064	MD_IMAGE	0	666	5362	62	58
+        MD	0x1065	MD_IMAGE	0	0	5505	62	60
+        MD	0x1066	MD_IMAGE	0	73	5473	62	60
+        MD	0x1067	MD_IMAGE	0	148	5433	64	58
+        MD	0x1068	MD_IMAGE	0	961	3887	62	92
+        MD	0x1069	MD_IMAGE	0	356	4686	64	88
+        MD	0x1070	MD_IMAGE	0	257	527	64	96
+        MD	0x1071	MD_IMAGE	0	641	3873	64	94
+        MD	0x1072	MD_IMAGE	0	641	3778	64	94
+        MD	0x1073	MD_IMAGE	0	257	624	64	94
+        MD	0x1074	MD_IMAGE	0	758	1243	60	110
+        MD	0x1075	MD_IMAGE	0	758	1132	60	110
+        MD	0x1076	MD_IMAGE	0	265	117	58	112
+        MD	0x1077	MD_IMAGE	0	265	230	58	110
+        MD	0x1078	MD_IMAGE	0	265	341	58	104
+        MD	0x1079	MD_IMAGE	0	180	4563	88	142
+        MD	0x1080	MD_IMAGE	0	281	4460	88	152
+        MD	0x1081	MD_IMAGE	0	650	1901	88	160
+        MD	0x1082	MD_IMAGE	0	0	4328	90	144
+        MD	0x1083	MD_IMAGE	0	0	4473	88	148
+        MD	0x1084	MD_IMAGE	0	91	4446	88	150
+        MD	0x1085	MD_IMAGE	0	192	4408	88	154
+        MD	0x1086	MD_IMAGE	0	101	4301	90	144
+        MD	0x1087	MD_IMAGE	0	470	4431	88	150
+        MD	0x1088	MD_IMAGE	0	707	3528	128	148
+        MD	0x1089	MD_IMAGE	0	890	2594	134	172
+        MD	0x1090	MD_IMAGE	0	861	0	162	184
+        MD	0x1091	MD_IMAGE	0	447	3006	146	184
+        MD	0x1092	MD_IMAGE	0	594	3015	142	168
+        MD	0x1093	MD_IMAGE	0	0	3927	118	184
+        MD	0x1094	MD_IMAGE	0	219	1255	102	188
+        MD	0x1095	MD_IMAGE	0	575	803	244	146
+        MD	0x1096	MD_IMAGE	0	819	1154	194	158
+        MD	0x1097	MD_IMAGE	0	820	892	204	182
+        MD	0x1098	MD_IMAGE	0	819	1313	190	176
+        MD	0x1099	MD_IMAGE	0	824	713	194	178
+        MD	0x10100	MD_IMAGE	0	163	2127	154	168
+        MD	0x10101	MD_IMAGE	0	886	2892	138	170
+        MD	0x10102	MD_IMAGE	0	927	4200	96	176
+        MD	0x10103	MD_IMAGE	0	576	3506	130	176
+        MD	0x10104	MD_IMAGE	0	318	2309	156	180
+        MD	0x10105	MD_IMAGE	0	608	2771	128	182
+        MD	0x10106	MD_IMAGE	0	227	1076	94	178
+        MD	0x10107	MD_IMAGE	0	892	2427	132	166
+        MD	0x10108	MD_IMAGE	0	648	4542	86	156
+        MD	0x10109	MD_IMAGE	0	826	4235	98	162
+        MD	0x10110	MD_IMAGE	0	626	2551	110	168
+        MD	0x10111	MD_IMAGE	0	907	1922	116	170
+        MD	0x10112	MD_IMAGE	0	834	3729	126	166
+        MD	0x10113	MD_IMAGE	0	866	3467	128	164
+        MD	0x10114	MD_IMAGE	0	427	3568	130	160
+        MD	0x10115	MD_IMAGE	0	884	3308	134	158
+        MD	0x10116	MD_IMAGE	0	264	3616	128	146
+        MD	0x10117	MD_IMAGE	0	735	4621	86	152
+        MD	0x10118	MD_IMAGE	0	254	3858	120	68
+        MD	0x10119	MD_IMAGE	0	129	3849	124	72
+        MD	0x10120	MD_IMAGE	0	902	2279	122	74
+        MD	0x10121	MD_IMAGE	0	0	3856	124	70
+        MD	0x10122	MD_IMAGE	0	902	2354	122	72
+        MD	0x10123	MD_IMAGE	0	283	4336	90	66
+        MD	0x10124	MD_IMAGE	0	665	4469	94	72
+        MD	0x10125	MD_IMAGE	0	570	4252	96	74
+        MD	0x10126	MD_IMAGE	0	192	4335	90	72
+        MD	0x10127	MD_IMAGE	0	825	4554	92	68
+        MD	0x10128	MD_IMAGE	0	825	4398	94	74
+        MD	0x10129	MD_IMAGE	0	363	5419	60	68
+        MD	0x10130	MD_IMAGE	0	445	5404	60	70
+        MD	0x10131	MD_IMAGE	0	965	3717	58	76
+        MD	0x10132	MD_IMAGE	0	213	5479	58	72
+        MD	0x10133	MD_IMAGE	0	968	4882	56	90
+        MD	0x10134	MD_IMAGE	0	522	5266	72	52
+        MD	0x10135	MD_IMAGE	0	814	4843	78	52
+        MD	0x10136	MD_IMAGE	0	164	4869	78	52
+        MD	0x10137	MD_IMAGE	0	0	4928	78	52
+        MD	0x10138	MD_IMAGE	0	731	4855	78	50
+        MD	0x10139	MD_IMAGE	0	327	4077	98	44
+        MD	0x10140	MD_IMAGE	0	236	4014	104	40
+        MD	0x10141	MD_IMAGE	0	119	4052	104	38
+        MD	0x10142	MD_IMAGE	0	327	4122	98	40
+        MD	0x10143	MD_IMAGE	0	667	4267	96	66
+        MD	0x10144	MD_IMAGE	0	630	2429	106	66
+        MD	0x10145	MD_IMAGE	0	473	4376	96	54
+        MD	0x10146	MD_IMAGE	0	630	2496	106	54
+        MD	0x10147	MD_IMAGE	0	119	4091	102	60
+        MD	0x10148	MD_IMAGE	0	684	4206	98	60
+        MD	0x10149	MD_IMAGE	0	570	4327	96	56
+        MD	0x10150	MD_IMAGE	0	101	4152	100	148
+        MD	0x10151	MD_IMAGE	0	822	4623	86	148
+        MD	0x10152	MD_IMAGE	0	918	4592	90	170
+        MD	0x10153	MD_IMAGE	0	911	1656	84	174
+        MD	0x10154	MD_IMAGE	0	570	4384	94	130
+        MD	0x10155	MD_IMAGE	0	243	4877	76	124
+        MD	0x10156	MD_IMAGE	0	948	4071	76	128
+        MD	0x10157	MD_IMAGE	0	346	4775	74	126
+        MD	0x10158	MD_IMAGE	0	658	4897	72	124
+        MD	0x10159	MD_IMAGE	0	76	5135	74	116
+        MD	0x10160	MD_IMAGE	0	376	5209	72	122
+        MD	0x10161	MD_IMAGE	0	842	5255	70	122
+        MD	0x10162	MD_IMAGE	0	750	1354	68	116
+        MD	0x10163	MD_IMAGE	0	253	874	68	118
+        MD	0x10164	MD_IMAGE	0	301	5275	72	120
+        MD	0x10165	MD_IMAGE	0	965	3632	58	84
+        MD	0x10166	MD_IMAGE	0	253	719	68	154
+        MD	0x10167	MD_IMAGE	0	202	4190	90	144
+        MD	0x10168	MD_IMAGE	0	0	4112	100	152
+        MD	0x10169	MD_IMAGE	0	646	2062	92	152
+        MD	0x10170	MD_IMAGE	0	473	4229	96	146
+        MD	0x10171	MD_IMAGE	0	213	1444	106	192
+        MD	0x10172	MD_IMAGE	0	579	4041	104	210
+        MD	0x10173	MD_IMAGE	0	474	4014	104	214
+        MD	0x10174	MD_IMAGE	0	746	1471	72	184
+        MD	0x10175	MD_IMAGE	0	707	1604	34	24
+        MD	0x10176	MD_IMAGE	0	707	1482	36	28
+        MD	0x10177	MD_IMAGE	0	495	1553	36	34
+        MD	0x10178	MD_IMAGE	0	785	4195	40	40
+        MD	0x10179	MD_IMAGE	0	783	4236	42	48
+        MD	0x10180	MD_IMAGE	0	695	1808	44	50
+        MD	0x10181	MD_IMAGE	0	374	4425	46	56
+        MD	0x10182	MD_IMAGE	0	782	5376	50	64
+        MD	0x10183	MD_IMAGE	0	729	5376	52	64
+        MD	0x10184	MD_IMAGE	0	421	4445	46	50
+        MD	0x10185	MD_IMAGE	0	853	171	6	6
+        MD	0x10186	MD_IMAGE	0	819	1490	188	64
+        MD	0x10187	MD_IMAGE	0	555	1041	224	84
+        MD	0x10188	MD_IMAGE	0	322	895	238	90
+        MD	0x10189	MD_IMAGE	0	561	950	234	90
+        MD	0x10190	MD_IMAGE	0	0	1110	218	90
+        MD	0x10191	MD_IMAGE	0	441	3451	134	116
+        MD	0x10192	MD_IMAGE	0	888	2767	136	124
+        MD	0x10193	MD_IMAGE	0	884	3063	140	122
+        MD	0x10194	MD_IMAGE	0	594	3184	142	124
+        MD	0x10195	MD_IMAGE	0	292	3501	134	114
+        MD	0x10196	MD_IMAGE	0	423	4380	46	64
+        MD	0x10197	MD_IMAGE	0	374	4336	48	88
+        MD	0x10198	MD_IMAGE	0	424	4174	48	110
+        MD	0x10199	MD_IMAGE	0	593	4582	54	140
+        MD	0x10200	MD_IMAGE	0	370	4482	50	126
+        MD	0x10201	MD_IMAGE	0	447	3191	146	154
+        MD	0x10202	MD_IMAGE	0	737	2748	150	132
+        MD	0x10203	MD_IMAGE	0	151	2857	148	136
+        MD	0x10204	MD_IMAGE	0	0	3307	146	136
+        MD	0x10205	MD_IMAGE	0	155	2611	150	134
+        MD	0x10206	MD_IMAGE	0	737	3173	146	154
+        MD	0x10207	MD_IMAGE	0	463	2626	150	132
+        MD	0x10208	MD_IMAGE	0	302	2837	148	136
+        MD	0x10209	MD_IMAGE	0	147	3212	146	136
+        MD	0x10210	MD_IMAGE	0	312	2589	150	134
+        MD	0x10211	MD_IMAGE	0	737	3018	146	154
+        MD	0x10212	MD_IMAGE	0	0	2623	150	132
+        MD	0x10213	MD_IMAGE	0	737	2881	148	136
+        MD	0x10214	MD_IMAGE	0	296	3192	146	136
+        MD	0x10215	MD_IMAGE	0	167	1992	150	134
+        MD	0x10216	MD_IMAGE	0	174	4820	80	48
+        MD	0x10217	MD_IMAGE	0	174	4820	80	48
+        MD	0x10218	MD_IMAGE	0	654	1762	40	52
+        MD	0x10219	MD_IMAGE	0	654	1815	40	50
+        MD	0x10220	MD_IMAGE	0	223	5410	64	68
+        MD	0x10221	MD_IMAGE	0	961	3980	62	90
+        MD	0x10222	MD_IMAGE	0	760	4530	64	90
+        MD	0x10223	MD_IMAGE	0	961	3794	62	92
+        MD	0x10224	MD_IMAGE	0	913	5260	54	82
+        MD	0x10225	MD_IMAGE	0	495	1461	36	48
+        MD	0x10226	MD_IMAGE	0	495	1588	34	46
+        MD	0x10227	MD_IMAGE	0	780	1041	38	46
+        MD	0x10228	MD_IMAGE	0	785	4146	40	48
+        MD	0x10229	MD_IMAGE	0	762	4465	62	64
+        MD	0x10230	MD_IMAGE	0	762	4376	62	88
+        MD	0x10231	MD_IMAGE	0	587	4723	60	88
+        MD	0x10232	MD_IMAGE	0	764	4285	60	90
+        MD	0x10233	MD_IMAGE	0	966	5412	52	78
+        MD	0x10234	MD_IMAGE	0	707	1557	34	46
+        MD	0x10235	MD_IMAGE	0	495	1635	34	42
+        MD	0x10236	MD_IMAGE	0	495	1510	36	42
+        MD	0x10237	MD_IMAGE	0	491	1678	32	30
+        MD	0x10238	MD_IMAGE	0	288	5473	60	60
+        MD	0x10239	MD_IMAGE	0	136	5492	56	68
+        MD	0x10240	MD_IMAGE	0	587	4812	60	84
+        MD	0x10241	MD_IMAGE	0	968	5339	54	72
+        MD	0x10242	MD_IMAGE	0	968	5260	54	78
+        MD	0x10243	MD_IMAGE	0	996	1555	28	28
+        MD	0x10244	MD_IMAGE	0	707	1629	32	42
+        MD	0x10245	MD_IMAGE	0	0	3089	146	217
+        MD	0x10246	MD_IMAGE	0	149	2994	146	217
+        MD	0x10247	MD_IMAGE	0	300	2974	146	217
+        MD	0x10248	MD_IMAGE	0	171	1774	146	217
+        MD	0x10249	MD_IMAGE	0	300	2974	146	217
+        MD	0x10250	MD_IMAGE	0	149	2994	146	217
+        MD	0x10251	MD_IMAGE	0	485	1843	164	98
+        MD	0x10252	MD_IMAGE	0	0	2354	160	94
+        MD	0x10253	MD_IMAGE	0	318	2490	154	98
+        MD	0x10254	MD_IMAGE	0	157	2516	154	94
+        MD	0x10255	MD_IMAGE	0	457	2759	150	96
+        MD	0x10256	MD_IMAGE	0	324	117	0	0
+        MD	0x10257	MD_IMAGE	0	826	4192	100	42
+        MD	0x10258	MD_IMAGE	0	614	2720	122	50
+        MD	0x10259	MD_IMAGE	0	588	3418	144	52
+        MD	0x10260	MD_IMAGE	0	884	3249	138	58
+        MD	0x10261	MD_IMAGE	0	737	2687	152	60
+        MD	0x10262	MD_IMAGE	0	483	1942	164	58
+        MD	0x10263	MD_IMAGE	0	0	1779	168	44
+        MD	0x10264	MD_IMAGE	0	530	1658	172	48
+        MD	0x10265	MD_IMAGE	0	324	117	0	0
+        MD	0x10266	MD_IMAGE	0	324	117	0	0
+        MD	0x10267	MD_IMAGE	0	178	4706	86	32
+        MD	0x10268	MD_IMAGE	0	269	4670	86	56
+        MD	0x10269	MD_IMAGE	0	283	4403	90	56
+        MD	0x10270	MD_IMAGE	0	269	4613	86	56
+        MD	0x10271	MD_IMAGE	0	508	4582	84	54
+        MD	0x10272	MD_IMAGE	0	508	4637	84	52
+        MD	0x10273	MD_IMAGE	0	324	117	0	0
+        MD	0x10274	MD_IMAGE	0	827	3993	120	112
+        MD	0x10275	MD_IMAGE	0	733	3445	132	82
+        MD	0x10276	MD_IMAGE	0	707	3677	126	222
+        MD	0x10277	MD_IMAGE	0	327	4163	96	172
+        MD	0x10278	MD_IMAGE	0	520	3778	120	158
+        MD	0x10279	MD_IMAGE	0	706	3900	120	152
+        MD	0x10280	MD_IMAGE	0	125	3922	120	52
+        MD	0x10281	MD_IMAGE	0	449	5294	72	42
+        MD	0x10282	MD_IMAGE	0	0	1935	166	102
+        MD	0x10283	MD_IMAGE	0	532	1482	174	104
+        MD	0x10284	MD_IMAGE	0	819	1555	176	100
+        MD	0x10285	MD_IMAGE	0	838	414	184	102
+        MD	0x10286	MD_IMAGE	0	318	1653	172	108
+        MD	0x10287	MD_IMAGE	0	0	4869	78	58
+        MD	0x10288	MD_IMAGE	0	0	4806	84	62
+        MD	0x10289	MD_IMAGE	0	559	4515	88	66
+        MD	0x10290	MD_IMAGE	0	918	4523	92	68
+        MD	0x10291	MD_IMAGE	0	920	4452	94	70
+        MD	0x10292	MD_IMAGE	0	648	4699	82	126
+        MD	0x10293	MD_IMAGE	0	909	4763	86	118
+        MD	0x10294	MD_IMAGE	0	89	4726	84	114
+        MD	0x10295	MD_IMAGE	0	750	5267	70	108
+        MD	0x10296	MD_IMAGE	0	225	5299	72	110
+        MD	0x10297	MD_IMAGE	0	504	4690	82	82
+        MD	0x10298	MD_IMAGE	0	731	4774	82	80
+        MD	0x10299	MD_IMAGE	0	502	4854	80	82
+        MD	0x10300	MD_IMAGE	0	421	4827	80	82
+        MD	0x10301	MD_IMAGE	0	504	4773	82	80
+        MD	0x10302	MD_IMAGE	0	421	4746	82	80
+        MD	0x10303	MD_IMAGE	0	265	4727	80	82
+        MD	0x10304	MD_IMAGE	0	241	993	80	82
+        MD	0x10305	MD_IMAGE	0	147	3460	144	56
+        MD	0x10306	MD_IMAGE	0	740	1656	170	56
+        MD	0x10307	MD_IMAGE	0	524	1707	170	54
+        MD	0x10308	MD_IMAGE	0	0	2038	164	56
+        MD	0x10309	MD_IMAGE	0	294	3444	146	56
+        MD	0x10310	MD_IMAGE	0	318	1762	168	54
+        MD	0x10311	MD_IMAGE	0	740	1796	168	56
+        MD	0x10312	MD_IMAGE	0	318	1973	164	56
+        MD	0x10313	MD_IMAGE	0	595	5314	70	72
+        MD	0x10314	MD_IMAGE	0	529	5120	74	72
+        MD	0x10315	MD_IMAGE	0	956	5054	68	68
+        MD	0x10316	MD_IMAGE	0	601	5241	72	72
+        MD	0x10317	MD_IMAGE	0	522	5319	70	70
+        MD	0x10318	MD_IMAGE	0	396	4910	75	75
+        MD	0x10319	MD_IMAGE	0	152	5063	75	73
+        MD	0x10320	MD_IMAGE	0	228	5002	75	73
+        MD	0x10321	MD_IMAGE	0	320	4978	75	73
+        MD	0x10322	MD_IMAGE	0	320	4902	75	75
+        MD	0x10323	MD_IMAGE	0	0	5133	75	75
+        MD	0x10324	MD_IMAGE	0	76	5059	75	75
+        MD	0x10325	MD_IMAGE	0	152	4987	75	75
+        MD	0x10326	MD_IMAGE	0	0	5057	75	75
+        MD	0x10327	MD_IMAGE	0	76	4983	75	75
+        MD	0x10328	MD_IMAGE	0	0	4981	75	75
+        MD	0x10329	MD_IMAGE	0	75	5252	74	74
+        MD	0x10330	MD_IMAGE	0	151	5212	74	74
+        MD	0x10331	MD_IMAGE	0	226	5151	74	74
+        MD	0x10332	MD_IMAGE	0	303	5127	74	74
+        MD	0x10333	MD_IMAGE	0	379	5061	74	74
+        MD	0x10334	MD_IMAGE	0	471	5012	74	74
+        MD	0x10335	MD_IMAGE	0	547	4972	74	74
+        MD	0x10336	MD_IMAGE	0	151	5137	74	74
+        MD	0x10337	MD_IMAGE	0	228	5076	74	74
+        MD	0x10338	MD_IMAGE	0	304	5052	74	74
+        MD	0x10339	MD_IMAGE	0	396	4986	74	74
+        MD	0x10340	MD_IMAGE	0	677	5202	72	72
+        MD	0x10341	MD_IMAGE	0	769	5194	72	72
+        MD	0x10342	MD_IMAGE	0	845	5182	72	72
+        MD	0x10343	MD_IMAGE	0	449	5221	72	72
+        MD	0x10344	MD_IMAGE	0	528	5193	72	72
+        MD	0x10345	MD_IMAGE	0	604	5168	72	72
+        MD	0x10346	MD_IMAGE	0	696	5129	72	72
+        MD	0x10347	MD_IMAGE	0	772	5121	72	72
+        MD	0x10348	MD_IMAGE	0	0	5432	72	72
+        MD	0x10349	MD_IMAGE	0	75	5400	72	72
+        MD	0x10350	MD_IMAGE	0	150	5360	72	72
+        MD	0x10351	MD_IMAGE	0	472	4937	74	74
+        MD	0x10352	MD_IMAGE	0	881	5107	74	74
+        MD	0x10353	MD_IMAGE	0	806	5046	74	74
+        MD	0x10354	MD_IMAGE	0	881	5032	74	74
+        MD	0x10355	MD_IMAGE	0	731	4981	74	74
+        MD	0x10356	MD_IMAGE	0	806	4971	74	74
+        MD	0x10357	MD_IMAGE	0	731	4906	74	74
+        MD	0x10358	MD_IMAGE	0	583	4897	74	74
+        MD	0x10359	MD_IMAGE	0	885	4957	74	74
+        MD	0x10360	MD_IMAGE	0	810	4896	74	74
+        MD	0x10361	MD_IMAGE	0	893	4882	74	74
+        MD	0x10362	MD_IMAGE	0	621	5095	74	72
+        MD	0x10363	MD_IMAGE	0	697	5056	74	72
+        MD	0x10364	MD_IMAGE	0	0	5359	74	72
+        MD	0x10365	MD_IMAGE	0	75	5327	74	72
+        MD	0x10366	MD_IMAGE	0	150	5287	74	72
+        MD	0x10367	MD_IMAGE	0	226	5226	74	72
+        MD	0x10368	MD_IMAGE	0	301	5202	74	72
+        MD	0x10369	MD_IMAGE	0	378	5136	74	72
+        MD	0x10370	MD_IMAGE	0	454	5087	74	72
+        MD	0x10371	MD_IMAGE	0	546	5047	74	72
+        MD	0x10372	MD_IMAGE	0	622	5022	74	72
+        MD	0x10373	MD_IMAGE	0	535	1423	210	58
+        MD	0x10374	MD_IMAGE	0	581	580	256	66
+        MD	0x10375	MD_IMAGE	0	0	944	240	66
+        MD	0x10376	MD_IMAGE	0	147	3517	134	34
+        MD	0x10377	MD_IMAGE	0	576	3471	132	34
+        MD	0x10378	MD_IMAGE	0	324	117	0	0
+        MD	0x10379	MD_IMAGE	0	535	1364	210	58
+        MD	0x10380	MD_IMAGE	0	0	623	256	70
+        MD	0x10381	MD_IMAGE	0	322	824	240	70
+        MD	0x10382	MD_IMAGE	0	600	2954	136	60
+        MD	0x10383	MD_IMAGE	0	884	3186	138	62
+        MD	0x10384	MD_IMAGE	0	324	117	0	0
+        MD	0x10385	MD_IMAGE	0	739	2315	162	50
+        MD	0x10386	MD_IMAGE	0	739	2258	162	56
+        MD	0x10387	MD_IMAGE	0	0	1714	170	64
+        MD	0x10388	MD_IMAGE	0	740	1853	166	70
+        MD	0x10389	MD_IMAGE	0	318	1817	166	66
+        MD	0x10390	MD_IMAGE	0	481	2175	162	68
+        MD	0x10391	MD_IMAGE	0	853	262	170	76
+        MD	0x10392	MD_IMAGE	0	838	517	178	84
+        MD	0x10393	MD_IMAGE	0	0	2281	162	72
+        MD	0x10394	MD_IMAGE	0	853	185	170	76
+        MD	0x10395	MD_IMAGE	0	451	2933	148	72
+        MD	0x10396	MD_IMAGE	0	475	2333	156	82
+        MD	0x10397	MD_IMAGE	0	318	1884	164	88
+        MD	0x10398	MD_IMAGE	0	451	2856	148	76
+        MD	0x10399	MD_IMAGE	0	0	2449	156	82
+        MD	0x10400	MD_IMAGE	0	648	4826	82	70
+        MD	0x10401	MD_IMAGE	0	648	4826	82	70
+        MD	0x10402	MD_IMAGE	0	648	4826	82	70
+        MD	0x10403	MD_IMAGE	0	648	4826	82	70
+        MD	0x10404	MD_IMAGE	0	648	4826	82	70
+        MD	0x10405	MD_IMAGE	0	648	4826	82	70
+        MD	0x10406	MD_IMAGE	0	648	4826	82	70
+        MD	0x10407	MD_IMAGE	0	648	4826	82	70
+        MD	0x10408	MD_IMAGE	0	648	4826	82	70
+        MD	0x10409	MD_IMAGE	0	648	4826	82	70
+        MD	0x10410	MD_IMAGE	0	648	4826	82	70
+        MD	0x10411	MD_IMAGE	0	0	4739	84	66
+        MD	0x10412	MD_IMAGE	0	0	4739	84	66
+        MD	0x10413	MD_IMAGE	0	0	4739	84	66
+        MD	0x10414	MD_IMAGE	0	0	4739	84	66
+        MD	0x10415	MD_IMAGE	0	0	4739	84	66
+        MD	0x10416	MD_IMAGE	0	648	4826	82	70
+        MD	0x10417	MD_IMAGE	0	648	4826	82	70
+        MD	0x10418	MD_IMAGE	0	648	4826	82	70
+        MD	0x10419	MD_IMAGE	0	447	5337	70	66
+        MD	0x10420	MD_IMAGE	0	825	4473	92	80
+        MD	0x10421	MD_IMAGE	0	925	4377	98	74
+        MD	0x10422	MD_IMAGE	0	453	5160	74	60
+        MD	0x10423	MD_IMAGE	0	164	4922	76	64
+        MD	0x10424	MD_IMAGE	0	255	4810	80	66
+        MD	0x10425	MD_IMAGE	0	918	5231	72	28
+        MD	0x10426	MD_IMAGE	0	956	5123	68	28
+        MD	0x10427	MD_IMAGE	0	374	5390	70	28
+        MD	0x10428	MD_IMAGE	0	374	5361	70	28
+        MD	0x10429	MD_IMAGE	0	374	5332	72	28
+        MD	0x10430	MD_IMAGE	0	838	602	176	110
+        MD	0x10431	MD_IMAGE	0	0	1824	166	110
+        MD	0x10432	MD_IMAGE	0	163	2296	154	128
+        MD	0x10433	MD_IMAGE	0	541	1126	216	120
+        MD	0x10434	MD_IMAGE	0	0	0	324	116
+        MD	0x10435	MD_IMAGE	0	0	694	252	148
+        MD	0x10436	MD_IMAGE	0	596	0	264	170
+        MD	0x10437	MD_IMAGE	0	325	0	270	194
+        MD	0x10438	MD_IMAGE	0	596	171	256	230
+        MD	0x10439	MD_IMAGE	0	0	117	264	236
+        MD	0x10440	MD_IMAGE	0	322	581	252	242
+        MD	0x10441	MD_IMAGE	0	481	2094	162	80
+        MD	0x10442	MD_IMAGE	0	739	2094	162	82
+        MD	0x10443	MD_IMAGE	0	740	1713	168	82
+        MD	0x10444	MD_IMAGE	0	487	1762	166	80
+        MD	0x10445	MD_IMAGE	0	0	2206	162	74
+        MD	0x10446	MD_IMAGE	0	318	2119	162	74
+        MD	0x10447	MD_IMAGE	0	320	1574	174	78
+        MD	0x10448	MD_IMAGE	0	853	339	170	74
+        MD	0x10449	MD_IMAGE	0	0	1647	170	66
+        MD	0x10450	MD_IMAGE	0	532	1587	174	70
+        MD	0x10451	MD_IMAGE	0	737	2592	152	94
+        MD	0x10452	MD_IMAGE	0	0	2532	154	90
+        MD	0x10453	MD_IMAGE	0	479	2244	160	88
+        MD	0x10454	MD_IMAGE	0	161	2425	156	90
+        MD	0x10455	MD_IMAGE	0	473	2531	152	94
+        MD	0x10456	MD_IMAGE	0	739	2177	162	80
+        MD	0x10457	MD_IMAGE	0	483	2001	162	92
+        MD	0x10458	MD_IMAGE	0	318	2030	162	88
+        MD	0x10459	MD_IMAGE	0	739	2009	162	84
+        MD	0x10460	MD_IMAGE	0	739	1924	162	84
+        MD	0x10461	MD_IMAGE	0	0	843	252	100
+        MD	0x10462	MD_IMAGE	0	324	296	256	100
+        MD	0x10463	MD_IMAGE	0	324	195	256	100
+        MD	0x10464	MD_IMAGE	0	324	397	256	98
+        MD	0x10465	MD_IMAGE	0	0	354	256	98
+        MD	0x10466	MD_IMAGE	0	0	1518	210	128
+        MD	0x10467	MD_IMAGE	0	537	1247	212	116
+        MD	0x10468	MD_IMAGE	0	320	1461	174	112
+        MD	0x10469	MD_IMAGE	0	0	1274	212	122
+        MD	0x10470	MD_IMAGE	0	0	1397	212	120
+        MD	0x10471	MD_IMAGE	0	684	4053	100	62
+        MD	0x10472	MD_IMAGE	0	632	2362	106	66
+        MD	0x10473	MD_IMAGE	0	363	4006	110	70
+        MD	0x10474	MD_IMAGE	0	595	3968	110	72
+        MD	0x10475	MD_IMAGE	0	363	3929	116	76
+        MD	0x10476	MD_IMAGE	0	119	3975	116	76
+        MD	0x10477	MD_IMAGE	0	0	4265	100	62
+        MD	0x10478	MD_IMAGE	0	0	4265	100	62
+        MD	0x10479	MD_IMAGE	0	306	2724	150	112
+        MD	0x10480	MD_IMAGE	0	737	3328	146	116
+        MD	0x10481	MD_IMAGE	0	0	2859	148	116
+        MD	0x10482	MD_IMAGE	0	151	2746	150	110
+        MD	0x10483	MD_IMAGE	0	147	3349	146	110
+        MD	0x10484	MD_IMAGE	0	441	3346	146	104
+        MD	0x10485	MD_IMAGE	0	0	2756	150	102
+        MD	0x10486	MD_IMAGE	0	0	3444	146	104
+        MD	0x10487	MD_IMAGE	0	383	3824	120	104
+        MD	0x10488	MD_IMAGE	0	0	3549	132	108
+        MD	0x10489	MD_IMAGE	0	594	3309	142	108
+        MD	0x10490	MD_IMAGE	0	739	2366	152	112
+        MD	0x10491	MD_IMAGE	0	0	2095	162	110
+        MD	0x10492	MD_IMAGE	0	909	1831	114	90
+        MD	0x10493	MD_IMAGE	0	246	3927	116	86
+        MD	0x10494	MD_IMAGE	0	480	3937	114	76
+        MD	0x10495	MD_IMAGE	0	902	2186	122	92
+        MD	0x10496	MD_IMAGE	0	258	3763	124	94
+        MD	0x10497	MD_IMAGE	0	393	3729	126	94
+        MD	0x10498	MD_IMAGE	0	558	3683	126	94
+        MD	0x10499	MD_IMAGE	0	834	3896	126	96
+        MD	0x10500	MD_IMAGE	0	836	3632	128	96
+        MD	0x10501	MD_IMAGE	0	0	3757	128	98
+        MD	0x10502	MD_IMAGE	0	129	3750	128	98
+        MD	0x10503	MD_IMAGE	0	0	3658	128	98
+        MD	0x10504	MD_IMAGE	0	133	3552	130	98
+        MD	0x10505	MD_IMAGE	0	133	3651	128	98
+        MD	0x10506	MD_IMAGE	0	902	2093	122	92
+
+        MAPPING "(null)"
+        {
+            0x4000
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+// Frames...
+// <Frame> := FRAME ["desc"] { id <RC1> [<RC2> ...] <FM1> [<FM2> ...] }
+// <RCi>   := RC x1 y1 x2 y2
+// <FMi>   := FM module_or_frame_id ox oy [FLAGS hex_flags] [+Flags]
+// Flags   := HYPER_FM | FLIP_X | FLIP_Y | ROT_90 | FREE_ROT
+
+    FRAME "" // Index = 0, FModules = 1
+    {
+        0x2000
+        FM	0x1000	0	0
+    }
+
+    FRAME "" // Index = 1, FModules = 1
+    {
+        0x2001
+        FM	0x1001	0	0
+    }
+
+    FRAME "" // Index = 2, FModules = 1
+    {
+        0x2002
+        FM	0x1002	18	0
+    }
+
+    FRAME "" // Index = 3, FModules = 1
+    {
+        0x2003
+        FM	0x1003	30	0
+    }
+
+    FRAME "" // Index = 4, FModules = 1
+    {
+        0x2004
+        FM	0x1004	26	2
+    }
+
+    FRAME "" // Index = 5, FModules = 1
+    {
+        0x2005
+        FM	0x1005	14	12
+    }
+
+    FRAME "" // Index = 6, FModules = 1
+    {
+        0x2006
+        FM	0x1006	0	32
+    }
+
+    FRAME "" // Index = 7, FModules = 1
+    {
+        0x2007
+        FM	0x1007	0	30
+    }
+
+    FRAME "" // Index = 8, FModules = 1
+    {
+        0x2008
+        FM	0x1008	0	10
+    }
+
+    FRAME "" // Index = 9, FModules = 1
+    {
+        0x2009
+        FM	0x1009	0	0
+    }
+
+    FRAME "" // Index = 10, FModules = 1
+    {
+        0x2010
+        FM	0x1010	0	0
+    }
+
+    FRAME "" // Index = 11, FModules = 1
+    {
+        0x2011
+        FM	0x1011	0	0
+    }
+
+    FRAME "" // Index = 12, FModules = 1
+    {
+        0x2012
+        FM	0x1012	0	0
+    }
+
+    FRAME "" // Index = 13, FModules = 1
+    {
+        0x2013
+        FM	0x1013	0	0
+    }
+
+    FRAME "" // Index = 14, FModules = 1
+    {
+        0x2014
+        FM	0x1014	36	0
+    }
+
+    FRAME "" // Index = 15, FModules = 1
+    {
+        0x2015
+        FM	0x1015	54	0
+    }
+
+    FRAME "" // Index = 16, FModules = 1
+    {
+        0x2016
+        FM	0x1016	48	8
+    }
+
+    FRAME "" // Index = 17, FModules = 1
+    {
+        0x2017
+        FM	0x1017	26	24
+    }
+
+    FRAME "" // Index = 18, FModules = 1
+    {
+        0x2018
+        FM	0x1018	0	58
+    }
+
+    FRAME "" // Index = 19, FModules = 1
+    {
+        0x2019
+        FM	0x1019	0	54
+    }
+
+    FRAME "" // Index = 20, FModules = 1
+    {
+        0x2020
+        FM	0x1020	0	20
+    }
+
+    FRAME "" // Index = 21, FModules = 1
+    {
+        0x2021
+        FM	0x1021	0	0
+    }
+
+    FRAME "" // Index = 22, FModules = 1
+    {
+        0x2022
+        FM	0x1022	0	0
+    }
+
+    FRAME "" // Index = 23, FModules = 1
+    {
+        0x2023
+        FM	0x1023	0	0
+    }
+
+    FRAME "" // Index = 24, FModules = 1
+    {
+        0x2024
+        FM	0x1024	73	70
+    }
+
+    FRAME "" // Index = 25, FModules = 1
+    {
+        0x2025
+        FM	0x1025	62	57
+    }
+
+    FRAME "" // Index = 26, FModules = 1
+    {
+        0x2026
+        FM	0x1026	49	41
+    }
+
+    FRAME "" // Index = 27, FModules = 1
+    {
+        0x2027
+        FM	0x1027	42	25
+    }
+
+    FRAME "" // Index = 28, FModules = 1
+    {
+        0x2028
+        FM	0x1028	42	20
+    }
+
+    FRAME "" // Index = 29, FModules = 1
+    {
+        0x2029
+        FM	0x1029	48	39
+    }
+
+    FRAME "" // Index = 30, FModules = 1
+    {
+        0x2030
+        FM	0x1030	45	27
+    }
+
+    FRAME "" // Index = 31, FModules = 1
+    {
+        0x2031
+        FM	0x1031	18	84
+    }
+
+    FRAME "" // Index = 32, FModules = 1
+    {
+        0x2032
+        FM	0x1032	16	70
+    }
+
+    FRAME "" // Index = 33, FModules = 1
+    {
+        0x2033
+        FM	0x1033	16	58
+    }
+
+    FRAME "" // Index = 34, FModules = 1
+    {
+        0x2034
+        FM	0x1034	18	43
+    }
+
+    FRAME "" // Index = 35, FModules = 1
+    {
+        0x2035
+        FM	0x1035	25	26
+    }
+
+    FRAME "" // Index = 36, FModules = 1
+    {
+        0x2036
+        FM	0x1036	33	11
+    }
+
+    FRAME "" // Index = 37, FModules = 1
+    {
+        0x2037
+        FM	0x1037	0	23
+    }
+
+    FRAME "" // Index = 38, FModules = 1
+    {
+        0x2038
+        FM	0x1038	0	23
+    }
+
+    FRAME "" // Index = 39, FModules = 1
+    {
+        0x2039
+        FM	0x1039	0	23
+    }
+
+    FRAME "" // Index = 40, FModules = 1
+    {
+        0x2040
+        FM	0x1040	0	23
+    }
+
+    FRAME "" // Index = 41, FModules = 1
+    {
+        0x2041
+        FM	0x1041	0	23
+    }
+
+    FRAME "" // Index = 42, FModules = 1
+    {
+        0x2042
+        FM	0x1042	18	34
+    }
+
+    FRAME "" // Index = 43, FModules = 1
+    {
+        0x2043
+        FM	0x1043	12	35
+    }
+
+    FRAME "" // Index = 44, FModules = 1
+    {
+        0x2044
+        FM	0x1044	3	33
+    }
+
+    FRAME "" // Index = 45, FModules = 1
+    {
+        0x2045
+        FM	0x1045	1	33
+    }
+
+    FRAME "" // Index = 46, FModules = 1
+    {
+        0x2046
+        FM	0x1046	25	34
+    }
+
+    FRAME "" // Index = 47, FModules = 1
+    {
+        0x2047
+        FM	0x1047	31	20
+    }
+
+    FRAME "" // Index = 48, FModules = 1
+    {
+        0x2048
+        FM	0x1048	25	20
+    }
+
+    FRAME "" // Index = 49, FModules = 1
+    {
+        0x2049
+        FM	0x1049	17	19
+    }
+
+    FRAME "" // Index = 50, FModules = 1
+    {
+        0x2050
+        FM	0x1050	29	23
+    }
+
+    FRAME "" // Index = 51, FModules = 1
+    {
+        0x2051
+        FM	0x1051	30	18
+    }
+
+    FRAME "" // Index = 52, FModules = 1
+    {
+        0x2052
+        FM	0x1052	76	93
+    }
+
+    FRAME "" // Index = 53, FModules = 1
+    {
+        0x2053
+        FM	0x1053	75	96
+    }
+
+    FRAME "" // Index = 54, FModules = 1
+    {
+        0x2054
+        FM	0x1054	81	99
+    }
+
+    FRAME "" // Index = 55, FModules = 1
+    {
+        0x2055
+        FM	0x1055	76	101
+    }
+
+    FRAME "" // Index = 56, FModules = 1
+    {
+        0x2056
+        FM	0x1056	76	104
+    }
+
+    FRAME "" // Index = 57, FModules = 1
+    {
+        0x2057
+        FM	0x1057	7	23
+    }
+
+    FRAME "" // Index = 58, FModules = 1
+    {
+        0x2058
+        FM	0x1058	0	21
+    }
+
+    FRAME "" // Index = 59, FModules = 1
+    {
+        0x2059
+        FM	0x1059	8	21
+    }
+
+    FRAME "" // Index = 60, FModules = 1
+    {
+        0x2060
+        FM	0x1060	8	23
+    }
+
+    FRAME "" // Index = 61, FModules = 1
+    {
+        0x2061
+        FM	0x1061	0	21
+    }
+
+    FRAME "" // Index = 62, FModules = 1
+    {
+        0x2062
+        FM	0x1062	39	35
+    }
+
+    FRAME "" // Index = 63, FModules = 1
+    {
+        0x2063
+        FM	0x1063	39	32
+    }
+
+    FRAME "" // Index = 64, FModules = 1
+    {
+        0x2064
+        FM	0x1064	39	30
+    }
+
+    FRAME "" // Index = 65, FModules = 1
+    {
+        0x2065
+        FM	0x1065	38	29
+    }
+
+    FRAME "" // Index = 66, FModules = 1
+    {
+        0x2066
+        FM	0x1066	38	29
+    }
+
+    FRAME "" // Index = 67, FModules = 1
+    {
+        0x2067
+        FM	0x1067	37	30
+    }
+
+    FRAME "" // Index = 68, FModules = 1
+    {
+        0x2068
+        FM	0x1068	35	29
+    }
+
+    FRAME "" // Index = 69, FModules = 1
+    {
+        0x2069
+        FM	0x1069	35	30
+    }
+
+    FRAME "" // Index = 70, FModules = 1
+    {
+        0x2070
+        FM	0x1070	35	29
+    }
+
+    FRAME "" // Index = 71, FModules = 1
+    {
+        0x2071
+        FM	0x1071	34	27
+    }
+
+    FRAME "" // Index = 72, FModules = 1
+    {
+        0x2072
+        FM	0x1072	34	26
+    }
+
+    FRAME "" // Index = 73, FModules = 1
+    {
+        0x2073
+        FM	0x1073	34	27
+    }
+
+    FRAME "" // Index = 74, FModules = 1
+    {
+        0x2074
+        FM	0x1074	34	18
+    }
+
+    FRAME "" // Index = 75, FModules = 1
+    {
+        0x2075
+        FM	0x1075	34	17
+    }
+
+    FRAME "" // Index = 76, FModules = 1
+    {
+        0x2076
+        FM	0x1076	35	16
+    }
+
+    FRAME "" // Index = 77, FModules = 1
+    {
+        0x2077
+        FM	0x1077	36	18
+    }
+
+    FRAME "" // Index = 78, FModules = 1
+    {
+        0x2078
+        FM	0x1078	36	18
+    }
+
+    FRAME "" // Index = 79, FModules = 1
+    {
+        0x2079
+        FM	0x1079	208	174
+    }
+
+    FRAME "" // Index = 80, FModules = 1
+    {
+        0x2080
+        FM	0x1080	208	164
+    }
+
+    FRAME "" // Index = 81, FModules = 1
+    {
+        0x2081
+        FM	0x1081	208	156
+    }
+
+    FRAME "" // Index = 82, FModules = 1
+    {
+        0x2082
+        FM	0x1082	207	172
+    }
+
+    FRAME "" // Index = 83, FModules = 1
+    {
+        0x2083
+        FM	0x1083	209	168
+    }
+
+    FRAME "" // Index = 84, FModules = 1
+    {
+        0x2084
+        FM	0x1084	208	166
+    }
+
+    FRAME "" // Index = 85, FModules = 1
+    {
+        0x2085
+        FM	0x1085	208	162
+    }
+
+    FRAME "" // Index = 86, FModules = 1
+    {
+        0x2086
+        FM	0x1086	207	172
+    }
+
+    FRAME "" // Index = 87, FModules = 1
+    {
+        0x2087
+        FM	0x1087	209	166
+    }
+
+    FRAME "" // Index = 88, FModules = 1
+    {
+        0x2088
+        FM	0x1088	85	75
+    }
+
+    FRAME "" // Index = 89, FModules = 1
+    {
+        0x2089
+        FM	0x1089	84	50
+    }
+
+    FRAME "" // Index = 90, FModules = 1
+    {
+        0x2090
+        FM	0x1090	48	38
+    }
+
+    FRAME "" // Index = 91, FModules = 1
+    {
+        0x2091
+        FM	0x1091	46	34
+    }
+
+    FRAME "" // Index = 92, FModules = 1
+    {
+        0x2092
+        FM	0x1092	45	36
+    }
+
+    FRAME "" // Index = 93, FModules = 1
+    {
+        0x2093
+        FM	0x1093	73	28
+    }
+
+    FRAME "" // Index = 94, FModules = 1
+    {
+        0x2094
+        FM	0x1094	76	30
+    }
+
+    FRAME "" // Index = 95, FModules = 1
+    {
+        0x2095
+        FM	0x1095	6	50
+    }
+
+    FRAME "" // Index = 96, FModules = 1
+    {
+        0x2096
+        FM	0x1096	8	40
+    }
+
+    FRAME "" // Index = 97, FModules = 1
+    {
+        0x2097
+        FM	0x1097	9	21
+    }
+
+    FRAME "" // Index = 98, FModules = 1
+    {
+        0x2098
+        FM	0x1098	34	20
+    }
+
+    FRAME "" // Index = 99, FModules = 1
+    {
+        0x2099
+        FM	0x1099	19	21
+    }
+
+    FRAME "" // Index = 100, FModules = 1
+    {
+        0x20100
+        FM	0x10100	55	40
+    }
+
+    FRAME "" // Index = 101, FModules = 1
+    {
+        0x20101
+        FM	0x10101	59	38
+    }
+
+    FRAME "" // Index = 102, FModules = 1
+    {
+        0x20102
+        FM	0x10102	82	37
+    }
+
+    FRAME "" // Index = 103, FModules = 1
+    {
+        0x20103
+        FM	0x10103	70	32
+    }
+
+    FRAME "" // Index = 104, FModules = 1
+    {
+        0x20104
+        FM	0x10104	52	28
+    }
+
+    FRAME "" // Index = 105, FModules = 1
+    {
+        0x20105
+        FM	0x10105	62	26
+    }
+
+    FRAME "" // Index = 106, FModules = 1
+    {
+        0x20106
+        FM	0x10106	84	30
+    }
+
+    FRAME "" // Index = 107, FModules = 1
+    {
+        0x20107
+        FM	0x10107	68	42
+    }
+
+    FRAME "" // Index = 108, FModules = 1
+    {
+        0x20108
+        FM	0x10108	83	44
+    }
+
+    FRAME "" // Index = 109, FModules = 1
+    {
+        0x20109
+        FM	0x10109	80	42
+    }
+
+    FRAME "" // Index = 110, FModules = 1
+    {
+        0x20110
+        FM	0x10110	76	41
+    }
+
+    FRAME "" // Index = 111, FModules = 1
+    {
+        0x20111
+        FM	0x10111	69	42
+    }
+
+    FRAME "" // Index = 112, FModules = 1
+    {
+        0x20112
+        FM	0x10112	61	44
+    }
+
+    FRAME "" // Index = 113, FModules = 1
+    {
+        0x20113
+        FM	0x10113	60	39
+    }
+
+    FRAME "" // Index = 114, FModules = 1
+    {
+        0x20114
+        FM	0x10114	60	39
+    }
+
+    FRAME "" // Index = 115, FModules = 1
+    {
+        0x20115
+        FM	0x10115	58	38
+    }
+
+    FRAME "" // Index = 116, FModules = 1
+    {
+        0x20116
+        FM	0x10116	55	48
+    }
+
+    FRAME "" // Index = 117, FModules = 1
+    {
+        0x20117
+        FM	0x10117	83	45
+    }
+
+    FRAME "" // Index = 118, FModules = 1
+    {
+        0x20118
+        FM	0x10118	5	47
+    }
+
+    FRAME "" // Index = 119, FModules = 1
+    {
+        0x20119
+        FM	0x10119	4	43
+    }
+
+    FRAME "" // Index = 120, FModules = 1
+    {
+        0x20120
+        FM	0x10120	4	40
+    }
+
+    FRAME "" // Index = 121, FModules = 1
+    {
+        0x20121
+        FM	0x10121	4	45
+    }
+
+    FRAME "" // Index = 122, FModules = 1
+    {
+        0x20122
+        FM	0x10122	4	42
+    }
+
+    FRAME "" // Index = 123, FModules = 1
+    {
+        0x20123
+        FM	0x10123	22	41
+    }
+
+    FRAME "" // Index = 124, FModules = 1
+    {
+        0x20124
+        FM	0x10124	18	37
+    }
+
+    FRAME "" // Index = 125, FModules = 1
+    {
+        0x20125
+        FM	0x10125	19	36
+    }
+
+    FRAME "" // Index = 126, FModules = 1
+    {
+        0x20126
+        FM	0x10126	24	37
+    }
+
+    FRAME "" // Index = 127, FModules = 1
+    {
+        0x20127
+        FM	0x10127	18	40
+    }
+
+    FRAME "" // Index = 128, FModules = 1
+    {
+        0x20128
+        FM	0x10128	19	36
+    }
+
+    FRAME "" // Index = 129, FModules = 1
+    {
+        0x20129
+        FM	0x10129	32	36
+    }
+
+    FRAME "" // Index = 130, FModules = 1
+    {
+        0x20130
+        FM	0x10130	32	35
+    }
+
+    FRAME "" // Index = 131, FModules = 1
+    {
+        0x20131
+        FM	0x10131	32	34
+    }
+
+    FRAME "" // Index = 132, FModules = 1
+    {
+        0x20132
+        FM	0x10132	33	37
+    }
+
+    FRAME "" // Index = 133, FModules = 1
+    {
+        0x20133
+        FM	0x10133	35	34
+    }
+
+    FRAME "" // Index = 134, FModules = 1
+    {
+        0x20134
+        FM	0x10134	33	32
+    }
+
+    FRAME "" // Index = 135, FModules = 1
+    {
+        0x20135
+        FM	0x10135	29	33
+    }
+
+    FRAME "" // Index = 136, FModules = 1
+    {
+        0x20136
+        FM	0x10136	30	31
+    }
+
+    FRAME "" // Index = 137, FModules = 1
+    {
+        0x20137
+        FM	0x10137	30	32
+    }
+
+    FRAME "" // Index = 138, FModules = 1
+    {
+        0x20138
+        FM	0x10138	30	33
+    }
+
+    FRAME "" // Index = 139, FModules = 1
+    {
+        0x20139
+        FM	0x10139	38	52
+    }
+
+    FRAME "" // Index = 140, FModules = 1
+    {
+        0x20140
+        FM	0x10140	32	53
+    }
+
+    FRAME "" // Index = 141, FModules = 1
+    {
+        0x20141
+        FM	0x10141	31	52
+    }
+
+    FRAME "" // Index = 142, FModules = 1
+    {
+        0x20142
+        FM	0x10142	32	51
+    }
+
+    FRAME "" // Index = 143, FModules = 1
+    {
+        0x20143
+        FM	0x10143	33	52
+    }
+
+    FRAME "" // Index = 144, FModules = 1
+    {
+        0x20144
+        FM	0x10144	32	51
+    }
+
+    FRAME "" // Index = 145, FModules = 1
+    {
+        0x20145
+        FM	0x10145	14	34
+    }
+
+    FRAME "" // Index = 146, FModules = 1
+    {
+        0x20146
+        FM	0x10146	13	33
+    }
+
+    FRAME "" // Index = 147, FModules = 1
+    {
+        0x20147
+        FM	0x10147	17	28
+    }
+
+    FRAME "" // Index = 148, FModules = 1
+    {
+        0x20148
+        FM	0x10148	14	28
+    }
+
+    FRAME "" // Index = 149, FModules = 1
+    {
+        0x20149
+        FM	0x10149	13	32
+    }
+
+    FRAME "" // Index = 150, FModules = 1
+    {
+        0x20150
+        FM	0x10150	84	53
+    }
+
+    FRAME "" // Index = 151, FModules = 1
+    {
+        0x20151
+        FM	0x10151	83	56
+    }
+
+    FRAME "" // Index = 152, FModules = 1
+    {
+        0x20152
+        FM	0x10152	81	41
+    }
+
+    FRAME "" // Index = 153, FModules = 1
+    {
+        0x20153
+        FM	0x10153	90	30
+    }
+
+    FRAME "" // Index = 154, FModules = 1
+    {
+        0x20154
+        FM	0x10154	82	66
+    }
+
+    FRAME "" // Index = 155, FModules = 1
+    {
+        0x20155
+        FM	0x10155	27	2
+    }
+
+    FRAME "" // Index = 156, FModules = 1
+    {
+        0x20156
+        FM	0x10156	27	0
+    }
+
+    FRAME "" // Index = 157, FModules = 1
+    {
+        0x20157
+        FM	0x10157	28	2
+    }
+
+    FRAME "" // Index = 158, FModules = 1
+    {
+        0x20158
+        FM	0x10158	29	4
+    }
+
+    FRAME "" // Index = 159, FModules = 1
+    {
+        0x20159
+        FM	0x10159	27	12
+    }
+
+    FRAME "" // Index = 160, FModules = 1
+    {
+        0x20160
+        FM	0x10160	30	6
+    }
+
+    FRAME "" // Index = 161, FModules = 1
+    {
+        0x20161
+        FM	0x10161	31	6
+    }
+
+    FRAME "" // Index = 162, FModules = 1
+    {
+        0x20162
+        FM	0x10162	32	11
+    }
+
+    FRAME "" // Index = 163, FModules = 1
+    {
+        0x20163
+        FM	0x10163	31	9
+    }
+
+    FRAME "" // Index = 164, FModules = 1
+    {
+        0x20164
+        FM	0x10164	27	6
+    }
+
+    FRAME "" // Index = 165, FModules = 1
+    {
+        0x20165
+        FM	0x10165	100	128
+    }
+
+    FRAME "" // Index = 166, FModules = 1
+    {
+        0x20166
+        FM	0x10166	99	56
+    }
+
+    FRAME "" // Index = 167, FModules = 1
+    {
+        0x20167
+        FM	0x10167	80	52
+    }
+
+    FRAME "" // Index = 168, FModules = 1
+    {
+        0x20168
+        FM	0x10168	78	43
+    }
+
+    FRAME "" // Index = 169, FModules = 1
+    {
+        0x20169
+        FM	0x10169	81	46
+    }
+
+    FRAME "" // Index = 170, FModules = 1
+    {
+        0x20170
+        FM	0x10170	78	44
+    }
+
+    FRAME "" // Index = 171, FModules = 1
+    {
+        0x20171
+        FM	0x10171	71	30
+    }
+
+    FRAME "" // Index = 172, FModules = 1
+    {
+        0x20172
+        FM	0x10172	74	11
+    }
+
+    FRAME "" // Index = 173, FModules = 1
+    {
+        0x20173
+        FM	0x10173	73	0
+    }
+
+    FRAME "" // Index = 174, FModules = 1
+    {
+        0x20174
+        FM	0x10174	95	4
+    }
+
+    FRAME "" // Index = 175, FModules = 1
+    {
+        0x20175
+        FM	0x10175	47	70
+    }
+
+    FRAME "" // Index = 176, FModules = 1
+    {
+        0x20176
+        FM	0x10176	45	67
+    }
+
+    FRAME "" // Index = 177, FModules = 1
+    {
+        0x20177
+        FM	0x10177	46	62
+    }
+
+    FRAME "" // Index = 178, FModules = 1
+    {
+        0x20178
+        FM	0x10178	44	57
+    }
+
+    FRAME "" // Index = 179, FModules = 1
+    {
+        0x20179
+        FM	0x10179	42	51
+    }
+
+    FRAME "" // Index = 180, FModules = 1
+    {
+        0x20180
+        FM	0x10180	42	50
+    }
+
+    FRAME "" // Index = 181, FModules = 1
+    {
+        0x20181
+        FM	0x10181	41	46
+    }
+
+    FRAME "" // Index = 182, FModules = 1
+    {
+        0x20182
+        FM	0x10182	39	39
+    }
+
+    FRAME "" // Index = 183, FModules = 1
+    {
+        0x20183
+        FM	0x10183	38	41
+    }
+
+    FRAME "" // Index = 184, FModules = 1
+    {
+        0x20184
+        FM	0x10184	38	42
+    }
+
+    FRAME "" // Index = 185, FModules = 1
+    {
+        0x20185
+        FM	0x10185	77	76
+    }
+
+    FRAME "" // Index = 186, FModules = 1
+    {
+        0x20186
+        FM	0x10186	36	33
+    }
+
+    FRAME "" // Index = 187, FModules = 1
+    {
+        0x20187
+        FM	0x10187	18	23
+    }
+
+    FRAME "" // Index = 188, FModules = 1
+    {
+        0x20188
+        FM	0x10188	11	16
+    }
+
+    FRAME "" // Index = 189, FModules = 1
+    {
+        0x20189
+        FM	0x10189	13	17
+    }
+
+    FRAME "" // Index = 190, FModules = 1
+    {
+        0x20190
+        FM	0x10190	21	21
+    }
+
+    FRAME "" // Index = 191, FModules = 1
+    {
+        0x20191
+        FM	0x10191	64	7
+    }
+
+    FRAME "" // Index = 192, FModules = 1
+    {
+        0x20192
+        FM	0x10192	62	4
+    }
+
+    FRAME "" // Index = 193, FModules = 1
+    {
+        0x20193
+        FM	0x10193	58	0
+    }
+
+    FRAME "" // Index = 194, FModules = 1
+    {
+        0x20194
+        FM	0x10194	56	0
+    }
+
+    FRAME "" // Index = 195, FModules = 1
+    {
+        0x20195
+        FM	0x10195	64	10
+    }
+
+    FRAME "" // Index = 196, FModules = 1
+    {
+        0x20196
+        FM	0x10196	105	136
+    }
+
+    FRAME "" // Index = 197, FModules = 1
+    {
+        0x20197
+        FM	0x10197	104	109
+    }
+
+    FRAME "" // Index = 198, FModules = 1
+    {
+        0x20198
+        FM	0x10198	104	87
+    }
+
+    FRAME "" // Index = 199, FModules = 1
+    {
+        0x20199
+        FM	0x10199	105	60
+    }
+
+    FRAME "" // Index = 200, FModules = 1
+    {
+        0x20200
+        FM	0x10200	109	70
+    }
+
+    FRAME "" // Index = 201, FModules = 1
+    {
+        0x20201
+        FM	0x10201	54	45
+    }
+
+    FRAME "" // Index = 202, FModules = 1
+    {
+        0x20202
+        FM	0x10202	54	65
+    }
+
+    FRAME "" // Index = 203, FModules = 1
+    {
+        0x20203
+        FM	0x10203	55	65
+    }
+
+    FRAME "" // Index = 204, FModules = 1
+    {
+        0x20204
+        FM	0x10204	54	69
+    }
+
+    FRAME "" // Index = 205, FModules = 1
+    {
+        0x20205
+        FM	0x10205	54	63
+    }
+
+    FRAME "" // Index = 206, FModules = 1
+    {
+        0x20206
+        FM	0x10206	54	45
+    }
+
+    FRAME "" // Index = 207, FModules = 1
+    {
+        0x20207
+        FM	0x10207	54	65
+    }
+
+    FRAME "" // Index = 208, FModules = 1
+    {
+        0x20208
+        FM	0x10208	55	65
+    }
+
+    FRAME "" // Index = 209, FModules = 1
+    {
+        0x20209
+        FM	0x10209	54	69
+    }
+
+    FRAME "" // Index = 210, FModules = 1
+    {
+        0x20210
+        FM	0x10210	54	63
+    }
+
+    FRAME "" // Index = 211, FModules = 1
+    {
+        0x20211
+        FM	0x10211	54	45
+    }
+
+    FRAME "" // Index = 212, FModules = 1
+    {
+        0x20212
+        FM	0x10212	54	65
+    }
+
+    FRAME "" // Index = 213, FModules = 1
+    {
+        0x20213
+        FM	0x10213	55	65
+    }
+
+    FRAME "" // Index = 214, FModules = 1
+    {
+        0x20214
+        FM	0x10214	54	69
+    }
+
+    FRAME "" // Index = 215, FModules = 1
+    {
+        0x20215
+        FM	0x10215	54	63
+    }
+
+    FRAME "" // Index = 216, FModules = 1
+    {
+        0x20216
+        FM	0x10216	0	1
+    }
+
+    FRAME "" // Index = 217, FModules = 1
+    {
+        0x20217
+        FM	0x10217	0	1
+    }
+
+    FRAME "" // Index = 218, FModules = 1
+    {
+        0x20218
+        FM	0x10218	478	312
+    }
+
+    FRAME "" // Index = 219, FModules = 1
+    {
+        0x20219
+        FM	0x10219	479	304
+    }
+
+    FRAME "" // Index = 220, FModules = 1
+    {
+        0x20220
+        FM	0x10220	479	294
+    }
+
+    FRAME "" // Index = 221, FModules = 1
+    {
+        0x20221
+        FM	0x10221	481	284
+    }
+
+    FRAME "" // Index = 222, FModules = 1
+    {
+        0x20222
+        FM	0x10222	479	273
+    }
+
+    FRAME "" // Index = 223, FModules = 1
+    {
+        0x20223
+        FM	0x10223	479	263
+    }
+
+    FRAME "" // Index = 224, FModules = 1
+    {
+        0x20224
+        FM	0x10224	484	264
+    }
+
+    FRAME "" // Index = 225, FModules = 1
+    {
+        0x20225
+        FM	0x10225	501	290
+    }
+
+    FRAME "" // Index = 226, FModules = 1
+    {
+        0x20226
+        FM	0x10226	502	283
+    }
+
+    FRAME "" // Index = 227, FModules = 1
+    {
+        0x20227
+        FM	0x10227	480	316
+    }
+
+    FRAME "" // Index = 228, FModules = 1
+    {
+        0x20228
+        FM	0x10228	481	306
+    }
+
+    FRAME "" // Index = 229, FModules = 1
+    {
+        0x20229
+        FM	0x10229	481	296
+    }
+
+    FRAME "" // Index = 230, FModules = 1
+    {
+        0x20230
+        FM	0x10230	481	284
+    }
+
+    FRAME "" // Index = 231, FModules = 1
+    {
+        0x20231
+        FM	0x10231	481	274
+    }
+
+    FRAME "" // Index = 232, FModules = 1
+    {
+        0x20232
+        FM	0x10232	480	263
+    }
+
+    FRAME "" // Index = 233, FModules = 1
+    {
+        0x20233
+        FM	0x10233	486	266
+    }
+
+    FRAME "" // Index = 234, FModules = 1
+    {
+        0x20234
+        FM	0x10234	503	291
+    }
+
+    FRAME "" // Index = 235, FModules = 1
+    {
+        0x20235
+        FM	0x10235	503	284
+    }
+
+    FRAME "" // Index = 236, FModules = 1
+    {
+        0x20236
+        FM	0x10236	481	317
+    }
+
+    FRAME "" // Index = 237, FModules = 1
+    {
+        0x20237
+        FM	0x10237	483	316
+    }
+
+    FRAME "" // Index = 238, FModules = 1
+    {
+        0x20238
+        FM	0x10238	482	298
+    }
+
+    FRAME "" // Index = 239, FModules = 1
+    {
+        0x20239
+        FM	0x10239	483	296
+    }
+
+    FRAME "" // Index = 240, FModules = 1
+    {
+        0x20240
+        FM	0x10240	480	277
+    }
+
+    FRAME "" // Index = 241, FModules = 1
+    {
+        0x20241
+        FM	0x10241	483	274
+    }
+
+    FRAME "" // Index = 242, FModules = 1
+    {
+        0x20242
+        FM	0x10242	484	265
+    }
+
+    FRAME "" // Index = 243, FModules = 1
+    {
+        0x20243
+        FM	0x10243	505	301
+    }
+
+    FRAME "" // Index = 244, FModules = 1
+    {
+        0x20244
+        FM	0x10244	503	285
+    }
+
+    FRAME "" // Index = 245, FModules = 1
+    {
+        0x20245
+        FM	0x10245	10	9
+    }
+
+    FRAME "" // Index = 246, FModules = 1
+    {
+        0x20246
+        FM	0x10246	10	9
+    }
+
+    FRAME "" // Index = 247, FModules = 1
+    {
+        0x20247
+        FM	0x10247	10	9
+    }
+
+    FRAME "" // Index = 248, FModules = 1
+    {
+        0x20248
+        FM	0x10248	10	9
+    }
+
+    FRAME "" // Index = 249, FModules = 1
+    {
+        0x20249
+        FM	0x10249	10	9
+    }
+
+    FRAME "" // Index = 250, FModules = 1
+    {
+        0x20250
+        FM	0x10250	10	9
+    }
+
+    FRAME "" // Index = 251, FModules = 1
+    {
+        0x20251
+        FM	0x10251	48	0
+    }
+
+    FRAME "" // Index = 252, FModules = 1
+    {
+        0x20252
+        FM	0x10252	47	5
+    }
+
+    FRAME "" // Index = 253, FModules = 1
+    {
+        0x20253
+        FM	0x10253	51	2
+    }
+
+    FRAME "" // Index = 254, FModules = 1
+    {
+        0x20254
+        FM	0x10254	50	5
+    }
+
+    FRAME "" // Index = 255, FModules = 1
+    {
+        0x20255
+        FM	0x10255	55	1
+    }
+
+    FRAME "" // Index = 256, FModules = 1
+    {
+        0x20256
+        FM	0x10256	0	0
+    }
+
+    FRAME "" // Index = 257, FModules = 1
+    {
+        0x20257
+        FM	0x10257	33	109
+    }
+
+    FRAME "" // Index = 258, FModules = 1
+    {
+        0x20258
+        FM	0x10258	28	106
+    }
+
+    FRAME "" // Index = 259, FModules = 1
+    {
+        0x20259
+        FM	0x10259	23	108
+    }
+
+    FRAME "" // Index = 260, FModules = 1
+    {
+        0x20260
+        FM	0x10260	45	105
+    }
+
+    FRAME "" // Index = 261, FModules = 1
+    {
+        0x20261
+        FM	0x10261	46	106
+    }
+
+    FRAME "" // Index = 262, FModules = 1
+    {
+        0x20262
+        FM	0x10262	50	108
+    }
+
+    FRAME "" // Index = 263, FModules = 1
+    {
+        0x20263
+        FM	0x10263	57	106
+    }
+
+    FRAME "" // Index = 264, FModules = 1
+    {
+        0x20264
+        FM	0x10264	63	105
+    }
+
+    FRAME "" // Index = 265, FModules = 1
+    {
+        0x20265
+        FM	0x10265	0	0
+    }
+
+    FRAME "" // Index = 266, FModules = 1
+    {
+        0x20266
+        FM	0x10266	0	0
+    }
+
+    FRAME "" // Index = 267, FModules = 1
+    {
+        0x20267
+        FM	0x10267	83	172
+    }
+
+    FRAME "" // Index = 268, FModules = 1
+    {
+        0x20268
+        FM	0x10268	83	152
+    }
+
+    FRAME "" // Index = 269, FModules = 1
+    {
+        0x20269
+        FM	0x10269	81	152
+    }
+
+    FRAME "" // Index = 270, FModules = 1
+    {
+        0x20270
+        FM	0x10270	83	152
+    }
+
+    FRAME "" // Index = 271, FModules = 1
+    {
+        0x20271
+        FM	0x10271	85	153
+    }
+
+    FRAME "" // Index = 272, FModules = 1
+    {
+        0x20272
+        FM	0x10272	85	155
+    }
+
+    FRAME "" // Index = 273, FModules = 1
+    {
+        0x20273
+        FM	0x10273	0	0
+    }
+
+    FRAME "" // Index = 274, FModules = 1
+    {
+        0x20274
+        FM	0x10274	65	139
+    }
+
+    FRAME "" // Index = 275, FModules = 1
+    {
+        0x20275
+        FM	0x10275	63	142
+    }
+
+    FRAME "" // Index = 276, FModules = 1
+    {
+        0x20276
+        FM	0x10276	56	0
+    }
+
+    FRAME "" // Index = 277, FModules = 1
+    {
+        0x20277
+        FM	0x10277	82	28
+    }
+
+    FRAME "" // Index = 278, FModules = 1
+    {
+        0x20278
+        FM	0x10278	72	42
+    }
+
+    FRAME "" // Index = 279, FModules = 1
+    {
+        0x20279
+        FM	0x10279	72	47
+    }
+
+    FRAME "" // Index = 280, FModules = 1
+    {
+        0x20280
+        FM	0x10280	72	47
+    }
+
+    FRAME "" // Index = 281, FModules = 1
+    {
+        0x20281
+        FM	0x10281	90	57
+    }
+
+    FRAME "" // Index = 282, FModules = 1
+    {
+        0x20282
+        FM	0x10282	28	17
+    }
+
+    FRAME "" // Index = 283, FModules = 1
+    {
+        0x20283
+        FM	0x10283	37	17
+    }
+
+    FRAME "" // Index = 284, FModules = 1
+    {
+        0x20284
+        FM	0x10284	33	22
+    }
+
+    FRAME "" // Index = 285, FModules = 1
+    {
+        0x20285
+        FM	0x10285	31	17
+    }
+
+    FRAME "" // Index = 286, FModules = 1
+    {
+        0x20286
+        FM	0x10286	33	15
+    }
+
+    FRAME "" // Index = 287, FModules = 1
+    {
+        0x20287
+        FM	0x10287	24	38
+    }
+
+    FRAME "" // Index = 288, FModules = 1
+    {
+        0x20288
+        FM	0x10288	21	37
+    }
+
+    FRAME "" // Index = 289, FModules = 1
+    {
+        0x20289
+        FM	0x10289	19	35
+    }
+
+    FRAME "" // Index = 290, FModules = 1
+    {
+        0x20290
+        FM	0x10290	17	35
+    }
+
+    FRAME "" // Index = 291, FModules = 1
+    {
+        0x20291
+        FM	0x10291	16	34
+    }
+
+    FRAME "" // Index = 292, FModules = 1
+    {
+        0x20292
+        FM	0x10292	95	80
+    }
+
+    FRAME "" // Index = 293, FModules = 1
+    {
+        0x20293
+        FM	0x10293	94	77
+    }
+
+    FRAME "" // Index = 294, FModules = 1
+    {
+        0x20294
+        FM	0x10294	99	95
+    }
+
+    FRAME "" // Index = 295, FModules = 1
+    {
+        0x20295
+        FM	0x10295	100	94
+    }
+
+    FRAME "" // Index = 296, FModules = 1
+    {
+        0x20296
+        FM	0x10296	100	95
+    }
+
+    FRAME "" // Index = 297, FModules = 1
+    {
+        0x20297
+        FM	0x10297	90	82
+    }
+
+    FRAME "" // Index = 298, FModules = 1
+    {
+        0x20298
+        FM	0x10298	90	83
+    }
+
+    FRAME "" // Index = 299, FModules = 1
+    {
+        0x20299
+        FM	0x10299	90	81
+    }
+
+    FRAME "" // Index = 300, FModules = 1
+    {
+        0x20300
+        FM	0x10300	90	81
+    }
+
+    FRAME "" // Index = 301, FModules = 1
+    {
+        0x20301
+        FM	0x10301	88	83
+    }
+
+    FRAME "" // Index = 302, FModules = 1
+    {
+        0x20302
+        FM	0x10302	88	83
+    }
+
+    FRAME "" // Index = 303, FModules = 1
+    {
+        0x20303
+        FM	0x10303	90	83
+    }
+
+    FRAME "" // Index = 304, FModules = 1
+    {
+        0x20304
+        FM	0x10304	90	83
+    }
+
+    FRAME "" // Index = 305, FModules = 1
+    {
+        0x20305
+        FM	0x10305	59	106
+    }
+
+    FRAME "" // Index = 306, FModules = 1
+    {
+        0x20306
+        FM	0x10306	46	106
+    }
+
+    FRAME "" // Index = 307, FModules = 1
+    {
+        0x20307
+        FM	0x10307	46	107
+    }
+
+    FRAME "" // Index = 308, FModules = 1
+    {
+        0x20308
+        FM	0x10308	49	106
+    }
+
+    FRAME "" // Index = 309, FModules = 1
+    {
+        0x20309
+        FM	0x10309	58	106
+    }
+
+    FRAME "" // Index = 310, FModules = 1
+    {
+        0x20310
+        FM	0x10310	47	107
+    }
+
+    FRAME "" // Index = 311, FModules = 1
+    {
+        0x20311
+        FM	0x10311	47	107
+    }
+
+    FRAME "" // Index = 312, FModules = 1
+    {
+        0x20312
+        FM	0x10312	49	107
+    }
+
+    FRAME "" // Index = 313, FModules = 1
+    {
+        0x20313
+        FM	0x10313	30	25
+    }
+
+    FRAME "" // Index = 314, FModules = 1
+    {
+        0x20314
+        FM	0x10314	30	24
+    }
+
+    FRAME "" // Index = 315, FModules = 1
+    {
+        0x20315
+        FM	0x10315	31	28
+    }
+
+    FRAME "" // Index = 316, FModules = 1
+    {
+        0x20316
+        FM	0x10316	30	24
+    }
+
+    FRAME "" // Index = 317, FModules = 1
+    {
+        0x20317
+        FM	0x10317	29	27
+    }
+
+    FRAME "" // Index = 318, FModules = 1
+    {
+        0x20318
+        FM	0x10318	3	4
+    }
+
+    FRAME "" // Index = 319, FModules = 1
+    {
+        0x20319
+        FM	0x10319	3	6
+    }
+
+    FRAME "" // Index = 320, FModules = 1
+    {
+        0x20320
+        FM	0x10320	3	6
+    }
+
+    FRAME "" // Index = 321, FModules = 1
+    {
+        0x20321
+        FM	0x10321	3	6
+    }
+
+    FRAME "" // Index = 322, FModules = 1
+    {
+        0x20322
+        FM	0x10322	3	4
+    }
+
+    FRAME "" // Index = 323, FModules = 1
+    {
+        0x20323
+        FM	0x10323	3	4
+    }
+
+    FRAME "" // Index = 324, FModules = 1
+    {
+        0x20324
+        FM	0x10324	3	4
+    }
+
+    FRAME "" // Index = 325, FModules = 1
+    {
+        0x20325
+        FM	0x10325	3	4
+    }
+
+    FRAME "" // Index = 326, FModules = 1
+    {
+        0x20326
+        FM	0x10326	3	4
+    }
+
+    FRAME "" // Index = 327, FModules = 1
+    {
+        0x20327
+        FM	0x10327	3	4
+    }
+
+    FRAME "" // Index = 328, FModules = 1
+    {
+        0x20328
+        FM	0x10328	3	4
+    }
+
+    FRAME "" // Index = 329, FModules = 1
+    {
+        0x20329
+        FM	0x10329	3	3
+    }
+
+    FRAME "" // Index = 330, FModules = 1
+    {
+        0x20330
+        FM	0x10330	3	3
+    }
+
+    FRAME "" // Index = 331, FModules = 1
+    {
+        0x20331
+        FM	0x10331	3	3
+    }
+
+    FRAME "" // Index = 332, FModules = 1
+    {
+        0x20332
+        FM	0x10332	3	3
+    }
+
+    FRAME "" // Index = 333, FModules = 1
+    {
+        0x20333
+        FM	0x10333	3	3
+    }
+
+    FRAME "" // Index = 334, FModules = 1
+    {
+        0x20334
+        FM	0x10334	3	3
+    }
+
+    FRAME "" // Index = 335, FModules = 1
+    {
+        0x20335
+        FM	0x10335	3	3
+    }
+
+    FRAME "" // Index = 336, FModules = 1
+    {
+        0x20336
+        FM	0x10336	3	3
+    }
+
+    FRAME "" // Index = 337, FModules = 1
+    {
+        0x20337
+        FM	0x10337	3	3
+    }
+
+    FRAME "" // Index = 338, FModules = 1
+    {
+        0x20338
+        FM	0x10338	3	3
+    }
+
+    FRAME "" // Index = 339, FModules = 1
+    {
+        0x20339
+        FM	0x10339	3	3
+    }
+
+    FRAME "" // Index = 340, FModules = 1
+    {
+        0x20340
+        FM	0x10340	4	4
+    }
+
+    FRAME "" // Index = 341, FModules = 1
+    {
+        0x20341
+        FM	0x10341	4	4
+    }
+
+    FRAME "" // Index = 342, FModules = 1
+    {
+        0x20342
+        FM	0x10342	4	4
+    }
+
+    FRAME "" // Index = 343, FModules = 1
+    {
+        0x20343
+        FM	0x10343	4	4
+    }
+
+    FRAME "" // Index = 344, FModules = 1
+    {
+        0x20344
+        FM	0x10344	4	4
+    }
+
+    FRAME "" // Index = 345, FModules = 1
+    {
+        0x20345
+        FM	0x10345	4	4
+    }
+
+    FRAME "" // Index = 346, FModules = 1
+    {
+        0x20346
+        FM	0x10346	4	4
+    }
+
+    FRAME "" // Index = 347, FModules = 1
+    {
+        0x20347
+        FM	0x10347	4	4
+    }
+
+    FRAME "" // Index = 348, FModules = 1
+    {
+        0x20348
+        FM	0x10348	4	4
+    }
+
+    FRAME "" // Index = 349, FModules = 1
+    {
+        0x20349
+        FM	0x10349	4	4
+    }
+
+    FRAME "" // Index = 350, FModules = 1
+    {
+        0x20350
+        FM	0x10350	4	4
+    }
+
+    FRAME "" // Index = 351, FModules = 1
+    {
+        0x20351
+        FM	0x10351	3	3
+    }
+
+    FRAME "" // Index = 352, FModules = 1
+    {
+        0x20352
+        FM	0x10352	3	3
+    }
+
+    FRAME "" // Index = 353, FModules = 1
+    {
+        0x20353
+        FM	0x10353	3	3
+    }
+
+    FRAME "" // Index = 354, FModules = 1
+    {
+        0x20354
+        FM	0x10354	3	3
+    }
+
+    FRAME "" // Index = 355, FModules = 1
+    {
+        0x20355
+        FM	0x10355	3	3
+    }
+
+    FRAME "" // Index = 356, FModules = 1
+    {
+        0x20356
+        FM	0x10356	3	3
+    }
+
+    FRAME "" // Index = 357, FModules = 1
+    {
+        0x20357
+        FM	0x10357	3	3
+    }
+
+    FRAME "" // Index = 358, FModules = 1
+    {
+        0x20358
+        FM	0x10358	3	3
+    }
+
+    FRAME "" // Index = 359, FModules = 1
+    {
+        0x20359
+        FM	0x10359	3	3
+    }
+
+    FRAME "" // Index = 360, FModules = 1
+    {
+        0x20360
+        FM	0x10360	3	3
+    }
+
+    FRAME "" // Index = 361, FModules = 1
+    {
+        0x20361
+        FM	0x10361	3	3
+    }
+
+    FRAME "" // Index = 362, FModules = 1
+    {
+        0x20362
+        FM	0x10362	2	5
+    }
+
+    FRAME "" // Index = 363, FModules = 1
+    {
+        0x20363
+        FM	0x10363	2	5
+    }
+
+    FRAME "" // Index = 364, FModules = 1
+    {
+        0x20364
+        FM	0x10364	2	5
+    }
+
+    FRAME "" // Index = 365, FModules = 1
+    {
+        0x20365
+        FM	0x10365	2	5
+    }
+
+    FRAME "" // Index = 366, FModules = 1
+    {
+        0x20366
+        FM	0x10366	2	5
+    }
+
+    FRAME "" // Index = 367, FModules = 1
+    {
+        0x20367
+        FM	0x10367	2	5
+    }
+
+    FRAME "" // Index = 368, FModules = 1
+    {
+        0x20368
+        FM	0x10368	2	5
+    }
+
+    FRAME "" // Index = 369, FModules = 1
+    {
+        0x20369
+        FM	0x10369	2	5
+    }
+
+    FRAME "" // Index = 370, FModules = 1
+    {
+        0x20370
+        FM	0x10370	2	5
+    }
+
+    FRAME "" // Index = 371, FModules = 1
+    {
+        0x20371
+        FM	0x10371	2	5
+    }
+
+    FRAME "" // Index = 372, FModules = 1
+    {
+        0x20372
+        FM	0x10372	2	5
+    }
+
+    FRAME "" // Index = 373, FModules = 1
+    {
+        0x20373
+        FM	0x10373	0	28
+    }
+
+    FRAME "" // Index = 374, FModules = 1
+    {
+        0x20374
+        FM	0x10374	0	24
+    }
+
+    FRAME "" // Index = 375, FModules = 1
+    {
+        0x20375
+        FM	0x10375	16	24
+    }
+
+    FRAME "" // Index = 376, FModules = 1
+    {
+        0x20376
+        FM	0x10376	66	42
+    }
+
+    FRAME "" // Index = 377, FModules = 1
+    {
+        0x20377
+        FM	0x10377	66	42
+    }
+
+    FRAME "" // Index = 378, FModules = 1
+    {
+        0x20378
+        FM	0x10378	0	0
+    }
+
+    FRAME "" // Index = 379, FModules = 1
+    {
+        0x20379
+        FM	0x10379	0	28
+    }
+
+    FRAME "" // Index = 380, FModules = 1
+    {
+        0x20380
+        FM	0x10380	0	20
+    }
+
+    FRAME "" // Index = 381, FModules = 1
+    {
+        0x20381
+        FM	0x10381	16	20
+    }
+
+    FRAME "" // Index = 382, FModules = 1
+    {
+        0x20382
+        FM	0x10382	65	21
+    }
+
+    FRAME "" // Index = 383, FModules = 1
+    {
+        0x20383
+        FM	0x10383	63	19
+    }
+
+    FRAME "" // Index = 384, FModules = 1
+    {
+        0x20384
+        FM	0x10384	0	0
+    }
+
+    FRAME "" // Index = 385, FModules = 1
+    {
+        0x20385
+        FM	0x10385	51	38
+    }
+
+    FRAME "" // Index = 386, FModules = 1
+    {
+        0x20386
+        FM	0x10386	51	33
+    }
+
+    FRAME "" // Index = 387, FModules = 1
+    {
+        0x20387
+        FM	0x10387	44	26
+    }
+
+    FRAME "" // Index = 388, FModules = 1
+    {
+        0x20388
+        FM	0x10388	48	20
+    }
+
+    FRAME "" // Index = 389, FModules = 1
+    {
+        0x20389
+        FM	0x10389	48	25
+    }
+
+    FRAME "" // Index = 390, FModules = 1
+    {
+        0x20390
+        FM	0x10390	44	27
+    }
+
+    FRAME "" // Index = 391, FModules = 1
+    {
+        0x20391
+        FM	0x10391	40	24
+    }
+
+    FRAME "" // Index = 392, FModules = 1
+    {
+        0x20392
+        FM	0x10392	36	21
+    }
+
+    FRAME "" // Index = 393, FModules = 1
+    {
+        0x20393
+        FM	0x10393	44	22
+    }
+
+    FRAME "" // Index = 394, FModules = 1
+    {
+        0x20394
+        FM	0x10394	40	19
+    }
+
+    FRAME "" // Index = 395, FModules = 1
+    {
+        0x20395
+        FM	0x10395	61	31
+    }
+
+    FRAME "" // Index = 396, FModules = 1
+    {
+        0x20396
+        FM	0x10396	57	26
+    }
+
+    FRAME "" // Index = 397, FModules = 1
+    {
+        0x20397
+        FM	0x10397	53	24
+    }
+
+    FRAME "" // Index = 398, FModules = 1
+    {
+        0x20398
+        FM	0x10398	61	26
+    }
+
+    FRAME "" // Index = 399, FModules = 1
+    {
+        0x20399
+        FM	0x10399	57	21
+    }
+
+    FRAME "" // Index = 400, FModules = 1
+    {
+        0x20400
+        FM	0x10400	5	10
+    }
+
+    FRAME "" // Index = 401, FModules = 1
+    {
+        0x20401
+        FM	0x10401	5	10
+    }
+
+    FRAME "" // Index = 402, FModules = 1
+    {
+        0x20402
+        FM	0x10402	5	10
+    }
+
+    FRAME "" // Index = 403, FModules = 1
+    {
+        0x20403
+        FM	0x10403	5	10
+    }
+
+    FRAME "" // Index = 404, FModules = 1
+    {
+        0x20404
+        FM	0x10404	5	10
+    }
+
+    FRAME "" // Index = 405, FModules = 1
+    {
+        0x20405
+        FM	0x10405	5	10
+    }
+
+    FRAME "" // Index = 406, FModules = 1
+    {
+        0x20406
+        FM	0x10406	5	10
+    }
+
+    FRAME "" // Index = 407, FModules = 1
+    {
+        0x20407
+        FM	0x10407	5	10
+    }
+
+    FRAME "" // Index = 408, FModules = 1
+    {
+        0x20408
+        FM	0x10408	5	10
+    }
+
+    FRAME "" // Index = 409, FModules = 1
+    {
+        0x20409
+        FM	0x10409	5	10
+    }
+
+    FRAME "" // Index = 410, FModules = 1
+    {
+        0x20410
+        FM	0x10410	5	10
+    }
+
+    FRAME "" // Index = 411, FModules = 1
+    {
+        0x20411
+        FM	0x10411	4	16
+    }
+
+    FRAME "" // Index = 412, FModules = 1
+    {
+        0x20412
+        FM	0x10412	4	16
+    }
+
+    FRAME "" // Index = 413, FModules = 1
+    {
+        0x20413
+        FM	0x10413	4	16
+    }
+
+    FRAME "" // Index = 414, FModules = 1
+    {
+        0x20414
+        FM	0x10414	4	16
+    }
+
+    FRAME "" // Index = 415, FModules = 1
+    {
+        0x20415
+        FM	0x10415	4	16
+    }
+
+    FRAME "" // Index = 416, FModules = 1
+    {
+        0x20416
+        FM	0x10416	5	10
+    }
+
+    FRAME "" // Index = 417, FModules = 1
+    {
+        0x20417
+        FM	0x10417	5	10
+    }
+
+    FRAME "" // Index = 418, FModules = 1
+    {
+        0x20418
+        FM	0x10418	5	10
+    }
+
+    FRAME "" // Index = 419, FModules = 1
+    {
+        0x20419
+        FM	0x10419	102	154
+    }
+
+    FRAME "" // Index = 420, FModules = 1
+    {
+        0x20420
+        FM	0x10420	87	137
+    }
+
+    FRAME "" // Index = 421, FModules = 1
+    {
+        0x20421
+        FM	0x10421	84	144
+    }
+
+    FRAME "" // Index = 422, FModules = 1
+    {
+        0x20422
+        FM	0x10422	89	153
+    }
+
+    FRAME "" // Index = 423, FModules = 1
+    {
+        0x20423
+        FM	0x10423	88	151
+    }
+
+    FRAME "" // Index = 424, FModules = 1
+    {
+        0x20424
+        FM	0x10424	86	150
+    }
+
+    FRAME "" // Index = 425, FModules = 1
+    {
+        0x20425
+        FM	0x10425	26	52
+    }
+
+    FRAME "" // Index = 426, FModules = 1
+    {
+        0x20426
+        FM	0x10426	29	52
+    }
+
+    FRAME "" // Index = 427, FModules = 1
+    {
+        0x20427
+        FM	0x10427	28	52
+    }
+
+    FRAME "" // Index = 428, FModules = 1
+    {
+        0x20428
+        FM	0x10428	28	52
+    }
+
+    FRAME "" // Index = 429, FModules = 1
+    {
+        0x20429
+        FM	0x10429	26	52
+    }
+
+    FRAME "" // Index = 430, FModules = 1
+    {
+        0x20430
+        FM	0x10430	89	129
+    }
+
+    FRAME "" // Index = 431, FModules = 1
+    {
+        0x20431
+        FM	0x10431	104	139
+    }
+
+    FRAME "" // Index = 432, FModules = 1
+    {
+        0x20432
+        FM	0x10432	132	127
+    }
+
+    FRAME "" // Index = 433, FModules = 1
+    {
+        0x20433
+        FM	0x10433	86	130
+    }
+
+    FRAME "" // Index = 434, FModules = 1
+    {
+        0x20434
+        FM	0x10434	33	127
+    }
+
+    FRAME "" // Index = 435, FModules = 1
+    {
+        0x20435
+        FM	0x10435	68	119
+    }
+
+    FRAME "" // Index = 436, FModules = 1
+    {
+        0x20436
+        FM	0x10436	68	108
+    }
+
+    FRAME "" // Index = 437, FModules = 1
+    {
+        0x20437
+        FM	0x10437	69	99
+    }
+
+    FRAME "" // Index = 438, FModules = 1
+    {
+        0x20438
+        FM	0x10438	69	96
+    }
+
+    FRAME "" // Index = 439, FModules = 1
+    {
+        0x20439
+        FM	0x10439	68	89
+    }
+
+    FRAME "" // Index = 440, FModules = 1
+    {
+        0x20440
+        FM	0x10440	78	85
+    }
+
+    FRAME "" // Index = 441, FModules = 1
+    {
+        0x20441
+        FM	0x10441	59	18
+    }
+
+    FRAME "" // Index = 442, FModules = 1
+    {
+        0x20442
+        FM	0x10442	59	17
+    }
+
+    FRAME "" // Index = 443, FModules = 1
+    {
+        0x20443
+        FM	0x10443	53	18
+    }
+
+    FRAME "" // Index = 444, FModules = 1
+    {
+        0x20444
+        FM	0x10444	55	18
+    }
+
+    FRAME "" // Index = 445, FModules = 1
+    {
+        0x20445
+        FM	0x10445	59	17
+    }
+
+    FRAME "" // Index = 446, FModules = 1
+    {
+        0x20446
+        FM	0x10446	53	23
+    }
+
+    FRAME "" // Index = 447, FModules = 1
+    {
+        0x20447
+        FM	0x10447	47	20
+    }
+
+    FRAME "" // Index = 448, FModules = 1
+    {
+        0x20448
+        FM	0x10448	49	23
+    }
+
+    FRAME "" // Index = 449, FModules = 1
+    {
+        0x20449
+        FM	0x10449	49	28
+    }
+
+    FRAME "" // Index = 450, FModules = 1
+    {
+        0x20450
+        FM	0x10450	47	25
+    }
+
+    FRAME "" // Index = 451, FModules = 1
+    {
+        0x20451
+        FM	0x10451	56	11
+    }
+
+    FRAME "" // Index = 452, FModules = 1
+    {
+        0x20452
+        FM	0x10452	54	14
+    }
+
+    FRAME "" // Index = 453, FModules = 1
+    {
+        0x20453
+        FM	0x10453	51	15
+    }
+
+    FRAME "" // Index = 454, FModules = 1
+    {
+        0x20454
+        FM	0x10454	57	14
+    }
+
+    FRAME "" // Index = 455, FModules = 1
+    {
+        0x20455
+        FM	0x10455	58	11
+    }
+
+    FRAME "" // Index = 456, FModules = 1
+    {
+        0x20456
+        FM	0x10456	49	25
+    }
+
+    FRAME "" // Index = 457, FModules = 1
+    {
+        0x20457
+        FM	0x10457	49	24
+    }
+
+    FRAME "" // Index = 458, FModules = 1
+    {
+        0x20458
+        FM	0x10458	49	25
+    }
+
+    FRAME "" // Index = 459, FModules = 1
+    {
+        0x20459
+        FM	0x10459	49	24
+    }
+
+    FRAME "" // Index = 460, FModules = 1
+    {
+        0x20460
+        FM	0x10460	49	24
+    }
+
+    FRAME "" // Index = 461, FModules = 1
+    {
+        0x20461
+        FM	0x10461	4	8
+    }
+
+    FRAME "" // Index = 462, FModules = 1
+    {
+        0x20462
+        FM	0x10462	0	8
+    }
+
+    FRAME "" // Index = 463, FModules = 1
+    {
+        0x20463
+        FM	0x10463	0	8
+    }
+
+    FRAME "" // Index = 464, FModules = 1
+    {
+        0x20464
+        FM	0x10464	0	9
+    }
+
+    FRAME "" // Index = 465, FModules = 1
+    {
+        0x20465
+        FM	0x10465	0	9
+    }
+
+    FRAME "" // Index = 466, FModules = 1
+    {
+        0x20466
+        FM	0x10466	0	0
+    }
+
+    FRAME "" // Index = 467, FModules = 1
+    {
+        0x20467
+        FM	0x10467	0	0
+    }
+
+    FRAME "" // Index = 468, FModules = 1
+    {
+        0x20468
+        FM	0x10468	38	5
+    }
+
+    FRAME "" // Index = 469, FModules = 1
+    {
+        0x20469
+        FM	0x10469	0	6
+    }
+
+    FRAME "" // Index = 470, FModules = 1
+    {
+        0x20470
+        FM	0x10470	0	7
+    }
+
+    FRAME "" // Index = 471, FModules = 1
+    {
+        0x20471
+        FM	0x10471	460	393
+    }
+
+    FRAME "" // Index = 472, FModules = 1
+    {
+        0x20472
+        FM	0x10472	457	390
+    }
+
+    FRAME "" // Index = 473, FModules = 1
+    {
+        0x20473
+        FM	0x10473	455	388
+    }
+
+    FRAME "" // Index = 474, FModules = 1
+    {
+        0x20474
+        FM	0x10474	455	387
+    }
+
+    FRAME "" // Index = 475, FModules = 1
+    {
+        0x20475
+        FM	0x10475	452	385
+    }
+
+    FRAME "" // Index = 476, FModules = 1
+    {
+        0x20476
+        FM	0x10476	452	386
+    }
+
+    FRAME "" // Index = 477, FModules = 1
+    {
+        0x20477
+        FM	0x10477	460	392
+    }
+
+    FRAME "" // Index = 478, FModules = 1
+    {
+        0x20478
+        FM	0x10478	460	392
+    }
+
+    FRAME "" // Index = 479, FModules = 1
+    {
+        0x20479
+        FM	0x10479	438	361
+    }
+
+    FRAME "" // Index = 480, FModules = 1
+    {
+        0x20480
+        FM	0x10480	440	358
+    }
+
+    FRAME "" // Index = 481, FModules = 1
+    {
+        0x20481
+        FM	0x10481	437	358
+    }
+
+    FRAME "" // Index = 482, FModules = 1
+    {
+        0x20482
+        FM	0x10482	437	362
+    }
+
+    FRAME "" // Index = 483, FModules = 1
+    {
+        0x20483
+        FM	0x10483	439	357
+    }
+
+    FRAME "" // Index = 484, FModules = 1
+    {
+        0x20484
+        FM	0x10484	440	358
+    }
+
+    FRAME "" // Index = 485, FModules = 1
+    {
+        0x20485
+        FM	0x10485	438	362
+    }
+
+    FRAME "" // Index = 486, FModules = 1
+    {
+        0x20486
+        FM	0x10486	440	359
+    }
+
+    FRAME "" // Index = 487, FModules = 1
+    {
+        0x20487
+        FM	0x10487	449	379
+    }
+
+    FRAME "" // Index = 488, FModules = 1
+    {
+        0x20488
+        FM	0x10488	444	377
+    }
+
+    FRAME "" // Index = 489, FModules = 1
+    {
+        0x20489
+        FM	0x10489	442	377
+    }
+
+    FRAME "" // Index = 490, FModules = 1
+    {
+        0x20490
+        FM	0x10490	440	375
+    }
+
+    FRAME "" // Index = 491, FModules = 1
+    {
+        0x20491
+        FM	0x10491	440	374
+    }
+
+    FRAME "" // Index = 492, FModules = 1
+    {
+        0x20492
+        FM	0x10492	458	374
+    }
+
+    FRAME "" // Index = 493, FModules = 1
+    {
+        0x20493
+        FM	0x10493	457	376
+    }
+
+    FRAME "" // Index = 494, FModules = 1
+    {
+        0x20494
+        FM	0x10494	453	386
+    }
+
+    FRAME "" // Index = 495, FModules = 1
+    {
+        0x20495
+        FM	0x10495	452	372
+    }
+
+    FRAME "" // Index = 496, FModules = 1
+    {
+        0x20496
+        FM	0x10496	450	371
+    }
+
+    FRAME "" // Index = 497, FModules = 1
+    {
+        0x20497
+        FM	0x10497	449	371
+    }
+
+    FRAME "" // Index = 498, FModules = 1
+    {
+        0x20498
+        FM	0x10498	449	372
+    }
+
+    FRAME "" // Index = 499, FModules = 1
+    {
+        0x20499
+        FM	0x10499	449	371
+    }
+
+    FRAME "" // Index = 500, FModules = 1
+    {
+        0x20500
+        FM	0x10500	447	372
+    }
+
+    FRAME "" // Index = 501, FModules = 1
+    {
+        0x20501
+        FM	0x10501	447	371
+    }
+
+    FRAME "" // Index = 502, FModules = 1
+    {
+        0x20502
+        FM	0x10502	447	371
+    }
+
+    FRAME "" // Index = 503, FModules = 1
+    {
+        0x20503
+        FM	0x10503	447	372
+    }
+
+    FRAME "" // Index = 504, FModules = 1
+    {
+        0x20504
+        FM	0x10504	445	372
+    }
+
+    FRAME "" // Index = 505, FModules = 1
+    {
+        0x20505
+        FM	0x10505	446	373
+    }
+
+    FRAME "" // Index = 506, FModules = 1
+    {
+        0x20506
+        FM	0x10506	451	372
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+// Animations...
+// <Anim> := ANIM ["desc"] { id [<AF1> <AF2> ...] }
+// <AFi>  := AF frame_id time ox oy [FLAGS hex_flags] [+Flags]
+// Flags  := FLIP_X | FLIP_Y | ROT_90
+
+    ANIM "autoplay" // Index = 0, AFrames = 5
+    {
+        0x3001
+        AF	0x2037	1	-125	-65
+        AF	0x2038	1	-125	-65
+        AF	0x2039	1	-125	-65
+        AF	0x2040	1	-125	-65
+        AF	0x2041	1	-125	-65
+    }
+
+    ANIM "blood" // Index = 1, AFrames = 5
+    {
+        0x3002
+        AF	0x2052	1	-125	-205
+        AF	0x2053	1	-125	-205
+        AF	0x2054	1	-125	-205
+        AF	0x2055	1	-125	-205
+        AF	0x2056	1	-125	-205
+    }
+
+    ANIM "burn" // Index = 2, AFrames = 10
+    {
+        0x3003
+        AF	0x20165	1	-135	-164
+        AF	0x20166	1	-135	-164
+        AF	0x20167	1	-135	-164
+        AF	0x20168	1	-135	-164
+        AF	0x20169	1	-135	-164
+        AF	0x20170	1	-135	-164
+        AF	0x20171	1	-135	-164
+        AF	0x20172	1	-135	-164
+        AF	0x20173	1	-135	-164
+        AF	0x20174	1	-135	-164
+    }
+
+    ANIM "click" // Index = 3, AFrames = 11
+    {
+        0x3004
+        AF	0x20175	1	-65	-85
+        AF	0x20176	1	-65	-85
+        AF	0x20177	1	-65	-85
+        AF	0x20178	1	-65	-85
+        AF	0x20179	1	-65	-85
+        AF	0x20180	1	-65	-85
+        AF	0x20181	1	-65	-85
+        AF	0x20182	1	-65	-85
+        AF	0x20183	1	-65	-85
+        AF	0x20184	1	-65	-85
+        AF	0x20185	1	-65	-85
+    }
+
+    ANIM "drink" // Index = 4, AFrames = 5
+    {
+        0x3005
+        AF	0x20196	2	-130	-174
+        AF	0x20197	2	-130	-174
+        AF	0x20198	2	-130	-174
+        AF	0x20199	2	-130	-174
+        AF	0x20200	2	-130	-174
+    }
+
+    ANIM "dz_1" // Index = 5, AFrames = 5
+    {
+        0x3006
+        AF	0x20201	1	-130	-144
+        AF	0x20202	1	-130	-144
+        AF	0x20203	1	-130	-144
+        AF	0x20204	1	-130	-144
+        AF	0x20205	1	-130	-144
+    }
+
+    ANIM "dz_2" // Index = 6, AFrames = 5
+    {
+        0x3007
+        AF	0x20206	1	-130	-144
+        AF	0x20207	1	-130	-144
+        AF	0x20208	1	-130	-144
+        AF	0x20209	1	-130	-144
+        AF	0x20210	1	-130	-144
+    }
+
+    ANIM "dz_3" // Index = 7, AFrames = 5
+    {
+        0x3008
+        AF	0x20211	1	-130	-144
+        AF	0x20212	1	-130	-144
+        AF	0x20213	1	-130	-144
+        AF	0x20214	1	-130	-144
+        AF	0x20215	1	-130	-144
+    }
+
+    ANIM "enemy1" // Index = 8, AFrames = 2
+    {
+        0x3009
+        AF	0x20216	2	-40	-45
+        AF	0x20217	2	-40	-65
+    }
+
+    ANIM "equiplevel1" // Index = 9, AFrames = 5
+    {
+        0x3010
+        AF	0x2000	1	-128	-145
+        AF	0x2001	1	-128	-145
+        AF	0x2002	1	-128	-145
+        AF	0x2003	1	-128	-145
+        AF	0x2004	1	-128	-145
+    }
+
+    ANIM "equiplevel2" // Index = 10, AFrames = 5
+    {
+        0x3011
+        AF	0x2005	1	-128	-145
+        AF	0x2006	1	-128	-145
+        AF	0x2007	1	-128	-145
+        AF	0x2008	1	-128	-145
+        AF	0x2009	1	-128	-145
+    }
+
+    ANIM "equiplevel3" // Index = 11, AFrames = 5
+    {
+        0x3012
+        AF	0x2010	1	-125	-145
+        AF	0x2011	1	-125	-145
+        AF	0x2012	1	-125	-145
+        AF	0x2013	1	-125	-145
+        AF	0x2014	1	-125	-145
+    }
+
+    ANIM "equiplevel4" // Index = 12, AFrames = 5
+    {
+        0x3013
+        AF	0x2015	1	-128	-145
+        AF	0x2016	1	-128	-145
+        AF	0x2017	1	-128	-145
+        AF	0x2018	1	-128	-145
+        AF	0x2019	1	-128	-145
+    }
+
+    ANIM "equiplevel5" // Index = 13, AFrames = 5
+    {
+        0x3014
+        AF	0x2020	1	-128	-145
+        AF	0x2021	1	-128	-145
+        AF	0x2022	1	-128	-145
+        AF	0x2023	1	-128	-145
+        AF	0x2024	1	-128	-145
+    }
+
+    ANIM "goodwill1" // Index = 14, AFrames = 9
+    {
+        0x3015
+        AF	0x20218	1	-515	-425
+        AF	0x20219	1	-515	-425
+        AF	0x20220	1	-515	-425
+        AF	0x20221	1	-515	-425
+        AF	0x20222	1	-515	-425
+        AF	0x20223	1	-515	-425
+        AF	0x20224	1	-515	-425
+        AF	0x20225	1	-515	-425
+        AF	0x20226	1	-515	-425
+    }
+
+    ANIM "goodwill2" // Index = 15, AFrames = 9
+    {
+        0x3016
+        AF	0x20227	1	-515	-425
+        AF	0x20228	1	-515	-425
+        AF	0x20229	1	-515	-425
+        AF	0x20230	1	-515	-425
+        AF	0x20231	1	-515	-425
+        AF	0x20232	1	-515	-425
+        AF	0x20233	1	-515	-425
+        AF	0x20234	1	-515	-425
+        AF	0x20235	1	-515	-425
+    }
+
+    ANIM "goodwill3" // Index = 16, AFrames = 9
+    {
+        0x3017
+        AF	0x20236	1	-515	-425
+        AF	0x20237	1	-515	-425
+        AF	0x20238	1	-515	-425
+        AF	0x20239	1	-515	-425
+        AF	0x20240	1	-515	-425
+        AF	0x20241	1	-515	-425
+        AF	0x20242	1	-515	-425
+        AF	0x20243	1	-515	-425
+        AF	0x20244	1	-515	-425
+    }
+
+    ANIM "levelcomplete" // Index = 17, AFrames = 10
+    {
+        0x3018
+        AF	0x20218	1	-1126	-658
+        AF	0x20219	1	-1126	-658
+        AF	0x20220	1	-1126	-658
+        AF	0x20221	1	-1126	-658
+        AF	0x20222	1	-1126	-658
+        AF	0x20223	1	-1126	-658
+        AF	0x20224	1	-1126	-658
+        AF	0x20225	1	-1126	-658
+        AF	0x20226	1	-1126	-658
+        AF	0x20227	1	-1126	-658
+    }
+
+    ANIM "levelup_down" // Index = 18, AFrames = 8
+    {
+        0x3019
+        AF	0x20266	1	-133	-189
+        AF	0x20267	1	-133	-189
+        AF	0x20268	1	-133	-189
+        AF	0x20269	1	-133	-189
+        AF	0x20270	1	-133	-189
+        AF	0x20271	1	-133	-189
+        AF	0x20272	1	-133	-189
+        AF	0x20273	1	-133	-189
+    }
+
+    ANIM "levelup_up" // Index = 19, AFrames = 8
+    {
+        0x3020
+        AF	0x20274	1	-133	-189
+        AF	0x20275	1	-133	-189
+        AF	0x20276	1	-133	-189
+        AF	0x20277	1	-133	-189
+        AF	0x20278	1	-133	-189
+        AF	0x20279	1	-133	-189
+        AF	0x20280	1	-133	-189
+        AF	0x20281	1	-133	-189
+    }
+
+    ANIM "pick" // Index = 20, AFrames = 5
+    {
+        0x3021
+        AF	0x20287	1	-63	-66
+        AF	0x20288	1	-63	-66
+        AF	0x20289	1	-63	-66
+        AF	0x20290	1	-63	-66
+        AF	0x20291	1	-63	-66
+    }
+
+    ANIM "poison" // Index = 21, AFrames = 5
+    {
+        0x3022
+        AF	0x20292	1	-134	-216
+        AF	0x20293	1	-134	-216
+        AF	0x20294	1	-134	-216
+        AF	0x20295	1	-134	-216
+        AF	0x20296	1	-134	-216
+    }
+
+    ANIM "qt_1" // Index = 22, AFrames = 8
+    {
+        0x3023
+        AF	0x20297	2	-132	-124
+        AF	0x20298	2	-132	-124
+        AF	0x20299	2	-132	-124
+        AF	0x20300	2	-132	-124
+        AF	0x20301	2	-132	-124
+        AF	0x20302	2	-132	-124
+        AF	0x20303	2	-132	-124
+        AF	0x20304	2	-132	-124
+    }
+
+    ANIM "qt_2" // Index = 23, AFrames = 8
+    {
+        0x3024
+        AF	0x20305	2	-135	-138
+        AF	0x20306	2	-135	-138
+        AF	0x20307	2	-135	-138
+        AF	0x20308	2	-135	-138
+        AF	0x20309	2	-135	-138
+        AF	0x20310	2	-135	-138
+        AF	0x20311	2	-135	-138
+        AF	0x20312	2	-135	-138
+    }
+
+    ANIM "qt_3" // Index = 24, AFrames = 5
+    {
+        0x3025
+        AF	0x20313	2	-62	-63
+        AF	0x20314	2	-62	-63
+        AF	0x20315	2	-62	-63
+        AF	0x20316	2	-62	-63
+        AF	0x20317	2	-62	-63
+    }
+
+    ANIM "qualitybule" // Index = 25, AFrames = 11
+    {
+        0x3026
+        AF	0x20318	1	-40	-42
+        AF	0x20319	1	-40	-42
+        AF	0x20320	1	-40	-42
+        AF	0x20321	1	-40	-42
+        AF	0x20322	1	-40	-42
+        AF	0x20323	1	-40	-42
+        AF	0x20324	1	-40	-42
+        AF	0x20325	1	-40	-42
+        AF	0x20326	1	-40	-42
+        AF	0x20327	1	-40	-42
+        AF	0x20328	1	-40	-42
+    }
+
+    ANIM "qualitygreen" // Index = 26, AFrames = 11
+    {
+        0x3027
+        AF	0x20329	1	-40	-40
+        AF	0x20330	1	-40	-40
+        AF	0x20331	1	-40	-40
+        AF	0x20332	1	-40	-40
+        AF	0x20333	1	-40	-40
+        AF	0x20334	1	-40	-40
+        AF	0x20335	1	-40	-40
+        AF	0x20336	1	-40	-40
+        AF	0x20337	1	-40	-40
+        AF	0x20338	1	-40	-40
+        AF	0x20339	1	-40	-40
+    }
+
+    ANIM "qualitypink" // Index = 27, AFrames = 11
+    {
+        0x3028
+        AF	0x20340	1	-40	-40
+        AF	0x20341	1	-40	-40
+        AF	0x20342	1	-40	-40
+        AF	0x20343	1	-40	-40
+        AF	0x20344	1	-40	-40
+        AF	0x20345	1	-40	-40
+        AF	0x20346	1	-40	-40
+        AF	0x20347	1	-40	-40
+        AF	0x20348	1	-40	-40
+        AF	0x20349	1	-40	-40
+        AF	0x20350	1	-40	-40
+    }
+
+    ANIM "qualitypurple" // Index = 28, AFrames = 11
+    {
+        0x3029
+        AF	0x20351	1	-40	-40
+        AF	0x20352	1	-40	-40
+        AF	0x20353	1	-40	-40
+        AF	0x20354	1	-40	-40
+        AF	0x20355	1	-40	-40
+        AF	0x20356	1	-40	-40
+        AF	0x20357	1	-40	-40
+        AF	0x20358	1	-40	-40
+        AF	0x20359	1	-40	-40
+        AF	0x20360	1	-40	-40
+        AF	0x20361	1	-40	-40
+    }
+
+    ANIM "qualityyellow" // Index = 29, AFrames = 11
+    {
+        0x3030
+        AF	0x20362	1	-40	-40
+        AF	0x20363	1	-40	-40
+        AF	0x20364	1	-40	-40
+        AF	0x20365	1	-40	-40
+        AF	0x20366	1	-40	-40
+        AF	0x20367	1	-40	-40
+        AF	0x20368	1	-40	-40
+        AF	0x20369	1	-40	-40
+        AF	0x20370	1	-40	-40
+        AF	0x20371	1	-40	-40
+        AF	0x20372	1	-40	-40
+    }
+
+    ANIM "questaccept" // Index = 30, AFrames = 6
+    {
+        0x3031
+        AF	0x20373	2	-125	-64
+        AF	0x20374	2	-125	-64
+        AF	0x20375	2	-125	-64
+        AF	0x20376	2	-125	-64
+        AF	0x20377	2	-125	-64
+        AF	0x20378	2	-125	-64
+    }
+
+    ANIM "questcomplete" // Index = 31, AFrames = 6
+    {
+        0x3032
+        AF	0x20379	2	-133	-65
+        AF	0x20380	2	-133	-65
+        AF	0x20381	2	-133	-65
+        AF	0x20382	2	-133	-65
+        AF	0x20383	2	-133	-65
+        AF	0x20384	2	-133	-65
+    }
+
+    ANIM "remind50" // Index = 32, AFrames = 12
+    {
+        0x3033
+        AF	0x2000	1	-26	-26
+        AF	0x2001	1	-26	-26
+        AF	0x2002	1	-26	-26
+        AF	0x2003	1	-26	-26
+        AF	0x2004	1	-26	-26
+        AF	0x2005	1	-26	-26
+        AF	0x2006	1	-26	-26
+        AF	0x2007	1	-26	-26
+        AF	0x2008	1	-26	-26
+        AF	0x2009	1	-26	-26
+        AF	0x2010	1	-26	-26
+        AF	0x2011	1	-26	-26
+    }
+
+    ANIM "remind85" // Index = 33, AFrames = 12
+    {
+        0x3034
+        AF	0x2012	1	-49	-48
+        AF	0x2013	1	-49	-48
+        AF	0x2014	1	-49	-48
+        AF	0x2015	1	-49	-48
+        AF	0x2016	1	-49	-48
+        AF	0x2017	1	-49	-48
+        AF	0x2018	1	-49	-48
+        AF	0x2019	1	-49	-48
+        AF	0x2020	1	-49	-48
+        AF	0x2021	1	-49	-48
+        AF	0x2022	1	-49	-48
+        AF	0x2023	1	-49	-48
+    }
+
+    ANIM "silence" // Index = 34, AFrames = 7
+    {
+        0x3035
+        AF	0x2024	2	-80	-82
+        AF	0x2025	2	-80	-82
+        AF	0x2026	2	-80	-82
+        AF	0x2027	2	-80	-82
+        AF	0x2028	2	-80	-82
+        AF	0x2029	2	-80	-82
+        AF	0x2030	2	-80	-82
+    }
+
+    ANIM "slow" // Index = 35, AFrames = 6
+    {
+        0x3036
+        AF	0x20419	1	-128	-194
+        AF	0x20420	1	-128	-194
+        AF	0x20421	1	-128	-194
+        AF	0x20422	1	-128	-194
+        AF	0x20423	1	-128	-194
+        AF	0x20424	1	-128	-194
+    }
+
+    ANIM "star" // Index = 36, AFrames = 6
+    {
+        0x3037
+        AF	0x2031	1	-57	-105
+        AF	0x2032	1	-57	-105
+        AF	0x2033	1	-57	-105
+        AF	0x2034	1	-57	-105
+        AF	0x2035	1	-57	-105
+        AF	0x2036	1	-57	-105
+    }
+
+    ANIM "stun" // Index = 37, AFrames = 5
+    {
+        0x3038
+        AF	0x20425	1	-62	-64
+        AF	0x20426	1	-62	-64
+        AF	0x20427	1	-62	-64
+        AF	0x20428	1	-62	-64
+        AF	0x20429	1	-62	-64
+    }
+
+    ANIM "wayfinding" // Index = 38, AFrames = 5
+    {
+        0x3039
+        AF	0x20420	2	-123	-205
+        AF	0x20421	2	-123	-205
+        AF	0x20422	2	-123	-205
+        AF	0x20423	2	-123	-205
+        AF	0x20424	2	-123	-205
+    }
+
+    ANIM "xingzhen1" // Index = 39, AFrames = 8
+    {
+        0x3040
+        AF	0x20471	1	-512	-424
+        AF	0x20472	1	-512	-424
+        AF	0x20473	1	-512	-424
+        AF	0x20474	1	-512	-424
+        AF	0x20475	1	-512	-424
+        AF	0x20476	1	-512	-424
+        AF	0x20477	1	-512	-424
+        AF	0x20478	1	-512	-424
+    }
+
+    ANIM "xingzhen2" // Index = 40, AFrames = 8
+    {
+        0x3041
+        AF	0x20479	1	-515	-425
+        AF	0x20480	1	-515	-425
+        AF	0x20481	1	-515	-425
+        AF	0x20482	1	-515	-425
+        AF	0x20483	1	-515	-425
+        AF	0x20484	1	-515	-425
+        AF	0x20485	1	-515	-425
+        AF	0x20486	1	-515	-425
+    }
+
+    ANIM "xingzhen3" // Index = 41, AFrames = 8
+    {
+        0x3042
+        AF	0x20487	1	-515	-425
+        AF	0x20488	1	-515	-425
+        AF	0x20489	1	-515	-425
+        AF	0x20490	1	-515	-425
+        AF	0x20491	1	-515	-425
+        AF	0x20492	1	-515	-425
+        AF	0x20493	1	-515	-425
+        AF	0x20494	1	-515	-425
+    }
+
+    ANIM "xingzhen4" // Index = 42, AFrames = 12
+    {
+        0x3043
+        AF	0x20495	1	-510	-428
+        AF	0x20496	1	-510	-428
+        AF	0x20497	1	-510	-428
+        AF	0x20498	1	-510	-428
+        AF	0x20499	1	-510	-428
+        AF	0x20500	1	-510	-428
+        AF	0x20501	1	-510	-428
+        AF	0x20502	1	-510	-428
+        AF	0x20503	1	-510	-428
+        AF	0x20504	1	-510	-428
+        AF	0x20505	1	-510	-428
+        AF	0x20506	1	-510	-428
+    }
+
+    ANIM "shou1" // Index = 43, AFrames = 7
+    {
+        0x3000
+        AF	0x20400	1	-8	-16
+        AF	0x20401	1	57	-16
+        AF	0x20402	1	122	-16
+        AF	0x20403	1	187	-16
+        AF	0x20404	1	257	-16
+        AF	0x20405	1	317	-16
+        AF	0x20406	1	382	-16
+    }
+
+    ANIM "shou2" // Index = 44, AFrames = 12
+    {
+        0x3034
+        AF	0x20407	1	-8	-22
+        AF	0x20408	1	-8	-22
+        AF	0x20409	1	-8	-22
+        AF	0x20410	1	-8	-22
+        AF	0x20411	1	-8	-22
+        AF	0x20412	1	-38	-52
+        AF	0x20413	1	-68	-82
+        AF	0x20414	1	-98	-112
+        AF	0x20415	1	-128	-142
+        AF	0x20416	1	-128	-142
+        AF	0x20417	1	-128	-142
+        AF	0x20418	1	-128	-142
+    }
+
+    ANIM "baihuadiyi" // Index = 45, AFrames = 5
+    {
+        0x3001
+        AF	0x2042	1	-123	-64
+        AF	0x2043	1	-123	-64
+        AF	0x2044	1	-123	-64
+        AF	0x2045	1	-123	-64
+        AF	0x2046	1	-123	-64
+    }
+
+    ANIM "diyimeinv" // Index = 46, AFrames = 5
+    {
+        0x3005
+        AF	0x20186	1	-133	-77
+        AF	0x20187	1	-133	-77
+        AF	0x20188	1	-133	-77
+        AF	0x20189	1	-133	-77
+        AF	0x20190	1	-133	-77
+    }
+
+    ANIM "jinweidiyi" // Index = 47, AFrames = 5
+    {
+        0x3019
+        AF	0x20251	1	-133	-81
+        AF	0x20252	1	-133	-81
+        AF	0x20253	1	-133	-81
+        AF	0x20254	1	-133	-81
+        AF	0x20255	1	-133	-81
+    }
+
+    ANIM "shidagaoshou" // Index = 48, AFrames = 5
+    {
+        0x3037
+        AF	0x20385	1	-131	-81
+        AF	0x20386	1	-131	-81
+        AF	0x20387	1	-131	-81
+        AF	0x20388	1	-131	-81
+        AF	0x20389	1	-131	-81
+    }
+
+    ANIM "shidameinv" // Index = 49, AFrames = 5
+    {
+        0x3038
+        AF	0x20390	1	-123	-75
+        AF	0x20391	1	-123	-75
+        AF	0x20392	1	-123	-75
+        AF	0x20393	1	-123	-75
+        AF	0x20394	1	-123	-75
+    }
+
+    ANIM "tianxiadiyi" // Index = 50, AFrames = 5
+    {
+        0x3045
+        AF	0x20451	1	-140	-78
+        AF	0x20452	1	-140	-78
+        AF	0x20453	1	-140	-78
+        AF	0x20454	1	-140	-78
+        AF	0x20455	1	-140	-78
+    }
+
+    ANIM "success" // Index = 51, AFrames = 11
+    {
+        0x3045
+        AF	0x20430	1	-196	-205
+        AF	0x20431	1	-196	-205
+        AF	0x20432	1	-196	-205
+        AF	0x20433	1	-196	-205
+        AF	0x20434	1	-196	-205
+        AF	0x20435	1	-196	-205
+        AF	0x20436	1	-196	-205
+        AF	0x20437	1	-196	-205
+        AF	0x20438	1	-196	-205
+        AF	0x20439	1	-196	-205
+        AF	0x20440	1	-196	-205
+    }
+
+    ANIM "tianxiadier" // Index = 52, AFrames = 5
+    {
+        0x3052
+        AF	0x20441	1	-140	-78
+        AF	0x20442	1	-140	-78
+        AF	0x20443	1	-140	-78
+        AF	0x20444	1	-140	-78
+        AF	0x20445	1	-140	-78
+    }
+
+    ANIM "tianxiadisan" // Index = 53, AFrames = 5
+    {
+        0x3053
+        AF	0x20446	1	-140	-78
+        AF	0x20447	1	-140	-78
+        AF	0x20448	1	-140	-78
+        AF	0x20449	1	-140	-78
+        AF	0x20450	1	-140	-78
+    }
+
+    ANIM "tianxuandiyi" // Index = 54, AFrames = 5
+    {
+        0x3055
+        AF	0x20456	1	-132	-62
+        AF	0x20457	1	-132	-62
+        AF	0x20458	1	-132	-62
+        AF	0x20459	1	-132	-62
+        AF	0x20460	1	-132	-62
+    }
+
+    ANIM "wulinmengzhu" // Index = 55, AFrames = 5
+    {
+        0x3057
+        AF	0x20461	1	-134	-89
+        AF	0x20462	1	-134	-89
+        AF	0x20463	1	-134	-89
+        AF	0x20464	1	-134	-89
+        AF	0x20465	1	-134	-89
+    }
+
+    ANIM "beixian" // Index = 56, AFrames = 5
+    {
+        0x3002
+        AF	0x2047	1	-125	-88
+        AF	0x2048	1	-125	-88
+        AF	0x2049	1	-125	-88
+        AF	0x2050	1	-125	-88
+        AF	0x2051	1	-125	-88
+    }
+
+    ANIM "dongba" // Index = 57, AFrames = 5
+    {
+        0x3007
+        AF	0x20191	1	-132	-109
+        AF	0x20192	1	-132	-109
+        AF	0x20193	1	-132	-109
+        AF	0x20194	1	-132	-109
+        AF	0x20195	1	-132	-109
+    }
+
+    ANIM "nandi" // Index = 58, AFrames = 5
+    {
+        0x3025
+        AF	0x20282	1	-127	-91
+        AF	0x20283	1	-127	-91
+        AF	0x20284	1	-127	-91
+        AF	0x20285	1	-127	-91
+        AF	0x20286	1	-127	-91
+    }
+
+    ANIM "xikuang" // Index = 59, AFrames = 5
+    {
+        0x3055
+        AF	0x20466	1	-127	-91
+        AF	0x20467	1	-127	-91
+        AF	0x20468	1	-127	-91
+        AF	0x20469	1	-127	-91
+        AF	0x20470	1	-127	-91
+    }
+
+    ANIM "buff1" // Index = 60, AFrames = 5
+    {
+        0x3004
+        AF	0x2057	1	-86	-122
+        AF	0x2058	1	-86	-122
+        AF	0x2059	1	-86	-122
+        AF	0x2060	1	-86	-122
+        AF	0x2061	1	-86	-122
+    }
+
+    ANIM "buff2" // Index = 61, AFrames = 5
+    {
+        0x3005
+        AF	0x20118	1	-63	-85
+        AF	0x20119	1	-63	-85
+        AF	0x20120	1	-63	-85
+        AF	0x20121	1	-63	-85
+        AF	0x20122	1	-63	-85
+    }
+
+    ANIM "buff3" // Index = 62, AFrames = 6
+    {
+        0x3006
+        AF	0x20123	1	-68	-85
+        AF	0x20124	1	-68	-85
+        AF	0x20125	1	-68	-85
+        AF	0x20126	1	-68	-85
+        AF	0x20127	1	-68	-85
+        AF	0x20128	1	-68	-85
+    }
+
+    ANIM "buff4" // Index = 63, AFrames = 5
+    {
+        0x3007
+        AF	0x20129	1	-63	-131
+        AF	0x20130	1	-63	-131
+        AF	0x20131	1	-63	-131
+        AF	0x20132	1	-63	-131
+        AF	0x20133	1	-63	-131
+    }
+
+    ANIM "buff5" // Index = 64, AFrames = 5
+    {
+        0x3008
+        AF	0x20134	1	-70	-67
+        AF	0x20135	1	-70	-67
+        AF	0x20136	1	-70	-67
+        AF	0x20137	1	-70	-67
+        AF	0x20138	1	-70	-67
+    }
+
+    ANIM "buff6" // Index = 65, AFrames = 6
+    {
+        0x3009
+        AF	0x20139	1	-87	-83
+        AF	0x20140	1	-87	-83
+        AF	0x20141	1	-87	-83
+        AF	0x20142	1	-87	-83
+        AF	0x20143	1	-87	-83
+        AF	0x20144	1	-87	-83
+    }
+
+    ANIM "buff7" // Index = 66, AFrames = 5
+    {
+        0x3010
+        AF	0x20145	1	-60	-67
+        AF	0x20146	1	-60	-67
+        AF	0x20147	1	-60	-67
+        AF	0x20148	1	-60	-67
+        AF	0x20149	1	-60	-67
+    }
+
+    ANIM "buff8" // Index = 67, AFrames = 5
+    {
+        0x3011
+        AF	0x20150	1	-128	-213
+        AF	0x20151	1	-128	-213
+        AF	0x20152	1	-128	-213
+        AF	0x20153	1	-128	-213
+        AF	0x20154	1	-128	-213
+    }
+
+    ANIM "buff9" // Index = 68, AFrames = 10
+    {
+        0x3012
+        AF	0x20155	1	-66	-130
+        AF	0x20156	1	-66	-130
+        AF	0x20157	1	-66	-130
+        AF	0x20158	1	-66	-130
+        AF	0x20159	1	-66	-130
+        AF	0x20160	1	-66	-130
+        AF	0x20161	1	-66	-130
+        AF	0x20162	1	-66	-130
+        AF	0x20163	1	-66	-130
+        AF	0x20164	1	-66	-130
+    }
+
+    ANIM "buff10" // Index = 69, AFrames = 6
+    {
+        0x3005
+        AF	0x2062	1	-66	-65
+        AF	0x2063	1	-66	-65
+        AF	0x2064	1	-66	-65
+        AF	0x2065	1	-66	-65
+        AF	0x2066	1	-66	-65
+        AF	0x2067	1	-66	-65
+    }
+
+    ANIM "buff11" // Index = 70, AFrames = 6
+    {
+        0x3006
+        AF	0x2068	1	-64	-74
+        AF	0x2069	1	-64	-74
+        AF	0x2070	1	-64	-74
+        AF	0x2071	1	-64	-74
+        AF	0x2072	1	-64	-74
+        AF	0x2073	1	-64	-74
+    }
+
+    ANIM "buff12" // Index = 71, AFrames = 5
+    {
+        0x3007
+        AF	0x2074	1	-62	-114
+        AF	0x2075	1	-62	-114
+        AF	0x2076	1	-62	-114
+        AF	0x2077	1	-62	-114
+        AF	0x2078	1	-62	-114
+    }
+
+    ANIM "buff13" // Index = 72, AFrames = 9
+    {
+        0x3008
+        AF	0x2079	1	-257	-296
+        AF	0x2080	1	-257	-296
+        AF	0x2081	1	-257	-296
+        AF	0x2082	1	-257	-296
+        AF	0x2083	1	-257	-296
+        AF	0x2084	1	-257	-296
+        AF	0x2085	1	-257	-296
+        AF	0x2086	1	-257	-296
+        AF	0x2087	1	-257	-296
+    }
+
+    ANIM "buff14" // Index = 73, AFrames = 7
+    {
+        0x3009
+        AF	0x2088	1	-127	-199
+        AF	0x2089	1	-127	-199
+        AF	0x2090	1	-127	-199
+        AF	0x2091	1	-127	-199
+        AF	0x2092	1	-127	-199
+        AF	0x2093	1	-127	-199
+        AF	0x2094	1	-127	-199
+    }
+
+    ANIM "buff15" // Index = 74, AFrames = 5
+    {
+        0x3010
+        AF	0x2095	1	-131	-158
+        AF	0x2096	1	-131	-158
+        AF	0x2097	1	-131	-158
+        AF	0x2098	1	-131	-158
+        AF	0x2099	1	-131	-158
+    }
+
+    ANIM "buff16" // Index = 75, AFrames = 8
+    {
+        0x3011
+        AF	0x20100	1	-133	-191
+        AF	0x20101	1	-133	-191
+        AF	0x20102	1	-133	-191
+        AF	0x20103	1	-133	-191
+        AF	0x20104	1	-133	-191
+        AF	0x20105	1	-133	-191
+        AF	0x20106	1	-133	-191
+        AF	0x20107	1	-133	-191
+    }
+
+    ANIM "buff17" // Index = 76, AFrames = 10
+    {
+        0x3012
+        AF	0x20108	1	-129	-190
+        AF	0x20109	1	-129	-190
+        AF	0x20110	1	-129	-190
+        AF	0x20111	1	-129	-190
+        AF	0x20112	1	-129	-190
+        AF	0x20113	1	-129	-190
+        AF	0x20114	1	-129	-190
+        AF	0x20115	1	-129	-190
+        AF	0x20116	1	-129	-190
+        AF	0x20117	1	-129	-190
+    }
+
+    ANIM "shidameinv1" // Index = 77, AFrames = 5
+    {
+        0x3054
+        AF	0x20395	1	-136	-87
+        AF	0x20396	1	-136	-87
+        AF	0x20397	1	-136	-87
+        AF	0x20398	1	-136	-87
+        AF	0x20399	1	-136	-87
+    }
+
+    ANIM "labatexiao" // Index = 78, AFrames = 10
+    {
+        0x3034
+        AF	0x20256	1	-130	-131
+        AF	0x20257	1	-130	-131
+        AF	0x20258	1	-130	-131
+        AF	0x20259	1	-130	-131
+        AF	0x20260	1	-130	-131
+        AF	0x20261	1	-130	-131
+        AF	0x20262	1	-130	-131
+        AF	0x20263	1	-130	-131
+        AF	0x20264	1	-130	-131
+        AF	0x20265	1	-130	-131
+    }
+
+    ANIM "headkuangkuang" // Index = 79, AFrames = 6
+    {
+        0x3033
+        AF	0x20245	1	-83	-121
+        AF	0x20246	1	-83	-121
+        AF	0x20247	1	-83	-121
+        AF	0x20248	1	-83	-121
+        AF	0x20249	1	-83	-121
+        AF	0x20250	1	-83	-121
+    }
+
+    SPRITE_END
+
+} // SPRITE
+////////////////////////////////////////////////////////////////////////////////

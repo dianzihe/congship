@@ -38,7 +38,7 @@ public:
 	float getAnimTime( int id );
 	int	 getFrame() { return m_frame; }
 	void setFrame(int frame) { m_frame = frame;}
-	CCPoint GetMarkLOC();
+	Point GetMarkLOC();
 	const char* GetMarkDesc();
 	void MarkBeingCall(CCPoint pos, const char* desc);
 	bool isEnd();
@@ -49,8 +49,8 @@ public:
 	inline ASprite* GetSprite(AnimPart nAnimPart = eAnimPart_Body) { return m_sprite[nAnimPart]; }
 	void AddASprite(ASprite* sprite, ACTORTYPE type);
 
-	bool GetAnimRect( CCRect& retRect, int animId, AnimPart nAnimPart = eAnimPart_Body );
-	bool GetAnimRectFast( CCRect& retRect, int animId, AnimPart nAnimPart = eAnimPart_Body );
+	bool GetAnimRect( Rect& retRect, int animId, AnimPart nAnimPart = eAnimPart_Body );
+	bool GetAnimRectFast( Rect& retRect, int animId, AnimPart nAnimPart = eAnimPart_Body );
 	void ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* pReplace, ACTORTYPE type, GrayPart gpart);
 	int m_opacity;
 

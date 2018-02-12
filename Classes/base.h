@@ -1,8 +1,6 @@
-
-
-#pragma once
-
-
+#ifndef _SHIP_BASE_H__
+#define _SHIP_BASE_H__
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +9,7 @@
 #include <vector>
 #include <deque>
 //#include "FontCharacter.h"
-
+*/
 /*
 #if defined _MSC_VER
 #include <Windows.h>
@@ -28,9 +26,10 @@ using namespace std;
 #include "Log.h"
 */
 // cocos2d-x include
-#include "cocos2d.h"
-USING_NS_CC;
+//#include "cocos2d.h"
+//USING_NS_CC;
 
+/*
 #define CHECK_MEM	1
 
 #define Readint(buf,data)	data =*((int*)(buf)); buf += 4;
@@ -44,6 +43,7 @@ USING_NS_CC;
 
 #endif
 
+*/
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)          { if (p) { delete(p); (p) = NULL;} }
 #endif
@@ -438,3 +438,4 @@ bool myIsScissorTestEnabled();
 static long long gStaticConvoyActorID = 0;
 #define MakeConvoyActorID64 ++gStaticConvoyActorID
 */
+#endif
