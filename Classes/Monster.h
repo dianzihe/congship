@@ -16,6 +16,28 @@ enum
 	eMonsterWildAnimation_State_NotWilded,
 };
 
+struct ObjectBuff
+{
+	INT32 buff_id;
+	INT16 allValidTime;
+	INT8 remainTriggerCount;
+};
+struct LookInfoMonster
+{
+	INT32 id;
+	INT16 move_target_x;
+	INT16 move_target_y;
+	INT16 move_speed;
+	INT16 x;
+	INT16 y;
+	INT16 monster_data_id;
+	INT8 lifePercent;
+	INT8 faction;
+	int charState;
+	vector<ObjectBuff> buffList;
+	INT8 wildState;
+};
+
 class CMonster : public Charactor
 {
 private:
@@ -31,7 +53,7 @@ public:
 	void updateDeathFly(float dt);
 
 	void onStateEnter( int stateToEnter, int stateParam /*= 0 */ );
-	//float getStateAnimTime( CharactorState state, int stateParam = 0 );
+	float getStateAnimTime( CharactorState state, int stateParam = 0 );
 //////////////////////////////////////////////////////////////////////////
 	void setHostAtkObjID( ActorID id ) { mHostAtkObjID = id; }
 
@@ -55,16 +77,16 @@ public:
 	}
 //Msg
 public:
-	//void			onLookInfoMonster( const pk::LookInfoMonster* pLookInfoMonster );
-	float mDeathFlyTime;
-	float mCurDecresSpeed;
-	Point mDeathFlyDir;
+	void	onLookInfoMonster( const LookInfoMonster* pLookInfoMonster );
+	float	mDeathFlyTime;
+	float	mCurDecresSpeed;
+	Point	mDeathFlyDir;
 	static float sDeathFlySpeed;
 	static float sDeathFlyAcceleration;
 	ActorID mHostAtkObjID;
-	//ASprite*		m_cacheSkillSprite;
-	int	m_eWildState;
-	int	m_eWildAinmationState;
+	ASprite*		m_cacheSkillSprite;
+	int		m_eWildState;
+	int		m_eWildAinmationState;
 	float	m_fCfgScale;
 	float	m_fWildScale;
 	float	m_fMaxWildScale;

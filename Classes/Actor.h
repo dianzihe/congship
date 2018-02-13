@@ -1,7 +1,6 @@
 #pragma once
 
 #include "base.h"
-//#include "Animation.h"
 //#include "PlayerDefine.h"
 #include "ActorType.h"
 #include "cocos2d.h"
@@ -78,7 +77,7 @@ struct Tail_t
 
 static const float Buttle_Life_Time_Max = 5.0f;
 
-//class ASprite;
+class ASprite;
 //class SFXModule;
 //class AbnormalStateModule;
 //class UIText;
@@ -88,10 +87,10 @@ typedef long long	ActorID;
 
 class Actor : public cocos2d::Node
 {
-	CC_SYNTHESIZE(int, m_animID, animID);//ACTORSTATE
-	CC_SYNTHESIZE(int, m_moveState, MoveState);//MOVESTATE
-	CC_SYNTHESIZE(int, m_flyState, FlyState);//MOVESTATE
-	CC_SYNTHESIZE(int, m_dir, Dir);//ACTORDIR	
+	CC_SYNTHESIZE(int, m_animID, animID);		//ACTORSTATE
+	CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE
+	CC_SYNTHESIZE(int, m_flyState, FlyState);	//MOVESTATE
+	CC_SYNTHESIZE(int, m_dir, Dir);				//ACTORDIR	
 
 //	CC_SYNTHESIZE(int, m_mapID, MapID);//µØÍ¼ID
 
@@ -149,9 +148,9 @@ public:
 
 	//Map* GetMap();
 
-	//void SetNewPos( Point& pos);
+	void SetNewPos( Point& pos);
 
-	//virtual void ProcessAnimaEvent( AnimaEvent* event ){}
+	virtual void ProcessAnimaEvent( AnimaEvent* event ){}
 
 	//inline SFXModule* GetSFXModule() { return m_SFXModule; }
 
@@ -220,20 +219,18 @@ public:
 	void setTargetIconSheild(bool is) {m_bIsTargetIconSheild = is;}
 
 public:
-	//ASprite*			GetSprite()				{return m_animation.GetSprite();}
-	
+	ASprite*			GetSprite()				{return m_animation.GetSprite();}
 	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
 
 	void				addAnimationSprite( int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false );
-
-	virtual void	SetShowName( const std::string& name);
+	virtual void		SetShowName( const std::string& name);
 	void				SetPKProctIcon(bool bShow);
 
 	virtual std::string		GetPkProctedAppendName(){return "";}
 
 	void				SetName(  const std::string& name ){ m_name = name; };
-	const std::string&		GetName()const {return m_name;};
-	const std::string&		GetShowName()const{return m_nShowName;};
+	const std::string&	GetName()const {return m_name;};
+	const std::string&	GetShowName()const{return m_nShowName;};
 
 	void				OnMountSetShowName(void);
 	void				DownMountSetShowName(void);

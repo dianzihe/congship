@@ -1,9 +1,8 @@
 #include "Actor.h"
-//#include "ASprite.h"
 #include "GameScene.h"
 //#include "UIText.h"
 //#include "Hero.h"
-//#include "ActorManager.h"
+#include "ActorManager.h"
 #include "AnimDef.h"
 
 //#include "CharacterStateTransTable.h"
@@ -182,8 +181,8 @@ Rect& Actor::getSelectRect()
 //}
 
 
-/*
-void Actor::SetNewPos(  CCPoint& pos )
+
+void Actor::SetNewPos(  Point& pos )
 {
 	setPosition(pos);
 	getParent()->reorderChild(this, GetZOrder());
@@ -218,7 +217,7 @@ void Actor::SetNewPos(  CCPoint& pos )
 	}
 #endif
 }
-*/
+
 //fromTag = true: TagID ->Normal ID
 //fromTag = false: Normal ID -> TagID
 //int Actor::SwitchTagAndID(int type, int id,  bool fromTag)

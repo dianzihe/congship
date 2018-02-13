@@ -3,6 +3,7 @@
 #include "ActorManager.h"
 //#include "Hero.h"
 #include "CharDefine.h"
+#include "SkillCfg.h"
 //#include "UIText.h"
 /*
 #include "MyMathExtension.h"
@@ -20,7 +21,7 @@
 #include "HeroPet.h"
 #include "Map.h"
 #include "Teamlogic.h"
-#include "SkillCfg.h"
+
 #include "SitDown.h"
 #include "GameHangUp.h"
 #include "TargetList.h"
@@ -349,9 +350,15 @@ bool Charactor::IsAbleToBeenAttack()
 
 	return true;
 }
-/*
+
 void Charactor::ProcessAnimaEvent( AnimaEvent* event )
 {
+	Point pos;
+	pos.x = (float)event->_EventParamList[0]._Data._IntData;
+	pos.y = (float)event->_EventParamList[1]._Data._IntData;
+	string desc = event->_EventParamList[2]._Data._pStrData;
+	//CombatModule::instance().HandleAttackSuccess(m_CurCombatID, pos);
+	/*
 	switch(event->_EventType)
 	{
 	case eAnimaEventType_Marker:
@@ -359,12 +366,11 @@ void Charactor::ProcessAnimaEvent( AnimaEvent* event )
 			if( m_pStateMachine->getCurrentState() == eCharactorState_Attack )
 			{
 			
-				CCPoint pos;
+				Point pos;
 				pos.x = (float)event->_EventParamList[0]._Data._IntData;
 				pos.y = (float)event->_EventParamList[1]._Data._IntData;
 				string desc = event->_EventParamList[2]._Data._pStrData;
-				if(desc == "ATK")
-				{
+				if(desc == "ATK"){
 					CombatModule::instance().HandleAttackSuccess(m_CurCombatID, pos);
 					m_nSkillMac++;
 				}
@@ -376,8 +382,9 @@ void Charactor::ProcessAnimaEvent( AnimaEvent* event )
 	default:
 		break;
 	}
+	*/
 }
-*/
+
 
 void Charactor::DrawHP()
 {

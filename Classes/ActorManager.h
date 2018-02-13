@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "base.h"
+#include "base.h"
 //#include "Event.h"
 //#include "CCNode.h"
 #include "cocos2d.h"
@@ -17,6 +17,8 @@ class Map;
 */
 using namespace std;
 typedef std::map< ActorID, Actor* >	MAP_ACTORS;
+
+using namespace cocos2d;
 
 class ActorManager/* : public OneEventObject*/
 {

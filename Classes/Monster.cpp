@@ -3,8 +3,9 @@
 #include "MonsterCfg.h"
 #include "GameScene.h"
 #include "ActorManager.h"
-/*
 #include "SkillCfg.h"
+
+/*
 #include "Map.h"
 #include "../BaseModule/Motion/RoutingModule.h"
 #include "../InputSystem/GameCMDSystem.h"
@@ -12,18 +13,16 @@
 */
 
 float CMonster::sDeathFlySpeed = 1200;
-
 float CMonster::sDeathFlyAcceleration = 10000;
 
-#define		MonsterWild_Scale_Speed	4.0f
-
-#define  MONSTER_FONT_SCALE 1.3f
+#define	MonsterWild_Scale_Speed	4.0f
+#define MONSTER_FONT_SCALE 1.3f
 
 CMonster::CMonster()
 : mDeathFlyTime(0)
 , mCurDecresSpeed(0)
 , mHostAtkObjID(0)
-//, m_cacheSkillSprite(NULL)
+, m_cacheSkillSprite(NULL)
 , m_eWildState(Monster_WildState_NotWilded)
 , m_fCfgScale( 1.0f )
 , m_fWildScale( 1.0f )
@@ -53,21 +52,20 @@ CMonster* CMonster::node()
 
 	return pRet;
 }
-/*
-void CMonster::onLookInfoMonster( const pk::LookInfoMonster* pLookInfoMonster )
+
+void CMonster::onLookInfoMonster( const LookInfoMonster* pLookInfoMonster )
 {
 	const MonsterData* pMonsterData = MonsterCfg::instance().getMonsterCfgData( pLookInfoMonster->monster_data_id );
-	if( !pMonsterData )
-	{
-		ERROR_LOG( "CMonster::onLookInfoMonster monster_data_id[%d] can not find ", pLookInfoMonster->monster_data_id  );
+	if( !pMonsterData ){
+		log( "CMonster::onLookInfoMonster monster_data_id[%d] can not find ", pLookInfoMonster->monster_data_id  );
 		return;
 	}
 	setActorID( pLookInfoMonster->id );
-
+	log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
 	setDataID( pLookInfoMonster->monster_data_id );
 	setFaction(pMonsterData->faction);
 	setLevel( pMonsterData->level );
-	setperlife(float(pLookInfoMonster->lifePercent)/100.0f);
+	setperlife(float(pLookInfoMonster->lifePercent) / 100.0f);
 	setHead(pMonsterData->mobHead);
 	setSpeed(pLookInfoMonster->move_speed);
 	setStateFlag(pLookInfoMonster->charState);
@@ -79,46 +77,44 @@ void CMonster::onLookInfoMonster( const pk::LookInfoMonster* pLookInfoMonster )
 		setTargetIconSheild(true);
 	m_animation.SetHostEventHandler(this);
 	addAnimationSprite( pMonsterData->animation, ACTORTYPE_MONSTER, 0, 1, true );
+
 	char str[128];
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
-	m_pStateMachine->setStateForce(eCharactorState_Idle, m_dir);
+	//m_pStateMachine->setStateForce(eCharactorState_Idle, m_dir);
 
 	GameScene::GetActorManager()->AddActor( this );
-	SetNewPos(ccp(pLookInfoMonster->x, pLookInfoMonster->y));
-	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 )
-	{
+	SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
+	/*
+	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
 		GetGameCMDSystem()->PushGameCMD(newCMD);
 		GetRoutingModule()->AddTargetPath( ccp( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
 	}
+	*/
 	const SkillInfo* pBaseSkill = SkillCfg::instance().getSkillCfgData(pMonsterData->baseSkillID);
-	if(pBaseSkill)
-	{
+	if(pBaseSkill){
 		SpriteInfo _SpriteInfo;
 		_SpriteInfo._ActorType = ACTORTYPE_SKILLSFX;
 		_SpriteInfo._ActorID = pBaseSkill->EffectGroup;
 		m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
-	}
-	else
-	{
+	}else{
 		SpriteInfo _SpriteInfo;
 		_SpriteInfo._ActorType = ACTORTYPE_SKILLSFX;
 		_SpriteInfo._ActorID = 5;
 		m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
 	}
+	/*
 	// 处理金银岛
 	int mapID = GameScene::GetScene()->GetCurMap()->getMapID();
-	if (mapID ==45||mapID==48)
-	{
+	if (mapID ==45||mapID==48){
 		SetShowName(pMonsterData->name);
 	}
 
 	//添加buff
 	cc_timeval now;
 	CCTime::gettimeofdayCocos2d(&now,NULL);
-	for( int i=0; i < (int)pLookInfoMonster->buffList.size(); ++i )
-	{
+	for( int i=0; i < (int)pLookInfoMonster->buffList.size(); ++i ){
 		CharactorBuff buff;
 		buff.buff_id =pLookInfoMonster->buffList[i].buff_id;
 		buff.allValidTime = pLookInfoMonster->buffList[i].allValidTime;
@@ -127,8 +123,8 @@ void CMonster::onLookInfoMonster( const pk::LookInfoMonster* pLookInfoMonster )
 		buff.startTime = now.tv_sec+now.tv_usec/1000000;
 		AddBuff(buff);
 	}
-
-	DEBUG_LOG( "onLookInfoMonster [%lld %s] pos[%d %d]", 
+	*/
+	log( "onLookInfoMonster [%lld %s] pos[%d %d]", 
 		getActorID(),
 		GetName().c_str(),
 		(int)getPosition().x,
@@ -154,6 +150,7 @@ void CMonster::onLookInfoMonster( const pk::LookInfoMonster* pLookInfoMonster )
 	}
 }
 
+/*
 void CMonster::draw()
 {
 	Charactor::draw();

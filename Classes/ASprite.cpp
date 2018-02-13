@@ -271,7 +271,30 @@ int ASprite::GetAnimNumber ()
 
 bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 {
-#if 1
+	char fileNameBuffer[256];
+	ssize_t len = 0;
+	sprintf(fileNameBuffer, "%s.plist", resName);
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("test.plist");
+#if 0
+	std::string plist_content = FileUtils::getInstance()->getStringFromFile(fileNameBuffer);
+
+	sprintf(fileNameBuffer, "%s.png", resName);
+	Data image_content = FileUtils::getInstance()->getDataFromFile(fileNameBuffer);
+
+	Image* image = new (std::nothrow) Image();
+	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
+	Texture2D* texture = new (std::nothrow) Texture2D();
+	texture->initWithImage(image);
+	texture->autorelease();
+
+	CC_SAFE_RELEASE(image);
+
+	auto cache = SpriteFrameCache::getInstance();
+	cache->addSpriteFramesWithFileContent(plist_content, texture);
+#endif
+	
+#if 0
 	bool ret = false;
 
 	mIsDataLoaded = false;

@@ -112,7 +112,7 @@ public:
 
 	//inline StateMachine* GetStateMachine() { return m_pStateMachine; }
 
-	//virtual void ProcessAnimaEvent( AnimaEvent* event );
+	virtual void ProcessAnimaEvent( AnimaEvent* event );
 
 	bool IsAbleToAttack( int skillId );
 

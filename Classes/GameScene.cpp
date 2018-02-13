@@ -7,6 +7,8 @@
 #include "NPC.h"
 #include "hero.h"
 #include "ASpriteManager.h"
+#include "Monster.h"
+#include "MonsterCfg.h"
 
 using namespace CocosDenshion;
 
@@ -17,8 +19,10 @@ behaviac::vector<behaviac::Agent*>  GameScene::m_bt_agent_delete_queue;
 Scene* GameScene::createScene()
 {
     //创建一个没有重力的物理世界
-    auto scene = Scene::createWithPhysics();
+	//auto scene = Scene::createWithPhysics();
+	auto scene = new GameScene();
     scene->getPhysicsWorld()->setGravity(Vect(0, 0));
+	
 
     //物理调试绘图
     scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
@@ -26,15 +30,45 @@ Scene* GameScene::createScene()
     m_gamelayer = GameScene::create();
     scene->addChild(m_gamelayer);
 
-    return scene;
+    
+	
+
+	if (scene && scene->init()){
+		scene->autorelease();
+		//TODO: CCDirector::sharedDirector()->replaceScene(p);
+		CCDirector::sharedDirector()->runWithScene(scene);
+	}
+	CCDirector::sharedDirector()->setProjection(kCCDirectorProjection3D);
+
+
 }
 
+GameScene::GameScene(void)
+{
+	m_actorManager = new ActorManager();
+}
+void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
+{
+	/*
+	Readint64(buf, value.id);
+	Readint16(buf, value.move_target_x);
+	Readint16(buf, value.move_target_y);
+	Readint16(buf, value.move_speed);
+	Readint16(buf, value.x);
+	Readint16(buf, value.y);
+	Readint16(buf, value.monster_data_id);
+	Readint8(buf, value.lifePercent);
+	Readint8(buf, value.faction);
+	Readint(buf, value.charState);
+	ReadArray(buf, ObjectBuff, value.buffList);
+	Readint8(buf, value.wildState);
+	*/
+}
 bool GameScene::init()
 {
-    Layer::init();
     log("Game init!");
 
-	//m_actorManager = new ActorManager();
+	
     //m_isAI = false;
 
     auto winSize = Director::getInstance()->getWinSize();
@@ -97,25 +131,40 @@ bool GameScene::init()
 	//默认启动ＡＩ
 	m_isAI = true;
 
-
-
 	g_SecondAgent = behaviac::Agent::Create<SecondAgent>();
 	bool bRet = g_SecondAgent->btload("fish");
 	if (!bRet){
-		log("-==================");
+		log("==================");
 	}
 	g_SecondAgent->btsetcurrent("fish");
 	//g_SecondAgent->btexec();
 	//schedule(schedule_selector(GameScene::Update), 1.f);
-
 	
 	AspriteManager::instance().initilize();
+	MonsterCfg::instance().init("monster");
+
+	CMonster * pMonster = CMonster::node();
+	LookInfoMonster *monsterInfo = new LookInfoMonster();
+	monsterInfo->monster_data_id = 13;
+	monsterInfo->id = 0;
+	monsterInfo->move_target_x = 300;
+	monsterInfo->move_target_y = 600;
+	monsterInfo->move_speed = 2;
+	monsterInfo->x = 50;
+	monsterInfo->y = 100;
+	monsterInfo->lifePercent = 80;
+	monsterInfo->faction = 0;
+	monsterInfo->charState = 0;
+	monsterInfo->wildState = 0;
+
+	pMonster->onLookInfoMonster(monsterInfo);
+	/*
 	ASprite* m_cacheSkillSprite;
 	SpriteInfo _SpriteInfo;
 	_SpriteInfo._ActorType = ACTORTYPE_SKILLSFX;
 	_SpriteInfo._ActorID = 5;
 	m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
-
+	*/
 #if 0
     //create NPC and hero
     m_NPC = behaviac::Agent::Create<NPC>();
@@ -223,12 +272,15 @@ bool GameScene::init()
 #endif
     return true;
 }
-/*
+
 ActorManager* GameScene::GetActorManager()
 {
-	return GameScene::sharedGameLayer()->m_actorManager;
+	return GameScene::GetScene()->m_actorManager;
 }
-*/
+GameScene* GameScene::GetScene()
+{
+	return (GameScene*)(Director::getInstance()->getRunningScene());
+}
 void GameScene::playBackground()
 {
     auto winSize = Director::getInstance()->getWinSize();

@@ -7,7 +7,7 @@
 //#include "Pet.h"
 //#include "SitDown.h"
 //#include "GameScene.h"
-//#include "ActorManager.h"
+#include "ActorManager.h"
 //#include "HeroPet.h"
 #include "SimpleEventDefine.h"
 
@@ -262,7 +262,7 @@ void DQAnimation::MarkBeingCall(CCPoint pos, const char* desc)
 		marker._EventParamList.push_back(param1);
 		marker._EventParamList.push_back(param2);
 		marker._EventParamList.push_back(param3);
-		//m_pHostEventHandler->ProcessAnimaEvent(&marker);
+		m_pHostEventHandler->ProcessAnimaEvent(&marker);
 		SAFE_DELETE(param3._Data._pStrData);
 	}
 }

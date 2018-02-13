@@ -28,7 +28,7 @@ proj.win32/game.rc
 proj.win32/main.cpp
 proj.win32/main.h
 proj.win32/resource.h
-proj.win32/Debug.win32/*.exe
+proj.win32/Debug.win32/*
 
 # User-specific files
 *.suo

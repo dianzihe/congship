@@ -40,7 +40,7 @@ public:
 	void setFrame(int frame) { m_frame = frame;}
 	Point GetMarkLOC();
 	const char* GetMarkDesc();
-	void MarkBeingCall(CCPoint pos, const char* desc);
+	void MarkBeingCall(Point pos, const char* desc);
 	bool isEnd();
 	static int GetWeaponMatch( int playerAnimId );
 	static int GetWeaponSFXMatch( int playerAnimId );

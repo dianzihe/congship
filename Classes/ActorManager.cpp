@@ -1,7 +1,7 @@
 #include "ActorManager.h"
 //#include "GameScene.h"
-//#include "Monster.h"
-//#include "ASprite.h"
+#include "Monster.h"
+#include "ASprite.h"
 #include "Actor.h"
 //#include "Hero.h"
 //#include "Player.h"
@@ -313,22 +313,19 @@ void ActorManager::AddActor(Actor* actor)
 {
 	ActorID nActorID = actor->getActorID();
 
-	if( FindActor(nActorID) )
-	{
-		//ERROR_LOG( "ActorManager::AddActor nActorID[%lld] exist", nActorID );
+	if( FindActor(nActorID) ){
+		log( "ActorManager::AddActor nActorID[%lld] exist", nActorID );
 		DelActor( nActorID );
 	}
 	m_mapActors[nActorID] = actor;
 	/*
 	m_pMap->addActorToMap(actor);
-	if( actor->getActorType() == ACTORTYPE_PLAYER )
-	{
+	if( actor->getActorType() == ACTORTYPE_PLAYER ){
 		CPlayer* player = (CPlayer*)actor;
 		player->showFactionName(CSystemSetUI::instance().getHideCampNameFlag());
 	}
 	*/
-	if( actor->getActorType() == ACTORTYPE_TRANSPORT )
-	{
+	if( actor->getActorType() == ACTORTYPE_TRANSPORT ){
  		m_mapTransportActors[nActorID] = actor;
 	}
 }
@@ -454,12 +451,9 @@ void ActorManager::updateAllNpcIcon()
 void ActorManager::getActors( int nActorType, int nDataID, vector<Actor*>& vOut )
 {
 	vOut.clear();
-	for( MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter )
-	{
+	for( MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter ){
 		Actor* pActor = iter->second;
-		if( pActor->getActorType() == nActorType &&
-			pActor->getDataID() == nDataID )
-		{
+		if( pActor->getActorType() == nActorType &&	pActor->getDataID() == nDataID ){
 			vOut.push_back( pActor );
 		}
 	}
@@ -468,11 +462,9 @@ void ActorManager::getActors( int nActorType, int nDataID, vector<Actor*>& vOut 
 void ActorManager::getActors( int nActorType, vector<Actor*>& vOut )
 {
 	vOut.clear();
-	for(MAP_ACTORS::iterator it=m_mapActors.begin(); it!=m_mapActors.end(); it++)
-	{
+	for(MAP_ACTORS::iterator it=m_mapActors.begin(); it!=m_mapActors.end(); it++){
 		Actor *pActor = it->second;
-		if(pActor->getActorType() == nActorType)
-		{
+		if(pActor->getActorType() == nActorType){
 			vOut.push_back(pActor);
 		}
 	}

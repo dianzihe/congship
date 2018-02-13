@@ -4,7 +4,8 @@
 #include "cocos2d.h"
 #include "behaviac\behaviac.h"
 #include "SecondAgent.h"
-//#include "ActorManager.h"
+#include "ActorManager.h"
+#include "Monster.h"
 
 USING_NS_CC;
 
@@ -16,7 +17,7 @@ namespace behaviac{
     class Agent;
 }
 //游戏主场景层
-class GameScene : public Layer
+class GameScene : public Scene
 {
     //以下是游戏配置信息
 public:
@@ -61,11 +62,12 @@ public:
 
 public:
     static Scene* createScene();
-	//ActorManager*	m_actorManager;
-	//static ActorManager* GetActorManager();
+	static GameScene* GetScene();
+	ActorManager*	m_actorManager;
+	static ActorManager* GetActorManager();
     CREATE_FUNC(GameScene);
     bool init();
-	
+	void ReadLookInfoMonster(char*& buf, LookInfoMonster& value);
 public:
     static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
 

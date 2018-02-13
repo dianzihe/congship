@@ -1,6 +1,9 @@
 #include "BinTable.h"
 //#include "Misc.h"
+#include "cocos2d.h"
 #include "base.h"
+
+using namespace cocos2d;
 
 static std::string _GetLocaledDataStrFileFullPath( Language type )
 {
@@ -16,7 +19,7 @@ static std::string _GetLocaledDataStrFileFullPath( Language type )
 
 bool _IsLanguageEnable_LocaledDataStr( Language type )
 {
-	return CCFileUtils::sharedFileUtils()->isFileExist( _GetLocaledDataStrFileFullPath( type ).c_str() );
+	return CCFileUtils::getInstance()->isFileExist(_GetLocaledDataStrFileFullPath(type).c_str());
 }
 
 bool _ReloadLocaledDataStr();
@@ -120,7 +123,7 @@ TTableGroup* BinTable::GetTalbeGroup( const string& fileName )
 {
 	static BinTable bin;
 
-	for (size_t i=0; i<bin.m_tableGroups.size(); i++){
+	for (size_t i = 0; i < bin.m_tableGroups.size(); i++){
 		if ( bin.m_tableGroups[i]->m_fileName == fileName ){
 			return bin.m_tableGroups[i];
 		}
@@ -285,20 +288,21 @@ void TTableGroup::Load(const string& name)
 	string fileName = "Data/" + name + ".str";
 	string dataName = "Data/" + name + ".bin";
 
+	log("---->TTableGroup::Load --> %s", fileName.c_str());
+	log("---->TTableGroup::Load --> %s", dataName.c_str());
+
 	const vector<string>& stable = _GetLocalTextFile();
 
 	ssize_t len;
-	char* data = (char*)CCFileUtils::sharedFileUtils()->getFileData( fileName.c_str(), "rb", &len );
+	char* data = (char*)FileUtils::getInstance()->getFileData( fileName.c_str(), "rb", &len );
 	unsigned char* p = ( unsigned char* )data;
 	bool needLocalize = ( p[0] == ' ' ) && ( p[1] == ' ' ) && ( p[2] == ' ' );
 
 	int pos = 3;
 	int startPos = 3;
 	size_t startIndex = m_strKey.size();
-	while( pos < (int)len )
-	{
-		if ( data[pos] == '^' )
-		{
+	while( pos < (int)len ){
+		if ( data[pos] == '^' ){
 			data[pos] = '\0';
 			m_strKey.push_back(&data[startPos]);
 
@@ -315,13 +319,12 @@ void TTableGroup::Load(const string& name)
 
 	SAFE_DELETE_ARRAY( data );
 
-	data = (char*)CCFileUtils::sharedFileUtils()->getFileData( dataName.c_str(), "rb", &len );
+	data = (char*)FileUtils::getInstance()->getFileData( dataName.c_str(), "rb", &len );
 
 	int* endPtr  = (int*)(data + len);
 	int* curPtr  = (int*)(data);
 	int nRecordIndex = 0;
-	while( curPtr < endPtr )
-	{
+	while( curPtr < endPtr ){
 		TTable* table = new TTable();
 		m_tables.push_back(table);		
 
@@ -333,15 +336,14 @@ void TTableGroup::Load(const string& name)
 		table->m_recordCount  = *curPtr;
 		curPtr++;
 
-		for (int i=0; i<table->m_filedCount; i++)
-		{
+		for (int i = 0; i < table->m_filedCount; i++){
 			table->m_fieldstrKey.push_back(*curPtr);
 			curPtr++;
 		}
 
 		table->m_tableGroup = this;
 
-		int dataSize = table->m_filedCount*table->m_recordCount;
+		int dataSize = table->m_filedCount * table->m_recordCount;
 
 		table->m_data = new int[dataSize];
 
@@ -352,8 +354,7 @@ void TTableGroup::Load(const string& name)
 		++nRecordIndex;
 	}	
 
-	if( nRecordIndex >= 2 )
-	{
+	if( nRecordIndex >= 2 ){
 		int n = 0;
 	}
 

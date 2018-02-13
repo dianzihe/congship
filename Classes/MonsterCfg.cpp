@@ -1,5 +1,6 @@
 #include "MonsterCfg.h"
-//#include "BinTable.h"
+#include "BinTable.h"
+#include "cocos2d.h"
 
 MonsterCfg::MonsterCfg()
 {
@@ -13,7 +14,6 @@ MonsterCfg::~MonsterCfg()
 
 bool MonsterCfg::init(const char *pFile)
 {
-	/*
 	if( pFile == NULL )
 		return false;
 	m_mapMonsterTable.clear(); 
@@ -30,6 +30,7 @@ bool MonsterCfg::init(const char *pFile)
 		MonsterData data;
 		data.id = pTable->GetField(i, "id");
 		data.name = pTable->GetFieldString( i, "name" );
+		cocos2d::log("--MonsterCfg-->%s", data.name.c_str());
 		data.animation = pTable->GetField(i, "animation");
 		data.mobHead = pTable->GetField(i, "mobhead");
 		data.level = pTable->GetField(i, "level");
@@ -70,6 +71,6 @@ bool MonsterCfg::init(const char *pFile)
 		data.monstertype = pTable->GetField( i, "monstertype");
 		m_mapMonsterTable[data.id] = data;
 	}
-	*/
+	
 	return true;
 }
