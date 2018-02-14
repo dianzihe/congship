@@ -177,15 +177,12 @@ bool ImageResource::Load( const char * resName, ResourceType resType )
         while (it != end)
         {
             RenderBatchData* pRenderBatchData = *it;
-            if(pRenderBatchData)
-            {
-				if(newTex)
-				{
+            if(pRenderBatchData){
+				if(newTex){
 					pRenderBatchData->_FullTexture = newTex;
 					if (n != 0)
 						pRenderBatchData->_FullTexture->retain();
-				}
-				else
+				}else
 					pRenderBatchData->_HostImageResource = this;
             }
             ++it;

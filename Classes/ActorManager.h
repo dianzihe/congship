@@ -20,7 +20,7 @@ typedef std::map< ActorID, Actor* >	MAP_ACTORS;
 
 using namespace cocos2d;
 
-class ActorManager/* : public OneEventObject*/
+class ActorManager /*: public OneEventObject*/
 {
 public:
 	ActorManager(void);

@@ -75,7 +75,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	director->runWithScene(scene);
 	*/
 
-	GameScene::create();
+	//GameScene::create();
+	//GameScene::getInstance()->init();
+	GameScene::instance().initilize();
+	Director::getInstance()->runWithScene(&GameScene::instance());
 
     return true;
 }

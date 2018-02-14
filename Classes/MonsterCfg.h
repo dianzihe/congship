@@ -63,7 +63,7 @@ public:
 
 	static MonsterCfg& instance( void )
 	{
-		static MonsterCfg	 s;
+		static MonsterCfg s;
 		return s;
 	}
 

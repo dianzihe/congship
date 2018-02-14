@@ -336,15 +336,16 @@ void PlaneHero::blowUp()
 	animation->setRestoreOriginalFrame(true);
 
 	auto blowUp = Animate::create(animation);
-	
+	/*
 	//爆炸完后结束游戏
 	auto gameoverCall = CallFunc::create([this]() {
 		//log("call gameover!");
 		removeFromParent();
 		GameScene::sharedGameLayer()->gameover();
 	});
-
+	
 	this->runAction(Sequence::create(blowUp, gameoverCall, nullptr));
+	*/
 }
 
 /**
@@ -353,6 +354,7 @@ void PlaneHero::blowUp()
 */
 void PlaneHero::beginShooting(float dt)
 {
+	/*
 	SimpleAudioEngine::getInstance()->playEffect("sound/shoot.wav");
 
 	//log("a bullet shoot!");
@@ -370,6 +372,7 @@ void PlaneHero::beginShooting(float dt)
 	body->setCollisionBitmask(0x0); //不进行碰撞模拟，因为不需要。
 
 	bullet->setPhysicsBody(body);
+	*/
 }
 
 /**
@@ -378,6 +381,7 @@ void PlaneHero::beginShooting(float dt)
 */
 void PlaneHero::removeBullet(float dt)
 {
+	/*
 	//遍历每一颗子弹，把出界的删除
 	auto bulletBox = GameScene::sharedGameLayer()->getBulletBox();
 	auto vec = bulletBox->getChildren();
@@ -392,6 +396,7 @@ void PlaneHero::removeBullet(float dt)
 			//log("a bullet remove!");
 		}
 	}
+	*/
 }
 
 /**

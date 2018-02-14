@@ -56,7 +56,15 @@ ActorID ActorManager::incClientActorID()
 
 void ActorManager::update(float dt)   //¸Ä
 {
+	log("----->ActorManager::update");
 	m_nDispPlayerNum = 0;
+	for (MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter)
+	{
+		Actor* pActor = iter->second;
+		pActor->setIsSheild(false);
+		log("----->ActorManager::update--->%s", pActor->GetName().c_str());
+		pActor->update(dt);
+	}
 	/*
 	bool isSheild_diff_camp = CSystemSetUI::instance().isSet(ShieldSet_EnermyCamp);
 	bool isSheild_same_camp = CSystemSetUI::instance().isSet(ShieldSet_SelfCamp);
@@ -318,8 +326,9 @@ void ActorManager::AddActor(Actor* actor)
 		DelActor( nActorID );
 	}
 	m_mapActors[nActorID] = actor;
-	/*
+	
 	m_pMap->addActorToMap(actor);
+	/*
 	if( actor->getActorType() == ACTORTYPE_PLAYER ){
 		CPlayer* player = (CPlayer*)actor;
 		player->showFactionName(CSystemSetUI::instance().getHideCampNameFlag());

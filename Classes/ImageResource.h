@@ -3,13 +3,14 @@
 
 #include <vector>
 #include "cocos2d.h"
-//#include "Singleton.h"
+#include "Singleton.h"
 //#include "CCSprite.h"
 //#include "CCTexture2D.h"
 
-typedef int				BatchID;
+typedef int BatchID;
 
 #define InvalidBatchID	-1
+#define Readint(buf,data)	data =*((int*)(buf)); buf += 4;
 
 class ImageResource;
 struct RenderBatchData

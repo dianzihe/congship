@@ -56,6 +56,8 @@ bool GameOverScene::init()
 void GameOverScene::onBackItemCallback(Ref*)
 {
 	//·µ»ØÓÎÏ·
+	/*
 	auto scene = GameScene::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(2, scene));
+	*/
 }

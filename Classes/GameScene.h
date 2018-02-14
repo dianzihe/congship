@@ -6,6 +6,7 @@
 #include "SecondAgent.h"
 #include "ActorManager.h"
 #include "Monster.h"
+#include "Singleton.h"
 
 USING_NS_CC;
 
@@ -17,10 +18,11 @@ namespace behaviac{
     class Agent;
 }
 //游戏主场景层
-class GameScene : public Scene
+class GameScene : public Scene, public Singleton<GameScene, Tag_Singleton_Auto>
 {
     //以下是游戏配置信息
 public:
+	friend class Singleton<GameScene, Tag_Singleton_Auto>;
     enum NodeTag
     {
         HERO_TAG = 100,
@@ -61,18 +63,23 @@ public:
     static const float refresh_delay[]; //战机刷新间隔
 
 public:
-    static Scene* createScene();
-	static GameScene* GetScene();
+	GameScene(void);
+	~GameScene(void);
+
+	//void create();
+    ActorManager* GetActorManager();
+	//static GameScene* GetScene();
 	ActorManager*	m_actorManager;
-	static ActorManager* GetActorManager();
-    CREATE_FUNC(GameScene);
-    bool init();
+
+	//static void createScene();
+    //CREATE_FUNC(GameScene);
+	bool initilize();
 	void ReadLookInfoMonster(char*& buf, LookInfoMonster& value);
 public:
-    static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
+   // static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
 
 private:
-    static GameScene* m_gamelayer; //游戏场景层的单例对象
+    //static GameScene* m_gamelayer; //游戏场景层的单例对象
 public:
     SpriteBatchNode* getBulletBox() { return m_bulletBox; }	 //获取子弹渲染器
     void AdjustHeroPosition(Node* hero);

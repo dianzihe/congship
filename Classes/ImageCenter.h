@@ -1,18 +1,18 @@
 #ifndef _ImageCenter_H__
 #define _ImageCenter_H__
 
-//#include "Singleton.h"
+#include "Singleton.h"
 //#include "CCSprite.h"
 //#include "CCTexture2D.h"
 #include "ImageResource.h"
 #include <map>
 using namespace std;
 
-class UI;
-class ImageCenter //: public Singleton<ImageCenter ,Tag_Singleton_Auto>
+//class UI;
+class ImageCenter : public Singleton<ImageCenter ,Tag_Singleton_Auto>
 {
 protected:
-	//friend class Singleton<ImageCenter, Tag_Singleton_Auto>;
+	friend class Singleton<ImageCenter, Tag_Singleton_Auto>;
 	typedef std::map<std::string, ImageResource*> ResourceMap;
 	typedef std::map<BatchID, RenderBatchData*> RenderBatchIDMap;
 	typedef std::map<std::string, RenderBatchData*> RenderBatchNameMap;

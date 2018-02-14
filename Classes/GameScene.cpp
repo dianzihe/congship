@@ -12,41 +12,39 @@
 
 using namespace CocosDenshion;
 
-GameScene* GameScene::m_gamelayer = nullptr;
+//GameScene* GameScene::m_gamelayer = nullptr;
 
 const float GameScene::refresh_delay[] = { 2.0f, 1.5f, 1.0f, 0.5f, 0.2f }; //战机刷新间隔
 behaviac::vector<behaviac::Agent*>  GameScene::m_bt_agent_delete_queue;
-Scene* GameScene::createScene()
+/*
+void GameScene::create()
 {
     //创建一个没有重力的物理世界
 	//auto scene = Scene::createWithPhysics();
 	auto scene = new GameScene();
-    scene->getPhysicsWorld()->setGravity(Vect(0, 0));
-	
+    //scene->getPhysicsWorld()->setGravity(Vect(0, 0));
 
     //物理调试绘图
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    //scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 
-    m_gamelayer = GameScene::create();
-    scene->addChild(m_gamelayer);
-
-    
-	
+    //m_gamelayer = GameScene::create();
+    //scene->addChild(m_gamelayer);
 
 	if (scene && scene->init()){
 		scene->autorelease();
 		//TODO: CCDirector::sharedDirector()->replaceScene(p);
-		CCDirector::sharedDirector()->runWithScene(scene);
+		Director::getInstance()->runWithScene(scene);
 	}
-	CCDirector::sharedDirector()->setProjection(kCCDirectorProjection3D);
-
-
+//	Director::getInstance()->setProjection(kCCDirectorProjection3D);
 }
-
+*/
 GameScene::GameScene(void)
 {
 	m_actorManager = new ActorManager();
+	
 }
+GameScene::~GameScene(void)
+{}
 void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 {
 	/*
@@ -64,13 +62,11 @@ void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 	Readint8(buf, value.wildState);
 	*/
 }
-bool GameScene::init()
+bool GameScene::initilize()
 {
     log("Game init!");
-
-	
+	m_actorManager = new ActorManager();
     //m_isAI = false;
-
     auto winSize = Director::getInstance()->getWinSize();
 
     //加载plist文件
@@ -156,6 +152,7 @@ bool GameScene::init()
 	monsterInfo->faction = 0;
 	monsterInfo->charState = 0;
 	monsterInfo->wildState = 0;
+	m_actorManager->AddActor(pMonster);
 
 	pMonster->onLookInfoMonster(monsterInfo);
 	/*
@@ -275,12 +272,14 @@ bool GameScene::init()
 
 ActorManager* GameScene::GetActorManager()
 {
-	return GameScene::GetScene()->m_actorManager;
+	return m_actorManager;
 }
+/*
 GameScene* GameScene::GetScene()
 {
 	return (GameScene*)(Director::getInstance()->getRunningScene());
 }
+*/
 void GameScene::playBackground()
 {
     auto winSize = Director::getInstance()->getWinSize();
