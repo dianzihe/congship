@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <list>
 #include "cocos2d.h"
 
 using namespace std;
@@ -14,7 +15,58 @@ using namespace cocos2d;
 
 //class Map;
 //class ConfigChecking;
-class MapObject
+
+
+struct TileCoord
+{
+	int col;
+	int row;
+};
+
+
+struct StationReachInfo
+{
+	int stationId;
+	int distance;
+
+	StationReachInfo()
+	{
+		stationId = 0;
+		distance = 0;
+	}
+};
+
+struct BushPath
+{
+	float distance;
+	list<int>  path;
+
+	BushPath()
+	{
+		distance = 0;
+	}
+};
+
+struct BusStation
+{
+	int stationId;					//当前站台ID
+	TileCoord  pos;				//当前站台的位置
+	vector<StationReachInfo>  canReachStations;//此站台可通向的站台
+	map<int, BushPath>	mapPaths; //预存的路径（key=通向的站台ID,value=路径）
+
+	BusStation()
+	{
+		stationId = 0;
+		pos.col = 0;
+		pos.row = 0;
+	}
+};
+
+typedef map<int, BusStation>*	LPBUS_STATIONS;
+typedef map<int, BusStation>		BUS_STATIONS;
+
+
+struct MapObject
 {
 	//friend class Map;
 	friend class ConfigChecking;
@@ -30,12 +82,12 @@ public:
 	string GetName();
 };
 
-class DanamicMapObject: public MapObject
+struct DanamicMapObject : public MapObject
 {
 	int virtualID;
 };
 
-class TransportData : public MapObject
+struct TransportData : public MapObject
 {
 	TransportData(MapObject &obj);
 
@@ -47,7 +99,7 @@ class TransportData : public MapObject
 };
 
 
-class MapData
+struct MapData
 {
 	int id;
 	//地图上的怪物与NPC
@@ -91,7 +143,7 @@ class MapData
 	}
 };
 
-class ObjectPos
+struct ObjectPos
 {
 	int mapID;
 	int posX;

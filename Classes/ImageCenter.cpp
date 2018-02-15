@@ -25,8 +25,7 @@ void ImageCenter::UnInitialize()
 	{
 		ResourceMap::iterator it = mResourceMap.begin();
 		ResourceMap::iterator end = mResourceMap.end();
-		while( it != end )
-		{
+		while( it != end ){
 			SAFE_DELETE(it->second);
 			++it;
 		}
@@ -40,32 +39,24 @@ ImageResource* ImageCenter::_LoadResource( const char * resName )
 {
 	std::string filePath = resName;
 	ResourceType resType = eResourceType_png_pvr;
-	if(filePath.find(".wen") != -1)
-	{
+	if(filePath.find(".wen") != -1){
 		resType = eResourceType_jpg;
 	}
 	filePath = filePath.substr(0, filePath.find("."));
 	std::string fileName = filePath.substr(filePath.find_last_of("/") + 1, filePath.size());
 	ImageResource* retImageResource = NULL;
 	ResourceMap::iterator it  = mResourceMap.find(fileName);
-	if(it == mResourceMap.end())
-	{
+	if(it == mResourceMap.end()){
 		ImageResource* pImageRes = new ImageResource(this);
-		if(pImageRes->Load(filePath.c_str(), resType))
-		{
+		if(pImageRes->Load(filePath.c_str(), resType)){
 			mResourceMap[fileName] = pImageRes;
 			retImageResource = pImageRes;
-		}
-		else
-		{
+		}else{
 			SAFE_DELETE(pImageRes);
 		}
-	}
-	else
-	{
+	}else{
 		retImageResource = it->second;
-		if (retImageResource->GetResourceState() == eResourceState_UnLoaded)
-		{
+		if (retImageResource->GetResourceState() == eResourceState_UnLoaded){
 			retImageResource->ReLoad(filePath.c_str(), resType);
 		}
 	}
@@ -78,10 +69,8 @@ void ImageCenter::_UnLoadResource( const char * resName )
 	filePath = filePath.substr(0, filePath.find("."));
 	std::string fileName = filePath.substr(filePath.find_last_of("/") + 1, filePath.size());
 	ResourceMap::iterator it  = mResourceMap.find(fileName);
-	if(it != mResourceMap.end())
-	{
-		if (it->second->GetResourceState() == eResourceState_Loaded)
-		{
+	if(it != mResourceMap.end()){
+		if (it->second->GetResourceState() == eResourceState_Loaded){
 			it->second->UnLoad();
 		}
 	}

@@ -26,7 +26,6 @@ bool MapSettingCfg::init( const char* pFile )
 
 	for( int i=1; i<=pTable->m_recordCount; ++i )
 	{
-
 		MapSettingData data;
 		data.id = pTable->GetField(i, "id");
 		data.name = pTable->GetFieldString(i, "name");

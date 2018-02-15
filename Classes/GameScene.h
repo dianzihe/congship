@@ -7,7 +7,8 @@
 #include "ActorManager.h"
 #include "Monster.h"
 #include "Singleton.h"
-
+//#include "Camera.h"
+#include "Map.h"
 USING_NS_CC;
 
 class PlaneEnemy;
@@ -66,16 +67,19 @@ public:
 	GameScene(void);
 	~GameScene(void);
 
-	//void create();
+	
     ActorManager* GetActorManager();
-	//static GameScene* GetScene();
-	ActorManager*	m_actorManager;
+	//DQCamera* GetCamera();
 
+	//void create();
+	//static GameScene* GetScene();
 	//static void createScene();
     //CREATE_FUNC(GameScene);
 	bool initilize();
 	void ReadLookInfoMonster(char*& buf, LookInfoMonster& value);
 public:
+	ActorManager*	m_actorManager;
+	DQMap*			m_map;
    // static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
 
 private:

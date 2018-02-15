@@ -1,26 +1,32 @@
 #include "Map.h"
-//#include "Camera.h"
-//#include "PathSeeker.h"
 #include "Hero.h"
 #include "GameScene.h"
 #include "ActorManager.h"
+#include "TextDef.h"
+#include "Binary.h"
+#include "BinTable.h"
+#include "Text.h"
+#include "ActorManager.h"
+#include "Actor.h"
+#include "SceneObj.h"
+#include "SceneObjCfg.h"
+#include "Shake.h"
+
+//#include "ImageCenter.h"
+//#include "Camera.h"
+//#include "PathSeeker.h"
+
 /*
 //#include "MyMathExtension.h"
-//#include "TextDef.h"
 //#include "effect.h"
 //#include "Npc.h"
-//#include "Binary.h"
 //#include "UIProgressBar.h"
 #include "package.h"
 #include "GameState.h"
 #include "GameMainUI.h"
 #include "MessageTips.h" 
-#include "BinTable.h"
-#include "Text.h"
 #include "MonsterCfg.h"
 #include "NpcCfg.h"
-#include "ActorManager.h"
-#include "Actor.h"
 #include "Routing.h"
 #include "../BaseModule/Navigation/NavigationModule.h"
 #include "../BaseModule/Combat/SkillFilterModule.h"
@@ -29,7 +35,6 @@
 #include "../../CocosDenshion/include/SimpleAudioEngine.h"
 #include "../BaseModule/Motion/RoutingModule.h"
 #include "BuffListUI.h"
-#include "../BaseModule/ImageCenter/ImageCenter.h"
 #include "../BaseModule/Motion/TeleportModule.h"
 #include "../InputSystem/GameCMDSystem.h"
 #include "CCMemoryMonitor.h"
@@ -38,20 +43,15 @@
 #include "BattleUI.h"
 #include "DirectionHandleUI.h"
 #include "CCFileUtils.h"
-#include "SceneObj.h"
+
 #include "GameHangUp.h"
 #include "Target.h"
 */
-
 //const int ID_BACKGROUND = 0;
 //const int ID_FRONT		= 1;
 #define     STOP_GUAJITIME 1.0f
-
-//
-//extern void OnBtnStopHangUp(UI *ui, void *data);
-
 #define  FreshAtk_Time 1.0f
-
+//extern void OnBtnStopHangUp(UI *ui, void *data);
 const char* resDir = "Map/";
 
 const string getBackgroudFileDir(int id)
@@ -62,22 +62,23 @@ const string getBackgroudFileDir(int id)
 	return buf;
 }
 
-Map::Map(void)
-{
-	m_camera = new CCamera();
 
-	m_pathSeeker = &CBusPathSeeker::instance();
-	m_pathSeeker->setDelegate(this);
+DQMap::DQMap(void)
+{
+	//m_camera = new DQCamera();
+
+	//m_pathSeeker = &CBusPathSeeker::instance();
+	//m_pathSeeker->setDelegate(this);
 	m_ppTiles.clear();
 	m_pActorManager = NULL;
 
-	m_pTileNode = CCNode::node();
+	m_pTileNode = new Node();
 	addChild(m_pTileNode, MAP_LAYER_TILE);
-	m_pGroundNode = CCNode::node();
+	m_pGroundNode = new Node();
 	addChild(m_pGroundNode, MAP_LAYER_GROUND);
-	m_pActorNode = CCNode::node();
+	m_pActorNode = new Node();
 	addChild(m_pActorNode, MAP_LAYER_ACTOR);
-	m_pAirNode = CCNode::node();
+	m_pAirNode = new Node();
 	addChild(m_pAirNode, MAP_LAYER_AIR);
 	m_pMapCfgData = NULL;
 	m_pMapSettingData = NULL;
@@ -89,26 +90,28 @@ Map::Map(void)
 	m_fAtkTime = 0.0f;
 }
 
-Map::~Map(void)
+DQMap::~DQMap(void)
 {
-	SAFE_DELETE(m_camera);
+	//SAFE_DELETE(m_camera);
 
 	m_ppTiles.clear();
 }
 
-float Map::getSceneScale()
+float DQMap::getSceneScale()
 {
-	return m_camera->getSceneScale();
+	//return m_camera->getSceneScale();
+	return .8f;
 }
-
+/*
 //获取站台数据
-LPBUS_STATIONS		Map::getStations()
+LPBUS_STATIONS DQMap::getStations()
 {
 	return &m_pMapCfgData->busStations;
 }
+*/
 
 //获取格子代价
-int	Map::getCost(int col, int row)
+int	DQMap::getCost(int col, int row)
 {
 	if(CanWalkThrough(col, row))
 		return 1;
@@ -116,35 +119,33 @@ int	Map::getCost(int col, int row)
 		return -1;
 }
 
-void	Map::getTileSize( int *width, int *height)
+void DQMap::getTileSize(int *width, int *height)
 {
 	*width = MAP_PHY_TILE_W;
 	*height = MAP_PHY_TILE_H;
 }
 
 //获取最大的站点ID
-int Map::getMaxStationId()
+int DQMap::getMaxStationId()
 {
 	return m_pMapCfgData->iMaxStationId;
 }
 
-int Map::getUseBusPathMinDis()
+int DQMap::getUseBusPathMinDis()
 {
 	return 0;
 }
 
-void Map::initialize( const MapSettingData* pMapData )
+void DQMap::initialize(const MapSettingData* pMapData)
 {
 	if( !pMapData )
 		return;
 	const MapData *pData = MapCfg::instance().getMapCfgData(pMapData->id);
 	if( !pData )
 		return;
-
-	if( m_pMapSettingData )
-	{
-		if( m_pMapSettingData->type == Map_Type_Battle )
-		{
+	/*
+	if( m_pMapSettingData ){
+		if( m_pMapSettingData->type == Map_Type_Battle ){
 			//上一个地图是战场，表示正在离开战场
 			//如果是在战场战斗状态，就进入可以进入战场的状态，如果是战场结束状态，就去掉战场状态
 			if( CBattleUI::instance().getState() == eBattleState_Fighting )
@@ -152,13 +153,11 @@ void Map::initialize( const MapSettingData* pMapData )
 			else
 				CBattleUI::instance().ChangeState(eBattleState_NULL);
 		}
-	}
-	else
-	{
+	}else{
 		if( CBattleUI::instance().getState() != eBattleState_CanEnter)
 			CBattleUI::instance().ChangeState(eBattleState_NULL);
 	}
-
+	*/
 	unInitialize();
 
 	m_pMapSettingData = pMapData;
@@ -168,14 +167,13 @@ void Map::initialize( const MapSettingData* pMapData )
 	m_pMapCfgData = (MapData*)pData;
 	LoadMapSceneObjects(m_pMapCfgData);
 
-	if( m_pMapSettingData && m_pMapSettingData->type == Map_Type_Battle )
-	{
+	if( m_pMapSettingData && m_pMapSettingData->type == Map_Type_Battle ){
 		//本地图是战场，表示进入战场
-		CBattleUI::instance().ChangeState(eBattleState_Fighting);
+		//CBattleUI::instance().ChangeState(eBattleState_Fighting);
 	}
 
 	//重置寻路者大小
-	m_pathSeeker->setSeekSize(m_pMapCfgData->widthInPhy, m_pMapCfgData->heightInPhy);
+	//m_pathSeeker->setSeekSize(m_pMapCfgData->widthInPhy, m_pMapCfgData->heightInPhy);
 
 	//地图tile管理数据
 	//m_ppTiles = new CCSprite*[m_pMapCfgData->widthInTile*m_pMapCfgData->heightInTile];
@@ -198,21 +196,20 @@ void Map::initialize( const MapSettingData* pMapData )
 	sprintf(buff, "Minimap/%s.png",pMapData->MiniMap.c_str());
 #endif
 	ImageCenter::instance().LoadResource(buff);
-	m_pMiniMapTexture = ImageCenter::instance().GetRenderBatch(buff);
+	//m_pMiniMapTexture = ImageCenter::instance().GetRenderBatch(buff);
 
 	m_lastUpdateCut = ccp(MAP_PHY_TILE_W*2, MAP_PHY_TILE_H*2);
 
 	//播放音乐
 	char str[256];
 	sprintf( str, "Music/%s.spd", m_pMapSettingData->music.c_str());
-	if(!CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(str).c_str()))
-	{
+	if(!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(str).c_str())){
 		//strcpy_s(str, 256, "Music/guigucun.spd");  android编译不过， strcpy_s不是跨平台的
 		memset(str, 0, 256);
 		sprintf(str,"Music/guigucun.spd");
 	}
-	CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(str, true);
-
+	//CocosDenshion::SimpleAudioEngine::sharedEngine()->playBackgroundMusic(str, true);
+	/*
 	if(pMapData->type != 2)
 	{
 		switch(pMapData->pkFlag_Kill)
@@ -243,25 +240,22 @@ void Map::initialize( const MapSettingData* pMapData )
 			}
 			break;
 		}
-
 	}
+	*/
 }
 
-void Map::unInitialize()
+void DQMap::unInitialize()
 {
 	if(m_pMapCfgData && !m_ppTiles.empty())
 	{
 		assert( m_ppTiles.size() == m_pMapCfgData->widthInTile * m_pMapCfgData->heightInTile );
 		ImageCenter::instance().UnLoadResource(m_pMapSettingData->MiniMap.c_str());
-		for( int i=0; i<m_pMapCfgData->widthInTile; ++i )
-		{
-			for( int j=0; j<m_pMapCfgData->heightInTile; ++j )
-			{
+		for( int i=0; i<m_pMapCfgData->widthInTile; ++i ){
+			for( int j=0; j<m_pMapCfgData->heightInTile; ++j ){
 				//CCSprite *p = m_ppTiles[i+j*m_pMapCfgData->widthInTile];
 
 				MapTile* tile = m_ppTiles[i + j * m_pMapCfgData->widthInTile];
-				if (tile)
-				{
+				if (tile){
 					removeChild(tile, true);
 					
 					SAFE_RELEASE(tile);
@@ -279,72 +273,77 @@ void Map::unInitialize()
 
 	m_ppTiles.clear();
 
-	GameScene::GetActorManager()->cleartimeNonce();
+	//GameScene::GetActorManager()->cleartimeNonce();
 
 	ReleaseMapSceneObjects();
 }
 
-void Map::addActorToMap(Actor *actor)
+void DQMap::addActorToMap(Actor *actor)
 {
 	if(actor == NULL )
 		return;
 	m_pActorNode->addChild(actor);
 }
 
-void Map::delActorFromMap(Actor *actor)
+void DQMap::delActorFromMap(Actor *actor)
 {
 	if( actor == NULL )
 		return;
-	if( BuffListUI::instance().getShowBuffCharactor() == actor )
-	{
+	/*
+	if( BuffListUI::instance().getShowBuffCharactor() == actor ){
 		BuffListUI::instance().setShowBuffCharactor(NULL);
 	}
+	*/
+
 	m_pActorNode->removeChild(actor, true);
 }
 
-void Map::addActorToAirNode(Actor *actor)
+void DQMap::addActorToAirNode(Actor *actor)
 {
 	if(actor == NULL )
 		return;
 	m_pAirNode->addChild(actor);
 }
 
-void Map::delActorFromAirNode(Actor *actor)
+void DQMap::delActorFromAirNode(Actor *actor)
 {
 	if( actor == NULL )
 		return;
 	m_pAirNode->removeChild(actor, true);
 }
 
-void Map::removeActorFromAirNode(Actor *actor)
+void DQMap::removeActorFromAirNode(Actor *actor)
 {
 	if( actor == NULL )
 		return;
 	m_pAirNode->removeChild(actor, false);
 }
 
-void Map::addActorToGroundNode(Actor *actor)
+void DQMap::addActorToGroundNode(Actor *actor)
 {
 	if(actor == NULL )
 		return;
 	m_pGroundNode->addChild(actor);
 }
 
-void Map::delActorFromGroundNode(Actor *actor)
+void DQMap::delActorFromGroundNode(Actor *actor)
 {
 	if( actor == NULL )
 		return;
 	m_pGroundNode->removeChild(actor, true);
 }
 
-void Map::removeActorFromGroundNode(Actor *actor)
+void DQMap::removeActorFromGroundNode(Actor *actor)
 {
 	if( actor == NULL )
 		return;
 	m_pGroundNode->removeChild(actor, false);
 }
+#define		MAP_TOUCH_ONEE_MOVE_TIME	0.3f
+#define		MAP_TOUCH_TELEPORT_MOVE_TIME	0.5f
 
-bool Map::ccTouchBegan(CCTouch* touch, CCEvent* event)
+/*
+bool DQMap::ccTouchBegan(CCTouch* touch, CCEvent* event)
 {
 
 	CHero * pHero =GameScene::GetActorManager()->GetHero();
@@ -369,15 +368,14 @@ bool Map::ccTouchBegan(CCTouch* touch, CCEvent* event)
 	return true;
 }
 
-#define		MAP_TOUCH_ONEE_MOVE_TIME	0.3f
-#define		MAP_TOUCH_TELEPORT_MOVE_TIME	0.5f
-bool Map::ccTouchMoved(CCTouch* touch, CCEvent* event)
+
+bool DQMap::ccTouchMoved(CCTouch* touch, CCEvent* event)
 {
 	m_HoldTouch = *touch;
 	return true;
 }
 
-bool Map::ccTouchEnd(CCTouch* touch, CCEvent* event, bool isTeleportMove )
+bool DQMap::ccTouchEnd(CCTouch* touch, CCEvent* event, bool isTeleportMove)
 {
 	CHero * pHero =GameScene::GetActorManager()->GetHero();
 	if (pHero && pHero->getTianTiFight())
@@ -535,46 +533,45 @@ bool Map::ccTouchEnd(CCTouch* touch, CCEvent* event, bool isTeleportMove )
 
 	return true;
 }
-
-bool Map::CanWalkThrough(int phyTileX, int phyTileY)
+*/
+bool DQMap::CanWalkThrough(int phyTileX, int phyTileY)
 {
 	if(phyTileX < 0 || phyTileY < 0 || phyTileX >= m_pMapCfgData->widthInPhy || phyTileY >= m_pMapCfgData->heightInPhy)
 		return false;
 	return (m_pMapCfgData->phyData[REVERSE_Y(phyTileY, m_pMapCfgData->heightInPhy)*m_pMapCfgData->widthInPhy + phyTileX]&MAP_TILE_FLAG_PHY) == 0;
 };
 
-bool Map::IsTransparent(int phyTileX, int phyTileY)
+bool DQMap::IsTransparent(int phyTileX, int phyTileY)
 {
 	if(phyTileX < 0 || phyTileY < 0 || phyTileX >= m_pMapCfgData->widthInPhy || phyTileY >= m_pMapCfgData->heightInPhy)
 		return false;
 	return (m_pMapCfgData->phyData[REVERSE_Y(phyTileY, m_pMapCfgData->heightInPhy)*m_pMapCfgData->widthInPhy + phyTileX]&MAP_TILE_FLAG_TRANS) != 0;
 };
 
-CCPoint Map::GetAccessPosByStep( const CCPoint& beginPos, const CCPoint& endPos )
+CCPoint DQMap::GetAccessPosByStep(const CCPoint& beginPos, const CCPoint& endPos)
 {
 	CCPoint target = endPos;
+	/*
 	while(!CCPoint::CCPointEqualToPoint(target, beginPos))
 	{
 		float xoff = beginPos.x - target.x;
 		float yoff = beginPos.y - target.y;
-		if(!(fabsf(xoff) < FLT_EPSILON && fabsf(yoff) < FLT_EPSILON))
-		{
+		if(!(fabsf(xoff) < FLT_EPSILON && fabsf(yoff) < FLT_EPSILON)){
 			MOVE_V1_TO_V2(target.y, beginPos.y, GET_SPEED_SUB(yoff, xoff, MAP_PHY_TILE_W));
 			MOVE_V1_TO_V2(target.x, beginPos.x, GET_SPEED_SUB(xoff, yoff, MAP_PHY_TILE_H));
-			if(CanWalkThrough(GetTileX(target.x), GetTileY(target.y)))
-			{
+			if(CanWalkThrough(GetTileX(target.x), GetTileY(target.y))){
 				break;
 			}
-		}
-		else
-		{
+		}else{
 			break;
 		}
 	}
+	*/
 	return target;
 }
 
-void Map::GetPlayerPath(CPlayer* player, const CCPoint& start, const CCPoint& end)
+/*
+void DQMap::GetPlayerPath(CPlayer* player, const CCPoint& start, const CCPoint& end)
 {
 	CCPoint destiny = end;
 	if(!CanWalkThrough(destiny.x/MAP_PHY_TILE_W, destiny.y/MAP_PHY_TILE_H))
@@ -605,7 +602,7 @@ void Map::GetPlayerPath(CPlayer* player, const CCPoint& start, const CCPoint& en
 	}
 }
 
-void Map::UpdateCamera(float dt)
+void DQMap::UpdateCamera(float dt)
 {
 	m_camera->update(dt, this);
 	if( fabs(fabs(m_camera->getCurPos().x)-fabs(m_lastUpdateCut.x)) >= MAP_UPDATE_CUT_DIS ||
@@ -632,8 +629,8 @@ void Map::UpdateCamera(float dt)
 	setPosition(cameraPos);
 	setScale(m_camera->getSceneScale());
 }
-
-void Map::UpadteTileAndObjectCut()
+*/
+void DQMap::UpadteTileAndObjectCut()
 {
 	//CCSprite *node = NULL;
 	MapTile* tile = NULL;
@@ -651,31 +648,31 @@ void Map::UpadteTileAndObjectCut()
 				tile->getPositionY(), 
 				tile->getContentSize().width, 
 				tile->getContentSize().height);
-
+			tile->setVisible(true);
+			/*
 			if( !CCRect::CCRectIntersectsRect(rectTile, m_camera->getCurRectInWindow()))
 				tile->setVisible(false);
 			else
 				tile->setVisible(true);
+			*/
 		}
 	}
 }
 
-void Map::update( float dt )
+void DQMap::update(float dt)
 {
 	m_fAtkTime +=dt;
 	if( !m_pMapCfgData )
 		return;
-	UpdateCamera(dt);
+	//UpdateCamera(dt);
 	updateDynamicLoad();
 	UpdateSceneObjects(dt);
 	m_fMapHoldAllTimeTeleport += dt;
-	if( m_fMapHoldTime >= 0.0f )
-	{
+	if( m_fMapHoldTime >= 0.0f ){
 		m_fMapHoldTime+=dt;
-		if( m_fMapHoldTime >= MAP_TOUCH_ONEE_MOVE_TIME )
-		{
+		if( m_fMapHoldTime >= MAP_TOUCH_ONEE_MOVE_TIME ){
 			//MOVETOUCH
-			ccTouchEnd(&m_HoldTouch, NULL, false);
+			//ccTouchEnd(&m_HoldTouch, NULL, false);
 			m_fMapHoldTime = 0;
 		}
 	}
@@ -683,19 +680,16 @@ void Map::update( float dt )
 		m_fMapHoldAllTime += dt;
 
 	MapTile* tile = NULL;
-	for( int i=0; i<m_pMapCfgData->widthInTile*m_pMapCfgData->heightInTile; ++i)
-	{
+	for( int i=0; i<m_pMapCfgData->widthInTile*m_pMapCfgData->heightInTile; ++i){
 		tile = m_ppTiles[i];
-		if(tile)
-		{
+		if(tile){
 			tile->tick(dt);
 		}
 	}
-	if (m_fTouchTime>= 0.0f)
-	{
+	if (m_fTouchTime>= 0.0f){
 		m_fTouchTime+=dt;
 	}
-
+	/*
 	if (CGameHangUp::GetInstance().getGuaji())
 	{
 		CHero *pHero = GameScene::GetActorManager()->GetHero();
@@ -718,11 +712,11 @@ void Map::update( float dt )
 			CGameHangUp::GetInstance().setRemove(false);
 			CGameHangUp::GetInstance().setFreeTime(false);
 		}
-		
 	}
+	*/
 }
-
-void Map::visit( )
+/*
+void DQMap::visit()
 {PROFILE("Map::visit");
 	SceneInstance::instance().PushSFXToGroundNode(m_pGroundNode);
 	SceneInstance::instance().PushSFXToAirNode(m_pAirNode);
@@ -736,8 +730,8 @@ void Map::visit( )
 
 	SceneInstance::instance().RenderBackUI();
 }
-
-void Map::doReleaseMemory()
+*/
+void DQMap::doReleaseMemory()
 {
     if(m_pMapCfgData == NULL)
         return;
@@ -757,8 +751,9 @@ void Map::doReleaseMemory()
 
 
 //更新动态载入
-void Map::updateDynamicLoad()
+void DQMap::updateDynamicLoad()
 {
+	/*
     if(m_ppTiles.empty())
         return;
 	int w = (int)m_camera->getSceneScreenSize().width/MAP_RENDER_TILE_W+1;
@@ -818,40 +813,37 @@ void Map::updateDynamicLoad()
 			}
 		}
 	}
+	*/
 }
 
-void Map::SetCameraType( int t )
+/*
+void DQMap::SetCameraType(int t)
 {
-	m_camera->setCameraType(t);
+	//m_camera->setCameraType(t);
 }
 
-void Map::SetCameraTarget( const CCPoint& pos )
+void DQMap::SetCameraTarget(const CCPoint& pos)
 {
-	//CCSize size = m_camera->getSceneScreenSize();
-
-	//CCPoint tmp;
-	//CHECK_SET_POS(tmp.x, pos.x, size.width/2, getWidthInPixel() - size.width/2);
-	//CHECK_SET_POS(tmp.y, pos.y, size.height/2, getHeightInPixel() - size.height/2);
 	m_camera->setTargetPos(pos);
 }
-
-void Map::UpdateAllNpcIcon()
+*/
+void DQMap::UpdateAllNpcIcon()
 {
-	GameScene::GetActorManager()->updateAllNpcIcon();
+	//GameScene::GetActorManager()->updateAllNpcIcon();
 }
 
-bool Map::isMapPackgeNeedUpdate()
+bool DQMap::isMapPackgeNeedUpdate()
 {
 	if(m_pMapCfgData)
 	{
 		char path[128];
 		sprintf(path, "Map/%s/0_0.wen", m_pMapCfgData->resName.c_str());
-		return !CCFileUtils::sharedFileUtils()->isFileExist(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(path).c_str());
+		return !FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(path).c_str());
 	}
 	return false;
 }
 
-void Map::LoadMapSceneObjects(MapData* pMapData)
+void DQMap::LoadMapSceneObjects(MapData* pMapData)
 {
 	vector<MapObject>::iterator it = pMapData->objects.begin();
 	while(it != pMapData->objects.end())
@@ -883,7 +875,7 @@ void Map::LoadMapSceneObjects(MapData* pMapData)
 	}
 }
 
-void Map::ReleaseMapSceneObjects()
+void DQMap::ReleaseMapSceneObjects()
 {
 	MapSceneObjectContainer::iterator it = m_pMapSceneObjects.begin();
 	while(it != m_pMapSceneObjects.end())
@@ -906,7 +898,7 @@ void Map::ReleaseMapSceneObjects()
 	m_pMapSceneObjects.clear();
 }
 
-void Map::UpdateSceneObjects( float dt )
+void DQMap::UpdateSceneObjects(float dt)
 {
 	MapSceneObjectContainer::iterator it = m_pMapSceneObjects.begin();
 	while(it != m_pMapSceneObjects.end())
@@ -917,9 +909,10 @@ void Map::UpdateSceneObjects( float dt )
 	}
 }
 
-ACTORTYPE Map::JugdeTargetState(CCTouch* touch, CCEvent* event)
+ACTORTYPE DQMap::JugdeTargetState(CCTouch* touch, CCEvent* event)
 {
-		cocos2d::CCPoint touchLocation = touch->locationInView();
+	/*
+	cocos2d::CCPoint touchLocation = touch->locationInView();
 	touchLocation = cocos2d::CCDirector::sharedDirector()->convertToGL(touchLocation);
 
 	Actor* selectObjects =NULL;
@@ -929,8 +922,7 @@ ACTORTYPE Map::JugdeTargetState(CCTouch* touch, CCEvent* event)
 	for( MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter )
 	{
 		Actor* pActor = iter->second;
-		if( /*!pActor->isSheild()
-			&&*/ pActor->isVisible() 
+		if( pActor->isVisible() 
 			&& pActor->getCanBeenClick() )
 		{
 			const CCRect& rect = pActor->getSelectRect();
@@ -965,6 +957,6 @@ ACTORTYPE Map::JugdeTargetState(CCTouch* touch, CCEvent* event)
 			return ACTORTYPE_MOUNT;
 		}
 	}
-
+	*/
 	return ACTORTYPE_Count;
 }

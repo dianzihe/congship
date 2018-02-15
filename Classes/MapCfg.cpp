@@ -2,10 +2,10 @@
 #include "Actor.h"
 #include "MonsterCfg.h"
 //#include "NpcCfg.h"
-//#include "Text.h"
-//#include "TextDef.h"
-//#include "Binary.h"
-//#include "Map.h"
+#include "Text.h"
+#include "TextDef.h"
+#include "Binary.h"
+#include "Map.h"
 //#include "ObjectCfg.h"
 
 
@@ -69,19 +69,17 @@ int TransportData::getDestMapId()
 	return 0;
 }
 
-CCPoint TransportData::getPos()
+Point TransportData::getPos()
 {
-	if(params.size() >=3)
-	{
-		return ccp(params[1], params[2]);
+	if(params.size() >=3){
+		return Point(params[1], params[2]);
 	}
-	return CCPointZero;
+	return Point();
 }
 
 int TransportData::getLevelLimit()
 {
-	if(params.size() >=4)
-	{
+	if(params.size() >=4){
 		return params[3];
 	}
 	return 0;
@@ -95,20 +93,17 @@ MapCfg::MapCfg()
 MapCfg::~MapCfg()
 {
 	map<int, MapData*>::iterator it = m_mapCfgTable.begin();
-	for( ; it != m_mapCfgTable.end(); ++it )
-	{
+	for( ; it != m_mapCfgTable.end(); ++it ){
 		SAFE_DELETE(it->second);
 	}
 	m_mapCfgTable.clear();
 
-	for(map<int, ObjectPos*>::iterator it=m_objNpcPosTable.begin(); it!=m_objNpcPosTable.end(); it++)
-	{
+	for(map<int, ObjectPos*>::iterator it=m_objNpcPosTable.begin(); it!=m_objNpcPosTable.end(); it++){
 		SAFE_DELETE(it->second);
 	}
 	m_objNpcPosTable.clear();
 
-	for(map<int, ObjectPos*>::iterator it=m_objPilePosTable.begin(); it!=m_objPilePosTable.end(); it++)
-	{
+	for(map<int, ObjectPos*>::iterator it=m_objPilePosTable.begin(); it!=m_objPilePosTable.end(); it++){
 		SAFE_DELETE(it->second);
 	}
 	m_objPilePosTable.clear();
@@ -120,10 +115,9 @@ void MapData::loadData( const MapSettingData* pMapSettingData )
 	name=pMapSettingData->name;
 	string ss = ("Map/" + pMapSettingData->MapScn );
 
-	unsigned long len = 0;
-	char* data = (char*)CCFileUtils::sharedFileUtils()->getFileData( ss.c_str(), "rb", &len );
-	if (data ==  NULL)
-	{
+	ssize_t len = 0;
+	char* data = (char*)FileUtils::getInstance()->getFileData( ss.c_str(), "rb", &len );
+	if (data ==  NULL){
 		char txt[256];
 		sprintf(txt,"%s",CText::GetText(CTextDef::MAP_NULL).c_str());
 		//MessageTips::showMessageTips(txt);
@@ -205,9 +199,10 @@ void MapData::loadData( const MapSettingData* pMapSettingData )
 		}
 		if(station.stationId>iMaxStationId) 
 			iMaxStationId=station.stationId;
-
+		/*
 		if(childCount)
 			busStations[station.stationId] = station;
+		*/
 	}
 	SAFE_DELETE_ARRAY(data);
 }

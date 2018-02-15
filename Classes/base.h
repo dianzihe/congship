@@ -54,6 +54,32 @@ using namespace std;
 #define SAFE_RELEASE(p)         { if (p) { (p)->release(); (p) = 0; } }
 #endif
 
+
+/*
+#define GET_SPEED_SUB(v1, v2, speed) (speed * fabsf(v1) / sqrtf(v1*v1 + v2*v2))
+
+#define MOVE_V1_TO_V2(v1, v2, speed)\
+	if(v1 > v2) {\
+	v1 -= speed;\
+			}\
+				else {\
+	v1 += speed;\
+				}\
+	if(fabsf(v1 - v2) <= speed)\
+	v1 = v2;
+
+inline float CHECK_SET_POS(float v, float minV, float maxV)
+{
+	float v1;
+	v1 = v;
+	if (v1 < minV)
+		v1 = minV;
+	else if (v1 >= maxV)
+		v1 = maxV - 1;
+	return v1;
+}
+
+*/
 typedef long long	ActorID;
 
 /*

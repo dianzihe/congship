@@ -5,6 +5,9 @@
 //#include "CCNode.h"
 #include "cocos2d.h"
 #include "Actor.h"
+#include "Map.h"
+#include <map>
+#include <vector>
 /*
 class Actor;
 class CHero;
@@ -40,14 +43,14 @@ public:
 		return iterFind != m_mapActors.end() ? (iterFind->second) : NULL;
 	}
 
-	void	getActors( int nActorType, int nDataID, vector<Actor*>& vOut );//获得指定Type与dataID的actor
-	void	getActors( int nActorType, vector<Actor*>& vOut );//获得指定Type的actor
-	void    getActors(MAP_ACTORS& vOut); //获得全部actor
-	void	onChangeMap( void );
-	void	onGameStateEnter( void );
-	void	onGameStateLeave( void );
+	void getActors( int nActorType, int nDataID, vector<Actor*>& vOut );//获得指定Type与dataID的actor
+	void getActors( int nActorType, vector<Actor*>& vOut );//获得指定Type的actor
+	void getActors(MAP_ACTORS& vOut); //获得全部actor
+	void onChangeMap( void );
+	void onGameStateEnter( void );
+	void onGameStateLeave( void );
 
-	void	updateAllNpcIcon( void );
+	void  updateAllNpcIcon( void );
 
 	/*
 	CHero* GetHero(){return m_hero;};
@@ -63,9 +66,9 @@ public:
 	//void SetLevel(LevelUp*level){m_level = level;};
 	MAP_ACTORS& GetMapActors(){return m_mapActors;};
 
-	ActorID							incClientActorID( void );
+	ActorID incClientActorID( void );
 
-	//void  setMap(Map *p){ m_pMap = p;};
+	void  setMap(DQMap *p){ m_pMap = p;};
 
 
 	//自动选择一个目标，在使用技能时无目标时调用
@@ -91,14 +94,13 @@ private:
 	//LevelUp* m_level;
 	//int Deltag[];
 	MAP_ACTORS						m_mapActors;
-
 	MAP_ACTORS						m_mapTransportActors;
 
 	typedef list< ActorID >			LIST_ACTORIDS;
 	LIST_ACTORIDS					m_lstWaitToDelActorIDs;
 	long							timeNonce;
 
-	//Map*							m_pMap;
+	 DQMap*							m_pMap;
 
 	int								m_nDispPlayerNum;
 };

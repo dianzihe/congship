@@ -275,6 +275,12 @@ ActorManager* GameScene::GetActorManager()
 	return m_actorManager;
 }
 /*
+DQCamera* GameScene::GetCamera()
+{
+	return m_map->GetCamera();
+}
+*/
+/*
 GameScene* GameScene::GetScene()
 {
 	return (GameScene*)(Director::getInstance()->getRunningScene());

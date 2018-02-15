@@ -33,8 +33,8 @@ ActorManager::ActorManager(void)
 	m_click =NULL;
 	m_pick = NULL;
 	m_aoe = NULL;
-	m_pMap = NULL;
 	*/
+	m_pMap = NULL;
 	// 跟服务器对应的封装方法
 	//%%构建物件ID，暂时32位(前1位永为0保持正数，8位服务器ID，4位类型ID，19位ID值)，以后改为64位
 	ActorID Index = 1;
@@ -353,8 +353,8 @@ void ActorManager::DelActor(ActorID nActorID)
 			}
 			*/
 		}
-		//CCLOG("actorName===========================%s", iterFind->second->GetName().c_str());
-		//m_pMap->delActorFromMap(iterFind->second);
+		CCLOG("actorName===========================%s", iterFind->second->GetName().c_str());
+		m_pMap->delActorFromMap(iterFind->second);
 		m_mapActors.erase( iterFind );
 	}
 

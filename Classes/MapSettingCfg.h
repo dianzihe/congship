@@ -1,6 +1,10 @@
 #pragma once
 
 #include "base.h"
+#include <string>
+#include <map>
+
+using namespace std;
 
 enum EnterMap_Fail_Type
 {
