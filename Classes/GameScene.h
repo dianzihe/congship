@@ -8,6 +8,7 @@
 #include "Monster.h"
 #include "Singleton.h"
 //#include "Camera.h"
+#include "GameState.h"
 #include "Map.h"
 USING_NS_CC;
 
@@ -18,8 +19,33 @@ class Hero;
 namespace behaviac{
     class Agent;
 }
+
+enum GAME_LAYER
+{
+	GAME_LAYER_MAP,
+	GAME_LAYER_UI
+};
+enum GAME_STATE
+{
+	GAME_STATE_NONE,
+	GAME_STATE_UPDATE,
+	GAME_STATE_ZHONGGAO,
+	GAME_STATE_CUTSCENE,
+	GAME_STATE_LOGIN,
+	GAME_STATE_GAMESERVERLIST,
+	GAME_STATE_CHARLOBBY,
+	GAME_STATE_CREATEPLAYER,
+	GAME_STATE_GAME,
+	GAME_STATE_LOADING,
+	GAME_STATE_DISCONNECTION_LOGIN,
+	GAME_STATE_RECONNECT_LOGIN,
+	GAME_STATE_BRANCHUPDATE,
+};
+
+
+
 //游戏主场景层
-class GameScene : public Scene, public Singleton<GameScene, Tag_Singleton_Auto>
+class GameScene : public Scene
 {
     //以下是游戏配置信息
 public:
@@ -67,24 +93,35 @@ public:
 	GameScene(void);
 	~GameScene(void);
 
-	
-    ActorManager* GetActorManager();
-	//DQCamera* GetCamera();
+	static void create();
+	static GameScene* GetScene();
+	static ActorManager* GetActorManager();
+	static DQMap* GetMap();
 
+	//DQCamera* GetCamera();
 	//void create();
 	//static GameScene* GetScene();
 	//static void createScene();
     //CREATE_FUNC(GameScene);
-	bool initilize();
+	//bool initilize();
+	//static Node* GetUI();
+
+	virtual void onEnter();
+	virtual void onExit();
+
 	void ReadLookInfoMonster(char*& buf, LookInfoMonster& value);
 public:
 	ActorManager*	m_actorManager;
 	DQMap*			m_map;
+	Node*			m_uiNode;
+	GAME_STATE		m_eGameState;
+	CRunState*		m_pRunState;
    // static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
 
 private:
     //static GameScene* m_gamelayer; //游戏场景层的单例对象
 public:
+	Node* GetUI();
     SpriteBatchNode* getBulletBox() { return m_bulletBox; }	 //获取子弹渲染器
     void AdjustHeroPosition(Node* hero);
     void gameover();

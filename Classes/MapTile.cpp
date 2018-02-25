@@ -1,9 +1,9 @@
 #include "MapTile.h"
 //#include "CCMemoryMonitor.h"
 
-void MapTile::onAsyncLoadedTexture( CCTexture2D* pTexture )
+void MapTile::onAsyncLoadedTexture( Texture2D* pTexture )
 {
-	m_sprite = new CCSprite();
+	m_sprite = new Sprite();
 
 	// 保存当前引用计数
 	unsigned int rt = pTexture->getReferenceCount();
@@ -24,7 +24,7 @@ void MapTile::onAsyncLoadedTexture( CCTexture2D* pTexture )
 	}
 }
 
-void MapTile::Load( const char* pszFileName, const CCRect& rect )
+void MapTile::Load( const char* pszFileName, const Rect& rect )
 {
 	m_rect = rect;
 	m_textureName = pszFileName;
@@ -100,7 +100,7 @@ void MapTile::releaseSprite()
 	}
 }
 
-void MapTile::SetRect( const CCRect& rect )
+void MapTile::SetRect( const Rect& rect )
 {
 	m_rect = rect;
 }

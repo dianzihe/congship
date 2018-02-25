@@ -89,7 +89,7 @@ class ImageResource
 {
 public:
 	typedef std::vector<RenderBatchData*> RenderBatchMap;
-	typedef std::vector<cocos2d::CCTexture2D*> TextureContainer;
+	typedef std::vector<cocos2d::Texture2D*> TextureContainer;
 	ImageResource(ImageCenter* pImageCenter);
 	virtual ~ImageResource();
 public:

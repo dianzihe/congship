@@ -28,11 +28,11 @@ public:
 		releaseSprite();
 	}
 
-	void onAsyncLoadedTexture(CCTexture2D* pTexture);
+	void onAsyncLoadedTexture(Texture2D* pTexture);
 
-	void SetRect(const CCRect& rect);
+	void SetRect(const Rect& rect);
 
-	void Load(const char* pszFileName, const CCRect& rect);
+	void Load(const char* pszFileName, const Rect& rect);
 	
 	void unLoad();
 

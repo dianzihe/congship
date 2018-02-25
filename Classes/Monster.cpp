@@ -53,7 +53,7 @@ CMonster* CMonster::node()
 	return pRet;
 }
 
-void CMonster::onLookInfoMonster( const LookInfoMonster* pLookInfoMonster )
+void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 {
 	const MonsterData* pMonsterData = MonsterCfg::instance().getMonsterCfgData( pLookInfoMonster->monster_data_id );
 	if( !pMonsterData ){
@@ -83,7 +83,7 @@ void CMonster::onLookInfoMonster( const LookInfoMonster* pLookInfoMonster )
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
 	//m_pStateMachine->setStateForce(eCharactorState_Idle, m_dir);
 
-	GameScene::instance().GetActorManager()->AddActor(this);
+	GameScene::GetActorManager()->AddActor(this);
 	SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
 	/*
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){

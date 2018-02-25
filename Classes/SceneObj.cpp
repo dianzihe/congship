@@ -32,7 +32,7 @@ SceneObj* SceneObj::node( void )
 	return pRet;
 }
 
-void SceneObj::onLookInfoSceneObject( int nSceneObjId, CCPoint& position, const SceneObjData* pObjData )
+void SceneObj::onLookInfoSceneObject( int nSceneObjId, Point& position, const SceneObjData* pObjData )
 {
 	if( !pObjData ){
 		log( "SceneObj::onLookInfoSceneObjList SceneObj_data_id[%d] can not find", nSceneObjId );
@@ -58,7 +58,7 @@ void SceneObj::onLookInfoSceneObject( int nSceneObjId, CCPoint& position, const 
 	}
 
 	if(pObjData->m_Layer == eSceneObjLayer_Actor){
-		GameScene::instance().GetActorManager()->AddActor(this);
+		GameScene::GetActorManager()->AddActor(this);
 		SetNewPos(position);
 	}
 
@@ -91,7 +91,7 @@ bool SceneObj::loadParticle( const char *plistFile )
 	assert(m_pParticleSystem == NULL);
 	char name[256];
 	sprintf(name, "Particle/%s.plist", plistFile);
-	m_pParticleSystem = new CCParticleSystemQuad();
+	m_pParticleSystem = new ParticleSystemQuad();
 	if(!m_pParticleSystem->initWithFile(name))
 		SAFE_DELETE(m_pParticleSystem);
 	return true;

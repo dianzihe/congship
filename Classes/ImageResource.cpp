@@ -133,7 +133,7 @@ bool ImageResource::Load( const char * resName, ResourceType resType )
 	{
 		sprintf(filename, "%s.wen" ,resName );
 	}
-    CCTexture2D *newTex = CCTextureCache::sharedTextureCache()->addImage(filename);
+    Texture2D *newTex = TextureCache::getInstance()->addImage(filename);
     if(newTex == NULL)
     {
         
@@ -153,7 +153,7 @@ bool ImageResource::Load( const char * resName, ResourceType resType )
 				sprintf(filename, "%s_%d.wen", resName, texIdx++ );
 			}
             //CCTexture2D::setUSED_ANTI_ALIAS( false );
-            CCTexture2D* newTex = CCTextureCache::sharedTextureCache()->addImage(filename);
+            Texture2D* newTex = TextureCache::getInstance()->addImage(filename);
             //CCTexture2D::setUSED_ANTI_ALIAS( true );
             if(newTex)
             {
@@ -265,7 +265,7 @@ bool ImageResource::ReLoad(const char * resName, ResourceType resType)
 	{
 		sprintf(filename, "%s.wen" ,resName );
 	}
-	CCTexture2D *newTex = CCTextureCache::sharedTextureCache()->addImage(filename);
+	Texture2D *newTex = TextureCache::getInstance()->addImage(filename);
 	int n = 0;
 	if ( newTex )
 	{
@@ -307,7 +307,7 @@ bool ImageResource::ReLoad(const char * resName, ResourceType resType)
 				sprintf(filename, "%s_%d.wen", resName, texIdx++ );
 			}
 			//CCTexture2D::setUSED_ANTI_ALIAS( false );
-			CCTexture2D* newTex = CCTextureCache::sharedTextureCache()->addImage(filename);
+			Texture2D* newTex = TextureCache::getInstance()->addImage(filename);
 			//CCTexture2D::setUSED_ANTI_ALIAS( true );
 			if(newTex)
 			{

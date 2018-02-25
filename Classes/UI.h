@@ -2,11 +2,17 @@
 
 #include "base.h"
 #include "ImageResource.h"
-//#include "../BaseModule/ImageCenter/ImageCenter.h"
+#include "ImageCenter.h"
 //#include "NetDef.h"
 #include "cocos2d.h"
 //#define USE_UI_DRAG
 #include <string>
+#include <map>
+#include <vector>
+
+using namespace std;
+using namespace cocos2d;
+
 const int ALIGN_LEFT	= (1<<0);
 const int ALIGN_HCENTER = (1<<1);
 const int ALIGN_RIGHT	= (1<<2);
@@ -14,6 +20,24 @@ const int ALIGN_TOP		= (1<<3);
 const int ALIGN_VCENTER = (1<<4);
 const int ALIGN_BOTTOM	= (1<<5);
 
+#define READ_BEGIN( file ) while(1) { ssize_t _len; int _pos=0;\
+	char* _buf = (char*)FileUtils::getInstance()->getFileData(FileUtils::getInstance()->fullPathForFilename(filePath), "rb", &_len);
+
+#define READ_END() if ( _buf ) delete[] _buf; break;}
+
+#define READ_INT( data ) data = *((int*)&_buf[_pos]); _pos+=4;
+#define READ_INT16( data ) data = *((short*)&_buf[_pos]); _pos+=2;
+
+#define READ_STRING( data ) while(1){\
+	int _size;\
+	char _data[1024];\
+	READ_INT(_size);\
+	memcpy(_data, &_buf[_pos], _size);\
+	_data[_size] = '\0';\
+	data = _data;\
+	_pos+=_size;\
+	break;\
+	}
 
 enum TUIType
 {
@@ -47,9 +71,9 @@ enum	eTextType
 	eTextType_Num
 };
 
-using namespace std;
+
 class UI;
-class UIScrollView;
+//class UIScrollView;
 
 typedef void (*TEventFun)( UI* ui, void* data );
 
@@ -127,7 +151,7 @@ struct UIImage
 {
 	RenderBatchData* m_RenderBatch;
 	RenderBatchData* m_downRenderBatch;
-	CCTexture2D* m_IconTexture;
+	Texture2D* m_IconTexture;
 	std::string  m_IconName;
 
 	UIImage()
@@ -165,16 +189,16 @@ enum	UIMusicEffect_Type
 extern bool gStopEven;
 
 class UIManager;
-class UIText;
-class UIAnimation;
+//class UIText;
+//class UIAnimation;
 typedef bool (*UIUpdateFunc)( UI * ui, float t);
-typedef bool (*UIScrollView_updat)(UIScrollView* ui, float t);
+//typedef bool (*UIScrollView_updat)(UIScrollView* ui, float t);
 typedef void (*UIDragFunc)( UI * selfUI, UI * srcUI, void * data );
 typedef UI* (*CreateDragUIFunc)( UI * srcUI );
 
 class UI : public Node
 {
-	friend class UIManager;
+	//friend class UIManager;
 public:
 	UI();
 	virtual ~UI();
@@ -189,7 +213,7 @@ public:
 
 	bool	isHaveUnKnowChar();
 
-	CCRect	getGlobalRect();
+	Rect	getGlobalRect();
 
 	virtual void		update(float t);
 	//virtual void		draw();
@@ -199,11 +223,11 @@ public:
 	void					setRenderBatch(RenderBatchData* pRenderBatch);
 	void					setImage( string& name, bool boundingWH = false);
 	void					setImageByFullPath(  string& name, bool boundingWH = false );
-	void					setIconTex(CCTexture2D* tex, bool boundingWH = false);
+	void					setIconTex(Texture2D* tex, bool boundingWH = false);
 	//重新计算_down图片的UV和SOURCE SIZE
 	void					needReCalDownTex();
 	//新整理接口
-	CCTexture2D *           getTexture2D();
+	Texture2D *           getTexture2D();
 	//reverse texture
 	void					setReverseTex(bool reverse);
 	//围绕X轴旋转
@@ -228,13 +252,13 @@ public:
 
 	void					setEvent( TEventType msg, TEventFun fun , void* data = NULL );	
 	void				setOtherEvent(TEventType msg, TEventFun fun , void* data = NULL );
-	virtual void		OnEvent( TEventType msg, CCTouch* touch );
+	virtual void		OnEvent( TEventType msg, Touch* touch );
 
 	UI*					setSubImage(int Id,string name);
 	void					rermoveImag(int Id);
 
-	UI*					getTouchUI(CCTouch* touch);
-	virtual UI*			getTouchUI(int beginX, int beginY, CCTouch* touch);
+	UI*					getTouchUI(Touch* touch);
+	virtual UI*			getTouchUI(int beginX, int beginY, Touch* touch);
 
 	string&				getText( void )		{ return m_text; }
 
@@ -243,11 +267,11 @@ public:
 
 	UI*					SetSubValue( string UIName, string Text);		//设置UI子控件值
 
-	CCPoint			getRealPos();
-	CCPoint			getCurPos();
+	Point			getRealPos();
+	Point			getCurPos();
 
-	ccColor4B			getColor(){ return m_color;};
-	virtual void		setColor( ccColor4B color );
+	Color4B			getColor(){ return m_color;};
+	virtual void		setColor( Color4B color );
 
 	void					setUpdateFunc( UIUpdateFunc fun){ m_pUpdateFun = fun;};
 
@@ -264,9 +288,9 @@ public:
 	void					remove(){ bIsRemove = true; };
 	void					retainChild(){ bIsRemove = false; };
 
-	void					SetClip(const CCRect& rect  ) ;
-	CCRect*					getClip() {return m_clipRect;}
-	virtual bool			isInClipRect( CCTouch* touch);
+	void					SetClip(const Rect& rect  ) ;
+	Rect*					getClip() {return m_clipRect;}
+	virtual bool			isInClipRect( Touch* touch);
 
 	bool					isMonopolizeTouch(){ return bIsMonopolizeTouch; };
 	void					setMonopolizeTouch(bool b);
@@ -332,7 +356,7 @@ public:
 	TUIType			m_type;
 	int				m_width;
 	int				m_height;
-	ccColor4B		m_color;
+	Color4B		m_color;
 	bool			m_down;
     
 //    bool            m_bisTop;
@@ -340,8 +364,8 @@ public:
 	UIImage			m_image;
 protected:
 	
-	UIText*			m_pText;
-	UIText*			m_pTextDown;
+	//UIText*			m_pText;
+	//UIText*			m_pTextDown;
 	EventFunData	m_eventData[EVENT_SIZE];
 	EventFunData	m_otherEventData[EVENT_SIZE];
 	bool			bIsRemove;
@@ -350,8 +374,8 @@ protected:
 	bool			m_bIsPenetrateTouch; //是否穿透touch
 	bool			bIsEnable; //enable
 	bool			m_bIsMasking; //是否蒙板
-	CCRect*			m_clipRect;
-	CCRect*			m_rect9;
+	Rect*			m_clipRect;
+	Rect*			m_rect9;
 	bool			m_isEnlarge;		//是否扩大点击范围;
 	//bool         m_isSTensile;    //是否lashen
 	static  RenderBatchData * m_MaskingBack;
@@ -368,7 +392,7 @@ public:
 	struct	UIRect9Data 
 	{
 		bool	isHave;
-		CCRect rect;
+		Rect rect;
 	};
 private:
 	static map<string, UIRect9Data>		m_sRect9Datatable;
@@ -422,8 +446,8 @@ struct ChildUiLocateItem
 	//parent name
 	std::vector<std::string> parentNameArr;
 };
-class UIEditNew;
-class UIManager : public Object
+//class UIEditNew;
+class UIManager : public Ref
 {
 public:
 	typedef std::map<std::string, UI*> UIMap;
@@ -452,7 +476,7 @@ public:
 
 	//void			AddTouchDelegate( CCTouchDelegate* pHandler );
 	//void			RemoveTouchDelegate( CCTouchDelegate* pHandler );
-
+	
 	bool			ccTouchBegan(CCTouch* touch, CCEvent* event);
 	virtual void	ccTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void	ccTouchEnded(CCTouch* touch, CCEvent* event);
@@ -461,17 +485,17 @@ public:
 	virtual void	ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
 	virtual void	ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
 	virtual void	ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
-
-	UI*			getTouchUI( CCTouch* touch );
+	
+	UI*				getTouchUI( Touch* touch );
 
 	static UIManager* Instance();
 
-	CCTouch*		getCurTouch( void )		{ return m_curTouch; }
+	Touch*			getCurTouch( void )		{ return m_curTouch; }
 	static void		PushEvent(UI* p, const EventFunData& data );
 	static void		RemoveEvent( UI* p );
 	static void		PushOtherEvent(UI* p, const EventFunData& data );
 	static void		RemoveOtherEvent( UI* p );
-	void				setOnlyMessage(UI *p){ m_pOnlyMessage = p; };
+	void			setOnlyMessage(UI *p){ m_pOnlyMessage = p; };
 	UI*				getOnlyMessage(){ return m_pOnlyMessage; };
 
     void    topUI(UI* ui);
@@ -488,11 +512,11 @@ public:
 
 public:
 	vector<UI*>		m_selected;
-	UIEditNew *		m_NonceEdit; //当前输入框
+	//UIEditNew *		m_NonceEdit; //当前输入框
 	float			m_holdTime;
-	CCPoint			m_curPos;
-	CCRect			m_nonceClipRect;
-	CCPoint			m_TranslatefPos;
+	Point			m_curPos;
+	Rect			m_nonceClipRect;
+	Point			m_TranslatefPos;
 	//std::set<CCTouchDelegate*> m_TouchHandlers;
     
     std::vector<UI*> m_stack;
@@ -504,7 +528,7 @@ private:
 	UIMap			m_uiMap;
 	list<UIEvent>	m_eventList;
 	list<UIEvent>	m_otherEventList;
-	CCTouch*		m_curTouch;
+	Touch*			m_curTouch;
 	UI*				m_pOnlyMessage;
 	bool			m_bIsDrag;
 	int				m_iTouchNum;

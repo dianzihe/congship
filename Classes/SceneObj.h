@@ -19,7 +19,7 @@ public:
 	virtual ~SceneObj();
 
 	static SceneObj* node(void);
-	void onLookInfoSceneObject( int nSceneObjId, CCPoint& position, const SceneObjData* pObjData );
+	void onLookInfoSceneObject( int nSceneObjId, Point& position, const SceneObjData* pObjData );
 
 	virtual	void	update(float dt);
 	//virtual void	draw(void);
@@ -28,5 +28,5 @@ public:
 	bool loadParticle( const char *plistFile );
 protected:
 	const SceneObjData*	m_pSceneObjData;
-	CCParticleSystemQuad* m_pParticleSystem;
+	ParticleSystemQuad* m_pParticleSystem;
 };

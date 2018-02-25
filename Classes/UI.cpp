@@ -1,5 +1,5 @@
 #include "UI.h"
-//#include "GameScene.h"
+#include "GameScene.h"
 #include "cocos2d.h"
 //#include "GameMainUI.h"
 //#include "ASprite.h"
@@ -59,12 +59,12 @@ static std::string _GetLocaledUIFileFullPath( Language type )
 	}
 	filePath.append( ".bin" );
 
-	return CCFileUtils::getInstance()->fullPathFromRelativeFile(filePath.c_str(), "");
+	return FileUtils::getInstance()->fullPathFromRelativeFile(filePath.c_str(), "");
 }
 
 bool _IsLanguageEnable_LocaledUI( Language type )
 {
-	return CCFileUtils::sharedFileUtils()->isFileExist( _GetLocaledUIFileFullPath( type ).c_str() );
+	return FileUtils::getInstance()->isFileExist(_GetLocaledUIFileFullPath(type).c_str());
 }
 
 bool _ReloadLocaledUI();
@@ -87,24 +87,20 @@ bool _ReloadLocaledUI()
 	std::string fullPath = _GetLocaledUIFileFullPath( GetCurrentLanguage() );
 
 	ssize_t lenth;
-	unsigned char* buffer = CCFileUtils::sharedFileUtils()->getFileData( fullPath.c_str(), "rb", &lenth );
+	unsigned char* buffer = FileUtils::getInstance()->getFileData( fullPath.c_str(), "rb", &lenth );
 	
 	unsigned pos = 0;
-	while( pos < lenth )
-	{
+	while( pos < lenth ){
 		int size = 0;
 		memcpy( &size, buffer+pos, sizeof(int) );
 		pos += sizeof(int);
-		if( size > 0 )
-		{
+		if( size > 0 ){
 			char *pStr = new char[size+1];
 			memcpy( pStr, buffer+pos, sizeof(char)*size );
 			pStr[size] = '\0';
 			table.push_back( pStr );
 			SAFE_DELETE_ARRAY( pStr );
-		}
-		else
-		{
+		}else{
 			table.push_back( "" );
 		}
 		pos += size;
@@ -132,12 +128,12 @@ UIManager gUIManager;
 #endif
 
 
-void DrawFillRect(int x=0, int y=0, const CCRect* pRc = NULL)
+void DrawFillRect(int x=0, int y=0, const Rect* pRc = NULL)
 {}
 
 void UIDataGroup::Load(const char* fileName)
 {
-#if 0
+#if 1
 	UIDataGroup& g = *this;
 
 	g.name = fileName;
@@ -150,12 +146,11 @@ void UIDataGroup::Load(const char* fileName)
 	READ_INT(g.count);
 	READ_INT(g.align);
 
-	//CCLog("--------------------------------------%s\n",fileName);
+	log("--UIDataGroup::Load----------%s\n",fileName);
 
 	g.data = new UIData[g.count];
 
-	for (int i=0; i<g.count; i++)
-	{
+	for (int i=0; i < g.count; i++)	{
 		READ_STRING(g.data[i].name);		
 		READ_INT(g.data[i].x);
 		READ_INT(g.data[i].y);
@@ -176,13 +171,12 @@ void UIDataGroup::Load(const char* fileName)
 			// convert index to text here
 			bool succeeded = false;
 			int index = atoi( g.data[i].text.c_str() );
-			if ( index < (int)_GetLocalTextFile().size() ) 
-			{
+			if ( index < (int)_GetLocalTextFile().size() ) {
 				g.data[i].text = _GetLocalTextFile()[ index ];
 				succeeded = true;
 			}
 			if ( !succeeded ) {
-				//__Trace( "read localized text failed" );
+				log( "read localized text failed" );
 			}
 		}
 		READ_INT16(g.data[i].isEnlarge);
@@ -267,8 +261,8 @@ UI* UIDataGroup::createUI(int zoder)
 {
 	UI* p = createUIBase();
 
-	//GameScene* scene = GameScene::GetScene();
-	//scene->m_uiNode->addChild(p, zoder);
+	GameScene* scene = GameScene::GetScene();
+	scene->m_uiNode->addChild(p, zoder);
 
 	return p;
 }
@@ -295,11 +289,9 @@ UI* UIDataGroup::createUIBase()
 
 
 
-	for (int i=0; i<count; i++ )
-	{
+	for (int i=0; i<count; i++ ){
 
-		if (ui->name == "SelectPlayerBtn0")
-		{
+		if (ui->name == "SelectPlayerBtn0"){
 			int a = 0;
 			a++;
 		}
@@ -308,27 +300,22 @@ UI* UIDataGroup::createUIBase()
 		int uialign = (1<<((ui->posalign/3)+3)) | (1<<(ui->posalign%3));
 		int offsetx = (SCREEN_SIZE.width - BASEWIDTH) / 2;
 
-		if( (uialign & ALIGN_LEFT) !=0 && (align & ALIGN_LEFT) == 0)
-		{
+		if( (uialign & ALIGN_LEFT) !=0 && (align & ALIGN_LEFT) == 0){
 			ui->x -= offsetx;
 		}
 
-		if( (uialign & ALIGN_RIGHT) !=0 && (align & ALIGN_RIGHT) == 0)
-		{
+		if( (uialign & ALIGN_RIGHT) !=0 && (align & ALIGN_RIGHT) == 0){
 			ui->x += offsetx;
 		}
 
 		int offsety = (SCREEN_SIZE.height - BASEHIGHT) / 2;
-		if( (uialign & ALIGN_TOP) !=0 && (align & ALIGN_TOP) == 0)
-		{
+		if( (uialign & ALIGN_TOP) !=0 && (align & ALIGN_TOP) == 0){
 			ui->y -= offsety;
 		}
 
-		if( (uialign & ALIGN_BOTTOM) !=0 && (align & ALIGN_BOTTOM) == 0)
-		{
+		if( (uialign & ALIGN_BOTTOM) !=0 && (align & ALIGN_BOTTOM) == 0){
 			ui->y += offsety;
 		}
-
 
 		UI* pChild = ui->createUI();
 
@@ -349,7 +336,7 @@ UIManager::UIManager()
 	//CCTouchDispatcher::sharedDispatcher()->addTargetedDelegate(this, 0, true);	
 
 	m_curTouch = NULL;
-	m_NonceEdit = NULL;
+	//m_NonceEdit = NULL;
 	m_pOnlyMessage = NULL;
 	m_bIsDrag = false;
 
@@ -427,7 +414,7 @@ bool UIManager::ccTouchBegan(CCTouch* touch, CCEvent* event)
 		GameScene* scene = GameScene::GetScene();
 		if(scene == NULL)
 			return false;
-		CCObject* layer;
+		Ref* layer;
 		UI * pMonopolizeTouch =NULL;
 		CCARRAY_FOREACH_REVERSE(scene->m_uiNode->getChildren() , layer)
 		{
@@ -468,10 +455,10 @@ bool UIManager::ccTouchBegan(CCTouch* touch, CCEvent* event)
 				m_selected.push_back(pUI);
 				if ( pUI->m_tag != 0 )
 				{				
-					CCNode *pParent = pUI->getParent();
+					Node *pParent = pUI->getParent();
 					if( pParent )
 					{
-						CCObject* child;
+						Ref* child;
 						CCARRAY_FOREACH(pParent->getChildren(), child)
 						{
 							UI* p = (UI*) child;
@@ -520,6 +507,7 @@ bool UIManager::ccTouchBegan(CCTouch* touch, CCEvent* event)
 
 void UIManager::ccTouchMoved(CCTouch* touch, CCEvent* event)
 {
+
 #if 0
 #ifdef USED_JUMP
 	m_draged++;
@@ -536,7 +524,7 @@ void UIManager::ccTouchMoved(CCTouch* touch, CCEvent* event)
 	}
 #endif
 
-	CCPoint pos = touch->locationInView();
+	Point pos = touch->locationInView();
 	if( !(fabs(pos.x-m_curPos.x)>=5 || fabs( pos.y-m_curPos.y)>=5))
 	{
 		return;
@@ -582,18 +570,18 @@ void UIManager::ccTouchMoved(CCTouch* touch, CCEvent* event)
 
 			p->OnEvent( EVENT_DRAG, touch );
 
-			CCRect rect;
+			Rect rect;
 			if(p->isEnlarge())
 			{
-				rect = CCRectMake(p->m_width/4,p->m_height/4, p->m_width+p->m_width/2, p->m_height+p->m_height/2);
+				rect = RectMake(p->m_width/4,p->m_height/4, p->m_width+p->m_width/2, p->m_height+p->m_height/2);
 			}
 			else
 			{
-				rect = CCRectMake(0,0,p->m_width,p->m_height);
+				rect = RectMake(0,0,p->m_width,p->m_height);
 			}
 
 
-			if ( CCRect::CCRectContainsPoint(rect, p->convertTouchToNodeSpaceAR(touch)) )
+			if ( Rect::RectContainsPoint(rect, p->convertTouchToNodeSpaceAR(touch)) )
 			{
 				isHold = true;
 			}
@@ -659,7 +647,7 @@ void UIManager::ccTouchEnded(CCTouch* touch, CCEvent* event)
 
 	vector<UI*> upUIList;
 	GameScene* scene = GameScene::GetScene();
-	CCObject* layer;
+	Ref* layer;
 	bool isHaveMonopolizeTouchUI = false;
 	CCARRAY_FOREACH_REVERSE(scene->m_uiNode->getChildren() , layer)
 	{
@@ -738,11 +726,12 @@ map<string, UI::UIRect9Data>	UI::m_sRect9Datatable;
 string	UI::m_strMusicEffectFileName[UIMusicType_Button_Num] = {"Music/button1.spd", "Music/closebutton.spd", "Music/select.spd"};
 string	UI::m_strTextFontName[eTextType_Num] = { "Font/ms_font.fnt" };
 
-
-UI::UI():
-bIsRemove(false),
+/*
 m_pText(NULL),
 m_pTextDown(NULL),
+*/
+UI::UI():
+bIsRemove(false),
 m_down(false),
 m_bIsIgnoreTouch(false),
 bIsMonopolizeTouch(false),
@@ -770,7 +759,7 @@ m_pCreateDragFunc( NULL )
 
 	m_clipRect = NULL;
 
-	m_color = ccc4( 255, 255, 255, 255 );
+	m_color = Color4B( 255, 255, 255, 255 );
 
 	m_rect9 = NULL;
 
@@ -790,8 +779,7 @@ m_pCreateDragFunc( NULL )
 
 UI::~UI()
 {
-	if ( m_clipRect )
-	{
+	if ( m_clipRect ){
 		delete m_clipRect;
 	}
 
@@ -800,8 +788,7 @@ UI::~UI()
 	UIManager::RemoveEvent(this);
 	UIManager::RemoveOtherEvent(this);
 
-	if( UIManager::Instance()->getOnlyMessage() == this )
-	{
+	if( UIManager::Instance()->getOnlyMessage() == this ){
 		UIManager::Instance()->setOnlyMessage( NULL );
 	}
 
@@ -818,12 +805,12 @@ bool UI::isInClipRect( CCTouch* touch)
 	if( !m_clipRect )
 		return true;
 
-// 	CCPoint  pos( touch->locationInView().x, touch->locationInView().y );
+// 	Point  pos( touch->locationInView().x, touch->locationInView().y );
 // 	pos = CCDirector::sharedDirector()->convertToGL(pos);
 
-	CCPoint r_pos = this->getRealPos();
-	CCRect rect;
-	rect.origin = ccpAdd(r_pos, m_clipRect->origin);
+	Point r_pos = this->getRealPos();
+	Rect rect;
+	rect.origin = r_pos + m_clipRect->origin;
 	rect.size = m_clipRect->size;
 
 	return rect.containsPoint(touch->getLocation());
@@ -849,7 +836,7 @@ UI* UI::getTouchUI(CCTouch* touch)
 UI* UI::getTouchUI(int beginX, int beginY, CCTouch* touch)
 {
 #if 0
-	CCObject* child;
+	Ref* child;
 	CCARRAY_FOREACH_REVERSE(m_pChildren, child)
 	{
 		UI* p = dynamic_cast<UI*> ( child );
@@ -862,7 +849,7 @@ UI* UI::getTouchUI(int beginX, int beginY, CCTouch* touch)
 
 			if ( pSel ) return pSel;
 
-			CCRect rect;
+			Rect rect;
 			if(p->m_isEnlarge)
 			{
 				float w = p->m_width/4;
@@ -871,15 +858,15 @@ UI* UI::getTouchUI(int beginX, int beginY, CCTouch* touch)
 				float h = p->m_height/4;
 				h = h > 32 ? 32 : h;
 
-				rect = CCRectMake(beginX - w,beginY - h, p->m_width + (w * 2), p->m_height + (h * 2));
+				rect = RectMake(beginX - w,beginY - h, p->m_width + (w * 2), p->m_height + (h * 2));
 			}
 			else
 			{
-				rect = CCRectMake(beginX,beginY,p->m_width,p->m_height);
+				rect = RectMake(beginX,beginY,p->m_width,p->m_height);
 			}
 			
 
-			if ( CCRect::CCRectContainsPoint(rect, p->convertTouchToNodeSpaceAR(touch)) )
+			if ( Rect::RectContainsPoint(rect, p->convertTouchToNodeSpaceAR(touch)) )
 			{
 				return p;
 			}
@@ -903,16 +890,15 @@ float UI::GetHoldTime()
 
 void UI::update(float t)
 {
-	if( m_pUpdateFun && m_pUpdateFun( this, t ))
-	{
+	if( m_pUpdateFun && m_pUpdateFun( this, t )){
 		return;
 	}
 
-	CCObject* child;
+	Ref* child;
 #if 0
 	CCARRAY_FOREACH(m_pChildren, child)
 	{
-		CCNode* p = dynamic_cast<CCNode*>(child);
+		Node* p = dynamic_cast<Node*>(child);
 		if (p && p->isVisible())
 		{
 			p->update( t );
@@ -930,10 +916,10 @@ void UI::setLinePos(int sx, int sy, int ex, int ey)
 	m_isLine     = true;
 }
 
-CCRect UI::getGlobalRect()
+Rect UI::getGlobalRect()
 {
-// 	CCNode* parent = this->getParent();
-// 	CCPoint g_pos = this->getPosition();
+// 	Node* parent = this->getParent();
+// 	Point g_pos = this->getPosition();
 // 
 // 	while (parent)
 // 	{
@@ -942,9 +928,9 @@ CCRect UI::getGlobalRect()
 // 		parent = parent->getParent();
 // 	}
 
-	CCPoint g_pos = this->getRealPos();
+	Point g_pos = this->getRealPos();
 
-	CCRect rect;
+	Rect rect;
 	rect.origin = g_pos;
 	rect.size.width = m_width;
 	rect.size.height = m_height;
@@ -970,8 +956,7 @@ void UI::needReCalDownTex()
 	int CX = DX - SX;
 	int CY = DY - SY;
 
-	if(CX != 0 && CY != 0)
-	{
+	if(CX != 0 && CY != 0){
  		downRenderBatch->_SourceSizeX = SX;
  		downRenderBatch->_SourceSizeY = SY;
  		downRenderBatch->_ConvertU += CY/2;
@@ -984,7 +969,7 @@ void UI::setReverseTex(bool reverse)
 	m_isReverseTex = reverse;
 }
 
-/*
+
 void UI::draw()
 {
 	int offY = 0;
@@ -1001,73 +986,58 @@ void UI::draw()
 
 	RenderBatchData* nRenderBatch = m_image.m_RenderBatch;
 
-	if ( m_type == UI_BUTTON || m_type == UI_BTN_feature)
-	{
-		if ( m_down ) 
-		{
-			if ( m_image.m_downRenderBatch != NULL )
-			{
+	if ( m_type == UI_BUTTON || m_type == UI_BTN_feature){
+		if ( m_down ) {
+			if ( m_image.m_downRenderBatch != NULL ){
 				//don't use it if no need
-  				if (nRenderBatch != NULL)
-  				{
+  				if (nRenderBatch != NULL){
  					needReCalDownTex();
   				}
 
 				nRenderBatch = m_image.m_downRenderBatch;
-			}
-			else
-			{
+			}else{
 				offY -= 2;
 			}
 
 			if( m_pText ) m_pText->setVisible(false);
 			if( m_pTextDown ) m_pTextDown->setVisible(true);
-		}
-		else
-		{
+		}else{
 			if( m_pText ) m_pText->setVisible(true);
 			if( m_pTextDown ) m_pTextDown->setVisible(false);
 		}
 	}
 
-// 	CCRect rect = this->getGlobalRect();
+// 	Rect rect = this->getGlobalRect();
 // 
-// 	rect.origin = CCPointZero;
-// 	CCPoint rt = rect.origin;
+// 	rect.origin = PointZero;
+// 	Point rt = rect.origin;
 // 	rt.x += rect.size.width;
 // 	rt.y += rect.size.height;
 // 
 // 	ccDrawRect(rect.origin, rt);
 
-	if ( nRenderBatch != NULL ) 	
-	{
+	if ( nRenderBatch != NULL ) {
 		CCGLProgram* p = NULL;
-		if (m_onlyUseVertexColor)
-		{
+		if (m_onlyUseVertexColor){
 			p = CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionColor);
-		}
-		else
-		{
+		}else{
 			p = CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor);
 		}
 
 		UIBatchRenderer::instance()->setShader(p);
 
 		//add line flag
-		if (!m_isReverseTex)
-		{
+		if (!m_isReverseTex){
 			if ( m_rect9 )
 				DrawImage9(nRenderBatch, 0, offY, m_width, m_height, m_color, *m_rect9 );	
 			else
 				DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color );	
-		}
-		else
-		{
+		}else{
 			//reverse texture.add by wcc.
 			DrawImage_Reverse(nRenderBatch, 0, offY, m_width, m_height, m_color );
 			//calculate vertex and uv value
 // 			float left,right,top,bottom;
-// 			CCTexture2D *tex = m_image.m_IconTexture;
+// 			Texture2D *tex = m_image.m_IconTexture;
 // 
 // 			float width = tex->getContentSize().width;
 // 			float height =  tex->getContentSize().height;
@@ -1079,7 +1049,7 @@ void UI::draw()
 // 			top = (2 * 0.0f + 1)/(2 * pixh);
 // 			bottom = top+(height * 2 - 2) /(2 * pixh);
 // 
-// 			CCPoint dir(m_endLineX-m_startLineX, m_endLineY-m_startLineY);
+// 			Point dir(m_endLineX-m_startLineX, m_endLineY-m_startLineY);
 // 			float len = sqrt(dir.x*dir.x + dir.y*dir.y);
 // 			dir.x = dir.x / len;
 // 			dir.y = dir.y / len;
@@ -1096,14 +1066,12 @@ void UI::draw()
 
 	
 	
-	if( m_image.m_IconTexture != NULL )
-	{
+	if( m_image.m_IconTexture != NULL ){
 		DrawImage(m_image.m_IconTexture, 0, offY, m_width, m_height, m_color );		
 	}
 
 
-	if (m_clipRect)
-	{
+	if (m_clipRect){
 #ifdef  UI_BATCH_RENDERER
 		UIBatchRenderer::instance()->flush();
 #endif
@@ -1111,13 +1079,13 @@ void UI::draw()
 
 
 #ifdef DEBUG_DRAW
-	CCPoint pos = getPosition();
+	Point pos = getPosition();
 	if( m_width > 0 && m_height >0 )
-		FillRect( CCRectMake( 0, 0, m_width, m_height), ccc4(255,255,255,255), true);
+		FillRect( RectMake( 0, 0, m_width, m_height), ccc4(255,255,255,255), true);
 #endif
 }
 
-
+/*
 void UI::visit()
 {PROFILE("UI::visit");
 	if ( m_clipRect )
@@ -1128,7 +1096,7 @@ void UI::visit()
 		//glEnable(GL_SCISSOR_TEST);
 		myGLEnableScissorTest();
 
-		CCPoint realPos = getRealPos();
+		Point realPos = getRealPos();
     
         float xScale = CCEGLView::sharedOpenGLView()->getFrameSize().width / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width;
         float yScale = CCEGLView::sharedOpenGLView()->getFrameSize().height / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().height;
@@ -1145,7 +1113,7 @@ void UI::visit()
 	{
 		float xScale = CCEGLView::sharedOpenGLView()->getFrameSize().width / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width;
 		float yScale = CCEGLView::sharedOpenGLView()->getFrameSize().height / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().height;
-		CCRect rc, rc2;
+		Rect rc, rc2;
 		rc.origin = convertToWorldSpaceAR(ccp(0,0));
 		rc.origin.x += UIManager::Instance()->m_TranslatefPos.x;
 		rc.origin.y += UIManager::Instance()->m_TranslatefPos.y;
@@ -1155,7 +1123,7 @@ void UI::visit()
 		rc.size.height = m_height * yScale;
 
 		rc2 = UIManager::Instance()->m_nonceClipRect;
-		if( rc.size.width == 0 || rc.size.height ==0 || CCRect::CCRectIntersectsRect( rc,  rc2))
+		if( rc.size.width == 0 || rc.size.height ==0 || Rect::RectIntersectsRect( rc,  rc2))
 		{
 			setIsDraw(true);
 		}
@@ -1169,7 +1137,7 @@ void UI::visit()
 		setIsDraw(true);
 	}
 	
-	CCNode::visit();
+	Node::visit();
 
 
 	if ( m_clipRect )
@@ -1178,13 +1146,13 @@ void UI::visit()
 		
 		myGLDisableScissorTest();
 	}
-}
+} 
 */
-void UI::setColor( ccColor4B color )
+void UI::setColor( Color4B color )
 {
 	m_color = color;
 
-	CCObject* child;
+	Ref* child;
 #if 0
 	CCARRAY_FOREACH(m_pChildren, child)
 	{
@@ -1199,33 +1167,33 @@ void UI::setColor( ccColor4B color )
 
 void UI::setText(  std::string& pszText )
 {
-	//setText( pszText, 24, CCSize(m_width, m_height), tAlignCenterX | tAlignCenterY );
+	//setText( pszText, 24, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
 }
 
 void UI::setText(  std::string& strText, int fontSize )
 {
-	//setText( strText, fontSize, CCSize(m_width, m_height), tAlignCenterX | tAlignCenterY );
+	//setText( strText, fontSize, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
 }
 
 void UI::setText(  std::string& strText, int fontSize, int alignType )
 {
-	setText( strText, fontSize, CCSize(m_width, m_height), alignType );
+	setText( strText, fontSize, Size(m_width, m_height), alignType );
 }
 void UI::setText(int number)
 {
 	char a[256];
 	sprintf(a,"%d",number);
 
-	//setText( a, 24, CCSize(m_width, m_height), tAlignCenterX | tAlignCenterY );
+	//setText( a, 24, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
 }
 
 
-void UI::setText(  std::string& strText, int fontSize,  CCSize &size, int alignType, bool isAutoNewLine )
+void UI::setText(  std::string& strText, int fontSize,  Size &size, int alignType, bool isAutoNewLine )
 {
 	setText(strText, fontSize, size, alignType, m_strTextFontName[m_eTextType].c_str(), isAutoNewLine );
 }
 
-void		UI::setText(  std::string& strText, int fontSize,  CCSize &size, int alignType , string fontName, bool isAutoNewLine )
+void UI::setText(  std::string& strText, int fontSize,  Size &size, int alignType , string fontName, bool isAutoNewLine )
 {
 	/*
 	if( m_text == strText )
@@ -1264,14 +1232,13 @@ void		UI::setText(  std::string& strText, int fontSize,  CCSize &size, int align
 
 void UI::setImage( std::string& name, bool boundingWH)
 {
-#if 0
 	if ( name == "" ) return;
 
 	char buf[256];
 
 	sprintf( buf, "UI/LoadingRes/%s", name.c_str() );
 
-	//CCTexture2D::setUSED_ANTI_ALIAS( false );
+	//Texture2D::setUSED_ANTI_ALIAS( false );
 	m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
 
 	//Tyrzhao: Temp Use Two Different File
@@ -1287,7 +1254,7 @@ void UI::setImage( std::string& name, bool boundingWH)
 
 	m_image.m_downRenderBatch = ImageCenter::instance().GetRenderBatch( buf );
 
-	//CCTexture2D::setUSED_ANTI_ALIAS( true );
+	//Texture2D::setUSED_ANTI_ALIAS( true );
 
 	if ( m_image.m_RenderBatch != NULL )
 	{
@@ -1315,11 +1282,10 @@ void UI::setImage( std::string& name, bool boundingWH)
 		{
 			UIRect9Data r9data;
 
-			unsigned long length;
-			unsigned char* pszBuffer = CCFileUtils::sharedFileUtils()->getFileData(buf, "rb", &length);
+			ssize_t length;
+			unsigned char* pszBuffer = FileUtils::getInstance()->getFileData(buf, "rb", &length);
 
-			if ( length <= 0  || pszBuffer == NULL )
-			{
+			if ( length <= 0  || pszBuffer == NULL ){
 				r9data.isHave = false;
 				m_sRect9Datatable[buf] = r9data;
 				return;
@@ -1329,27 +1295,22 @@ void UI::setImage( std::string& name, bool boundingWH)
 			int n[4] = {0};
 
 			int pos = 0;
-			for (int i = 0; i < (int)length; i++)
-			{
-				if ( (pszBuffer[i] == ',' )
-					) 
-				{
+			for (int i = 0; i < (int)length; i++){
+				if ( (pszBuffer[i] == ',' )) {
 					pos++;
 
-				}
-				else if (pszBuffer[i]>='0' && pszBuffer[i]<='9') 
-				{
+				}else if (pszBuffer[i]>='0' && pszBuffer[i]<='9') {
 					n[pos] = n[pos] * 10 + pszBuffer[i] - '0';
 				}
 			}
 			r9data.isHave = true;
-			r9data.rect = CCRect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
+			r9data.rect = Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
 
 			m_sRect9Datatable[buf] = r9data;
 			if(m_rect9)
-				*m_rect9 = CCRect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
+				*m_rect9 = Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
 			else
-				m_rect9 = new CCRect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
+				m_rect9 = new Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
             CC_SAFE_DELETE_ARRAY(pszBuffer);
 		}
 		else
@@ -1357,13 +1318,12 @@ void UI::setImage( std::string& name, bool boundingWH)
 			if( it->second.isHave )
 			{
 				if(m_rect9)
-					*m_rect9 = CCRect(it->second.rect);
+					*m_rect9 = Rect(it->second.rect);
 				else
-					m_rect9 = new CCRect(it->second.rect);
+					m_rect9 = new Rect(it->second.rect);
 			}
 		}
 	}
-#endif
 }
 
 extern std::string _fixPathByLanguage( const char* resName );
@@ -1436,7 +1396,7 @@ void UI::setImageByFullPath( string& name, bool boundingWH)
 }
 
 
-void UI::setIconTex(CCTexture2D* tex, bool boundingWH)
+void UI::setIconTex(Texture2D* tex, bool boundingWH)
 {
 	if (m_image.m_IconTexture)
 		m_image.m_IconTexture->release();
@@ -1444,8 +1404,7 @@ void UI::setIconTex(CCTexture2D* tex, bool boundingWH)
 	m_image.m_IconName = "";
 	if (m_image.m_IconTexture)
 		m_image.m_IconTexture->retain();
-	if(boundingWH && m_image.m_IconTexture)
-	{
+	if(boundingWH && m_image.m_IconTexture)	{
 		m_width = m_image.m_IconTexture->getContentSize().width;
 		m_height = m_image.m_IconTexture->getContentSize().height;
 	}
@@ -1455,7 +1414,7 @@ void UI::setIconTex(CCTexture2D* tex, bool boundingWH)
 UI* UI::findUI( const string& name )
 {
 #if 0
-	CCObject* child;
+	Ref* child;
 	CCARRAY_FOREACH(m_pChildren, child)
 	{
 		UI* p = (UI*) child;
@@ -1483,7 +1442,7 @@ void UI::setOtherEvent(TEventType msg, TEventFun fun , void* data )
 
 void UI::Top()
 {	
-	CCNode* p = getParent();
+	Node* p = getParent();
 
 	if ( p!= NULL )
 	{
@@ -1525,8 +1484,7 @@ UI* UI::loadChild( const string& name )
 
 	rt = group.createUIBase();
 
-	if (rt)
-	{
+	if (rt){
 		addChild(rt);
 	}
 	UIManager::Instance()->addItemToChildMap(name,this);
@@ -1534,7 +1492,7 @@ UI* UI::loadChild( const string& name )
 }
 
 
-CCPoint UI::getCurPos()
+Point UI::getCurPos()
 {
 	return gUIManager.m_curPos;
 }
@@ -1553,7 +1511,7 @@ bool UI::isParentVisible()
 	while(pUITemp != NULL&&pParentUI != NULL)
 	{
 		pParentUI = pUITemp;
-		CCNode *pParent = pUITemp->getParent();
+		Node *pParent = pUITemp->getParent();
 		if(pParent)
 			pUITemp = dynamic_cast<UI*>(pUITemp->getParent());
 		else
@@ -1562,11 +1520,11 @@ bool UI::isParentVisible()
 	return pParentUI->isVisible();
 }
 
-CCPoint  UI::getRealPos()
+Point  UI::getRealPos()
 {
-	CCPoint realPos = getPosition();
+	Point realPos = getPosition();
 #if 0
-	CCNode *pParent = getParent();
+	Node *pParent = getParent();
 	while( pParent != NULL )
 	{
 		realPos.x += pParent->getPositionX();
@@ -1574,7 +1532,7 @@ CCPoint  UI::getRealPos()
 		UIScrollView *pView = dynamic_cast<UIScrollView*>(pParent);
 		if( pView )
 		{
-			CCPoint pos = pView->getStartPos();
+			Point pos = pView->getStartPos();
 			realPos.x += pos.x;
 			realPos.y += pos.y;
 		}
@@ -1605,9 +1563,9 @@ UI* UI::SetSubValue( string UIName, string Text)
 }
 
 
-void UI::SetClip(const CCRect& rect  ) 
+void UI::SetClip(const Rect& rect  ) 
 {
-	if (!m_clipRect) m_clipRect = new CCRect();
+	if (!m_clipRect) m_clipRect = new Rect();
 
 	*m_clipRect = rect;
 	if( m_clipRect->size.width < 0.0f ) m_clipRect->size.width = 0.0f;
@@ -1632,19 +1590,15 @@ void UIManager::topUI(UI *ui)
     if (!ui->m_bisRoot)
         return;
     
-    for (UIMap::iterator mit = m_uiMap.begin(); mit != m_uiMap.end(); ++mit)
-    {
-        if (mit->second == ui)
-        {            
-            if (m_stack.size() > 0)
-            {
+    for (UIMap::iterator mit = m_uiMap.begin(); mit != m_uiMap.end(); ++mit){
+        if (mit->second == ui){            
+            if (m_stack.size() > 0) {
                 // find ui
                 for (std::vector<UI*>::iterator it = m_stack.begin();
                      it != m_stack.end();
                      ++it)
                 {
-                    if (*it == ui)
-                    {
+                    if (*it == ui) {
                         m_stack.erase(it);
                         break;
                     }
@@ -1654,10 +1608,9 @@ void UIManager::topUI(UI *ui)
             // push
             UI* old_top = m_stack.size() > 0 ? (*(m_stack.rbegin())) : NULL;
             
-            if (old_top && old_top != ui)
-            {
+            if (old_top && old_top != ui) {
                 old_top->onLoseTop();
-                //CCLOG("ON LOSE TOP:%s\n", old_top->m_name.c_str());
+                log("ON LOSE TOP:%s\n", old_top->m_name.c_str());
             }
             
             // push
@@ -1665,7 +1618,7 @@ void UIManager::topUI(UI *ui)
             
             // new top
             ui->onGetTop();
-            //CCLOG("ON GET TOP:%s\n", ui->m_name.c_str());
+            log("ON GET TOP:%s\n", ui->m_name.c_str());
             
             break;
         }
@@ -1680,10 +1633,9 @@ void UIManager::onLoseTop(UI *ui)
     // lose
     UI* old_top = m_stack.size() > 0 ? (*(m_stack.rbegin())) : NULL;
     
-    if (old_top && old_top == ui)
-    {
+    if (old_top && old_top == ui){
         old_top->onLoseTop();
-        //CCLOG("ON LOSE TOP:%s\n", old_top->m_name.c_str());
+        log("ON LOSE TOP:%s\n", old_top->m_name.c_str());
     }
     
     // remove
@@ -1691,8 +1643,7 @@ void UIManager::onLoseTop(UI *ui)
          it != m_stack.end();
          ++it)
     {
-        if (*it == ui)
-        {
+        if (*it == ui){
             m_stack.erase(it);
             break;
         }
@@ -1700,10 +1651,9 @@ void UIManager::onLoseTop(UI *ui)
 
     // cur
     UI* cur_top = m_stack.size() > 0 ? (*(m_stack.rbegin())) : NULL;
-    if (cur_top)
-    {
+    if (cur_top){
         cur_top->onGetTop();
-        //CCLOG("nON GET TOP:%s\n", cur_top->m_name.c_str());
+        log("nON GET TOP:%s\n", cur_top->m_name.c_str());
     }
 
 }
@@ -1711,10 +1661,9 @@ void UIManager::onLoseTop(UI *ui)
 void UIManager::onGetTop(UI *ui)
 {
     // lose
-    CCNode* p = ui->getParent();
+    Node* p = ui->getParent();
     
-    if ( p!= NULL )
-    {
+    if ( p!= NULL ){
         ui->retain();
         p->removeChild(ui, false);
         p->addChild(ui);
@@ -1730,7 +1679,7 @@ void UIManager::clear()
 	m_uiMap.clear();
 	m_iTouchNum = 0;
 	m_pOnlyMessage = NULL;
-	m_NonceEdit = NULL;
+	//m_NonceEdit = NULL;
 	m_selected.clear();
 	m_curTouch = NULL;
     
@@ -1741,8 +1690,7 @@ UI* UIManager::findUI( const string& name )
 {
 	map<string,UI*>::iterator it = m_uiMap.find(name);
 
-	if ( it != m_uiMap.end() )
-	{
+	if ( it != m_uiMap.end() )	{
 		return it->second;
 	}
 
@@ -1777,7 +1725,7 @@ void UI::removeChild(UI* child, bool cleanup)
 	{
 		UIManager::Instance()->removeItemFromChildMap(child->m_name);
 	}
-	CCNode::removeChild(child,cleanup);
+	Node::removeChild(child,cleanup);
 }
 //在childmap表查找所需ui
 UI* UIManager::findUIInChildMap(const string& name )
@@ -1878,7 +1826,7 @@ void UIManager::update(float dt)
 	}
 #endif
 
-	CCObject::update( dt );
+	Ref::update( dt );
 
 	if( m_pOnlyMessage )
 	{
@@ -2001,6 +1949,7 @@ void UIManager::update(float dt)
 
 UI* UIManager::loadUI( const string& name, bool isTop, int zoder)
 {
+	log("------>UIManager::loadUI=%s", name.c_str());
 	UI* rt =findUI(name);
 	if (rt != NULL) return rt;
 
@@ -2011,38 +1960,31 @@ UI* UIManager::loadUI( const string& name, bool isTop, int zoder)
 	rt = group.createUI(zoder);
 
 	int x = SCREEN_SIZE.width / 2;
-	if( (group.align & ALIGN_LEFT) !=0 )
-	{
+	if( (group.align & ALIGN_LEFT) !=0 ){
 		x = 0;
 	}
-	 if( (group.align & ALIGN_HCENTER) !=0 )
-	{
+	if( (group.align & ALIGN_HCENTER) !=0 ){
 		x = SCREEN_SIZE.width / 2;
 	}
-	 if( (group.align & ALIGN_RIGHT) !=0 )
-	{
+	if( (group.align & ALIGN_RIGHT) !=0 ){
 		x = SCREEN_SIZE.width;
 	}
 
 	int y = SCREEN_SIZE.height / 2;
-	if( (group.align & ALIGN_TOP) !=0 )
-	{
+	if( (group.align & ALIGN_TOP) !=0 ){
 		y = SCREEN_SIZE.height;
 	}
-	 if( (group.align & ALIGN_VCENTER) !=0 )
-	{
+	if( (group.align & ALIGN_VCENTER) !=0 )	{
 		y = SCREEN_SIZE.height / 2;
 	}
-	 if( (group.align & ALIGN_BOTTOM) !=0 )
-	{
+	if( (group.align & ALIGN_BOTTOM) !=0 )	{
 		y = 0;
 	}
 	rt->setPosition(x,y);
 
 	m_uiMap[name] = rt;
 
-    if (isTop)
-    {
+    if (isTop){
         rt->m_bisRoot = true;
         rt->Top();
     }
@@ -2053,39 +1995,31 @@ UI* UIManager::loadUI( const string& name, bool isTop, int zoder)
 
 void UIManager::addUI(UI* pUI, bool isTop)
 {
-	/*
-	if (pUI)
-	{
-		if(m_uiMap[pUI->m_name] != NULL)
-		{	
+	if (pUI){
+		if(m_uiMap[pUI->m_name] != NULL){	
 			return;
 		}
 		GameScene::GetScene()->m_uiNode->addChild(pUI, 10000);
 		m_uiMap[pUI->m_name] = pUI;
 	}
 
-	if (isTop)
-	{
+	if (isTop){
 		pUI->m_bisRoot = true;
 		pUI->Top();
 	}
-	*/
 }
 
 void UIManager::addUI(UI* pUI, int id, bool isTop)
 {
-	if (pUI)
-	{
-		if(m_uiMap[pUI->m_name] != NULL)
-		{	
+	if (pUI){
+		if(m_uiMap[pUI->m_name] != NULL)	{	
 			return;
 		}
-		//GameScene::GetScene()->m_uiNode->addChild(pUI, 0);
+		GameScene::GetScene()->m_uiNode->addChild(pUI, 0);
 		m_uiMap[pUI->m_name] = pUI;
 	}
 
-	if (isTop)
-	{
+	if (isTop){
 		pUI->m_bisRoot = true;
 		pUI->Top();
 	}
@@ -2194,24 +2128,17 @@ UI* UI::setSubImage(int Id,string name)
 
 	UI* p = NULL;
 
-	if(this->getChildByTag(Id))
-	{
+	if(this->getChildByTag(Id))	{
 		p = dynamic_cast<UI*>(getChildByTag(Id));
-		if ( p )
-		{
-			if ( name == "" )
-			{
+		if ( p ){
+			if ( name == "" ){
 				p->setVisible(false);
 				return NULL;
-			}
-			else
-			{
+			}else{
 				p->setVisible(true);
 			}			
 		}
-	}
-	else if ( name != "" )
-	{
+	}else if ( name != "" ){
 		UIData data;
 
 		data.type = UI_BASE;
@@ -2221,22 +2148,17 @@ UI* UI::setSubImage(int Id,string name)
 		data.width= 1;
 		data.height= 1;
 
-
 		data.tag=0;
 		data.align=0;
 		data.picName="";
 		data.text="";	
 
-
 		p = data.createUI();
 
 		addChild(p,0,Id);
-
-
 	}
 
-	if ( p )
-	{
+	if ( p ){
 		p->setImageByFullPath(name, true);
 		p->setPosition( (m_width - p->m_width) / 2, (m_height - p->m_height) / 2 );
 		p->setIgnoreTouch( true );
@@ -2252,7 +2174,7 @@ void UI::setVisible(bool visible)
 //    {
 //        for (int i = 0; i < arr->count(); ++i)
 //        {
-//            CCNode* node = dynamic_cast<CCNode*>(arr->objectAtIndex(i));
+//            Node* node = dynamic_cast<Node*>(arr->objectAtIndex(i));
 //            if(node)
 //            {
 //                node->setVisible(visible);
@@ -2262,11 +2184,10 @@ void UI::setVisible(bool visible)
     // diff
     if (this->isVisible() != visible)
     {
-        CCNode::setVisible(visible);
+		Node::setVisible(visible);
     
         // to hide
-        if (this->m_bisRoot)
-        {
+        if (this->m_bisRoot) {
             if (visible)
                 UIManager::Instance()->onGetTop(this);
             else
@@ -2406,7 +2327,7 @@ UI*	UIManager::getTouchUI( CCTouch* touch )
 	GameScene* scene = GameScene::GetScene();
 	if(scene == NULL)
 		return NULL;
-	CCObject* layer;
+	Ref* layer;
 	UI * pMonopolizeTouch =NULL;
 	CCARRAY_FOREACH_REVERSE(scene->m_uiNode->getChildren() , layer)
 	{
@@ -2449,7 +2370,7 @@ void UIManager::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		sCanTouch = false;
 		return;
 	}
-	CCPoint location[2]; 
+	Point location[2]; 
 	CCSetIterator iter = pTouches->begin();
 	bool	isUseDirectCMD = false;
     
@@ -2500,7 +2421,7 @@ void UIManager::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 				UIScrollView *pCheatsScrollView = dynamic_cast<UIScrollView*>(pUI->findUI("pageequipmentz1"));;
 				if (pCheatsScrollView)
 				{
-					CCRect rect = pCheatsScrollView->getGlobalRect();
+					Rect rect = pCheatsScrollView->getGlobalRect();
 					if (!rect.containsPoint(pTouch->getLocation())) //&& !rect1.containsPoint(dynamic_cast< CCTouch *>(pTouches).getLocation()))
 					{
 						CGameMainUI::instance()->CloseCheatsList();
@@ -2511,7 +2432,7 @@ void UIManager::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 		}
 	}//遍历取出每个触摸点坐标
     //wcc
-	if( !isUseDirectCMD && !CCPoint::CCPointEqualToPoint(location[0], CCPointZero) && !CCPoint::CCPointEqualToPoint(location[1], CCPointZero) && gCanTouchForZoom)
+	if( !isUseDirectCMD && !Point::PointEqualToPoint(location[0], PointZero) && !Point::PointEqualToPoint(location[1], PointZero) && gCanTouchForZoom)
 	{
         sIsFinishChange = false;
         
@@ -2538,7 +2459,7 @@ void UIManager::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 void UIManager::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
 #if 0
-	CCPoint location[2]; 
+	Point location[2]; 
 	CCSetIterator iter = pTouches->begin();
 	bool	isUseDirectCMD = false;
     
@@ -2584,7 +2505,7 @@ void UIManager::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 		}
 	}//遍历取出每个触摸点坐标
     
-    if( !isUseDirectCMD && !CCPoint::CCPointEqualToPoint(location[0], CCPointZero) && !CCPoint::CCPointEqualToPoint(location[1], CCPointZero) && sDistance == 0.0f && gCanTouchForZoom)
+    if( !isUseDirectCMD && !Point::PointEqualToPoint(location[0], PointZero) && !Point::PointEqualToPoint(location[1], PointZero) && sDistance == 0.0f && gCanTouchForZoom)
 	{
 		float x = location[0].x - location[1].x;
 		float y = location[0].y - location[1].y;
@@ -2592,7 +2513,7 @@ void UIManager::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 	}
     
     
-	if( !isUseDirectCMD && !m_NonceEdit && !CCPoint::CCPointEqualToPoint(location[0], CCPointZero) && !CCPoint::CCPointEqualToPoint(location[1], CCPointZero) && !m_selected.size()  && gCanTouchForZoom)
+	if( !isUseDirectCMD && !m_NonceEdit && !Point::PointEqualToPoint(location[0], PointZero) && !Point::PointEqualToPoint(location[1], PointZero) && !m_selected.size()  && gCanTouchForZoom)
 	{
         sIsFinishChange = false;
         
@@ -2626,7 +2547,7 @@ void UIManager::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 void UIManager::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 {
 #if 0
-	CCPoint location[2]; 
+	Point location[2]; 
 	CCSetIterator iter = pTouches->begin();
 	bool	isUseDirectCMD = false;
     
@@ -2685,7 +2606,7 @@ void UIManager::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 UI*	UI::findUsingUI( const string& uiFileName, const string& uiNodeName)
 {
 #if 0
-	CCObject* child;
+	Ref* child;
 	CCARRAY_FOREACH(m_pChildren, child)
 	{
 		UI* pUI = dynamic_cast<UI*> (child);
@@ -2764,7 +2685,7 @@ void UI::recursiveResource( bool visible )
 	if(!visible)
 	{
 		onReleaseResource();
-		CCObject* child;
+		Ref* child;
 		CCARRAY_FOREACH(m_pChildren, child)
 		{
 			UI* pUI = dynamic_cast<UI*> (child);
@@ -2776,7 +2697,7 @@ void UI::recursiveResource( bool visible )
 	{
         if(isVisible())
             onReLoadResource();
-		CCObject* child;
+		Ref* child;
 		CCARRAY_FOREACH(m_pChildren, child)
 		{
 			UI* pUI = dynamic_cast<UI*> (child);
@@ -2789,11 +2710,11 @@ void UI::recursiveResource( bool visible )
 
 void UI::removeAllChildrenWithCleanup( bool cleanup )
 {
-	CCNode::removeAllChildrenWithCleanup(cleanup);
+	Node::removeAllChildrenWithCleanup(cleanup);
 	if(cleanup)
 	{
-		m_pText = NULL;
-		m_pTextDown = NULL;
+		//m_pText = NULL;
+		//m_pTextDown = NULL;
 	}
 }
 
@@ -2851,7 +2772,7 @@ void	UIManager::_CreateGragUI( UI* srcUI, CCTouch * touch )
 	UIScrollView *pScroll = dynamic_cast<UIScrollView*>(srcUI);
 	if( pScroll )
 	{
-		CCPoint pos = pScroll->getStartPos();
+		Point pos = pScroll->getStartPos();
 		UI* pUI = pScroll->UI::getTouchUI( pos.x, pos.y, touch );
 		if( pUI ) srcUI = pUI;
 	}
@@ -2867,7 +2788,7 @@ void	UIManager::_CreateGragUI( UI* srcUI, CCTouch * touch )
 	scene->m_uiNode->addChild(m_pDragUI);
 	m_pDragUI->m_iDragSrcTag = srcUI->m_iDragSrcTag;
 	m_pDragUI->Top();
-	CCPoint pos = scene->m_uiNode->convertTouchToNodeSpaceAR(touch);
+	Point pos = scene->m_uiNode->convertTouchToNodeSpaceAR(touch);
 	m_pDragUI->setPosition( pos.x - m_pDragUI->m_width/2, pos.y - m_pDragUI->m_height/2 );
 }
 
@@ -2882,7 +2803,7 @@ void UIManager::_MoveGragUI( CCTouch *touch )
 		return;
 	if( !scene->m_uiNode )
 		return;
-	CCPoint pos = scene->m_uiNode->convertTouchToNodeSpaceAR(touch);
+	Point pos = scene->m_uiNode->convertTouchToNodeSpaceAR(touch);
 	m_pDragUI->setPosition( pos.x - m_pDragUI->m_width/2, pos.y - m_pDragUI->m_height/2 );
 }
 
@@ -2901,7 +2822,7 @@ void	UIManager::_HandleGragEvent( UI* destUI, CCTouch *touch )
 	UIScrollView *pScroll = dynamic_cast<UIScrollView*>(destUI);
 	if( pScroll )
 	{
-		CCPoint pos = pScroll->getStartPos();
+		Point pos = pScroll->getStartPos();
 		UI* pUI = pScroll->UI::getTouchUI( pos.x, pos.y, touch );
 		if( pUI ) destUI = pUI;
 	}

@@ -76,7 +76,9 @@ DQMap::DQMap(void)
 	addChild(m_pTileNode, MAP_LAYER_TILE);
 	m_pGroundNode = new Node();
 	addChild(m_pGroundNode, MAP_LAYER_GROUND);
+	
 	m_pActorNode = new Node();
+	log("=======m_pActorNode======");
 	addChild(m_pActorNode, MAP_LAYER_ACTOR);
 	m_pAirNode = new Node();
 	addChild(m_pAirNode, MAP_LAYER_AIR);
@@ -282,6 +284,11 @@ void DQMap::addActorToMap(Actor *actor)
 {
 	if(actor == NULL )
 		return;
+	
+	if (NULL == m_pTileNode)
+		log("fdsafdsafdsafdasfdsafdas");
+	if (NULL == m_pActorNode)
+		log("===========m_pActorNode is null");
 	m_pActorNode->addChild(actor);
 }
 

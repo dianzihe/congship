@@ -2,8 +2,6 @@
 #define _ImageCenter_H__
 
 #include "Singleton.h"
-//#include "CCSprite.h"
-//#include "CCTexture2D.h"
 #include "ImageResource.h"
 #include <map>
 using namespace std;

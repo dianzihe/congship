@@ -206,7 +206,7 @@ void DQAnimation::update(float dt)
 		if (m_markInfo.m_markExist)
 		{
 			m_markInfo.m_markExist = false;
-			CCPoint pos = GetMarkLOC();
+			Point pos = GetMarkLOC();
 			const char* desc = GetMarkDesc();
 			MarkBeingCall(pos, desc);
 		}
@@ -239,7 +239,7 @@ void DQAnimation::update(float dt)
 	}
 }
 
-void DQAnimation::MarkBeingCall(CCPoint pos, const char* desc)
+void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 {
 	if(m_pHostEventHandler)
 	{
@@ -409,14 +409,14 @@ void DQAnimation::SetHostEventHandler( Actor* hostHandler )
 	m_pHostEventHandler = hostHandler;
 }
 
-CCPoint DQAnimation::GetMarkLOC()
+Point DQAnimation::GetMarkLOC()
 {
 	if(m_sprite[eAnimPart_Body] == NULL || m_sprite[eAnimPart_Body]->IsDataLoaded() == false)
-		return ccp(0,0);
+		return Point(0,0);
 	int rc[4];
 	m_sprite[eAnimPart_Body]->GetFModuleRect(rc, m_markInfo.mark_frame, m_markInfo.mark_moudeID, 0,0,0,0,0);
 
-	CCPoint pos  = ccp(rc[0],rc[1]);
+	Point pos = Point(rc[0], rc[1]);
     pos.x -= 515;
     pos.y -= 425;
 	if(m_flipFlag == 1)
@@ -571,7 +571,7 @@ int DQAnimation::GetPetMatch( int playerAnimId )
 	return sPetMatcher.sAinmPlayerToMount[playerAnimId];
 }
 
-bool DQAnimation::GetAnimRectFast( CCRect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */ )
+bool DQAnimation::GetAnimRectFast( Rect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */ )
 {
 	ASprite* pSprite = GetSprite(nAnimPart);
 	if(pSprite == NULL || pSprite->IsDataLoaded() == false)
@@ -587,7 +587,7 @@ bool DQAnimation::GetAnimRectFast( CCRect& retRect, int animId, AnimPart nAnimPa
 	return true;
 }
 
-bool DQAnimation::GetAnimRect( CCRect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */ )
+bool DQAnimation::GetAnimRect( Rect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */ )
 {
 	ASprite* pSprite = GetSprite(nAnimPart);
 	if(pSprite == NULL || pSprite->IsDataLoaded() == false)

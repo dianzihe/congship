@@ -37,9 +37,9 @@ enum Login_LS_Result
 	Login_LS_Result_Fail_Unsupport	= -10,			//	验证失败，登录服务器不支持该平台验证
 	Login_LS_Result_Fail_Timeout	= -11,			//	验证失败，验证超时
 	Login_LS_Result_Fail_Disconnect	= -12,			//	验证失败，网络断开
-	Login_LS_Result_Fail_Forbidden = -13,				//验证失败，帐号被封
-	Login_LS_Result_Fail_Version = -14,            //  版本过低
-	Login_LS_Result_Fail_Version_LevelUper = -15,            //  版本过高
+	Login_LS_Result_Fail_Forbidden = -13,			//  验证失败，帐号被封
+	Login_LS_Result_Fail_Version = -14,				//  版本过低
+	Login_LS_Result_Fail_Version_LevelUper = -15,	//  版本过高
 };
 
 //	登录GameServer结果返回
@@ -51,7 +51,7 @@ enum Login_GS_Result
 	Login_GS_Result_Fail_Unvalid= -3,				//	服务器无效
 	Login_GS_Result_Fail_Connect= -4,				//	链接失败
 	Login_GS_Result_Fail_ProtVerErr= -5,				//	协议版本匹配错误
-	Login_GS_Result_Fail_Closed= -6,				//	服务器维护中
+	Login_GS_Result_Fail_Closed= -6,					//	服务器维护中
 };
 
 //	角色创建结果
@@ -109,10 +109,11 @@ public:
 	virtual void OnDestroy() {}
 };
 
+/*
 namespace pk {
 	struct PlayerBaseInfo;
 }
-
+*/
 //class UI;
 class CLoadingState : public CRunState
 {

@@ -5,8 +5,8 @@
 #include "cocos2d.h"
 using namespace cocos2d;
 //¿ñ±©×´Ì¬
-#define Monster_WildState_NotWilded			0		//Î´¿ñ±©
-#define Monster_WildState_Wilded				1		//ÒÑ¾­¿ñ±©
+#define Monster_WildState_NotWilded	0	//Î´¿ñ±©
+#define Monster_WildState_Wilded 1		//ÒÑ¾­¿ñ±©
 
 enum
 {
@@ -77,7 +77,7 @@ public:
 	}
 //Msg
 public:
-	void	onLookInfoMonster( const LookInfoMonster* pLookInfoMonster );
+	void	onLookInfoMonster( LookInfoMonster* pLookInfoMonster );
 	float	mDeathFlyTime;
 	float	mCurDecresSpeed;
 	Point	mDeathFlyDir;
