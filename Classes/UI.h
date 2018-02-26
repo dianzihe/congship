@@ -1,14 +1,16 @@
 #pragma  once
 
-#include "base.h"
-#include "ImageResource.h"
-#include "ImageCenter.h"
 //#include "NetDef.h"
 #include "cocos2d.h"
 //#define USE_UI_DRAG
 #include <string>
 #include <map>
 #include <vector>
+
+#include "base.h"
+#include "ImageResource.h"
+#include "ImageCenter.h"
+#include "GraphicsExtension.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -217,6 +219,7 @@ public:
 
 	virtual void		update(float t);
 	//virtual void		draw();
+	virtual void draw(Renderer *renderer, const kmMat4& transform, bool transformUpdated);
 	//virtual void		visit(void);
 	//ÖØÐ´ÒÆ³ýchildº¯Êý
 	void					removeChild(UI* child, bool cleanup);				

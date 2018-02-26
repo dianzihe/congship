@@ -970,14 +970,12 @@ void UI::setReverseTex(bool reverse)
 }
 
 
-void UI::draw()
+void UI::draw(Renderer *renderer, const kmMat4& transform, bool transformUpdated)
 {
 	int offY = 0;
 
-	if( m_bIsMasking )
-	{
-		if( !m_MaskingBack )
-		{
+	if( m_bIsMasking ){
+		if( !m_MaskingBack ){
 			m_MaskingBack = ImageCenter::instance().GetRenderBatch("UI/LRes/NPCCover2.png");
 		}
 		if(m_MaskingBack)
@@ -999,11 +997,11 @@ void UI::draw()
 				offY -= 2;
 			}
 
-			if( m_pText ) m_pText->setVisible(false);
-			if( m_pTextDown ) m_pTextDown->setVisible(true);
+			//if( m_pText ) m_pText->setVisible(false);
+			//if( m_pTextDown ) m_pTextDown->setVisible(true);
 		}else{
-			if( m_pText ) m_pText->setVisible(true);
-			if( m_pTextDown ) m_pTextDown->setVisible(false);
+			//if( m_pText ) m_pText->setVisible(true);
+			//if( m_pTextDown ) m_pTextDown->setVisible(false);
 		}
 	}
 
@@ -1017,11 +1015,11 @@ void UI::draw()
 // 	ccDrawRect(rect.origin, rt);
 
 	if ( nRenderBatch != NULL ) {
-		CCGLProgram* p = NULL;
+		GLProgram* p = NULL;
 		if (m_onlyUseVertexColor){
-			p = CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionColor);
+			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionColor);
 		}else{
-			p = CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor);
+			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionTextureColor);
 		}
 
 		UIBatchRenderer::instance()->setShader(p);
