@@ -25,7 +25,7 @@ UIBatchRenderer::~UIBatchRenderer()
 
 void UIBatchRenderer::initilize()
 {
-	m_pProgram = CCShaderCache::sharedShaderCache()->programForKey(kCCShader_PositionTextureColor);
+	m_pProgram = ShaderCache::getInstance()->programForKey(kCCShader_PositionTextureColor);
 	m_pProgram->retain();
 
 	m_uTotalQuads = 0;
@@ -140,22 +140,22 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 	quad.br.vertices = vertex3(x2, y1, 0);
 	quad.tl.vertices = vertex3(x1, y2, 0);
 	quad.tr.vertices = vertex3(x2, y2, 0);
+	
+	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[0] + quad.bl.vertices.y * out.m[4] + quad.bl.vertices.z * out.m[8] + out.m[12]);
+	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[1] + quad.bl.vertices.y * out.m[5] + quad.bl.vertices.z * out.m[9] + out.m[13]);
+	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[2] + quad.bl.vertices.y * out.m[6] + quad.bl.vertices.z * out.m[10] + out.m[14]);
 
-	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[0] + quad.bl.vertices.y * out.mat[4] + quad.bl.vertices.z * out.mat[8] + out.mat[12]);
-	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[1] + quad.bl.vertices.y * out.mat[5] + quad.bl.vertices.z * out.mat[9] + out.mat[13]);
-	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[2] + quad.bl.vertices.y * out.mat[6] + quad.bl.vertices.z * out.mat[10] + out.mat[14]);
+	quad.br.vertices.x = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[0] + quad.br.vertices.y * out.m[4] + quad.br.vertices.z * out.m[8] + out.m[12]);
+	quad.br.vertices.y = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[1] + quad.br.vertices.y * out.m[5] + quad.br.vertices.z * out.m[9] + out.m[13]);
+	quad.br.vertices.z = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[2] + quad.br.vertices.y * out.m[6] + quad.br.vertices.z * out.m[10] + out.m[14]);
 
-	quad.br.vertices.x = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[0] + quad.br.vertices.y * out.mat[4] + quad.br.vertices.z * out.mat[8] + out.mat[12]);
-	quad.br.vertices.y = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[1] + quad.br.vertices.y * out.mat[5] + quad.br.vertices.z * out.mat[9] + out.mat[13]);
-	quad.br.vertices.z = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[2] + quad.br.vertices.y * out.mat[6] + quad.br.vertices.z * out.mat[10] + out.mat[14]);
+	quad.tl.vertices.x = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[0] + quad.tl.vertices.y * out.m[4] + quad.tl.vertices.z * out.m[8] + out.m[12]);
+	quad.tl.vertices.y = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[1] + quad.tl.vertices.y * out.m[5] + quad.tl.vertices.z * out.m[9] + out.m[13]);
+	quad.tl.vertices.z = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[2] + quad.tl.vertices.y * out.m[6] + quad.tl.vertices.z * out.m[10] + out.m[14]);
 
-	quad.tl.vertices.x = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[0] + quad.tl.vertices.y * out.mat[4] + quad.tl.vertices.z * out.mat[8] + out.mat[12]);
-	quad.tl.vertices.y = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[1] + quad.tl.vertices.y * out.mat[5] + quad.tl.vertices.z * out.mat[9] + out.mat[13]);
-	quad.tl.vertices.z = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[2] + quad.tl.vertices.y * out.mat[6] + quad.tl.vertices.z * out.mat[10] + out.mat[14]);
-
-	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[0] + quad.tr.vertices.y * out.mat[4] + quad.tr.vertices.z * out.mat[8] + out.mat[12]);
-	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[1] + quad.tr.vertices.y * out.mat[5] + quad.tr.vertices.z * out.mat[9] + out.mat[13]);
-	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[2] + quad.tr.vertices.y * out.mat[6] + quad.tr.vertices.z * out.mat[10] + out.mat[14]);
+	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[0] + quad.tr.vertices.y * out.m[4] + quad.tr.vertices.z * out.m[8] + out.m[12]);
+	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
+	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
 
 	CCRect rectTexture;
 	rectTexture.origin.x = (float)u;
@@ -271,21 +271,21 @@ void UIBatchRenderer::drawImage_Reverse(int u, int v, int texWidth, int texHeigh
 	quad.tl.vertices = vertex3(x2, y2, 0);
 	quad.tr.vertices = vertex3(x1, y2, 0);
 
-	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[0] + quad.bl.vertices.y * out.mat[4] + quad.bl.vertices.z * out.mat[8] + out.mat[12]);
-	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[1] + quad.bl.vertices.y * out.mat[5] + quad.bl.vertices.z * out.mat[9] + out.mat[13]);
-	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[2] + quad.bl.vertices.y * out.mat[6] + quad.bl.vertices.z * out.mat[10] + out.mat[14]);
+	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[0] + quad.bl.vertices.y * out.m[4] + quad.bl.vertices.z * out.m[8] + out.m[12]);
+	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[1] + quad.bl.vertices.y * out.m[5] + quad.bl.vertices.z * out.m[9] + out.m[13]);
+	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[2] + quad.bl.vertices.y * out.m[6] + quad.bl.vertices.z * out.m[10] + out.m[14]);
 
-	quad.br.vertices.x = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[0] + quad.br.vertices.y * out.mat[4] + quad.br.vertices.z * out.mat[8] + out.mat[12]);
-	quad.br.vertices.y = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[1] + quad.br.vertices.y * out.mat[5] + quad.br.vertices.z * out.mat[9] + out.mat[13]);
-	quad.br.vertices.z = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[2] + quad.br.vertices.y * out.mat[6] + quad.br.vertices.z * out.mat[10] + out.mat[14]);
+	quad.br.vertices.x = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[0] + quad.br.vertices.y * out.m[4] + quad.br.vertices.z * out.m[8] + out.m[12]);
+	quad.br.vertices.y = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[1] + quad.br.vertices.y * out.m[5] + quad.br.vertices.z * out.m[9] + out.m[13]);
+	quad.br.vertices.z = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[2] + quad.br.vertices.y * out.m[6] + quad.br.vertices.z * out.m[10] + out.m[14]);
 
-	quad.tl.vertices.x = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[0] + quad.tl.vertices.y * out.mat[4] + quad.tl.vertices.z * out.mat[8] + out.mat[12]);
-	quad.tl.vertices.y = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[1] + quad.tl.vertices.y * out.mat[5] + quad.tl.vertices.z * out.mat[9] + out.mat[13]);
-	quad.tl.vertices.z = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[2] + quad.tl.vertices.y * out.mat[6] + quad.tl.vertices.z * out.mat[10] + out.mat[14]);
+	quad.tl.vertices.x = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[0] + quad.tl.vertices.y * out.m[4] + quad.tl.vertices.z * out.m[8] + out.m[12]);
+	quad.tl.vertices.y = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[1] + quad.tl.vertices.y * out.m[5] + quad.tl.vertices.z * out.m[9] + out.m[13]);
+	quad.tl.vertices.z = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[2] + quad.tl.vertices.y * out.m[6] + quad.tl.vertices.z * out.m[10] + out.m[14]);
 
-	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[0] + quad.tr.vertices.y * out.mat[4] + quad.tr.vertices.z * out.mat[8] + out.mat[12]);
-	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[1] + quad.tr.vertices.y * out.mat[5] + quad.tr.vertices.z * out.mat[9] + out.mat[13]);
-	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[2] + quad.tr.vertices.y * out.mat[6] + quad.tr.vertices.z * out.mat[10] + out.mat[14]);
+	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[0] + quad.tr.vertices.y * out.m[4] + quad.tr.vertices.z * out.m[8] + out.m[12]);
+	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
+	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
 
 	CCRect rectTexture;
 	rectTexture.origin.x = (float)u;
@@ -389,7 +389,7 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 	float y2 = (float)my2;
 
 	// update transform
-	CCPoint dir(y2-y1, -x2+x1);
+	Point dir(y2-y1, -x2+x1);
 	float len = sqrt(dir.x*dir.x + dir.y*dir.y);
 	dir.x = dir.x / len;
 	dir.y = dir.y / len;
@@ -403,21 +403,21 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 	quad.tr.vertices = vertex3(x2-dir.x*(float)texWidth/2, y2-dir.y*(float)texHeight/2,0);
 	quad.br.vertices = vertex3(x2+dir.x*(float)texWidth/2, y2+dir.y*(float)texHeight/2,0);
 
-	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[0] + quad.bl.vertices.y * out.mat[4] + quad.bl.vertices.z * out.mat[8] + out.mat[12]);
-	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[1] + quad.bl.vertices.y * out.mat[5] + quad.bl.vertices.z * out.mat[9] + out.mat[13]);
-	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.mat[2] + quad.bl.vertices.y * out.mat[6] + quad.bl.vertices.z * out.mat[10] + out.mat[14]);
+	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[0] + quad.bl.vertices.y * out.m[4] + quad.bl.vertices.z * out.m[8] + out.m[12]);
+	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[1] + quad.bl.vertices.y * out.m[5] + quad.bl.vertices.z * out.m[9] + out.m[13]);
+	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[2] + quad.bl.vertices.y * out.m[6] + quad.bl.vertices.z * out.m[10] + out.m[14]);
 
-	quad.br.vertices.x = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[0] + quad.br.vertices.y * out.mat[4] + quad.br.vertices.z * out.mat[8] + out.mat[12]);
-	quad.br.vertices.y = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[1] + quad.br.vertices.y * out.mat[5] + quad.br.vertices.z * out.mat[9] + out.mat[13]);
-	quad.br.vertices.z = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.mat[2] + quad.br.vertices.y * out.mat[6] + quad.br.vertices.z * out.mat[10] + out.mat[14]);
+	quad.br.vertices.x = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[0] + quad.br.vertices.y * out.m[4] + quad.br.vertices.z * out.m[8] + out.m[12]);
+	quad.br.vertices.y = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[1] + quad.br.vertices.y * out.m[5] + quad.br.vertices.z * out.m[9] + out.m[13]);
+	quad.br.vertices.z = RENDER_IN_SUBPIXEL(quad.br.vertices.x * out.m[2] + quad.br.vertices.y * out.m[6] + quad.br.vertices.z * out.m[10] + out.m[14]);
 
-	quad.tl.vertices.x = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[0] + quad.tl.vertices.y * out.mat[4] + quad.tl.vertices.z * out.mat[8] + out.mat[12]);
-	quad.tl.vertices.y = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[1] + quad.tl.vertices.y * out.mat[5] + quad.tl.vertices.z * out.mat[9] + out.mat[13]);
-	quad.tl.vertices.z = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.mat[2] + quad.tl.vertices.y * out.mat[6] + quad.tl.vertices.z * out.mat[10] + out.mat[14]);
+	quad.tl.vertices.x = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[0] + quad.tl.vertices.y * out.m[4] + quad.tl.vertices.z * out.m[8] + out.m[12]);
+	quad.tl.vertices.y = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[1] + quad.tl.vertices.y * out.m[5] + quad.tl.vertices.z * out.m[9] + out.m[13]);
+	quad.tl.vertices.z = RENDER_IN_SUBPIXEL(quad.tl.vertices.x * out.m[2] + quad.tl.vertices.y * out.m[6] + quad.tl.vertices.z * out.m[10] + out.m[14]);
 
-	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[0] + quad.tr.vertices.y * out.mat[4] + quad.tr.vertices.z * out.mat[8] + out.mat[12]);
-	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[1] + quad.tr.vertices.y * out.mat[5] + quad.tr.vertices.z * out.mat[9] + out.mat[13]);
-	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.mat[2] + quad.tr.vertices.y * out.mat[6] + quad.tr.vertices.z * out.mat[10] + out.mat[14]);
+	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[0] + quad.tr.vertices.y * out.m[4] + quad.tr.vertices.z * out.m[8] + out.m[12]);
+	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
+	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
 
  	CCRect rectTexture;
  	rectTexture.origin.x = (float)0;
@@ -512,10 +512,10 @@ void UIBatchRenderer::flush()
 	
 	
 	m_pProgram->use();
-	m_pProgram->setUniformLocationwithMatrix4fv(m_pProgram->m_uUniforms[kCCUniformMVPMatrix], proj.mat, 1);
+	//m_pProgram->setUniformLocationWithMatrix4fv(m_pProgram->getUniform[kCCUniformMVPMatrix], proj.m, 1);
+	//m_pProgram->get
+	glEnable(GL_BLEND);
 	
- 	ccGLEnable(CC_GL_BLEND);
-
  	ccGLBlendFunc(m_sBlendFunc.src, m_sBlendFunc.dst);				
 
 	ccGLBindTexture2D(m_pTexture->getName());

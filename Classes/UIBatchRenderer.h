@@ -7,6 +7,14 @@ using namespace cocos2d;
 
 #define UI_BATCH_RENDERER   //定义这个宏来开启UI的批次渲染。
 
+#define kCCShader_PositionTextureColor            "ShaderPositionTextureColor"
+#define kCCShader_PositionTextureColorAlphaTest    "ShaderPositionTextureColorAlphaTest"
+#define kCCShader_PositionColor                    "ShaderPositionColor"
+#define kCCShader_PositionTexture                "ShaderPositionTexture"
+#define kCCShader_PositionTexture_uColor        "ShaderPositionTexture_uColor"
+#define kCCShader_PositionTextureA8Color        "ShaderPositionTextureA8Color"
+#define kCCShader_Position_uColor                "ShaderPosition_uColor"
+
 class UIBatchRenderer
 {
 public:
@@ -41,7 +49,7 @@ private:
 
 private:
 	GLProgram*		m_pProgram;
-	ccV3F_C4B_T2F_Quad* m_pQuads;
+	V3F_C4B_T2F_Quad* m_pQuads;
 	GLushort*           m_pIndices;
 	unsigned int		m_uTotalQuads;
 	unsigned int		m_uCapacity;

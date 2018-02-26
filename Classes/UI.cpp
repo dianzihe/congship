@@ -1,6 +1,6 @@
 #include "UI.h"
 #include "GameScene.h"
-#include "cocos2d.h"
+#include "UIBatchRenderer.h"
 //#include "GameMainUI.h"
 //#include "ASprite.h"
 
