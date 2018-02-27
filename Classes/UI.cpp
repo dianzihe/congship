@@ -165,6 +165,7 @@ void UIDataGroup::Load(const char* fileName)
 		READ_INT16(g.data[i].tag);
 
 		READ_STRING(g.data[i].picName);
+		log("--UIDataGroup::Load---pic-------%s\n", g.data[i].picName.c_str());
 		READ_STRING(g.data[i].text);
 
 		if ( !_GetLocalTextFile().empty() ) {
@@ -222,11 +223,12 @@ UI* UIData::createUI()
 	}
 	else
 	{
+		log("-------UIData::createUI------%s", name.c_str());
 		p = new UI();
 	}
 	p->autorelease();
 	p->m_name = name;
-	p->setPosition( ccp(x, -y-height)  );
+	p->setPosition( Vec2(x, -y-height)  );
 	p->m_type = (TUIType)type;
 	p->m_width = width;
 	p->m_height = height;
@@ -242,13 +244,10 @@ UI* UIData::createUI()
 	}
 	*/
 	p->setIsEnlarge(!!isEnlarge);
-	if( type == UI_BUTTON )
-	{
+	if( type == UI_BUTTON )	{
 		p->setUIEffectType(UIMusicType_Button_Check);
 		p->setPlayEffect(true);
-	}
-	else
-	{
+	}else{
 		p->setUIEffectType(UIMusicType_Button_Select);
 		p->setPlayEffect(false);
 	}
@@ -1085,18 +1084,18 @@ void UI::draw(Renderer *renderer, const kmMat4& transform, bool transformUpdated
 
 /*
 void UI::visit()
-{PROFILE("UI::visit");
-	if ( m_clipRect )
-	{
+{
+	//PROFILE("UI::visit");
+	if ( m_clipRect ){
 #ifdef  UI_BATCH_RENDERER
 		UIBatchRenderer::instance()->flush();
 #endif
-		//glEnable(GL_SCISSOR_TEST);
-		myGLEnableScissorTest();
+		glEnable(GL_SCISSOR_TEST);
+		//myGLEnableScissorTest();
 
 		Point realPos = getRealPos();
-    
-        float xScale = CCEGLView::sharedOpenGLView()->getFrameSize().width / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width;
+		
+        float xScale = GLView::getFrameSize().width / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().width;
         float yScale = CCEGLView::sharedOpenGLView()->getFrameSize().height / CCEGLView::sharedOpenGLView()->getDesignResolutionSize().height;
 
 		UIManager::Instance()->m_nonceClipRect.origin.x = (realPos.x + m_clipRect->origin.x) * xScale;
@@ -1240,8 +1239,7 @@ void UI::setImage( std::string& name, bool boundingWH)
 	m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
 
 	//Tyrzhao: Temp Use Two Different File
-	if(m_image.m_RenderBatch == NULL)
-	{
+	if(m_image.m_RenderBatch == NULL) {
 		sprintf( buf, "UI/LRes/%s", name.c_str() );
 		m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
 	}
@@ -1261,8 +1259,7 @@ void UI::setImage( std::string& name, bool boundingWH)
 		//m_image.x2 = -1;
 		//m_image.y2 = -1;
 
-		if(boundingWH)
-		{
+		if(boundingWH) {
 			m_width = m_image.m_RenderBatch->_SourceSizeX;
 			m_height = m_image.m_RenderBatch->_SourceSizeY;
 		}
@@ -1276,8 +1273,7 @@ void UI::setImage( std::string& name, bool boundingWH)
 		strcpy( &buf[len-3], "txt" );
 
 		map<string, UIRect9Data>::iterator it = m_sRect9Datatable.find(buf);
-		if( it == m_sRect9Datatable.end() )
-		{
+		if( it == m_sRect9Datatable.end() )	{
 			UIRect9Data r9data;
 
 			ssize_t length;
@@ -1310,11 +1306,8 @@ void UI::setImage( std::string& name, bool boundingWH)
 			else
 				m_rect9 = new Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
             CC_SAFE_DELETE_ARRAY(pszBuffer);
-		}
-		else
-		{
-			if( it->second.isHave )
-			{
+		} else {
+			if( it->second.isHave ) {
 				if(m_rect9)
 					*m_rect9 = Rect(it->second.rect);
 				else
@@ -1328,14 +1321,13 @@ extern std::string _fixPathByLanguage( const char* resName );
 
 void UI::setImageByFullPath( string& name, bool boundingWH)
 {
+	log("==error :UI::setImageByFullPath-----");
 #if 0
     std::string realTexName = name;
 	int pos = realTexName.find_first_of("/");
-	if( pos != string::npos )
-	{
+	if( pos != string::npos ) {
 		string path = realTexName.substr( 0, pos );
-		if( path == "Origin" || path == "ImageCenter" )
-		{
+		if( path == "Origin" || path == "ImageCenter" )	{
 			realTexName = _fixPathByLanguage(realTexName.c_str());
 		}
 	}
@@ -1343,30 +1335,22 @@ void UI::setImageByFullPath( string& name, bool boundingWH)
     realTexName = realTexName.substr(0, realTexName.find(".")) + ".pvr.ccz";
 #endif
 	m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( realTexName.c_str() );
-	if(m_image.m_RenderBatch == NULL && m_image.m_IconName != realTexName)
-	{
-		if(m_image.m_IconTexture)
-		{	
+	if(m_image.m_RenderBatch == NULL && m_image.m_IconName != realTexName) {
+		if(m_image.m_IconTexture) {	
 			m_image.m_IconTexture->release();
 		}
-		m_image.m_IconTexture = CCTextureCache::sharedTextureCache()->textureForKey(realTexName.c_str());
-		if(m_image.m_IconTexture)
-		{
+		m_image.m_IconTexture = TextureCache::getInstance()->textureForKey(realTexName.c_str());
+		if(m_image.m_IconTexture) {
 			/*m_image.m_IconName = realTexName;*/
-			if(boundingWH)
-			{
+			if(boundingWH) {
 				m_width = m_image.m_IconTexture->getContentSize().width;
 				m_height = m_image.m_IconTexture->getContentSize().height;
 			}
 			m_image.m_IconTexture->retain();
-		}
-		else
-		{
-            m_image.m_IconTexture = CCTextureCache::sharedTextureCache()->addImage(realTexName.c_str());
-			if(m_image.m_IconTexture)
-			{
-				if(boundingWH)
-				{
+		} else {
+            m_image.m_IconTexture = TextureCache::getInstance()->addImage(realTexName.c_str());
+			if(m_image.m_IconTexture) {
+				if(boundingWH) {
 					m_width = m_image.m_IconTexture->getContentSize().width;
 					m_height = m_image.m_IconTexture->getContentSize().height;
 				}
@@ -1377,8 +1361,7 @@ void UI::setImageByFullPath( string& name, bool boundingWH)
 	m_image.m_downRenderBatch = NULL;
 	m_image.m_IconName = realTexName;
 
-	if(boundingWH && m_image.m_RenderBatch)
-	{
+	if(boundingWH && m_image.m_RenderBatch) {
 		m_width = m_image.m_RenderBatch->_SourceSizeX;
 		m_height = m_image.m_RenderBatch->_SourceSizeY;
 	}
@@ -1411,17 +1394,13 @@ void UI::setIconTex(Texture2D* tex, bool boundingWH)
 
 UI* UI::findUI( const string& name )
 {
-#if 0
-	Ref* child;
-	CCARRAY_FOREACH(m_pChildren, child)
-	{
-		UI* p = (UI*) child;
-		if (p->m_name == name )
-		{
+	auto& children = this->getChildren();
+	for (const auto &child : children) {
+		UI* p = (UI*)child;
+		if (p->m_name == name){
 			return p;
 		}
 	}
-#endif
 	return NULL;
 }
 
@@ -1506,8 +1485,7 @@ bool UI::isParentVisible()
 {
 	UI* pParentUI = this;
 	UI* pUITemp = this;
-	while(pUITemp != NULL&&pParentUI != NULL)
-	{
+	while(pUITemp != NULL&&pParentUI != NULL) {
 		pParentUI = pUITemp;
 		Node *pParent = pUITemp->getParent();
 		if(pParent)
@@ -1540,7 +1518,7 @@ Point  UI::getRealPos()
 	return realPos;
 }
 
-bool	UI::isHaveUnKnowChar()
+bool UI::isHaveUnKnowChar()
 {
 	/*
 	if( m_pText )
@@ -1764,17 +1742,13 @@ UI* UIManager::findUIInChildMap(const string& name )
 //在使用loadchild时添加新节点到childmap表
 void UIManager::addItemToChildMap(const string name,UI* thisUi)
 {
-	/*
 	GameScene* scene = GameScene::GetScene();
 	vector<string> tempNameVec;
-	if (thisUi)
-	{
+	if (thisUi)	{
 		tempNameVec.push_back(thisUi->m_name);
-		if(thisUi != scene->m_uiNode)
-		{
+		if(thisUi != scene->m_uiNode) {
 			UI*	findParents = (UI*)(thisUi->getParent());
-			while(findParents && findParents != scene->m_uiNode)
-			{
+			while(findParents && findParents != scene->m_uiNode) {
 				tempNameVec.push_back(findParents->m_name);
 				findParents = (UI*)(findParents->getParent());
 			}
@@ -1782,14 +1756,12 @@ void UIManager::addItemToChildMap(const string name,UI* thisUi)
 		ChildUiLocateItem locateItem;
 		int layerNum = tempNameVec.size() - 1;
 		locateItem.parentNameArr.resize(tempNameVec.size());
-		for (int i = layerNum; i >= 0; i--)
-		{
+		for (int i = layerNum; i >= 0; i--) {
 			locateItem.parentNameArr[i] = tempNameVec[layerNum - i];
 		}
 		m_mapChildLocatea[name] = locateItem;
-		
 	}
-	*/
+	
 }
 //在删除节点时检测表中是否存在，存在则删除
 void UIManager::removeItemFromChildMap(const string name)
@@ -1808,7 +1780,7 @@ void UIManager::clearChildMap()
 }
 void UIManager::update(float dt)
 {
-#if 0
+#if 1
 	if ( m_holdTime >= 0 ) m_holdTime += dt;
 
 #ifdef USE_UI_DRAG
@@ -1824,7 +1796,7 @@ void UIManager::update(float dt)
 	}
 #endif
 
-	Ref::update( dt );
+	//Object::update( dt );
 
 	if( m_pOnlyMessage )
 	{
@@ -1845,15 +1817,15 @@ void UIManager::update(float dt)
 	{
 		if( i->second->isRemove() )
 		{
-			CMainUIOpenCloseHandle::instance().DelHandleUI(i->second);
-			i->second->removeFromParentAndCleanup(true);
-			m_uiMap.erase(i);
+			//CMainUIOpenCloseHandle::instance().DelHandleUI(i->second);
+			//i->second->removeFromParentAndCleanup(true);
+			//m_uiMap.erase(i);
 			break;
 		}
 	}
 	
 	//////////////////////////////update for zoom in/out////////////////////////////////////////////
-    
+	/*
     if (sIsFinishChange) {
 		Map* pMap = GameScene::GetScene()->GetCurMap();
 		CCamera* pCamera = pMap ? pMap->GetCamera() : 0;
@@ -1886,7 +1858,6 @@ void UIManager::update(float dt)
         }
     }
     
-    
 	if (sNowScale != gAntoScale)
 	{
 		if (sNowScale < gAntoScale)
@@ -1914,12 +1885,10 @@ void UIManager::update(float dt)
 		}
 	}
     //////////////////////////////////////////////////////////////////////////
-
+	*/
 	list<UIEvent>::iterator it = m_eventList.begin();
-	while( it != m_eventList.end() )
-	{
-		if ( it->self )
-		{
+	while( it != m_eventList.end() ) {
+		if ( it->self )	{
 			it->data.funcEvent( it->self, it->data.pData );			
 		}
 
@@ -1929,10 +1898,8 @@ void UIManager::update(float dt)
 	m_eventList.clear();
 
 	it = m_otherEventList.begin();
-	while( it != m_otherEventList.end() )
-	{
-		if ( it->self )
-		{
+	while( it != m_otherEventList.end() ) {
+		if ( it->self )	{
 			it->data.funcEvent( it->self, it->data.pData );			
 		}
 
