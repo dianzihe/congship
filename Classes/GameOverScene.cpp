@@ -1,6 +1,75 @@
 #include "GameOverScene.h"
 #include "GameScene.h"
 
+
+SceneTestLayer1::SceneTestLayer1()
+{
+	auto item1 = MenuItemFont::create("Test pushScene", CC_CALLBACK_1(SceneTestLayer1::onPushScene, this));
+	auto item2 = MenuItemFont::create("Test pushScene w/transition", CC_CALLBACK_1(SceneTestLayer1::onPushSceneTran, this));
+	auto item3 = MenuItemFont::create("Quit", CC_CALLBACK_1(SceneTestLayer1::onQuit, this));
+
+	auto menu = Menu::create(item1, item2, item3, nullptr);
+	menu->alignItemsVertically();
+
+	addChild(menu);
+
+	auto s = Director::getInstance()->getWinSize();
+	auto sprite = Sprite::create("Origin/chouqian.png");
+	addChild(sprite);
+	sprite->setPosition(Vec2(s.width - 40, s.height / 2));
+	auto rotate = RotateBy::create(2, 360);
+	auto repeat = RepeatForever::create(rotate);
+	sprite->runAction(repeat);
+
+	schedule(CC_SCHEDULE_SELECTOR(SceneTestLayer1::testDealloc));
+}
+
+void SceneTestLayer1::testDealloc(float dt)
+{
+	//CCLOG("SceneTestLayer1:testDealloc");
+}
+
+void SceneTestLayer1::onEnter()
+{
+	CCLOG("SceneTestLayer1#onEnter");
+	Layer::onEnter();
+}
+
+void SceneTestLayer1::onEnterTransitionDidFinish()
+{
+	CCLOG("SceneTestLayer1#onEnterTransitionDidFinish");
+	Layer::onEnterTransitionDidFinish();
+}
+
+SceneTestLayer1::~SceneTestLayer1()
+{
+	//NSLog(@"SceneTestLayer1 - dealloc");
+}
+
+void SceneTestLayer1::onPushScene(Ref* sender)
+{
+	//auto scene = SceneTestScene::create(2);
+	//Director::getInstance()->pushScene(scene);
+}
+
+void SceneTestLayer1::onPushSceneTran(Ref* sender)
+{
+	//auto scene = SceneTestScene::create(2);
+	//Director::getInstance()->pushScene(TransitionSlideInT::create(1, scene));
+}
+
+
+void SceneTestLayer1::onQuit(Ref* sender)
+{
+	//getCocosApp()->exit();
+	//CCDirector::getInstance()->poscene();
+
+	//// HA HA... no more terminate on sdk v3.0
+	//// http://developer.apple.com/iphone/library/qa/qa2008/qa1561.html
+	//if( [[UIApplication sharedApplication] respondsToSelector:@selector(terminate)] )
+	//    [[UIApplication sharedApplication] performSelector:@selector(terminate)];
+}
+
 Scene* GameOverScene::createScene()
 {
 	auto scene = Scene::create();

@@ -18,11 +18,13 @@ using namespace CocosDenshion;
 const float GameScene::refresh_delay[] = { 2.0f, 1.5f, 1.0f, 0.5f, 0.2f }; //战机刷新间隔
 behaviac::vector<behaviac::Agent*>  GameScene::m_bt_agent_delete_queue;
 
-void GameScene::create()
+Scene* GameScene::create()
 {
     //创建一个没有重力的物理世界
 	//auto scene = Scene::createWithPhysics();
-	GameScene* scene = new GameScene();
+	//GameScene* scene = new GameScene();
+	//auto scene = Scene::create();
+	auto scene = new Scene();
 //	auto layer = LoginScene::create();
 	//scene->addChild(layer);
 
@@ -36,14 +38,23 @@ void GameScene::create()
 	if (scene && scene->init()){
 		scene->autorelease();
 		//TODO: CCDirector::sharedDirector()->replaceScene(p);
+		scene->addChild(SceneTestLayer1::create());
 		Director::getInstance()->runWithScene(scene);
 	}
+	else
+	{
+		delete scene;
+		scene = nullptr;
+	}
+	return scene;
 //	Director::getInstance()->setProjection(kCCDirectorProjection3D);
 }
 
 GameScene::GameScene(void)
 {
 	log("new GameScene");
+
+	/*
 	AspriteManager::instance().initilize();
 	MonsterCfg::instance().init("monster");
 
@@ -54,10 +65,10 @@ GameScene::GameScene(void)
 	m_map->setActorManager(m_actorManager);
 	m_actorManager->setMap(m_map);
 	//addChild(m_map, GAME_LAYER_MAP);
-	
+	//addChild(SceneTestLayer1::create());
 	m_uiNode = Node::create();
 	addChild(m_uiNode, GAME_LAYER_UI);
-
+	*/
 	log("---->gamescene new %x", m_map);
 }
 GameScene::~GameScene(void){
@@ -72,7 +83,7 @@ Node* GameScene::GetUI()
 
 void GameScene::onEnter()
 {
-
+#if 0
 	m_pRunState = new CZhongGaoState();
 	if (m_pRunState)
 	{
@@ -268,6 +279,7 @@ void GameScene::onEnter()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
 	*/
+#endif
 }
 
 void GameScene::onExit()

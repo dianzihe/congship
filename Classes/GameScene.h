@@ -93,7 +93,7 @@ public:
 	GameScene(void);
 	~GameScene(void);
 
-	static void create();
+	static Scene* create();
 	static GameScene* GetScene();
 	static ActorManager* GetActorManager();
 	static DQMap* GetMap();
