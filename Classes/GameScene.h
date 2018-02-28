@@ -43,6 +43,26 @@ enum GAME_STATE
 };
 
 
+class DQScreen : public Scene
+{
+public:
+	bool init();
+
+	static DQScreen* create()
+	{
+		DQScreen* o = new DQScreen();
+		if (o && o->init()) {
+			o->autorelease();
+			return o;
+		}
+		assert(false && "DQ screen cannot be created");
+		CC_SAFE_DELETE(o);
+		return NULL;
+	}
+	DQScreen(void);
+	~DQScreen(void);
+
+};
 
 //游戏主场景层
 class GameScene : public Scene
@@ -90,6 +110,7 @@ public:
     static const float refresh_delay[]; //战机刷新间隔
 
 public:
+	
 	GameScene(void);
 	~GameScene(void);
 	virtual bool init();

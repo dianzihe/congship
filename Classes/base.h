@@ -1,5 +1,9 @@
 #ifndef _SHIP_BASE_H__
 #define _SHIP_BASE_H__
+
+#include "cocos2d.h"
+
+using namespace cocos2d;
 /*
 #include <stdio.h>
 #include <stdlib.h>
@@ -210,6 +214,7 @@ static Language _curLanguage = LT_Default;
 
 Language GetCurrentLanguage();
 const char* GetLanguageTypeString(Language type);
+Sprite *GetSprite(const std::string& filename);
 
 #define FONT_BMP_24					"Font/ms_font.fnt"
 

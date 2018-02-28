@@ -10,6 +10,7 @@
 #include "Monster.h"
 #include "MonsterCfg.h"
 #include "ZhongGaoState.h"
+#include "base.h"
 
 using namespace CocosDenshion;
 
@@ -52,20 +53,22 @@ GameScene* GameScene::create()
 
 bool GameScene::init()
 {
-	log("init GameScene");
 	if (!Scene::init())
 		return false;
-	//initBG();
+	
+	// launch network thread.
+	//PuzzleRPC::getInstance()->launch();
+
 	// create UI elements
-	Sprite* background = Sprite::createWithSpriteFrameName("loading_bg.jpg");
+	Sprite* background = GetSprite("loading_bg.jpg");
 	background->setPosition(Point(320, 480));
 	this->addChild(background);
 
-
+	return true;
 }
 GameScene::GameScene(void)
 {
-	log("new GameScene");
+	log("=======new GameScene");
 
 	/*
 	AspriteManager::instance().initilize();
@@ -87,6 +90,28 @@ GameScene::GameScene(void)
 GameScene::~GameScene(void){
 	log("=======>release gamescene");
 }
+DQScreen::DQScreen(void){
+	log("=======new GameScene");
+}
+DQScreen::~DQScreen(void){
+	log("=======>release gamescene");
+}
+bool DQScreen::init()
+{
+	if (!Scene::init())
+		return false;
+	
+	// launch network thread.
+	//PuzzleRPC::getInstance()->launch();
+
+	// create UI elements
+	Sprite* background = GetSprite("loading_bg.jpg");
+	background->setPosition(Point(320, 480));
+	this->addChild(background);
+	return true;
+}
+
+
 void GameScene::initBG()
 {
 	//¼ÓÔØplistÎÄ¼ş

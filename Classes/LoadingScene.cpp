@@ -9,7 +9,7 @@
 //#include "DebugMisc.h"
 #include "LoadingScene.h"
 #include "GameScene.h"
-
+#include "base.h"
 //#include "Common.h"
 //#include "PuzzleRPC.h"
 //#include "ResourceSyncMan.h"
@@ -21,31 +21,6 @@
 
 namespace PH
 {
-	static cocos2d::Sprite *GetSprite(const std::string& filename)
-	{
-		Sprite *psprite = Sprite::create();
-
-		// Search in the cache, first
-		SpriteFrameCache *sfc = SpriteFrameCache::getInstance();
-		SpriteFrame *psf = sfc->spriteFrameByName(filename.c_str());
-
-		std::string::size_type pos;
-		if (!psf && (pos = filename.find_last_of('/')) != filename.npos){
-			std::string lastPart(filename.begin() + pos + 1, filename.end());
-			psf = sfc->spriteFrameByName(lastPart.c_str());
-		}
-
-		if (psf){
-			psprite->initWithSpriteFrame(psf);
-		} else {
-			log("WARNING : %s not in a PACK!", filename.c_str() );
-			if (!psprite->initWithFile(filename.c_str())) {
-				log("ERROR: %s is not in resources", filename.c_str());
-				return NULL;
-			}
-		}
-		return psprite;
-	}
 
     class SFXConfirmLayer : public Layer
     {
@@ -74,7 +49,7 @@ namespace PH
         if(!Layer::init())
             return false;
         
-        CCMenu* menu = CCMenu::create();
+        Menu* menu = Menu::create();
         this->addChild(menu);
         
         MenuItemImage* yesButton = MenuItemImage::create("jscmcc/g_yes.png",
