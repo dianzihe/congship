@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 #include "GameScene.h"
+#include "LoadingScene.h"
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
 
@@ -71,10 +72,11 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	director->setAnimationInterval(1.0 / 60);
 
 	
-	auto scene = GameScene::create();
-	director->runWithScene(scene);
-	
-
+	//auto scene = GameScene::create();
+	//director->runWithScene(scene);
+	//director->runWithScene(PH::SplashScene::create());
+	//director->replaceScene(PH::LoadingScreen::create());
+	director->replaceScene(GameScene::create());
 	//GameScene::create();
 	//GameScene::getInstance()->init();
 	//GameScene::instance().initilize();

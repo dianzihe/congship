@@ -18,13 +18,14 @@ using namespace CocosDenshion;
 const float GameScene::refresh_delay[] = { 2.0f, 1.5f, 1.0f, 0.5f, 0.2f }; //战机刷新间隔
 behaviac::vector<behaviac::Agent*>  GameScene::m_bt_agent_delete_queue;
 
-Scene* GameScene::create()
+/*
+GameScene* GameScene::create()
 {
     //创建一个没有重力的物理世界
 	//auto scene = Scene::createWithPhysics();
-	//GameScene* scene = new GameScene();
+	GameScene* scene = new GameScene();
 	//auto scene = Scene::create();
-	auto scene = new Scene();
+	//auto scene = new Scene();
 //	auto layer = LoginScene::create();
 	//scene->addChild(layer);
 
@@ -38,18 +39,30 @@ Scene* GameScene::create()
 	if (scene && scene->init()){
 		scene->autorelease();
 		//TODO: CCDirector::sharedDirector()->replaceScene(p);
-		scene->addChild(SceneTestLayer1::create());
+		//scene->addChild(SceneTestLayer1::create());
 		Director::getInstance()->runWithScene(scene);
-	}
-	else
-	{
+	}else{
 		delete scene;
 		scene = nullptr;
 	}
 	return scene;
 //	Director::getInstance()->setProjection(kCCDirectorProjection3D);
 }
+*/
 
+bool GameScene::init()
+{
+	log("init GameScene");
+	if (!Scene::init())
+		return false;
+	//initBG();
+	// create UI elements
+	Sprite* background = Sprite::createWithSpriteFrameName("loading_bg.jpg");
+	background->setPosition(Point(320, 480));
+	this->addChild(background);
+
+
+}
 GameScene::GameScene(void)
 {
 	log("new GameScene");
@@ -69,10 +82,31 @@ GameScene::GameScene(void)
 	m_uiNode = Node::create();
 	addChild(m_uiNode, GAME_LAYER_UI);
 	*/
-	log("---->gamescene new %x", m_map);
+	//log("---->gamescene new %x", m_map);
 }
 GameScene::~GameScene(void){
 	log("=======>release gamescene");
+}
+void GameScene::initBG()
+{
+	//加载plist文件
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("shoot.plist");
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("shoot_background.plist");
+
+	auto winSize = Director::getInstance()->getWinSize();
+	auto pause_sp1 = Sprite::createWithSpriteFrameName("game_pause_nor.png");
+	auto pause_sp2 = Sprite::createWithSpriteFrameName("game_pause_pressed.png");
+	auto resume_sp1 = Sprite::createWithSpriteFrameName("game_resume_nor.png");
+	auto resume_sp2 = Sprite::createWithSpriteFrameName("game_resume_pressed.png");
+
+	auto pauseitem = MenuItemSprite::create(pause_sp1, pause_sp2);
+	auto resumeitem = MenuItemSprite::create(resume_sp1, resume_sp2);
+	auto pauseButton = MenuItemToggle::createWithTarget(this, menu_selector(GameScene::pauseButtonCallBack), pauseitem, resumeitem, nullptr);
+	pauseButton->setAnchorPoint(Vec2(0, 0));
+	pauseButton->setPosition(Vec2(winSize.width / 2 - pauseButton->getContentSize().width, winSize.height / 2 - pauseButton->getContentSize().height)); //位于左上角
+
+	auto menu = Menu::create(pauseButton, nullptr);
+	addChild(menu, 10, PAUSE_MENU);
 }
 
 Node* GameScene::GetUI()

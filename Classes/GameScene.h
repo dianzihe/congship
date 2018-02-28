@@ -92,11 +92,23 @@ public:
 public:
 	GameScene(void);
 	~GameScene(void);
+	virtual bool init();
+	static GameScene* create()
+	{
+		GameScene* o = new GameScene();
+		if (o && o->init())		{
+			o->autorelease();
+			return o;
+		}
+		assert(false && "game screen cannot be created");
+		CC_SAFE_DELETE(o);
+		return NULL;
+	}
 
-	static Scene* create();
 	static GameScene* GetScene();
 	static ActorManager* GetActorManager();
 	static DQMap* GetMap();
+	void initBG();
 
 	//DQCamera* GetCamera();
 	//void create();
@@ -111,6 +123,7 @@ public:
 
 	void ReadLookInfoMonster(char*& buf, LookInfoMonster& value);
 public:
+	Sprite* background;
 	ActorManager*	m_actorManager;
 	DQMap*			m_map;
 	Node*			m_uiNode;
