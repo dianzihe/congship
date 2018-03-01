@@ -230,7 +230,12 @@ namespace PH
     {
         if(!Scene::init())
             return false;
-        isGemAction = false;
+		isGemAction = false;
+		
+		logo = GetSprite("loading_logo.png");
+		logo->setPosition(Point(320, 200));
+		this->addChild(logo, 100);
+		/*
         // launch network thread.
         //PuzzleRPC::getInstance()->launch();
 
@@ -239,9 +244,7 @@ namespace PH
         background->setPosition(Point(320, 480));
         this->addChild(background);
 
-        logo = GetSprite("loading_logo.png");
-        logo->setPosition(Point(320, 200));
-        this->addChild(logo, 100);
+
 
         mProgressBar = GetSprite("loading_b_2.png");
         mProgressBar->setAnchorPoint(Point(0, 0.5));
@@ -260,8 +263,9 @@ namespace PH
         mText->setAnchorPoint(Point(0.5, 1));
         mText->setPosition(Point(320, 47));
         this->addChild(mText);
-        
-		launchSyncMan(useHD);
+        */
+		//launchSyncMan(useHD);
+		this->performGemsAction();
         // manage resources
         //std::string sourceArchiveName = (useHD ? "iphonehd.Head.tar" : "iphone.Head.tar");
         //std::string mainArchiveName = (useHD ? "iphonehd." PH_VERSION ".tar" : "iphone." PH_VERSION ".tar");
@@ -479,8 +483,9 @@ namespace PH
 						createGemOutAction(logo->getPosition(), desPos[i]),
 						NULL));
                 Sprite* light = (Sprite*)gems[i]->getChildByTag(1001);
-                if(light) {
+                if(light && true) {
                     float orgScale = light->getScale();
+					log("---->%f", orgScale);
                     light->runAction(
 						Sequence::create(
 							DelayTime::create(0.15 * i + 0.8),
@@ -489,7 +494,7 @@ namespace PH
 									DelayTime::create(1.0),
 									([=](){
 										light->setOpacity(255);
-										light->setScale(orgScale);
+										//light->setScale(orgScale);
 									}),
 									Spawn::create(
 										ScaleTo::create(0.6, 1.3),
@@ -517,7 +522,8 @@ namespace PH
         light->setTag(1001);
         light->setScale(scale);
         layer->addChild(light);
-        
+		if (NULL == layer)
+			log("=====createGem is null======");
         return layer;
     }
     

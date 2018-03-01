@@ -150,7 +150,7 @@ void UIDataGroup::Load(const char* fileName)
 
 	g.data = new UIData[g.count];
 
-	for (int i=0; i < g.count; i++)	{
+	for (int i = 0; i < g.count; i++)	{
 		READ_STRING(g.data[i].name);		
 		READ_INT(g.data[i].x);
 		READ_INT(g.data[i].y);
@@ -236,13 +236,13 @@ UI* UIData::createUI()
 	p->m_tag = tag;
 	p->setImage( picName, !isSTensile );
 	// utf-8 text
-	/*
+	
 	if ( _isTextUTF8( text.c_str(), text.length() ) ) {
 		p->setText( text );
 	} else {
-		p->setText( ANSI2UTF8( text ) );
+		//p->setText( ANSI2UTF8( text ) );
 	}
-	*/
+	
 	p->setIsEnlarge(!!isEnlarge);
 	if( type == UI_BUTTON )	{
 		p->setUIEffectType(UIMusicType_Button_Check);
@@ -259,10 +259,14 @@ UI* UIData::createUI()
 UI* UIDataGroup::createUI(int zoder)
 {
 	UI* p = createUIBase();
-
+	if (NULL == p)
+		log("ERROR:UIDataGroup::createUI-----> null");
 	GameScene* scene = GameScene::GetScene();
 	scene->m_uiNode->addChild(p, zoder);
 
+	//Sprite* b = GetSprite("loading_bg.jpg");
+	//scene->m_uiNode->addChild(b, zoder);
+	
 	return p;
 }
 
@@ -279,17 +283,12 @@ UI* UIDataGroup::createUIBase()
 
 //	int minX = 10000;
 //	int maxX = -10000;
-//
 //	int minY = 10000;
 //	int maxY = -10000;
 
-
 	UIData* ui = data;
-
-
-
-	for (int i=0; i<count; i++ ){
-
+	log("UIDataGroup::createUIBase-->%d", count);
+	for (int i = 0; i < count; i++ ){
 		if (ui->name == "SelectPlayerBtn0"){
 			int a = 0;
 			a++;
@@ -317,7 +316,6 @@ UI* UIDataGroup::createUIBase()
 		}
 
 		UI* pChild = ui->createUI();
-
 		p->addChild(pChild);
 
 		ui++;
@@ -1229,6 +1227,7 @@ void UI::setText(  std::string& strText, int fontSize,  Size &size, int alignTyp
 
 void UI::setImage( std::string& name, bool boundingWH)
 {
+	log("=====UI::setImage  %s", name.c_str());
 	if ( name == "" ) return;
 
 	char buf[256];

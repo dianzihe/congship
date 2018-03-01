@@ -214,12 +214,14 @@ static Language _curLanguage = LT_Default;
 
 Language GetCurrentLanguage();
 const char* GetLanguageTypeString(Language type);
+bool _isTextUTF8(const char* str, size_t length);
 Sprite *GetSprite(const std::string& filename);
 
 #define FONT_BMP_24					"Font/ms_font.fnt"
 
 #define REVERSE_Y(y, maxY)	(maxY - y -1)
 #define SCREEN_SIZE	(CCDirector::sharedDirector()->getWinSize())
+
 
 /*
 void			SetupLanguage( Language type = LT_Invalid );

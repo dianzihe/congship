@@ -25,7 +25,7 @@ void CZhongGaoState::EnterState()
 
 	m_pMainUI->setVisible(true);
 	m_pMainUI->setColor(Color4B(255,255,255, 0 ));
-	m_fTime = ShowAndHide_Time*3;
+	m_fTime = ShowAndHide_Time * 3;
 
 	/*
 	if( IsCHTOnly() ){

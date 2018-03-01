@@ -42,3 +42,48 @@ cocos2d::Sprite *GetSprite(const std::string& filename)
 	}
 	return psprite;
 }
+
+
+bool _isTextUTF8(const char* str, size_t length)
+{
+	int bytes = 0;
+	unsigned char chr;
+	bool allAscii = true;
+	for (size_t i = 0; i < length; ++i) {
+		chr = *(str + i);
+		if ((chr & 0x80) != 0) {
+			allAscii = false;
+		}
+		if (bytes == 0) {
+			if (chr >= 0x80) {
+				if (chr >= 0xFC && chr <= 0xFD)
+					bytes = 6;
+				else if (chr >= 0xF8)
+					bytes = 5;
+				else if (chr >= 0xF0)
+					bytes = 4;
+				else if (chr >= 0xE0)
+					bytes = 3;
+				else if (chr >= 0xC0)
+					bytes = 2;
+				else {
+					return false;
+				}
+				--bytes;
+			}
+		}
+		else {
+			if ((chr & 0xC0) != 0x80) {
+				return false;
+			}
+			--bytes;
+		}
+	}
+	if (bytes > 0) {
+		return false;
+	}
+	if (allAscii) {
+		return false;
+	}
+	return true;
+}

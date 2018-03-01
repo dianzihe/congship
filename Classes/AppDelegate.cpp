@@ -76,8 +76,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 	//director->runWithScene(scene);
 	//director->runWithScene(PH::SplashScene::create());
 	//director->replaceScene(PH::LoadingScreen::create());
-	director->replaceScene(DQScreen::create());
-	//director->replaceScene(GameScene::create());
+	//director->replaceScene(DQScreen::create());
+	director->replaceScene(GameScene::create());
 	//GameScene::create();
 	//GameScene::getInstance()->init();
 	//GameScene::instance().initilize();

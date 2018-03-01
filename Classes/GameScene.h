@@ -114,8 +114,10 @@ public:
 	GameScene(void);
 	~GameScene(void);
 	virtual bool init();
+	static GameScene* inst;
 	static GameScene* create()
 	{
+		/*
 		GameScene* o = new GameScene();
 		if (o && o->init())		{
 			o->autorelease();
@@ -124,6 +126,17 @@ public:
 		assert(false && "game screen cannot be created");
 		CC_SAFE_DELETE(o);
 		return NULL;
+		*/
+		assert(inst == NULL && "GameScene is already initialized.");
+		if (!inst){
+			inst = new GameScene();
+			inst->init();
+			return inst;
+		}
+		assert(false && "game screen cannot be created");
+		CC_SAFE_DELETE(inst);
+		return NULL;
+
 	}
 
 	static GameScene* GetScene();
@@ -138,9 +151,6 @@ public:
     //CREATE_FUNC(GameScene);
 	//bool initilize();
 	//static Node* GetUI();
-
-	virtual void onEnter();
-	virtual void onExit();
 
 	void ReadLookInfoMonster(char*& buf, LookInfoMonster& value);
 public:
