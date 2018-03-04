@@ -22,25 +22,6 @@ const int ALIGN_TOP		= (1<<3);
 const int ALIGN_VCENTER = (1<<4);
 const int ALIGN_BOTTOM	= (1<<5);
 
-#define READ_BEGIN( file ) while(1) { ssize_t _len; int _pos=0;\
-	char* _buf = (char*)FileUtils::getInstance()->getFileData(FileUtils::getInstance()->fullPathForFilename(filePath), "rb", &_len);
-
-#define READ_END() if ( _buf ) delete[] _buf; break;}
-
-#define READ_INT( data ) data = *((int*)&_buf[_pos]); _pos+=4;
-#define READ_INT16( data ) data = *((short*)&_buf[_pos]); _pos+=2;
-
-#define READ_STRING( data ) while(1){\
-	int _size;\
-	char _data[1024];\
-	READ_INT(_size);\
-	memcpy(_data, &_buf[_pos], _size);\
-	_data[_size] = '\0';\
-	data = _data;\
-	_pos+=_size;\
-	break;\
-	}
-
 enum TUIType
 {
 	UI_BASE,
@@ -219,8 +200,8 @@ public:
 
 	virtual void		update(float t);
 	//virtual void		draw();
-	virtual void draw(Renderer *renderer, const kmMat4& transform, bool transformUpdated);
-	//virtual void		visit(void);
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) ;
+	//virtual void		visit(void);override
 	//重写移除child函数
 	void					removeChild(UI* child, bool cleanup);				
 	void					setRenderBatch(RenderBatchData* pRenderBatch);
@@ -448,100 +429,4 @@ struct ChildUiLocateItem
 {
 	//parent name
 	std::vector<std::string> parentNameArr;
-};
-//class UIEditNew;
-class UIManager : public Ref
-{
-public:
-	typedef std::map<std::string, UI*> UIMap;
-	std::map<std::string, ChildUiLocateItem> m_mapChildLocatea;
-	UI*			findUI( const string& name );
-	UI*			findUIByName( const string name );
-	string		findTopRootName(const string name);
-    
-	UI*			loadUI( const string& name, bool isTop = true, int zoder = 0);
-	void		addUI(UI* pUI, bool isTop = true);
-	void		addUI(UI* pUI, int id, bool isTop = true);
-	UI*			loadUIWithIndex( const string& name, int iIndex, bool isTop = true , int zoder = 0 );
-    
-	UI*			findUI( const string& name,int iIndex );
-	void		removeUI( const string& name,int iIndex );
-	void		removeUI( const string& name );
-	UI*			findUsingUI( const string& uiFileName, const string& uiNodeName);
-
-	UIManager();
-	~UIManager();
-
-	void			clear();
-
-	UIMap&			GetUIMap() { return m_uiMap; }
-	virtual void	update(float dt);
-
-	//void			AddTouchDelegate( CCTouchDelegate* pHandler );
-	//void			RemoveTouchDelegate( CCTouchDelegate* pHandler );
-	
-	bool			ccTouchBegan(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchMoved(CCTouch* touch, CCEvent* event);
-	virtual void	ccTouchEnded(CCTouch* touch, CCEvent* event);
-
-	// optional
-	virtual void	ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent);
-	virtual void	ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent);
-	virtual void	ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent);
-	
-	UI*				getTouchUI( Touch* touch );
-
-	static UIManager* Instance();
-
-	Touch*			getCurTouch( void )		{ return m_curTouch; }
-	static void		PushEvent(UI* p, const EventFunData& data );
-	static void		RemoveEvent( UI* p );
-	static void		PushOtherEvent(UI* p, const EventFunData& data );
-	static void		RemoveOtherEvent( UI* p );
-	void			setOnlyMessage(UI *p){ m_pOnlyMessage = p; };
-	UI*				getOnlyMessage(){ return m_pOnlyMessage; };
-
-    void    topUI(UI* ui);
-    void    onLoseTop(UI* ui);
-    void    onGetTop(UI* ui);
-	//在childmap表查找所需ui
-	UI*		findUIInChildMap(const string& name );
-	//在使用loadchild时添加新节点到childmap表,name为查找ui的名称,thisUi为使用loadchild的ui指针
-	void	addItemToChildMap(const string name,UI* thisUi);
-	//在删除节点时检测表中是否存在，存在则删除
-	void	removeItemFromChildMap(const string name);
-	//清理整个节点表
-	void	clearChildMap();
-
-public:
-	vector<UI*>		m_selected;
-	//UIEditNew *		m_NonceEdit; //当前输入框
-	float			m_holdTime;
-	Point			m_curPos;
-	Rect			m_nonceClipRect;
-	Point			m_TranslatefPos;
-	//std::set<CCTouchDelegate*> m_TouchHandlers;
-    
-    std::vector<UI*> m_stack;
-
-#ifdef USED_JUMP
-	static int m_draged;
-#endif
-private:
-	UIMap			m_uiMap;
-	list<UIEvent>	m_eventList;
-	list<UIEvent>	m_otherEventList;
-	Touch*			m_curTouch;
-	UI*				m_pOnlyMessage;
-	bool			m_bIsDrag;
-	int				m_iTouchNum;
-
-#ifdef USE_UI_DRAG
-private:
-	UI*				m_pDragUI;
-	void				_CreateGragUI( UI* srcUI, CCTouch *touch );
-	void				_MoveGragUI( CCTouch *touch );
-	void				_HandleGragEvent( UI * destUI, CCTouch *touch );
-#endif
-
 };

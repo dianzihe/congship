@@ -11,7 +11,7 @@
 #include "MonsterCfg.h"
 #include "ZhongGaoState.h"
 #include "base.h"
-
+#include "UIBatchRenderer.h"
 using namespace CocosDenshion;
 
 //GameScene* GameScene::m_gamelayer = nullptr;
@@ -57,7 +57,7 @@ bool GameScene::init()
 GameScene::GameScene(void)
 {
 	log("=======new GameScene");
-
+	UIBatchRenderer::instance()->initilize();
 	
 	//Sprite* background = GetSprite("loading_bg.jpg");
 	//background->setPosition(Point(320, 480));
@@ -101,12 +101,16 @@ GameScene* GameScene::GetScene()
 
 	return inst;
 }
+void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
+	log("gamescene draw");
+	if (m_pRunState)
+		m_pRunState->OnDraw();
+}
 
 Node* GameScene::GetUI()
 {
 	return GameScene::GetScene()->m_uiNode;
 }
-
 
 void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 {

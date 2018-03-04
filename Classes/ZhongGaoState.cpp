@@ -1,7 +1,7 @@
 #include "ZhongGaoState.h"
 #include "GameScene.h"
 //#include "LoginBack.h"
-
+#include "UIManager.h"
 CZhongGaoState::CZhongGaoState(void)
 : m_pMainUI(NULL)
 {
@@ -87,6 +87,7 @@ void CZhongGaoState::OnUpdate(float dt)
 
 void CZhongGaoState::OnDraw()
 {
+	log("zhonggao ondraw");
 }
 
 void CZhongGaoState::OnDestroy()

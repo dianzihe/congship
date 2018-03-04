@@ -1,6 +1,6 @@
 #include "GraphicsExtension.h"
 #include "ImageCenter.h"
-//#include "UIBatchRenderer.h"
+#include "UIBatchRenderer.h"
 #ifdef _MSC_VER
 	#pragma warning( disable: 4244 )
 #endif
@@ -377,7 +377,7 @@ void RenderBatch( Texture2D *tex, int u, int v, int texW, int texH, int atlasWid
 	_RenderSprite.setOpacity(color.a);
     
     //_RenderSprite.updateBlendFunc();
-	
+	//_RenderSprite.getBlendFunc
 	_RenderSprite.setVertexRect(rectVer);
 	
 	//_RenderSprite.draw();

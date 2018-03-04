@@ -6,7 +6,7 @@
 
 using namespace cocos2d;
 
-//struct RenderBatchData;
+//struct RenderBatchData; 
 
 void FillRect(const Rect& r, const Color4B& c, bool isHollow = false);
 

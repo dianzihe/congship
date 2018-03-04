@@ -32,7 +32,7 @@ void UIBatchRenderer::initilize()
 	m_uCapacity = 10;
 
 	unsigned int size = m_uCapacity * sizeof(ccV3F_C4B_T2F_Quad);
-	m_pQuads = (ccV3F_C4B_T2F_Quad*)malloc(size);
+	m_pQuads = (V3F_C4B_T2F_Quad*)malloc(size);
 	assert(m_pQuads);
 	memset(m_pQuads, 0, size);
 
@@ -112,18 +112,17 @@ void UIBatchRenderer::setTexture(CCTexture2D* pTexture)
 
 void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const ccColor4B& color)
 {
-	if (m_uTotalQuads + 1 >= m_uCapacity)
-	{
+	if (m_uTotalQuads + 1 >= m_uCapacity){
 		unsigned int newCapacity = (m_uCapacity + 1) * 4 / 3;
 		resizeCapicity(newCapacity);
 	}
 	
-	kmMat4 out;
+	Mat4 out;
 	kmGLGetMatrix(KM_GL_MODELVIEW, &out);
 
-	ccV3F_C4B_T2F_Quad quad;
+	V3F_C4B_T2F_Quad quad;
 
-	CCRect rectVertices;
+	Rect rectVertices;
 	rectVertices.origin.x = (float)x;
 	rectVertices.origin.y = (float)y;
 	rectVertices.size.width = (float)width;
@@ -157,7 +156,7 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
 	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
 
-	CCRect rectTexture;
+	Rect rectTexture;
 	rectTexture.origin.x = (float)u;
 	rectTexture.origin.y = (float)v;
 	rectTexture.size.width = (float)texWidth;
@@ -248,12 +247,12 @@ void UIBatchRenderer::drawImage_Reverse(int u, int v, int texWidth, int texHeigh
 		resizeCapicity(newCapacity);
 	}
 	
-	kmMat4 out;
+	Mat4 out;
 	kmGLGetMatrix(KM_GL_MODELVIEW, &out);
 
-	ccV3F_C4B_T2F_Quad quad;
+	V3F_C4B_T2F_Quad quad;
 
-	CCRect rectVertices;
+	Rect rectVertices;
 	rectVertices.origin.x = (float)x;
 	rectVertices.origin.y = (float)y;
 	rectVertices.size.width = (float)width;
@@ -287,7 +286,7 @@ void UIBatchRenderer::drawImage_Reverse(int u, int v, int texWidth, int texHeigh
 	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
 	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
 
-	CCRect rectTexture;
+	Rect rectTexture;
 	rectTexture.origin.x = (float)u;
 	rectTexture.origin.y = (float)v;
 	rectTexture.size.width = (float)texWidth;
@@ -378,10 +377,10 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 		resizeCapicity(newCapacity);
 	}
 	
-	kmMat4 out;
+	Mat4 out;
 	kmGLGetMatrix(KM_GL_MODELVIEW, &out);
 
-	ccV3F_C4B_T2F_Quad quad;
+	V3F_C4B_T2F_Quad quad;
 
 	float x1 = (float)mx1;
 	float y1 = (float)my1;
@@ -419,7 +418,7 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
 	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
 
- 	CCRect rectTexture;
+ 	Rect rectTexture;
  	rectTexture.origin.x = (float)0;
  	rectTexture.origin.y = (float)0;
  	rectTexture.size.width = (float)texWidth;
@@ -502,44 +501,47 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 
 void UIBatchRenderer::flush()
 {
+	log("UIBatchRenderer::flush->1");
 	if (m_uTotalQuads == 0)
 		return;
 
 	kmGLPushMatrix();
-
-	kmMat4 proj;
+	log("UIBatchRenderer::flush->2");
+	Mat4 proj;
 	kmGLGetMatrix(KM_GL_PROJECTION, &proj);
 	
-	
+	log("UIBatchRenderer::flush->3");
 	m_pProgram->use();
-	//m_pProgram->setUniformLocationWithMatrix4fv(m_pProgram->getUniform[kCCUniformMVPMatrix], proj.m, 1);
+	//->setUniformLocationWithMatrix4fv(m_pProgram->getUniform[kCCUniformMVPMatrix], proj.m, 1);
+	//m_pProgram->
+	//m_pProgram->setUniformLocationwithMatrix4fv(m_pProgram->m_uUniforms[kCCUniformMVPMatrix], proj.mat, 1);
 	//m_pProgram->get
 	glEnable(GL_BLEND);
-	
+	log("UIBatchRenderer::flush->4");
  	ccGLBlendFunc(m_sBlendFunc.src, m_sBlendFunc.dst);				
 
 	ccGLBindTexture2D(m_pTexture->getName());
-
+	log("UIBatchRenderer::flush->5");
 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
 
 #define kQuadSize sizeof(m_pQuads[0].bl)
 	long offset = (long)&m_pQuads[0];
-
+	log("UIBatchRenderer::flush->6");
 
 	// vertex
-	int diff = offsetof( ccV3F_C4B_T2F, vertices);
+	int diff = offsetof( V3F_C4B_T2F, vertices);
 	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*) (offset + diff));
-
+	log("UIBatchRenderer::flush->7");
 	// texCoods
-	diff = offsetof( ccV3F_C4B_T2F, texCoords);
+	diff = offsetof( V3F_C4B_T2F, texCoords);
 	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
-
+	log("UIBatchRenderer::flush->8");
 	// color
-	diff = offsetof( ccV3F_C4B_T2F, colors);
+	diff = offsetof( V3F_C4B_T2F, colors);
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
 
 	glDrawElements(GL_TRIANGLES, (GLsizei) m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*) (m_pIndices));
-
+	log("UIBatchRenderer::flush->9");
 	CC_INCREMENT_GL_DRAWS(1);
 	
 	kmGLPopMatrix();
@@ -557,38 +559,30 @@ void UIBatchRenderer::resizeCapicity(unsigned int capacity)
 	m_uTotalQuads = MIN(m_uTotalQuads, capacity);
 	m_uCapacity = capacity;
 	
-	ccV3F_C4B_T2F_Quad* tmpQuads = NULL;
+	V3F_C4B_T2F_Quad* tmpQuads = NULL;
 
-	if (!m_pQuads)
-	{
-		tmpQuads = (ccV3F_C4B_T2F_Quad*)malloc(sizeof(ccV3F_C4B_T2F_Quad) * m_uCapacity);
+	if (!m_pQuads) {
+		tmpQuads = (V3F_C4B_T2F_Quad*)malloc(sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
 		assert(tmpQuads);
-		memset(tmpQuads, 0, sizeof(ccV3F_C4B_T2F_Quad) * m_uCapacity);
-	}
-	else
-	{
-		tmpQuads = (ccV3F_C4B_T2F_Quad*)realloc(m_pQuads, sizeof(ccV3F_C4B_T2F_Quad) * m_uCapacity);
+		memset(tmpQuads, 0, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+	} else {
+		tmpQuads = (V3F_C4B_T2F_Quad*)realloc(m_pQuads, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
 		assert(tmpQuads);
-		if (m_uCapacity > oldCapacity)
-		{
-			memset(tmpQuads + oldCapacity, 0, sizeof(ccV3F_C4B_T2F_Quad) * (m_uCapacity - oldCapacity));
+		if (m_uCapacity > oldCapacity) {
+			memset(tmpQuads + oldCapacity, 0, sizeof(V3F_C4B_T2F_Quad) * (m_uCapacity - oldCapacity));
 		}
 	}
 	
 	GLushort* tmpIndices = NULL;
 
-	if (!m_pIndices)
-	{
+	if (!m_pIndices){
 		tmpIndices = (GLushort*)malloc(sizeof(GLushort) * 6 * m_uCapacity);
 		assert(tmpIndices);
 		memset(tmpIndices, 0, sizeof(GLushort) * 6 * m_uCapacity);
-	}
-	else
-	{
+	}else{
 		tmpIndices = (GLushort*)realloc(m_pIndices, sizeof(GLushort) * 6 * m_uCapacity);
 		assert(tmpIndices);
-		if (m_uCapacity > oldCapacity)
-		{
+		if (m_uCapacity > oldCapacity){
 			memset(tmpIndices + oldCapacity, 0, sizeof(GLushort) * 6 * (m_uCapacity - oldCapacity));
 		}
 	}
@@ -603,8 +597,7 @@ void UIBatchRenderer::setupIndices()
 {
 	if (m_uCapacity == 0)
 		return;
-	for (unsigned int i = 0; i < m_uCapacity; ++i)
-	{
+	for (unsigned int i = 0; i < m_uCapacity; ++i){
 		m_pIndices[i * 6 + 0] = i * 4 + 0;
 		m_pIndices[i * 6 + 1] = i * 4 + 1;
 		m_pIndices[i * 6 + 2] = i * 4 + 2;

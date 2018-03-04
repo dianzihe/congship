@@ -59,6 +59,26 @@ using namespace std;
 #endif
 
 
+
+
+#define READ_BEGIN( file ) while(1) { ssize_t _len; int _pos=0;\
+	char* _buf = (char*)FileUtils::getInstance()->getFileData(FileUtils::getInstance()->fullPathForFilename(filePath), "rb", &_len);
+
+#define READ_END() if ( _buf ) delete[] _buf; break;}
+
+#define READ_INT( data ) data = *((int*)&_buf[_pos]); _pos+=4;
+#define READ_INT16( data ) data = *((short*)&_buf[_pos]); _pos+=2;
+
+#define READ_STRING( data ) while(1){\
+	int _size;\
+	char _data[1024];\
+	READ_INT(_size);\
+	memcpy(_data, &_buf[_pos], _size);\
+	_data[_size] = '\0';\
+	data = _data;\
+	_pos+=_size;\
+	break;\
+	}
 /*
 #define GET_SPEED_SUB(v1, v2, speed) (speed * fabsf(v1) / sqrtf(v1*v1 + v2*v2))
 
