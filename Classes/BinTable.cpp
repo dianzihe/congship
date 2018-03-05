@@ -19,7 +19,7 @@ static std::string _GetLocaledDataStrFileFullPath( Language type )
 
 bool _IsLanguageEnable_LocaledDataStr( Language type )
 {
-	return CCFileUtils::getInstance()->isFileExist(_GetLocaledDataStrFileFullPath(type).c_str());
+	return FileUtils::getInstance()->isFileExist(_GetLocaledDataStrFileFullPath(type).c_str());
 }
 
 bool _ReloadLocaledDataStr();

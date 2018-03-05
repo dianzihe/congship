@@ -46,6 +46,7 @@ ImageResource* ImageCenter::_LoadResource( const char * resName )
 	std::string fileName = filePath.substr(filePath.find_last_of("/") + 1, filePath.size());
 	ImageResource* retImageResource = NULL;
 	ResourceMap::iterator it  = mResourceMap.find(fileName);
+	log("ImageCenter::_LoadResource->%s", resName);
 	if(it == mResourceMap.end()){
 		ImageResource* pImageRes = new ImageResource(this);
 		if(pImageRes->Load(filePath.c_str(), resType)){
@@ -174,14 +175,24 @@ RenderBatchData* ImageCenter::GetRenderBatch( BatchID id )
 
 RenderBatchData* ImageCenter::GetRenderBatch( const char* name )
 {
+	CCLOG("-------------------------------------------------------------");
+	CCLOG("ImageCenter::GetRenderBatch->%s", name);
 	std::string picName = name;
 	picName = picName.substr( picName.find_last_of("/") + 1, picName.size() );
 	picName = picName.substr( 0, picName.find(".") );
-	RenderBatchNameMap::iterator it  = mRenderBatchNameMap.find(picName);
-	if(it != mRenderBatchNameMap.end())
-	{
+
+	//cocos2d::log("²âÊÔÖÐÎÄ!\n");
+	RenderBatchNameMap::iterator ite = mRenderBatchNameMap.begin();
+	for (; ite != mRenderBatchNameMap.end(); ++ite){
+		log("imagecenter -> %s", (std::string)ite->first.c_str());
+	}
+
+	RenderBatchNameMap::iterator it = mRenderBatchNameMap.find(picName);
+	if(it != mRenderBatchNameMap.end()) {
+		log("ImageCenter::GetRenderBatch return data %d->%s", mRenderBatchNameMap.size(), picName.c_str());
 		return it->second;
 	}
+	CCLOG("ImageCenter::GetRenderBatch return null->%s", picName.c_str());
 	return NULL;
 }
 
@@ -193,8 +204,8 @@ BatchID ImageCenter::GenerateNewBatchID()
 
 void ImageCenter::AddRenderBatch( RenderBatchData* pBatch )
 {
-	if(pBatch)
-	{
+	if(pBatch) {
+		CCLOG("ImageCenter::AddRenderBatch -> %s", pBatch->_TextureName.c_str());
 		mRenderBatchIDMap[pBatch->_BatchID] = pBatch;
 		mRenderBatchNameMap[pBatch->_TextureName] = pBatch;
 	}

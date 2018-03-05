@@ -2,6 +2,8 @@
 #include "GameScene.h"
 //#include "LoginBack.h"
 #include "UIManager.h"
+#include "UIBatchRenderer.h"
+
 CZhongGaoState::CZhongGaoState(void)
 : m_pMainUI(NULL)
 {

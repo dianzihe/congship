@@ -138,7 +138,7 @@ void UIDataGroup::Load(const char* fileName)
 	READ_INT(g.count);
 	READ_INT(g.align);
 
-	log("--UIDataGroup::Load----------%s\n",fileName);
+	log("--UIDataGroup::Load----------%s->%d\n",fileName, g.count);
 
 	g.data = new UIData[g.count];
 
@@ -746,42 +746,34 @@ void UI::setText(  std::string& strText, int fontSize,  Size &size, int alignTyp
 
 void UI::setImage( std::string& name, bool boundingWH)
 {
-	log("=====UI::setImage  %s", name.c_str());
+	CCLOG("=====UI::setImage 1: %s", name.c_str());
 	if ( name == "" ) return;
 
 	char buf[256];
-
 	sprintf( buf, "UI/LoadingRes/%s", name.c_str() );
-
+	CCLOG("=====UI::setImage 2: %s", buf);
 	//Texture2D::setUSED_ANTI_ALIAS( false );
 	m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
 
 	//Tyrzhao: Temp Use Two Different File
 	if(m_image.m_RenderBatch == NULL) {
 		sprintf( buf, "UI/LRes/%s", name.c_str() );
+		CCLOG("=====UI::setImage 3: %s", buf);
 		m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
 	}
 
 	int len = strlen(buf);
-
-	sprintf( &buf[len-4], "_down.png" );
-	 
+	sprintf( &buf[len - 4], "_down.png" );
 	m_image.m_downRenderBatch = ImageCenter::instance().GetRenderBatch( buf );
-
+	CCLOG("=====UI::setImage 4: %s", buf);
 	//Texture2D::setUSED_ANTI_ALIAS( true );
 
-	if ( m_image.m_RenderBatch != NULL ) {
-		//m_image.x1 = -1;
-		//m_image.y1 = -1;
-		//m_image.x2 = -1;
-		//m_image.y2 = -1;z
-
-		if(boundingWH) {
+	if (m_image.m_RenderBatch != NULL) {
+		if (boundingWH) {
 			m_width = m_image.m_RenderBatch->_SourceSizeX;
 			m_height = m_image.m_RenderBatch->_SourceSizeY;
 		}
 	}
-
 	// load rect9
 	{
 		sprintf( buf, "UI/%s", name.c_str() );
@@ -795,7 +787,7 @@ void UI::setImage( std::string& name, bool boundingWH)
 
 			ssize_t length;
 			unsigned char* pszBuffer = FileUtils::getInstance()->getFileData(buf, "rb", &length);
-
+			CCLOG("=====UI::setImage 5: %s", buf);
 			if ( length <= 0  || pszBuffer == NULL ){
 				r9data.isHave = false;
 				m_sRect9Datatable[buf] = r9data;
@@ -1016,22 +1008,21 @@ bool UI::isParentVisible()
 Point  UI::getRealPos()
 {
 	Point realPos = getPosition();
-#if 0
+
 	Node *pParent = getParent();
-	while( pParent != NULL )
-	{
+	while( pParent != NULL ) {
 		realPos.x += pParent->getPositionX();
 		realPos.y += pParent->getPositionY();
+		/*
 		UIScrollView *pView = dynamic_cast<UIScrollView*>(pParent);
-		if( pView )
-		{
+		if( pView ) {
 			Point pos = pView->getStartPos();
 			realPos.x += pos.x;
 			realPos.y += pos.y;
 		}
+		*/
 		pParent = pParent->getParent();
 	}
-#endif
 	return realPos;
 }
 

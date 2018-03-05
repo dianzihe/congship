@@ -501,47 +501,47 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 
 void UIBatchRenderer::flush()
 {
-	log("UIBatchRenderer::flush->1");
+	//log("UIBatchRenderer::flush->1");
 	if (m_uTotalQuads == 0)
 		return;
 
 	kmGLPushMatrix();
-	log("UIBatchRenderer::flush->2");
+	//log("UIBatchRenderer::flush->2");
 	Mat4 proj;
 	kmGLGetMatrix(KM_GL_PROJECTION, &proj);
 	
-	log("UIBatchRenderer::flush->3");
+	//log("UIBatchRenderer::flush->3");
 	m_pProgram->use();
 	//->setUniformLocationWithMatrix4fv(m_pProgram->getUniform[kCCUniformMVPMatrix], proj.m, 1);
 	//m_pProgram->
 	//m_pProgram->setUniformLocationwithMatrix4fv(m_pProgram->m_uUniforms[kCCUniformMVPMatrix], proj.mat, 1);
 	//m_pProgram->get
 	glEnable(GL_BLEND);
-	log("UIBatchRenderer::flush->4");
+	//log("UIBatchRenderer::flush->4");
  	ccGLBlendFunc(m_sBlendFunc.src, m_sBlendFunc.dst);				
 
 	ccGLBindTexture2D(m_pTexture->getName());
-	log("UIBatchRenderer::flush->5");
+	//log("UIBatchRenderer::flush->5");
 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
 
 #define kQuadSize sizeof(m_pQuads[0].bl)
 	long offset = (long)&m_pQuads[0];
-	log("UIBatchRenderer::flush->6");
+	//log("UIBatchRenderer::flush->6");
 
 	// vertex
 	int diff = offsetof( V3F_C4B_T2F, vertices);
 	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*) (offset + diff));
-	log("UIBatchRenderer::flush->7");
+	//log("UIBatchRenderer::flush->7");
 	// texCoods
 	diff = offsetof( V3F_C4B_T2F, texCoords);
 	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
-	log("UIBatchRenderer::flush->8");
+	//log("UIBatchRenderer::flush->8");
 	// color
 	diff = offsetof( V3F_C4B_T2F, colors);
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
 
 	glDrawElements(GL_TRIANGLES, (GLsizei) m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*) (m_pIndices));
-	log("UIBatchRenderer::flush->9");
+	//log("UIBatchRenderer::flush->9");
 	CC_INCREMENT_GL_DRAWS(1);
 	
 	kmGLPopMatrix();

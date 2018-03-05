@@ -76,8 +76,7 @@ bool ImageResource::LoadBui( const char* filename )
 		short _OriginSizeX;
 		short _OriginSizeY;
 	};
-	for (int i = 0; i < frameSize; ++i)
-	{
+	for (int i = 0; i < frameSize; ++i) {
 		RenderBatchData* newBatch = new RenderBatchData;
 		int picLen;
 		char picName[256];
@@ -121,46 +120,36 @@ bool ImageResource::Load( const char * resName, ResourceType resType )
 
 	// Load Texture
     // Reading Full Texture First
-	if(resType == eResourceType_png_pvr)
-	{
+	if(resType == eResourceType_png_pvr) {
 #if defined _WIN32 || defined WIN32
 		sprintf(filename, "%s.png" ,resName );
 #else
 		sprintf(filename, "%s.pvr.ccz" ,resName );
 #endif
-	}
-	else if(resType == eResourceType_jpg)
-	{
+	} else if(resType == eResourceType_jpg) {
 		sprintf(filename, "%s.wen" ,resName );
 	}
+	log("ImageResource::Load -> %s", filename);
     Texture2D *newTex = TextureCache::getInstance()->addImage(filename);
-    if(newTex == NULL)
-    {
-        
+    if(newTex == NULL) {
+		log("ImageResource::Load is null");
         int texIdx = 0;
-        while(1)
-        {
-			if(resType == eResourceType_png_pvr)
-			{
+        while(1) {
+			if(resType == eResourceType_png_pvr) {
 #if defined _WIN32 | WIN32
 				sprintf(filename, "%s_%d.png", resName, texIdx++ );
 #else
 				sprintf(filename, "%s_%d.pvr.ccz", resName, texIdx++ );
 #endif
-			}
-			else if(resType == eResourceType_jpg)
-			{
+			} else if(resType == eResourceType_jpg) {
 				sprintf(filename, "%s_%d.wen", resName, texIdx++ );
 			}
             //CCTexture2D::setUSED_ANTI_ALIAS( false );
             Texture2D* newTex = TextureCache::getInstance()->addImage(filename);
             //CCTexture2D::setUSED_ANTI_ALIAS( true );
-            if(newTex)
-            {
+            if(newTex) {
                 mTextureContainer.push_back(newTex);
-            }
-            else
-            {
+            } else {
                 break;
             }
         }
@@ -169,13 +158,12 @@ bool ImageResource::Load( const char * resName, ResourceType resType )
     if( newTex == NULL && mTextureContainer.empty() )
         return false;
     
-    if(isLoadBui)
-    {
+    if(isLoadBui) {
+		log("ImageResource::Load loadBui");
 		int n = 0;
         RenderBatchMap::iterator it = mRenderBatchMap.begin();
         RenderBatchMap::iterator end = mRenderBatchMap.end();
-        while (it != end)
-        {
+        while (it != end) {
             RenderBatchData* pRenderBatchData = *it;
             if(pRenderBatchData){
 				if(newTex){
@@ -188,9 +176,8 @@ bool ImageResource::Load( const char * resName, ResourceType resType )
             ++it;
 			++n;
         }
-    }
-    else
-    {
+    } else {
+		log("ImageResource::Load load no bui");
         assert(mRenderBatchMap.empty());//应该没有元素
         RenderBatchData* pImageRes = new RenderBatchData;
         pImageRes->_BatchID = mHostImageCenter->GenerateNewBatchID();
