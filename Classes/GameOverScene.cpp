@@ -130,3 +130,174 @@ void GameOverScene::onBackItemCallback(Ref*)
 	Director::getInstance()->replaceScene(TransitionFade::create(2, scene));
 	*/
 }
+
+
+static unsigned short quadIndices[] = { 0, 1, 2, 3, 2, 1 };
+
+
+
+MultiSprite::MultiSprite() :
+Sprite(),
+_lightTexture(nullptr)
+{
+
+}
+
+MultiSprite * MultiSprite::create(std::string filename, std::string lightTexture)
+{
+	MultiSprite * sprite = new MultiSprite();
+	if (sprite && sprite->init(filename, lightTexture)) {
+		sprite->autorelease();
+		return sprite;
+	}
+
+	CC_SAFE_DELETE(sprite);
+	return nullptr;
+}
+
+bool MultiSprite::init(std::string baseFilename, std::string lightFilename)
+{
+	bool ret = Sprite::initWithFile(baseFilename);
+
+	const char fragmentShader[] =
+		"#ifdef GL_ES                                                   \n"
+		"precision lowp float;                                          \n"
+		"#endif                                                         \n"
+		"varying vec4 v_fragmentColor;                                  \n"
+		"varying vec2 v_texCoord;                                       \n"
+		"varying vec2 v_texCoord1;                                      \n"
+		"void main()                                                    \n"
+		"{                                                              \n"
+		"   vec4 baseColor;                                             \n"
+		"   baseColor = texture2D( CC_Texture0, v_texCoord )*v_fragmentColor;                               \n"
+		"   vec4 lightColor;                                            \n"
+		"   if  (v_texCoord1.x>1.0 || v_texCoord1.y>1.0 || v_texCoord1.y < 0.0 || v_texCoord1.x<0.0 )                                        \n"
+		"   {                                                           \n"
+		"       lightColor = vec4(0, 0, 0, 1);                          \n"
+		"   }                                                           \n"
+		"   else                                                        \n"
+		"   {                                                           \n"
+		"       lightColor = texture2D( CC_Texture1, v_texCoord1 );     \n"
+		"   }                                                           \n"
+		"   gl_FragColor = baseColor * (lightColor + 0.25);             \n"
+		"                                                               \n"
+		"}                                                              \n";
+
+	const char vectShader[] =
+		"attribute vec4 a_position;                                     \n"
+		"attribute vec2 a_texCoord;                                     \n"
+		"attribute vec2 a_texCoord1;                                    \n"
+		"attribute vec4 a_color;                                        \n"
+		"#ifdef GL_ES                                                   \n"
+		"varying lowp vec4 v_fragmentColor;                             \n"
+		"varying mediump vec2 v_texCoord;                               \n"
+		"varying mediump vec2 v_texCoord1;                              \n"
+		"#else                                                          \n"
+		"varying vec4 v_fragmentColor;                                  \n"
+		"varying vec2 v_texCoord;                                       \n"
+		"varying vec2 v_texCoord1;                                      \n"
+		"#endif                                                         \n"
+		"void main()                                                    \n"
+		"{                                                              \n"
+		"   gl_Position = CC_MVPMatrix * a_position;                    \n"
+		"   v_fragmentColor = a_color;                                  \n"
+		"   v_texCoord = a_texCoord;                                    \n"
+		"   v_texCoord1 = a_texCoord1;                                  \n"
+		"}                                                              \n";
+
+	GLProgram * program = GLProgram::createWithByteArrays(vectShader, fragmentShader);
+	setGLProgramState(GLProgramState::getOrCreateWithGLProgram(program));
+
+	_multiCommand.func = CC_CALLBACK_0(MultiSprite::renderMultiSprite, this);
+
+	setLightTexture(lightFilename);
+
+	setRectInBase(Rect(Vec2::ZERO, _texture->getContentSize()));
+
+	return ret;
+}
+
+void MultiSprite::setLightTexture(std::string filename)
+{
+	setLightTexture(Director::getInstance()->getTextureCache()->addImage(filename));
+}
+
+void MultiSprite::setLightTexture(cocos2d::Texture2D *texture)
+{
+	if (texture != _lightTexture) {
+		CC_SAFE_RELEASE(_lightTexture);
+		_lightTexture = texture;
+		CC_SAFE_RETAIN(texture);
+	}
+}
+
+void MultiSprite::draw(cocos2d::Renderer *renderer, const cocos2d::Mat4 &transform, uint32_t flags)
+{
+	_multiCommand.init(_globalZOrder, transform, flags);
+	renderer->addCommand(&_multiCommand);
+}
+
+void MultiSprite::setRectInBase(cocos2d::Rect rect)
+{
+	if (!_rectInBase.equals(rect)) {
+		_rectInBase = rect;
+
+		PolygonInfo baseInfo = _polyInfo;
+
+		Size baseContentSize = _texture->getContentSize();
+
+		//坐标确定，纹理坐标值越大，单张纹理（0到1）越小
+
+		float lightScaleX = _rectInBase.size.width / baseContentSize.width;
+		float lightScaleY = _rectInBase.size.height / baseContentSize.height;
+
+		float originX = -(_rectInBase.origin.x / baseContentSize.width / lightScaleX);
+		float originY = -((baseContentSize.height - _rectInBase.origin.y - _rectInBase.size.height) / baseContentSize.height / lightScaleY);
+
+		// 0, 0       0, 1       1, 0          1, 1
+		for (int i = 0; i<4; ++i) {
+			_verts[i].color = Color4F::WHITE;
+			_verts[i].vertices = baseInfo.triangles.verts[i].vertices;
+			_verts[i].texCoords = baseInfo.triangles.verts[i].texCoords;
+		}
+
+		_verts[0].texCoords1 = Tex2F(originX, originY);
+		_verts[1].texCoords1 = Tex2F(originX, 1 / lightScaleY + originY);
+		_verts[2].texCoords1 = Tex2F(1 / lightScaleX + originX, originY);
+		_verts[3].texCoords1 = Tex2F(1 / lightScaleX + originX, 1 / lightScaleY + originY);
+	}
+}
+
+void MultiSprite::renderMultiSprite()
+{
+	//load mv
+	_glProgramState->apply(_modelViewTransform);
+
+	float size = sizeof(V3F_C4F_T2F2);
+
+	// Load the vertex position
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT,
+		GL_FALSE, size, &_verts[0]);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT,
+		GL_FALSE, size, &(_verts[0].color));
+	// Load the texture coordinate
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT,
+		GL_FALSE, size, &(_verts[0].texCoords));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD1, 2, GL_FLOAT,
+		GL_FALSE, size, &(_verts[0].texCoords1));
+
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD1);
+
+	//bind texture
+	GL::bindTextureN(0, _texture->getName());
+	glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER0), 0);
+
+	GL::bindTextureN(1, _lightTexture->getName());
+	glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER1), 1);
+
+	//draw
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+}

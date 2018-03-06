@@ -32,4 +32,45 @@ public:
 	void onPushSceneTran(cocos2d::Ref* sender);
 	void onQuit(cocos2d::Ref* sender);
 };
+
+
+struct V3F_C4F_T2F2
+{
+	/// vertices (2F)
+	Vec3            vertices;
+
+	Color4F         color;
+	/// tex coords (2F)
+	Tex2F           texCoords;
+	Tex2F           texCoords1;
+};
+
+
+class MultiSprite :public Sprite
+{
+
+public:
+
+	MultiSprite();
+	~MultiSprite() {}
+
+	static MultiSprite * create(std::string baseFilename, std::string lightFilename);
+
+	bool init(std::string filename, std::string lightTexture);
+
+	void setLightTexture(std::string filename);
+	void setLightTexture(Texture2D * texture);
+
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	void setRectInBase(Rect rect);
+	Rect getRectInBase() { return _rectInBase; }
+
+protected:
+
+	void renderMultiSprite();
+	CustomCommand               _multiCommand;
+	Texture2D *                 _lightTexture;
+	Rect                        _rectInBase;
+	V3F_C4F_T2F2                _verts[4];
+};
 #endif

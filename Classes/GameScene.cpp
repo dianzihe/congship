@@ -42,15 +42,23 @@ bool GameScene::init()
 	m_actorManager->setMap(m_map);
 	addChild(m_map, GAME_LAYER_MAP);
 	//addChild(SceneTestLayer1::create());
-	m_pRunState = new CZhongGaoState();
+	
 	m_uiNode = Node::create();
 	addChild(m_uiNode, GAME_LAYER_UI);
 
+	/*
+	auto sprite = MultiSprite::create("gem_light.png", "guangquan_lan.png");
+	addChild(sprite);
+	sprite->setPosition(100, 100);
+	*/
+	//m_pRunState = new CZhongGaoState();
+	/*
 	if (m_pRunState){
 		//m_pRunState->autorelease();
 		addChild(m_pRunState);
 		m_pRunState->EnterState();
 	}
+	*/
 
 	return true;
 }
@@ -103,8 +111,8 @@ GameScene* GameScene::GetScene()
 }
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
 	log("gamescene draw");
-	if (m_pRunState)
-		m_pRunState->OnDraw();
+	//if (m_pRunState)
+	//	m_pRunState->OnDraw();
 }
 
 Node* GameScene::GetUI()
