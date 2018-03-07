@@ -51,6 +51,12 @@ bool GameScene::init()
 	addChild(sprite);
 	sprite->setPosition(100, 100);
 	*/
+
+	
+	auto sprite = DQOPENGLSprite::create("gem_light.png");
+	addChild(sprite);
+	sprite->setPosition(100, 100);
+
 	//m_pRunState = new CZhongGaoState();
 	/*
 	if (m_pRunState){

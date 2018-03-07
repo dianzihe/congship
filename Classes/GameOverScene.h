@@ -73,4 +73,34 @@ protected:
 	Rect                        _rectInBase;
 	V3F_C4F_T2F2                _verts[4];
 };
+
+
+class DQOPENGLSprite :public Sprite
+{
+public:
+	DQOPENGLSprite();
+	~DQOPENGLSprite() {}
+
+	static DQOPENGLSprite * create(std::string filename);
+
+	bool init(std::string filename);
+
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	void setRectInBase(Rect rect);
+	Rect getRectInBase() { return _rectInBase; }
+
+protected:
+
+	void renderMultiSprite();
+	CustomCommand               _multiCommand;
+	//Texture2D *                 _lightTexture;
+	Rect                        _rectInBase;
+	V3F_C4F_T2F2                _verts[4];
+	GLProgram*		m_pProgram;
+	BlendFunc        m_sBlendFunc;
+	V3F_C4B_T2F_Quad* m_pQuads;
+	GLushort*           m_pIndices;
+	unsigned int		m_uCapacity;
+	unsigned int		m_uTotalQuads;
+};
 #endif
