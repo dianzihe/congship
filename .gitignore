@@ -4,6 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # dq add
+Resources/
 cocos2d/
 *.lib
 *.dll
