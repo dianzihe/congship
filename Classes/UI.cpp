@@ -372,6 +372,38 @@ m_pCreateDragFunc( NULL )
 
 	m_isLine = false;
 	m_isTop = false;
+
+	//Sprite *_RenderSprite = new Sprite::create("");
+	auto _RenderSprite = Sprite::create("HelloWorld.png");
+	/*
+	Rect rectTex;
+	Rect rectVer;
+	rectTex.origin.x = u;
+	rectTex.origin.y = v;
+
+	rectTex.size.width = texW;
+	rectTex.size.height = texH;
+
+	rectVer.origin.x = x;
+	rectVer.origin.y = y;
+
+	rectVer.size.width = nW;
+	rectVer.size.height = nH;
+	*/
+	//_RenderSprite.initWithTexture(nRenderBatch, rectTex, false);
+	//_RenderSprite->create("HelloWorld.png");
+
+	//_RenderSprite.setColor(Color3B(color.r, color.g, color.b));
+
+	//_RenderSprite.setOpacity(color.a);
+
+	//_RenderSprite.updateBlendFunc();
+	//_RenderSprite.getBlendFunc
+	//_RenderSprite.setVertexRect(rectVer);
+	_RenderSprite->setVisible(true);
+	//GameScene::GetScene()->addChild(&_RenderSprite);
+	//_RenderSprite.visit();
+	this->addChild(_RenderSprite);
 }
 
 UI::~UI()
@@ -567,7 +599,7 @@ void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	log("UI::draw");
 	int offY = 0;
-	UIBatchRenderer::instance()->flush();
+	//UIBatchRenderer::instance()->flush();
 
 	if( m_bIsMasking ){
 		if( !m_MaskingBack ){
@@ -621,28 +653,32 @@ void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionTextureColor);
 		}
 
-		UIBatchRenderer::instance()->setShader(p);
+		//UIBatchRenderer::instance()->setShader(p);
 
 		//add line flag
 		if (!m_isReverseTex){
 			log("2");
 			if (m_rect9){
 				log("3");
-				DrawImage9(nRenderBatch, 0, offY, m_width, m_height, m_color, *m_rect9);
+				//DrawImage9(nRenderBatch, 0, offY, m_width, m_height, m_color, *m_rect9);
 			}else{
-				log("-3");
-				DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color);
+				log("-3->%s", nRenderBatch->_TextureName.c_str());
+				//DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color);
+				
+				//================================================================
+
+
 			}
 		}else{
 			log("-2");
 			//reverse texture.add by wcc.
-			DrawImage_Reverse(nRenderBatch, 0, offY, m_width, m_height, m_color );
+			//DrawImage_Reverse(nRenderBatch, 0, offY, m_width, m_height, m_color );
 		}
 		
 	}
 	
 	if( m_image.m_IconTexture != NULL ){
-		DrawImage(m_image.m_IconTexture, 0, offY, m_width, m_height, m_color );		
+		//DrawImage(m_image.m_IconTexture, 0, offY, m_width, m_height, m_color );		
 	}
 
 	

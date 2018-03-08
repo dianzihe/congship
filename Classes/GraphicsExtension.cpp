@@ -372,9 +372,9 @@ void RenderBatch( Texture2D *tex, int u, int v, int texW, int texH, int atlasWid
 
 	_RenderSprite.initWithTexture(tex, rectTex, false);
 
-	_RenderSprite.setColor(Color3B(color.r, color.g, color.b));
+	//_RenderSprite.setColor(Color3B(color.r, color.g, color.b));
 
-	_RenderSprite.setOpacity(color.a);
+	//_RenderSprite.setOpacity(color.a);
     
     //_RenderSprite.updateBlendFunc();
 	//_RenderSprite.getBlendFunc

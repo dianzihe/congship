@@ -572,13 +572,14 @@ void DQOPENGLSprite::renderMultiSprite()
 	glEnable(GL_BLEND);
 	ccGLBlendFunc(m_sBlendFunc.src, m_sBlendFunc.dst);
 
-	//ccGLBindTexture2D(m_pTexture->getName());
 	GL::bindTextureN(0, _texture->getName());
 	ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
 
+	
 #define kQuadSize sizeof(m_pQuads[0].bl)
 	long offset = (long)&m_pQuads[0];
 
+	/*
 	// vertex
 	int diff = offsetof(V3F_C4B_T2F, vertices);
 	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
@@ -588,8 +589,26 @@ void DQOPENGLSprite::renderMultiSprite()
 	// color
 	diff = offsetof(V3F_C4B_T2F, colors);
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+	*/
 
-	glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
+	
+	float size = sizeof(V3F_C4F_T2F2);
+
+	// Load the vertex position
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, size, &_verts[0]);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, size, &(_verts[0].color));
+	// Load the texture coordinate
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, size, &(_verts[0].texCoords));
+	//glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD1, 2, GL_FLOAT, GL_FALSE, size, &(_verts[0].texCoords1));
+
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD1);
+	
+
+	//glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
 	CC_INCREMENT_GL_DRAWS(1);
 
 	kmGLPopMatrix();

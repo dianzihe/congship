@@ -32,8 +32,9 @@ bool GameScene::init()
 
 	// create UI elements
 	AspriteManager::instance().initilize();
-	MonsterCfg::instance().init("monster");
+	//MonsterCfg::instance().init("monster");
 
+	/*
 	m_actorManager = new ActorManager();
 	log("GameScene---m_actorManager---->%x", m_actorManager);
 	m_map = new DQMap();
@@ -41,6 +42,7 @@ bool GameScene::init()
 	m_map->setActorManager(m_actorManager);
 	m_actorManager->setMap(m_map);
 	addChild(m_map, GAME_LAYER_MAP);
+	*/
 	//addChild(SceneTestLayer1::create());
 	
 	m_uiNode = Node::create();
@@ -52,19 +54,19 @@ bool GameScene::init()
 	sprite->setPosition(100, 100);
 	*/
 
-	
+	/*
 	auto sprite = DQOPENGLSprite::create("gem_light.png");
 	addChild(sprite);
 	sprite->setPosition(100, 100);
-
-	//m_pRunState = new CZhongGaoState();
-	/*
+	*/
+	m_pRunState = new CZhongGaoState();
+	
 	if (m_pRunState){
 		//m_pRunState->autorelease();
 		addChild(m_pRunState);
 		m_pRunState->EnterState();
 	}
-	*/
+	
 
 	return true;
 }
