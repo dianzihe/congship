@@ -46,13 +46,11 @@ void UIBatchRenderer::initilize()
 
 void UIBatchRenderer::unintilize()
 {
-	if (m_pQuads)
-	{
+	if (m_pQuads){
 		free(m_pQuads);
 		m_pQuads = NULL;
 	}
-	if (m_pIndices)
-	{
+	if (m_pIndices){
 		free(m_pIndices);
 		m_pIndices = NULL;
 	}
@@ -80,17 +78,12 @@ void UIBatchRenderer::setShader( CCGLProgram* program )
 
 void UIBatchRenderer::setTexture(CCTexture2D* pTexture)
 {
-	if (m_pTexture != pTexture)
-	{
-		if (m_pTexture)
-		{
-			if (!m_pTexture->hasPremultipliedAlpha())
-			{
+	if (m_pTexture != pTexture){
+		if (m_pTexture){
+			if (!m_pTexture->hasPremultipliedAlpha()){
 				m_sBlendFunc.src = GL_SRC_ALPHA;
 				m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-			}
-			else
-			{
+			}else{
 				m_sBlendFunc.src = CC_BLEND_SRC;
 				m_sBlendFunc.dst = CC_BLEND_DST;
 			}
@@ -112,6 +105,8 @@ void UIBatchRenderer::setTexture(CCTexture2D* pTexture)
 
 void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const ccColor4B& color)
 {
+#ifdef DQ_BATCH_RENDERER
+#else
 	if (m_uTotalQuads + 1 >= m_uCapacity){
 		unsigned int newCapacity = (m_uCapacity + 1) * 4 / 3;
 		resizeCapicity(newCapacity);
@@ -237,6 +232,7 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 	assert(m_uTotalQuads <= m_uCapacity);
 	
 	m_pQuads[m_uTotalQuads - 1] = quad;
+#endif
 }
 
 void UIBatchRenderer::drawImage_Reverse(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const ccColor4B& color)
@@ -501,6 +497,32 @@ void UIBatchRenderer::drawImage2(float u1, float v1, float u2, float v2, int tex
 
 void UIBatchRenderer::flush()
 {
+#ifdef DQ_BATCH_RENDERER
+	//load mv
+	_glProgramState->apply(_modelViewTransform);
+
+	float size = sizeof(V3F_C4F_T2F2);
+
+	// Load the vertex position
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, size, &_verts[0]);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, size, &(_verts[0].color));
+	// Load the texture coordinate
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, size, &(_verts[0].texCoords));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD1, 2, GL_FLOAT,	GL_FALSE, size, &(_verts[0].texCoords1));
+
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD1);
+
+	//bind texture
+	GL::bindTextureN(0, m_pTexture->getName());
+	glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER0), 0);
+
+	//draw
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+
+#else
 	//log("UIBatchRenderer::flush->1");
 	if (m_uTotalQuads == 0)
 		return;
@@ -547,6 +569,7 @@ void UIBatchRenderer::flush()
 	kmGLPopMatrix();
 
 	m_uTotalQuads = 0;
+#endif
 }
 
 void UIBatchRenderer::resizeCapicity(unsigned int capacity)

@@ -5,7 +5,9 @@
 
 using namespace cocos2d;
 
-//#define UI_BATCH_RENDERER   //定义这个宏来开启UI的批次渲染。
+#define UI_BATCH_RENDERER   //定义这个宏来开启UI的批次渲染。
+#define DQ_BATCH_RENDERER 1
+
 
 #define kCCShader_PositionTextureColor            "ShaderPositionTextureColor"
 #define kCCShader_PositionTextureColorAlphaTest    "ShaderPositionTextureColorAlphaTest"
@@ -14,6 +16,18 @@ using namespace cocos2d;
 #define kCCShader_PositionTexture_uColor        "ShaderPositionTexture_uColor"
 #define kCCShader_PositionTextureA8Color        "ShaderPositionTextureA8Color"
 #define kCCShader_Position_uColor                "ShaderPosition_uColor"
+
+
+struct V3F_C4F_T2F2
+{
+	/// vertices (2F)
+	Vec3            vertices;
+
+	Color4F         color;
+	/// tex coords (2F)
+	Tex2F           texCoords;
+};
+
 
 class UIBatchRenderer
 {

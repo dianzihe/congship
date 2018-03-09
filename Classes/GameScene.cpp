@@ -118,7 +118,6 @@ GameScene* GameScene::GetScene()
 	return inst;
 }
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
-	log("gamescene draw");
 	//if (m_pRunState)
 	//	m_pRunState->OnDraw();
 }

@@ -103,4 +103,9 @@ protected:
 	unsigned int		m_uCapacity;
 	unsigned int		m_uTotalQuads;
 };
+
+class DQNodeSprite :public Node
+{
+public:
+}
 #endif

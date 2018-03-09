@@ -185,7 +185,8 @@ class UI : public Node
 public:
 	UI();
 	virtual ~UI();
-
+	Sprite *_RenderSprite;
+	Texture2D *_Tex;
 public:
 	static UI*			node(void);
 

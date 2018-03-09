@@ -2,31 +2,7 @@
 #include "GameScene.h"
 #include "UIBatchRenderer.h"
 #include "UIManager.h"
-//#include "GameMainUI.h"
-//#include "ASprite.h"
-//#include "UIScrollView.h"
-//#include "UIDrawable.h"
-//#include "GraphicsExtension.h"
-//#include "UIText.h"
-//#include "UIScroll.h"
-//#include "UIEditNew.h"
 
-/*
-#include "UIAnimation.h"
-#include "MainUIMove.h"
-#include "../BaseModule/Guide/GuideModule.h"
-#include "CCEGLView.h"
-#include "UIBatchRenderer.h"
-#include "../../CocosDenshion/include/SimpleAudioEngine.h"
-#include "Map.h"
-#include "MainUIOpenCloseHandle.h"
-#include "../gameui/DirectionHandleUI.h"
-#include "../gameui/ShortPage.h"
-#include "../gameui/Shortcut.h"
-#include "Misc.h"
-#include "Camera.h"
-#include "UINoteBook.h"
-*/
 #include <string>
 using namespace std;
 
@@ -273,11 +249,6 @@ UI* UIDataGroup::createUIBase()
 	p->m_name = name;
 	p->m_align = align;
 
-//	int minX = 10000;
-//	int maxX = -10000;
-//	int minY = 10000;
-//	int maxY = -10000;
-
 	UIData* ui = data;
 	log("UIDataGroup::createUIBase-->%d", count);
 	for (int i = 0; i < count; i++ ){
@@ -373,37 +344,19 @@ m_pCreateDragFunc( NULL )
 	m_isLine = false;
 	m_isTop = false;
 
-	//Sprite *_RenderSprite = new Sprite::create("");
-	auto _RenderSprite = Sprite::create("HelloWorld.png");
-	/*
-	Rect rectTex;
-	Rect rectVer;
-	rectTex.origin.x = u;
-	rectTex.origin.y = v;
+	//Texture2D *newTex = TextureCache::getInstance()->addImage("Origin/zhonggao.png");
 
-	rectTex.size.width = texW;
-	rectTex.size.height = texH;
-
-	rectVer.origin.x = x;
-	rectVer.origin.y = y;
-
-	rectVer.size.width = nW;
-	rectVer.size.height = nH;
-	*/
-	//_RenderSprite.initWithTexture(nRenderBatch, rectTex, false);
-	//_RenderSprite->create("HelloWorld.png");
-
-	//_RenderSprite.setColor(Color3B(color.r, color.g, color.b));
-
-	//_RenderSprite.setOpacity(color.a);
-
-	//_RenderSprite.updateBlendFunc();
-	//_RenderSprite.getBlendFunc
-	//_RenderSprite.setVertexRect(rectVer);
+	//_RenderSprite = Sprite::createWithTexture(m_image.m_RenderBatch->_FullTexture);
+	_RenderSprite = Sprite::create();
+	//_RenderSprite = Sprite::createWithTexture(newTex);
+	//_RenderSprite = Sprite::create(m_image.m_RenderBatch->_TextureName.c_str());
+	//_RenderSprite->autorelease();
 	_RenderSprite->setVisible(true);
-	//GameScene::GetScene()->addChild(&_RenderSprite);
-	//_RenderSprite.visit();
 	this->addChild(_RenderSprite);
+
+	//Texture2D *newTex = TextureCache::getInstance()->addImage("Origin/zhonggao.png");
+	//_RenderSprite->initWithTexture(newTex);
+	log("new ui end");
 }
 
 UI::~UI()
@@ -424,6 +377,198 @@ UI::~UI()
 	m_text = "";
 }
 
+
+
+void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	int offY = 0;
+	//UIBatchRenderer::instance()->flush();
+
+	if (m_bIsMasking){
+		if (!m_MaskingBack){
+			m_MaskingBack = ImageCenter::instance().GetRenderBatch("UI/LRes/NPCCover2.png");
+		}
+		if (m_MaskingBack)
+			DrawImage(m_MaskingBack, -SCREEN_SIZE.width / 2, -SCREEN_SIZE.height / 2 - 100, SCREEN_SIZE.width, SCREEN_SIZE.height + 100);
+	}
+
+	RenderBatchData* nRenderBatch = m_image.m_RenderBatch;
+
+	if (m_type == UI_BUTTON || m_type == UI_BTN_feature){
+		if (m_down) {
+			if (m_image.m_downRenderBatch != NULL){
+				//don't use it if no need
+				if (nRenderBatch != NULL){
+					needReCalDownTex();
+				}
+
+				nRenderBatch = m_image.m_downRenderBatch;
+			}
+			else{
+				offY -= 2;
+			}
+
+			//if( m_pText ) m_pText->setVisible(false);
+			//if( m_pTextDown ) m_pTextDown->setVisible(true);
+		}
+		else{
+			//if( m_pText ) m_pText->setVisible(true);
+			//if( m_pTextDown ) m_pTextDown->setVisible(false);
+		}
+	}
+
+	Rect rect = this->getGlobalRect();
+
+	rect.origin = Point();
+	Point rt = rect.origin;
+	rt.x += rect.size.width;
+	rt.y += rect.size.height;
+
+	ccDrawRect(rect.origin, rt);
+
+
+	if (nRenderBatch != NULL) {
+		GLProgram* p = NULL;
+		if (m_onlyUseVertexColor){
+			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionColor);
+		} else{
+			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionTextureColor);
+		}
+
+		//UIBatchRenderer::instance()->setShader(p);
+
+		//add line flag
+		if (!m_isReverseTex){
+			if (m_rect9){
+				//DrawImage9(nRenderBatch, 0, offY, m_width, m_height, m_color, *m_rect9);
+			}
+			else{
+				//DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color);
+
+				//================================================================
+
+
+			}
+		}else{
+			//reverse texture.add by wcc.
+			//DrawImage_Reverse(nRenderBatch, 0, offY, m_width, m_height, m_color );
+		}
+
+	}
+
+	if (m_image.m_IconTexture != NULL){
+		//DrawImage(m_image.m_IconTexture, 0, offY, m_width, m_height, m_color );		
+	}
+
+
+	if (m_clipRect){
+#ifdef  UI_BATCH_RENDERER
+		UIBatchRenderer::instance()->flush();
+#endif
+	}
+
+
+#ifdef DEBUG_DRAW
+	Point pos = getPosition();
+	if (m_width > 0 && m_height >0)
+		FillRect(RectMake(0, 0, m_width, m_height), ccc4(255, 255, 255, 255), true);
+#endif
+}
+
+void UI::setImage(std::string& name, bool boundingWH)
+{
+	CCLOG("=====UI::setImage 1: %s", name.c_str());
+	_Tex = TextureCache::getInstance()->addImage("Origin/zhonggao.png");
+	//_RenderSprite = Sprite::createWithTexture(newTex);
+
+	_RenderSprite->initWithTexture(_Tex);
+	_RenderSprite->setVisible(true);
+	return;
+	if (name == "") return;
+
+	char buf[256];
+	sprintf(buf, "UI/LoadingRes/%s", name.c_str());
+	CCLOG("=====UI::setImage 2: %s", buf);
+	//Texture2D::setUSED_ANTI_ALIAS( false );
+	m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch(buf);
+
+	if (m_image.m_RenderBatch->_FullTexture == NULL)
+		log("m_image.m_RenderBatch->_FullTexture is null, %s", m_image.m_RenderBatch->_TextureName.c_str());
+	else
+		log("m_image.m_RenderBatch->_FullTexture return %s", m_image.m_RenderBatch->_TextureName.c_str());
+	//auto _RenderSprite = Sprite::create(buf);
+
+	//Tyrzhao: Temp Use Two Different File
+	if (m_image.m_RenderBatch == NULL) {
+		sprintf(buf, "UI/LRes/%s", name.c_str());
+		CCLOG("=====UI::setImage 3: %s", buf);
+		m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch(buf);
+	}
+
+	int len = strlen(buf);
+	sprintf(&buf[len - 4], "_down.png");
+	m_image.m_downRenderBatch = ImageCenter::instance().GetRenderBatch(buf);
+	CCLOG("=====UI::setImage 4: %s", buf);
+	//Texture2D::setUSED_ANTI_ALIAS( true );
+
+	if (m_image.m_RenderBatch != NULL) {
+		if (boundingWH) {
+			m_width = m_image.m_RenderBatch->_SourceSizeX;
+			m_height = m_image.m_RenderBatch->_SourceSizeY;
+		}
+	}
+	// load rect9
+	{
+		sprintf(buf, "UI/%s", name.c_str());
+
+		int len = strlen(buf);
+		strcpy(&buf[len - 3], "txt");
+
+		map<string, UIRect9Data>::iterator it = m_sRect9Datatable.find(buf);
+		if (it == m_sRect9Datatable.end())	{
+			UIRect9Data r9data;
+
+			ssize_t length;
+			unsigned char* pszBuffer = FileUtils::getInstance()->getFileData(buf, "rb", &length);
+			CCLOG("=====UI::setImage 5: %s", buf);
+			if (length <= 0 || pszBuffer == NULL){
+				r9data.isHave = false;
+				m_sRect9Datatable[buf] = r9data;
+				return;
+			}
+
+			int n[4] = { 0 };
+
+			int pos = 0;
+			for (int i = 0; i < (int)length; i++){
+				if ((pszBuffer[i] == ',')) {
+					pos++;
+
+				}
+				else if (pszBuffer[i] >= '0' && pszBuffer[i] <= '9') {
+					n[pos] = n[pos] * 10 + pszBuffer[i] - '0';
+				}
+			}
+			r9data.isHave = true;
+			r9data.rect = Rect(n[0], n[1], n[2] - n[0], n[3] - n[1]);
+
+			m_sRect9Datatable[buf] = r9data;
+			if (m_rect9)
+				*m_rect9 = Rect(n[0], n[1], n[2] - n[0], n[3] - n[1]);
+			else
+				m_rect9 = new Rect(n[0], n[1], n[2] - n[0], n[3] - n[1]);
+			CC_SAFE_DELETE_ARRAY(pszBuffer);
+		}
+		else {
+			if (it->second.isHave) {
+				if (m_rect9)
+					*m_rect9 = Rect(it->second.rect);
+				else
+					m_rect9 = new Rect(it->second.rect);
+			}
+		}
+	}
+}
 bool UI::init()
 {
 	return true;
@@ -595,272 +740,6 @@ void UI::setReverseTex(bool reverse)
 }
 
 
-void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-{
-	log("UI::draw");
-	int offY = 0;
-	//UIBatchRenderer::instance()->flush();
-
-	if( m_bIsMasking ){
-		if( !m_MaskingBack ){
-			m_MaskingBack = ImageCenter::instance().GetRenderBatch("UI/LRes/NPCCover2.png");
-		}
-		if(m_MaskingBack)
-			DrawImage(m_MaskingBack, -SCREEN_SIZE.width/2, -SCREEN_SIZE.height/2-100, SCREEN_SIZE.width, SCREEN_SIZE.height+100 );	
-	}
-
-	RenderBatchData* nRenderBatch = m_image.m_RenderBatch;
-
-	if ( m_type == UI_BUTTON || m_type == UI_BTN_feature){
-		if ( m_down ) {
-			if ( m_image.m_downRenderBatch != NULL ){
-				//don't use it if no need
-  				if (nRenderBatch != NULL){
- 					needReCalDownTex();
-  				}
-
-				nRenderBatch = m_image.m_downRenderBatch;
-			}else{
-				offY -= 2;
-			}
-
-			//if( m_pText ) m_pText->setVisible(false);
-			//if( m_pTextDown ) m_pTextDown->setVisible(true);
-		}else{
-			//if( m_pText ) m_pText->setVisible(true);
-			//if( m_pTextDown ) m_pTextDown->setVisible(false);
-		}
-	}
-
- 	Rect rect = this->getGlobalRect();
- 
- 	rect.origin = Point();
- 	Point rt = rect.origin;
- 	rt.x += rect.size.width;
- 	rt.y += rect.size.height;
- 
- 	ccDrawRect(rect.origin, rt);
-
-
-	if ( nRenderBatch != NULL ) {
-		log("UI::draw nRenderBatch not null");
-		GLProgram* p = NULL;
-		if (m_onlyUseVertexColor){
-			log("1");
-			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionColor);
-		}else{
-			log("-1");
-			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionTextureColor);
-		}
-
-		//UIBatchRenderer::instance()->setShader(p);
-
-		//add line flag
-		if (!m_isReverseTex){
-			log("2");
-			if (m_rect9){
-				log("3");
-				//DrawImage9(nRenderBatch, 0, offY, m_width, m_height, m_color, *m_rect9);
-			}else{
-				log("-3->%s", nRenderBatch->_TextureName.c_str());
-				//DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color);
-				
-				//================================================================
-
-
-			}
-		}else{
-			log("-2");
-			//reverse texture.add by wcc.
-			//DrawImage_Reverse(nRenderBatch, 0, offY, m_width, m_height, m_color );
-		}
-		
-	}
-	
-	if( m_image.m_IconTexture != NULL ){
-		//DrawImage(m_image.m_IconTexture, 0, offY, m_width, m_height, m_color );		
-	}
-
-	
-	if (m_clipRect){
-		log("4");
-#ifdef  UI_BATCH_RENDERER
-		UIBatchRenderer::instance()->flush();
-#endif
-	}
-
-
-#ifdef DEBUG_DRAW
-	Point pos = getPosition();
-	if( m_width > 0 && m_height >0 )
-		FillRect( RectMake( 0, 0, m_width, m_height), ccc4(255,255,255,255), true);
-#endif
-}
-
-
-void UI::setColor( Color4B color )
-{
-	m_color = color;
-
-	Ref* child;
-#if 0
-	CCARRAY_FOREACH(m_pChildren, child)
-	{
-		UI* p = dynamic_cast<UI*>(child);
-		if (p)
-		{
-			p->setColor(m_color);
-		}
-	}
-#endif
-}
-
-void UI::setText(  std::string& pszText )
-{
-	//setText( pszText, 24, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
-}
-
-void UI::setText(  std::string& strText, int fontSize )
-{
-	//setText( strText, fontSize, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
-}
-
-void UI::setText(  std::string& strText, int fontSize, int alignType )
-{
-	setText( strText, fontSize, Size(m_width, m_height), alignType );
-}
-void UI::setText(int number)
-{
-	char a[256];
-	sprintf(a,"%d",number);
-
-	//setText( a, 24, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
-}
-
-
-void UI::setText(  std::string& strText, int fontSize,  Size &size, int alignType, bool isAutoNewLine )
-{
-	setText(strText, fontSize, size, alignType, m_strTextFontName[m_eTextType].c_str(), isAutoNewLine );
-}
-
-void UI::setText(  std::string& strText, int fontSize,  Size &size, int alignType , string fontName, bool isAutoNewLine )
-{
-	/*
-	if( m_text == strText )
-		return;
-	m_text = strText;
-
-	if(m_pText)
-	{
-		m_pText->setText(m_text);
-	}
-	else
-	{
-		m_pText = UIText::initUITextWithString( strText, fontSize, size, alignType, fontName, isAutoNewLine);
-		addChild(m_pText);
-	}
-
-	if( m_type == UI_BUTTON )
-	{
-		char str[256];
-		sprintf( str, "<C=149,212,251>%s</C>", strText.c_str() );
-		if(m_pTextDown)
-		{
-			m_pTextDown->setText(str);
-			m_pTextDown->setVisible(false);
-		}
-		else
-		{
-			m_pTextDown = UIText::initUITextWithString( str, fontSize, size, alignType, fontName, isAutoNewLine);
-			m_pTextDown->setVisible(false);
-			addChild(m_pTextDown);
-		}
-	}
-	*/
-}
-
-
-void UI::setImage( std::string& name, bool boundingWH)
-{
-	CCLOG("=====UI::setImage 1: %s", name.c_str());
-	if ( name == "" ) return;
-
-	char buf[256];
-	sprintf( buf, "UI/LoadingRes/%s", name.c_str() );
-	CCLOG("=====UI::setImage 2: %s", buf);
-	//Texture2D::setUSED_ANTI_ALIAS( false );
-	m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
-
-	//Tyrzhao: Temp Use Two Different File
-	if(m_image.m_RenderBatch == NULL) {
-		sprintf( buf, "UI/LRes/%s", name.c_str() );
-		CCLOG("=====UI::setImage 3: %s", buf);
-		m_image.m_RenderBatch = ImageCenter::instance().GetRenderBatch( buf );
-	}
-
-	int len = strlen(buf);
-	sprintf( &buf[len - 4], "_down.png" );
-	m_image.m_downRenderBatch = ImageCenter::instance().GetRenderBatch( buf );
-	CCLOG("=====UI::setImage 4: %s", buf);
-	//Texture2D::setUSED_ANTI_ALIAS( true );
-
-	if (m_image.m_RenderBatch != NULL) {
-		if (boundingWH) {
-			m_width = m_image.m_RenderBatch->_SourceSizeX;
-			m_height = m_image.m_RenderBatch->_SourceSizeY;
-		}
-	}
-	// load rect9
-	{
-		sprintf( buf, "UI/%s", name.c_str() );
-
-		int len = strlen(buf);
-		strcpy( &buf[len-3], "txt" );
-
-		map<string, UIRect9Data>::iterator it = m_sRect9Datatable.find(buf);
-		if( it == m_sRect9Datatable.end() )	{
-			UIRect9Data r9data;
-
-			ssize_t length;
-			unsigned char* pszBuffer = FileUtils::getInstance()->getFileData(buf, "rb", &length);
-			CCLOG("=====UI::setImage 5: %s", buf);
-			if ( length <= 0  || pszBuffer == NULL ){
-				r9data.isHave = false;
-				m_sRect9Datatable[buf] = r9data;
-				return;
-			}
-
-
-			int n[4] = {0};
-
-			int pos = 0;
-			for (int i = 0; i < (int)length; i++){
-				if ( (pszBuffer[i] == ',' )) {
-					pos++;
-
-				}else if (pszBuffer[i]>='0' && pszBuffer[i]<='9') {
-					n[pos] = n[pos] * 10 + pszBuffer[i] - '0';
-				}
-			}
-			r9data.isHave = true;
-			r9data.rect = Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
-
-			m_sRect9Datatable[buf] = r9data;
-			if(m_rect9)
-				*m_rect9 = Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
-			else
-				m_rect9 = new Rect(n[0],n[1],n[2]-n[0],n[3]-n[1]);
-            CC_SAFE_DELETE_ARRAY(pszBuffer);
-		} else {
-			if( it->second.isHave ) {
-				if(m_rect9)
-					*m_rect9 = Rect(it->second.rect);
-				else
-					m_rect9 = new Rect(it->second.rect);
-			}
-		}
-	}
-}
 
 extern std::string _fixPathByLanguage( const char* resName );
 
@@ -1354,6 +1233,87 @@ void UI::removeAllChildrenWithCleanup( bool cleanup )
 	}
 }
 
+
+void UI::setColor(Color4B color)
+{
+	m_color = color;
+
+	Ref* child;
+#if 0
+	CCARRAY_FOREACH(m_pChildren, child)
+	{
+		UI* p = dynamic_cast<UI*>(child);
+		if (p)
+		{
+			p->setColor(m_color);
+		}
+	}
+#endif
+}
+
+void UI::setText(std::string& pszText)
+{
+	//setText( pszText, 24, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
+}
+
+void UI::setText(std::string& strText, int fontSize)
+{
+	//setText( strText, fontSize, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
+}
+
+void UI::setText(std::string& strText, int fontSize, int alignType)
+{
+	setText(strText, fontSize, Size(m_width, m_height), alignType);
+}
+void UI::setText(int number)
+{
+	char a[256];
+	sprintf(a, "%d", number);
+
+	//setText( a, 24, Size(m_width, m_height), tAlignCenterX | tAlignCenterY );
+}
+
+
+void UI::setText(std::string& strText, int fontSize, Size &size, int alignType, bool isAutoNewLine)
+{
+	setText(strText, fontSize, size, alignType, m_strTextFontName[m_eTextType].c_str(), isAutoNewLine);
+}
+
+void UI::setText(std::string& strText, int fontSize, Size &size, int alignType, string fontName, bool isAutoNewLine)
+{
+	/*
+	if( m_text == strText )
+	return;
+	m_text = strText;
+
+	if(m_pText)
+	{
+	m_pText->setText(m_text);
+	}
+	else
+	{
+	m_pText = UIText::initUITextWithString( strText, fontSize, size, alignType, fontName, isAutoNewLine);
+	addChild(m_pText);
+	}
+
+	if( m_type == UI_BUTTON )
+	{
+	char str[256];
+	sprintf( str, "<C=149,212,251>%s</C>", strText.c_str() );
+	if(m_pTextDown)
+	{
+	m_pTextDown->setText(str);
+	m_pTextDown->setVisible(false);
+	}
+	else
+	{
+	m_pTextDown = UIText::initUITextWithString( str, fontSize, size, alignType, fontName, isAutoNewLine);
+	m_pTextDown->setVisible(false);
+	addChild(m_pTextDown);
+	}
+	}
+	*/
+}
 /*
 void UIManager::RemoveTouchDelegate( CCTouchDelegate* pHandler )
 {
@@ -1430,6 +1390,32 @@ UIBatchRenderer::instance()->flush();
 myGLDisableScissorTest();
 }
 }
+*/
+
+//#include "GameMainUI.h"
+//#include "ASprite.h"
+//#include "UIScrollView.h"
+//#include "UIDrawable.h"
+//#include "GraphicsExtension.h"
+//#include "UIText.h"
+//#include "UIScroll.h"
+//#include "UIEditNew.h"
+
+/*
+#include "UIAnimation.h"
+#include "MainUIMove.h"
+#include "../BaseModule/Guide/GuideModule.h"
+#include "CCEGLView.h"
+#include "UIBatchRenderer.h"
+#include "../../CocosDenshion/include/SimpleAudioEngine.h"
+#include "Map.h"
+#include "MainUIOpenCloseHandle.h"
+#include "../gameui/DirectionHandleUI.h"
+#include "../gameui/ShortPage.h"
+#include "../gameui/Shortcut.h"
+#include "Misc.h"
+#include "Camera.h"
+#include "UINoteBook.h"
 */
 #ifdef USE_UI_DRAG
 
