@@ -6,7 +6,7 @@
 using namespace cocos2d;
 
 #define UI_BATCH_RENDERER   //定义这个宏来开启UI的批次渲染。
-#define DQ_BATCH_RENDERER 1
+//#define DQ_BATCH_RENDERER
 
 
 #define kCCShader_PositionTextureColor            "ShaderPositionTextureColor"
@@ -17,16 +17,6 @@ using namespace cocos2d;
 #define kCCShader_PositionTextureA8Color        "ShaderPositionTextureA8Color"
 #define kCCShader_Position_uColor                "ShaderPosition_uColor"
 
-
-struct V3F_C4F_T2F2
-{
-	/// vertices (2F)
-	Vec3            vertices;
-
-	Color4F         color;
-	/// tex coords (2F)
-	Tex2F           texCoords;
-};
 
 
 class UIBatchRenderer
@@ -46,11 +36,11 @@ public:
 
 	void setTexture(Texture2D* pTexture);
 	
-	void drawImage(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const ccColor4B& color);
+	void drawImage(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const Color4B& color);
 	
-	void drawImage_Reverse(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const ccColor4B& color);
+	void drawImage_Reverse(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const Color4B& color);
 
-	void drawImage2(float u1, float v1, float u2, float v2, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int mx1, int my1, int mx2, int my2, const ccColor4B& color);
+	void drawImage2(float u1, float v1, float u2, float v2, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int mx1, int my1, int mx2, int my2, const Color4B& color);
 
 	void flush();
 
@@ -70,4 +60,5 @@ private:
 	Texture2D*		m_pTexture;
 
 	BlendFunc        m_sBlendFunc;
+	//V3F_C4F_T2F2                _verts[4];
 };

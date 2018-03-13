@@ -387,6 +387,7 @@ void RenderBatch( Texture2D *tex, int u, int v, int texW, int texH, int atlasWid
 
 void DrawImage( RenderBatchData *pRenderBatch, int x, int y, int nW, int nH, const Color4B& color )
 {
+	log("extension DrawImage");
 #if defined _DEBUG | DEBUG
 	const char* texturName = pRenderBatch->_TextureName.c_str();
 #endif

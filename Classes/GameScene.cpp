@@ -59,6 +59,7 @@ bool GameScene::init()
 	addChild(sprite);
 	sprite->setPosition(100, 100);
 	*/
+
 	m_pRunState = new CZhongGaoState();
 	
 	if (m_pRunState){
@@ -67,6 +68,11 @@ bool GameScene::init()
 		m_pRunState->EnterState();
 	}
 	
+	/*
+	auto bbsprite = DQNodeSprite::create();
+	addChild(bbsprite);
+	bbsprite->setPosition(100, 100);
+	*/
 
 	return true;
 }
@@ -118,8 +124,8 @@ GameScene* GameScene::GetScene()
 	return inst;
 }
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
-	//if (m_pRunState)
-	//	m_pRunState->OnDraw();
+	if (m_pRunState)
+		m_pRunState->OnDraw();
 }
 
 Node* GameScene::GetUI()

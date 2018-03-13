@@ -347,12 +347,12 @@ m_pCreateDragFunc( NULL )
 	//Texture2D *newTex = TextureCache::getInstance()->addImage("Origin/zhonggao.png");
 
 	//_RenderSprite = Sprite::createWithTexture(m_image.m_RenderBatch->_FullTexture);
-	_RenderSprite = Sprite::create();
+	//_RenderSprite = Sprite::create();
 	//_RenderSprite = Sprite::createWithTexture(newTex);
 	//_RenderSprite = Sprite::create(m_image.m_RenderBatch->_TextureName.c_str());
 	//_RenderSprite->autorelease();
-	_RenderSprite->setVisible(true);
-	this->addChild(_RenderSprite);
+	//_RenderSprite->setVisible(true);
+	//this->addChild(_RenderSprite);
 
 	//Texture2D *newTex = TextureCache::getInstance()->addImage("Origin/zhonggao.png");
 	//_RenderSprite->initWithTexture(newTex);
@@ -381,6 +381,7 @@ UI::~UI()
 
 void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
+	log("UI::draw-----------transform------------");
 	int offY = 0;
 	//UIBatchRenderer::instance()->flush();
 
@@ -391,10 +392,12 @@ void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 		if (m_MaskingBack)
 			DrawImage(m_MaskingBack, -SCREEN_SIZE.width / 2, -SCREEN_SIZE.height / 2 - 100, SCREEN_SIZE.width, SCREEN_SIZE.height + 100);
 	}
+	log("UI::draw-----------transform------------01");
 
 	RenderBatchData* nRenderBatch = m_image.m_RenderBatch;
 
 	if (m_type == UI_BUTTON || m_type == UI_BTN_feature){
+		log("UI::draw-----------transform------------02");
 		if (m_down) {
 			if (m_image.m_downRenderBatch != NULL){
 				//don't use it if no need
@@ -426,8 +429,8 @@ void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 	ccDrawRect(rect.origin, rt);
 
-
 	if (nRenderBatch != NULL) {
+		log("UI::draw-----------transform------------1");
 		GLProgram* p = NULL;
 		if (m_onlyUseVertexColor){
 			p = ShaderCache::getInstance()->programForKey(kCCShader_PositionColor);
@@ -440,11 +443,11 @@ void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 		//add line flag
 		if (!m_isReverseTex){
 			if (m_rect9){
+				log("UI::draw-----------transform------------2");
 				//DrawImage9(nRenderBatch, 0, offY, m_width, m_height, m_color, *m_rect9);
-			}
-			else{
-				//DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color);
-
+			}else{
+				log("UI::draw-----------transform------------3");
+				DrawImage(nRenderBatch, 0, offY, m_width, m_height, m_color);
 				//================================================================
 
 
@@ -453,7 +456,6 @@ void UI::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 			//reverse texture.add by wcc.
 			//DrawImage_Reverse(nRenderBatch, 0, offY, m_width, m_height, m_color );
 		}
-
 	}
 
 	if (m_image.m_IconTexture != NULL){
@@ -481,9 +483,9 @@ void UI::setImage(std::string& name, bool boundingWH)
 	_Tex = TextureCache::getInstance()->addImage("Origin/zhonggao.png");
 	//_RenderSprite = Sprite::createWithTexture(newTex);
 
-	_RenderSprite->initWithTexture(_Tex);
-	_RenderSprite->setVisible(true);
-	return;
+	//_RenderSprite->initWithTexture(_Tex);
+	//_RenderSprite->setVisible(true);
+	//return;
 	if (name == "") return;
 
 	char buf[256];

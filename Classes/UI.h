@@ -201,7 +201,7 @@ public:
 
 	virtual void		update(float t);
 	//virtual void		draw();
-	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) ;
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	//virtual void		visit(void);override
 	//ÖØÐ´ÒÆ³ýchildº¯Êý
 	void					removeChild(UI* child, bool cleanup);				

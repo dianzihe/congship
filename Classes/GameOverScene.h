@@ -104,8 +104,19 @@ protected:
 	unsigned int		m_uTotalQuads;
 };
 
-class DQNodeSprite :public Node
+class DQNodeSprite : public Node
 {
+	TextureAtlas*        _textureAtlas;
 public:
-}
+	CREATE_FUNC(DQNodeSprite);
+
+	DQNodeSprite();
+	~DQNodeSprite();
+	virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+protected:
+	void onDraw(const Mat4& transform, uint32_t flags);
+protected:
+	CustomCommand _customCommand;
+};
+
 #endif

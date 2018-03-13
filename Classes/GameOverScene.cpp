@@ -616,3 +616,82 @@ void DQOPENGLSprite::renderMultiSprite()
 	m_uTotalQuads = 0;
 #endif
 }
+
+
+//------------------------------------------------------------------
+//
+// Atlas1
+//
+//------------------------------------------------------------------
+DQNodeSprite::DQNodeSprite()
+{
+	setGLProgram(GLProgramCache::getInstance()->getProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE));
+	_textureAtlas = TextureAtlas::create("gem_dark.png", 3); 
+	//_textureAtlas = Texture2D::create("gem_dark.png", 3);
+	
+	_textureAtlas->retain();
+
+	auto s = Director::getInstance()->getWinSize();
+
+	//
+	// Notice: u,v tex coordinates are inverted
+	//
+	V3F_C4B_T2F_Quad quads[] =
+	{
+		{
+			{ Vec3(0, 0, 0), Color4B(0, 0, 0, 0), Tex2F(0.0f, 1.0f), },    // bottom left
+			{ Vec3(53, 0, 0), Color4B(0, 0, 0, 0), Tex2F(1.0f, 1.0f), },    // bottom right
+			{ Vec3(0, 53, 0), Color4B(0, 0, 0, 0), Tex2F(0.0f, 0.0f), },    // top left
+			{ Vec3(53, 53, 0), Color4B(0, 0, 0, 0), Tex2F(1.0f, 0.0f), },    // top right
+		},
+
+		/*
+		{
+			{ Vec3(0,       0,        0), Color4B(0, 0, 255, 255), Tex2F(0.0f, 1.0f), },    // bottom left
+			{ Vec3(s.width, 0,        0), Color4B(0, 0, 255,   0), Tex2F(1.0f, 1.0f), },    // bottom right
+			{ Vec3(0,       s.height, 0), Color4B(0, 0, 255,   0), Tex2F(0.0f, 0.0f), },    // top left
+			{ Vec3(s.width, s.height, 0), Color4B(0, 0, 255, 255), Tex2F(1.0f, 0.0f), },    // top right
+		},
+		
+		{
+			{ Vec3(40, 40, 0), Color4B(255, 255, 255, 255), Tex2F(0.0f, 0.2f), },            // bottom left
+			{ Vec3(120, 80, 0), Color4B(255, 0, 0, 255), Tex2F(0.5f, 0.2f), },            // bottom right
+			{ Vec3(40, 160, 0), Color4B(255, 255, 255, 255), Tex2F(0.0f, 0.0f), },        // top left
+			{ Vec3(160, 160, 0), Color4B(0, 255, 0, 255), Tex2F(0.5f, 0.0f), },            // top right
+		},
+
+		{
+			{ Vec3(s.width / 2, 40, 0), Color4B(255, 0, 0, 255), Tex2F(0.0f, 1.0f), },        // bottom left
+			{ Vec3(s.width, 40, 0), Color4B(0, 255, 0, 255), Tex2F(1.0f, 1.0f), },        // bottom right
+			{ Vec3(s.width / 2 - 50, 200, 0), Color4B(0, 0, 255, 255), Tex2F(0.0f, 0.0f), },        // top left
+			{ Vec3(s.width, 100, 0), Color4B(255, 255, 0, 255), Tex2F(1.0f, 0.0f), },        // top right
+		},
+		*/
+	};
+
+
+	for (int i = 0; i<3; i++)
+	{
+		_textureAtlas->updateQuad(&quads[i], i);
+	}
+}
+
+DQNodeSprite::~DQNodeSprite()
+{
+	_textureAtlas->release();
+}
+
+void DQNodeSprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	_customCommand.init(_globalZOrder);
+	_customCommand.func = CC_CALLBACK_0(DQNodeSprite::onDraw, this, transform, flags);
+	renderer->addCommand(&_customCommand);
+}
+
+void DQNodeSprite::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	getGLProgram()->use();
+	getGLProgram()->setUniformsForBuiltins(transform);
+	_textureAtlas->drawQuads();
+}
+
