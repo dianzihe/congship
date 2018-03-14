@@ -74,6 +74,26 @@ bool GameScene::init()
 	bbsprite->setPosition(100, 100);
 	*/
 
+	MonsterCfg::instance().init("monster");
+
+	CMonster * pMonster = CMonster::node();
+	LookInfoMonster *monsterInfo = new LookInfoMonster();
+	monsterInfo->monster_data_id = 13;
+	monsterInfo->id = 0;
+	monsterInfo->move_target_x = 300;
+	monsterInfo->move_target_y = 600;
+	monsterInfo->move_speed = 2;
+	monsterInfo->x = 50;
+	monsterInfo->y = 100;
+	monsterInfo->lifePercent = 80;
+	monsterInfo->faction = 0;
+	monsterInfo->charState = 0;
+	monsterInfo->wildState = 0;
+	m_actorManager->AddActor(pMonster);
+
+	pMonster->onLookInfoMonster(monsterInfo);
+
+
 	return true;
 }
 GameScene::GameScene(void)
@@ -85,6 +105,8 @@ GameScene::GameScene(void)
 	//background->setPosition(Point(320, 480));
 	//m_uiNode->addChild(background);
 	//log("---->gamescene new %x", m_map);
+
+
 }
 GameScene::~GameScene(void){
 	log("=======>release gamescene");
@@ -124,6 +146,7 @@ GameScene* GameScene::GetScene()
 	return inst;
 }
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
+	UIBatchRenderer::instance()->flush();
 	if (m_pRunState)
 		m_pRunState->OnDraw();
 }

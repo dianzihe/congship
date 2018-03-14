@@ -6,7 +6,7 @@
 using namespace cocos2d;
 
 #define UI_BATCH_RENDERER   //定义这个宏来开启UI的批次渲染。
-//#define DQ_BATCH_RENDERER
+#define DQ_BATCH_RENDERER
 
 
 #define kCCShader_PositionTextureColor            "ShaderPositionTextureColor"

@@ -76,8 +76,9 @@ void UIBatchRenderer::setShader( CCGLProgram* program )
 }
 
 
-void UIBatchRenderer::setTexture(CCTexture2D* pTexture)
+void UIBatchRenderer::setTexture(Texture2D* pTexture)
 {
+	log("UIBatchRenderer::setTexture-->%s", pTexture->getPath().c_str());
 	if (m_pTexture != pTexture){
 		if (m_pTexture){
 			if (!m_pTexture->hasPremultipliedAlpha()){
@@ -93,6 +94,7 @@ void UIBatchRenderer::setTexture(CCTexture2D* pTexture)
 		
 		CC_SAFE_RELEASE(m_pTexture);
 		m_pTexture = pTexture;
+		log("UIBatchRenderer::setTexture-->%d", pTexture->getName());
 		CC_SAFE_RETAIN(m_pTexture);
 	}
 }
@@ -105,9 +107,15 @@ void UIBatchRenderer::setTexture(CCTexture2D* pTexture)
 
 void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int atlasWidth, int atlasHeight, int x, int y, int width, int height, const ccColor4B& color)
 {
+	if (m_uTotalQuads + 1 >= m_uCapacity){
+		unsigned int newCapacity = (m_uCapacity + 1) * 4 / 3;
+		resizeCapicity(newCapacity);
+	}
+
 	log("drawImage u=%d, v=%d, texWidth=%d, texHeight=%d, atlasWidth=%d, atlasHeight=%d, x=%d, y=%d, width=%d, height=%d", u, v, texWidth, texHeight, atlasWidth, atlasHeight, x, y, width, height);
 #ifdef DQ_BATCH_RENDERER
-	//setRectInBase(Rect(Vec2::ZERO, _texture->getContentSize()));
+	/*
+	setRectInBase(Rect(Vec2::ZERO, _texture->getContentSize()));
 	V3F_C4B_T2F_Quad quads[] =
 	{
 		{
@@ -117,6 +125,7 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 			{ Vec3(s.width, s.height, 0), Color4B(0, 0, 255, 255), Tex2F(1.0f, 0.0f), },    // top right
 		},
 	};
+	*/
 	V3F_C4B_T2F_Quad quad;
 
 	Rect rectVertices;
@@ -136,7 +145,7 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 	quad.br.vertices = vertex3(x2, y1, 0);
 	quad.tl.vertices = vertex3(x1, y2, 0);
 	quad.tr.vertices = vertex3(x2, y2, 0);
-
+	/*
 	quad.bl.vertices.x = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[0] + quad.bl.vertices.y * out.m[4] + quad.bl.vertices.z * out.m[8] + out.m[12]);
 	quad.bl.vertices.y = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[1] + quad.bl.vertices.y * out.m[5] + quad.bl.vertices.z * out.m[9] + out.m[13]);
 	quad.bl.vertices.z = RENDER_IN_SUBPIXEL(quad.bl.vertices.x * out.m[2] + quad.bl.vertices.y * out.m[6] + quad.bl.vertices.z * out.m[10] + out.m[14]);
@@ -152,10 +161,68 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 	quad.tr.vertices.x = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[0] + quad.tr.vertices.y * out.m[4] + quad.tr.vertices.z * out.m[8] + out.m[12]);
 	quad.tr.vertices.y = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[1] + quad.tr.vertices.y * out.m[5] + quad.tr.vertices.z * out.m[9] + out.m[13]);
 	quad.tr.vertices.z = RENDER_IN_SUBPIXEL(quad.tr.vertices.x * out.m[2] + quad.tr.vertices.y * out.m[6] + quad.tr.vertices.z * out.m[10] + out.m[14]);
+	*/
 
+	Rect rectTexture;
+	rectTexture.origin.x = (float)u;
+	rectTexture.origin.y = (float)v;
+	rectTexture.size.width = (float)texWidth;
+	rectTexture.size.height = (float)texHeight;
 
-		//坐标确定，纹理坐标值越大，单张纹理（0到1）越小
+	float left,	right, top,	bottom;
+#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+	left = (2 * rectTexture.origin.x + 1) / (2 * atlasWidth);
+	right = left + (rectTexture.size.width * 2 - 2) / (2 * atlasWidth);
+	top = (2 * rectTexture.origin.y + 1) / (2 * atlasHeight);
+	bottom = top + (rectTexture.size.height * 2 - 2) / (2 * atlasHeight);
+#else
+	left = rectTexture.origin.x / atlasWidth;
+	right = (rectTexture.origin.x + rectTexture.size.width) / atlasWidth;
+	top = rectTexture.origin.y / atlasHeight;
+	bottom = (rectTexture.origin.y + rectTexture.size.height) / atlasHeight;
+#endif
 
+	quad.bl.texCoords.u = left;
+	quad.bl.texCoords.v = bottom;
+	quad.br.texCoords.u = right;
+	quad.br.texCoords.v = bottom;
+	quad.tl.texCoords.u = left;
+	quad.tl.texCoords.v = top;
+	quad.tr.texCoords.u = right;
+	quad.tr.texCoords.v = top;
+
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = color;
+
+	quad.bl.colors.r = quad.bl.colors.r * color.a >> 8;
+	quad.bl.colors.g = quad.bl.colors.g * color.a >> 8;
+	quad.bl.colors.b = quad.bl.colors.b * color.a >> 8;
+	quad.bl.colors.a = color.a;
+
+	quad.br.colors.r = quad.br.colors.r * color.a >> 8;
+	quad.br.colors.g = quad.br.colors.g * color.a >> 8;
+	quad.br.colors.b = quad.br.colors.b * color.a >> 8;
+	quad.br.colors.a = color.a;
+
+	quad.tl.colors.r = quad.tl.colors.r * color.a >> 8;
+	quad.tl.colors.g = quad.tl.colors.g * color.a >> 8;
+	quad.tl.colors.b = quad.tl.colors.b * color.a >> 8;
+	quad.tl.colors.a = color.a;
+
+	quad.tr.colors.r = quad.tr.colors.r * color.a >> 8;
+	quad.tr.colors.g = quad.tr.colors.g * color.a >> 8;
+	quad.tr.colors.b = quad.tr.colors.b * color.a >> 8;
+	quad.tr.colors.a = color.a;
+
+	m_uTotalQuads++;
+	assert(m_uTotalQuads <= m_uCapacity);
+
+	m_pQuads[m_uTotalQuads - 1] = quad;
+
+	//坐标确定，纹理坐标值越大，单张纹理（0到1）越小
+	/*
 		float lightScaleX = width / texWidth;
 		float lightScaleY = height / texHeight;
 
@@ -168,7 +235,7 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 			_verts[i].vertices = baseInfo.triangles.verts[i].vertices;
 			_verts[i].texCoords = baseInfo.triangles.verts[i].texCoords;
 		}
-
+	*/
 #else
 	if (m_uTotalQuads + 1 >= m_uCapacity){
 		unsigned int newCapacity = (m_uCapacity + 1) * 4 / 3;
@@ -300,18 +367,33 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 
 void UIBatchRenderer::flush()
 {
+	log("UIBatchRenderer::flush->m_uTotalQuads=%d, m_uCapacity=%d", m_uTotalQuads, m_uCapacity);
+	if (m_uTotalQuads == 0)
+		return;
 #ifdef DQ_BATCH_RENDERER
 	//load mv
 	//_glProgramState->apply(_modelViewTransform);
 
-	float size = sizeof(V3F_C4F_T2F2);
-
+#if 0
 	// Load the vertex position
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, size, &_verts[0]);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, size, &(_verts[0].color));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION,  3, GL_FLOAT, GL_FALSE, size, &_verts[0]);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR,     4, GL_FLOAT, GL_FALSE, size, &(_verts[0].color));
 	// Load the texture coordinate
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, size, &(_verts[0].texCoords));
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD1, 2, GL_FLOAT, GL_FALSE, size, &(_verts[0].texCoords1));
+#else
+#define kQuadSize sizeof(m_pQuads[0].bl)
+	long offset = (long)&m_pQuads[0];
+
+	// vertex
+	int diff = offsetof(V3F_C4B_T2F, vertices);
+	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+	// texCoods
+	diff = offsetof(V3F_C4B_T2F, texCoords);
+	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+	// color
+	diff = offsetof(V3F_C4B_T2F, colors);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+#endif
 
 	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
 	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
@@ -320,10 +402,22 @@ void UIBatchRenderer::flush()
 
 	//bind texture
 	GL::bindTextureN(0, m_pTexture->getName());
-	glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER0), 0);
+	//glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER0), 0);
 
 	//draw
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
+
+
+	//ccGLBindTexture2D(m_pTexture->getName());
+	//log("UIBatchRenderer::flush->5");
+	//ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
+
+	CC_INCREMENT_GL_DRAWS(1);
+
+	//kmGLPopMatrix();
+
+	m_uTotalQuads = 0;
 
 #else
 	//log("UIBatchRenderer::flush->1");
