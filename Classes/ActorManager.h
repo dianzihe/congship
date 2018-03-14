@@ -26,6 +26,25 @@ using namespace cocos2d;
 class ActorManager /*: public OneEventObject*/
 {
 public:
+	ActorID							m_clientActorID;
+
+	//CHero*							m_hero;
+	//Click*							m_click;
+	//Pick*							m_pick;
+	//AOEpick*						m_aoe;
+	//LevelUp* m_level;
+	//int Deltag[];
+	std::map< ActorID, Actor* >		m_mapActors;
+	MAP_ACTORS						m_mapTransportActors;
+
+	typedef list< ActorID >			LIST_ACTORIDS;
+	LIST_ACTORIDS					m_lstWaitToDelActorIDs;
+	long							timeNonce;
+
+	DQMap*							m_pMap;
+
+	int								m_nDispPlayerNum;
+public:
 	ActorManager(void);
 	~ActorManager(void);
 
@@ -39,6 +58,8 @@ public:
 	void cleartimeNonce(){timeNonce=0;}
 	Actor* FindActor(ActorID nActorID)
 	{
+		if (m_mapActors.empty())
+			return NULL;
 		MAP_ACTORS::iterator iterFind = m_mapActors.find( nActorID );
 		return iterFind != m_mapActors.end() ? (iterFind->second) : NULL;
 	}
@@ -84,23 +105,5 @@ public:
 
 	void	setOtherChaFractionName(bool showFraction);
 
-private:
-	ActorID							m_clientActorID;
 
-	//CHero*							m_hero;
-	//Click*							m_click;
-	//Pick*							m_pick;
-	//AOEpick*						m_aoe;
-	//LevelUp* m_level;
-	//int Deltag[];
-	MAP_ACTORS						m_mapActors;
-	MAP_ACTORS						m_mapTransportActors;
-
-	typedef list< ActorID >			LIST_ACTORIDS;
-	LIST_ACTORIDS					m_lstWaitToDelActorIDs;
-	long							timeNonce;
-
-	 DQMap*							m_pMap;
-
-	int								m_nDispPlayerNum;
 };

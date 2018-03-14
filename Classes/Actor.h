@@ -1,7 +1,7 @@
 #pragma once
 
 #include "base.h"
-//#include "PlayerDefine.h"
+#include "PlayerDefine.h"
 #include "ActorType.h"
 #include "cocos2d.h"
 #include "AnimDef.h"
@@ -137,7 +137,7 @@ public:
 
 	virtual void update(float dt);		
 	//virtual void draw(void);
-
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	virtual int GetZOrder() { return (int)(getPositionX() + (getPositionY())*(-10000));};
 
 	void ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
@@ -248,7 +248,7 @@ public:
 
 	bool				isStateFlag( unsigned int nFlag )const		{ return (m_nStateFlag & nFlag) != 0; }
 
-	//bool				isDead( void )const			{ return isStateFlag(Actor_State_Flag_Dead); }
+	bool				isDead( void )const			{ return isStateFlag(Actor_State_Flag_Dead); }
 
 	virtual void		addStateFlag( unsigned int nFlag );
 	virtual void		removeStateFlag( unsigned int nFlag );

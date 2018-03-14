@@ -349,48 +349,43 @@ void Actor::update(float dt)
 #endif
 }
 
-/*
-void Actor::draw(void)
-{
-	CCNode::draw();
 
-	Map* curMap = GameScene::GetScene()->GetCurMap();
+void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	Node::draw();
+	/*
+	DQMap* curMap = GameScene::GetScene()->GetCurMap();
 	if(curMap == NULL)
 		return;
-
-	if(m_SFXModule)
-	{
+	
+	if(m_SFXModule)	{
 		m_SFXModule->RenderBack();
 	}
-
-	if(!isDead())
-	{
-		if(curMap->IsTransparent((int)GetTileX(getPosition().x), (int)GetTileY(getPosition().y)))
-		{
+	
+	if(!isDead()){
+		if(curMap->IsTransparent((int)GetTileX(getPosition().x), (int)GetTileY(getPosition().y))) {
 			m_animation.m_opacity = 150;
-		}
-		else
-		{
+		} else {
 			m_animation.m_opacity = 255;
 		}
 	}
-	if(m_flyState == Object_FlyState_Flying)
-	{
+	*/
+	if(m_flyState == Object_FlyState_Flying) {
 		m_animation.setPosition(0, Object_Fly_Height);
 	}
 	m_animation.SetGray(!!mGrayInfo);
 	m_animation.visit();
 
-	if(m_SFXModule)
-	{
+	/*
+	if(m_SFXModule)	{
 		m_SFXModule->RenderFront();
 	}
-
+	*/
 	if (!m_bEnableTails)
 		return;
 	
 	kmGLPushMatrix();
-
+#if 0
 	// 渲染残影
 	{
 		// 保存动画参数
@@ -441,10 +436,10 @@ void Actor::draw(void)
 		m_animation.setFrame(frame);
 		m_animation.setAnimID(animID);
 	}
-
+#endif
 	kmGLPopMatrix();
 }
-*/
+
 void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex )
 {	
 	if(m_animID != animID || m_dir != dir)

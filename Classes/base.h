@@ -59,7 +59,14 @@ using namespace std;
 #endif
 
 
-
+struct ObjectBuff
+{
+	int buff_id;
+	short allValidTime;
+	unsigned char remainTriggerCount;
+};
+void WriteObjectBuff(char*& buf, ObjectBuff& value);
+void ReadObjectBuff(char*& buf, ObjectBuff& value);
 
 #define READ_BEGIN( file ) while(1) { ssize_t _len; int _pos=0;\
 	char* _buf = (char*)FileUtils::getInstance()->getFileData(FileUtils::getInstance()->fullPathForFilename(filePath), "rb", &_len);
@@ -68,6 +75,20 @@ using namespace std;
 
 #define READ_INT( data ) data = *((int*)&_buf[_pos]); _pos+=4;
 #define READ_INT16( data ) data = *((short*)&_buf[_pos]); _pos+=2;
+#define Readint(buf,data)	data =*((int*)(buf)); buf += 4;
+#define Readint64(buf,data) memcpy(&data,buf,8); buf += 8;
+#define Readint16(buf,data) data =*((short*)(buf)); buf += 2;
+#define Readint8(buf,data)	data =*((signed char*)(buf)); buf += 1;
+
+#define ReadArray(buf,t,data) {int len; Readint16(buf,len); data.resize(len); for(int i=0;i<len;i++){Read##t(buf,data[i]);}  }
+
+#define Writeint64(buf,data) memcpy(buf,&data,8); buf += 8;
+#define Writeint(buf,data)	memcpy(buf,&data,4); buf += 4;
+#define Writeint16(buf,data) memcpy(buf,&data,2); buf += 2;
+#define Writeint8(buf,data)	memcpy(buf,&data,1); buf += 1;
+#define Writestring(buf,data) { int len = data.length(); Writeint16(buf,len); memcpy(buf,data.c_str(),len); buf += len;}
+#define WriteArray(buf,t, data) { int len=data.size(); Writeint16(buf,len); for(int i=0;i<len;i++){ Write##t(buf,data[i]); }  }
+
 
 #define READ_STRING( data ) while(1){\
 	int _size;\

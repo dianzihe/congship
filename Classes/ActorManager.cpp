@@ -1,29 +1,7 @@
 #include "ActorManager.h"
-//#include "GameScene.h"
 #include "Monster.h"
 #include "ASprite.h"
 #include "Actor.h"
-//#include "Hero.h"
-//#include "Player.h"
-//#include "effect.h"
-//#include "map.h"
-//#include "Target.h"
-//#include "../BaseModule/Combat/CombatModule.h"
-//#include "../BaseModule/Navigation/NavigationModule.h"
-//#include "../BaseModule/Motion/RoutingModule.h"
-//#include "Npc.h"
-/*
-#include "Object.h"
-#include "platform.h"
-#include "Routing.h"
-#include "SystemSetUI.h"
-#include "MessageTips.h"
-#include "Text.h"
-#include "TextDef.h"
-#include "Pet.h"
-#include "GameHangUp.h"
-#include "TargetList.h"
-*/
 
 //extern void OnBtnStopHangUp(UI *ui, void *data);
 ActorManager::ActorManager(void)
@@ -42,6 +20,8 @@ ActorManager::ActorManager(void)
 	ActorID TypeID = 0xff;
 	timeNonce=0;
 
+	std::map< ActorID, Actor* >		zzzzz;
+	log("zzzzz->%d", zzzzz.size());
 	m_clientActorID = (ServerID << 55) | ( TypeID << 51 ) | Index;
 }
 

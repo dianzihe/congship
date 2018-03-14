@@ -149,23 +149,23 @@ void Charactor::update(float dt)
 	m_pStateMachine->updateMachine(dt);
 	*/
 }
-/*
-void Charactor::draw(void)
-{
-	Actor::draw();
 
+void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	Actor::draw(renderer, transform, flags);
+
+	/*
 	//选中的怪物与玩家攻击的怪物显示血条
-	if( Target::instance().getTargetID() == getActorID()||(m_percentage_Life<1.0 && Target::instance().isInTargetList(getActorID())) && !m_bTianTiFight)
-	{
+	if( Target::instance().getTargetID() == getActorID()||(m_percentage_Life<1.0 && Target::instance().isInTargetList(getActorID())) && !m_bTianTiFight)	{
 		DrawHP();
 		//checkCanBeenAttackByHero_DrawName();
 	}
-	if (m_bTianTiFight && getActorType() != ACTORTYPE_HERO)
-	{
+	if (m_bTianTiFight && getActorType() != ACTORTYPE_HERO)	{
 		DrawHP();
 	}
+	*/
 }
-*/
+
 void Charactor::checkCanBeenAttackByHero_DrawName()
 {
 	/*

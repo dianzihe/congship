@@ -34,7 +34,6 @@ bool GameScene::init()
 	AspriteManager::instance().initilize();
 	//MonsterCfg::instance().init("monster");
 
-	/*
 	m_actorManager = new ActorManager();
 	log("GameScene---m_actorManager---->%x", m_actorManager);
 	m_map = new DQMap();
@@ -42,7 +41,7 @@ bool GameScene::init()
 	m_map->setActorManager(m_actorManager);
 	m_actorManager->setMap(m_map);
 	addChild(m_map, GAME_LAYER_MAP);
-	*/
+	
 	//addChild(SceneTestLayer1::create());
 	
 	m_uiNode = Node::create();
@@ -158,7 +157,6 @@ Node* GameScene::GetUI()
 
 void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 {
-	/*
 	Readint64(buf, value.id);
 	Readint16(buf, value.move_target_x);
 	Readint16(buf, value.move_target_y);
@@ -169,9 +167,18 @@ void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 	Readint8(buf, value.lifePercent);
 	Readint8(buf, value.faction);
 	Readint(buf, value.charState);
-	ReadArray(buf, ObjectBuff, value.buffList);
+
+//#define ReadArray(buf,t,data) {int len; Readint16(buf,len); data.resize(len); for(int i=0;i<len;i++){Read##t(buf,data[i]);}  }
+	//ReadArray(buf, ObjectBuff, value.buffList);
+	{
+		int len; 
+		Readint16(buf, len); 
+		value.buffList.resize(len);
+		for (int i = 0; i<len; i++){ 
+			ReadObjectBuff(buf, value.buffList[i]);
+		}  
+	}
 	Readint8(buf, value.wildState);
-	*/
 }
 /*
 bool GameScene::initilize()

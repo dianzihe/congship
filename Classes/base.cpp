@@ -1,4 +1,18 @@
 #include "base.h"
+
+void WriteObjectBuff(char*& buf, ObjectBuff& value)
+{
+	Writeint(buf, value.buff_id);
+	Writeint16(buf, value.allValidTime);
+	Writeint8(buf, value.remainTriggerCount);
+}
+void ReadObjectBuff(char*& buf, ObjectBuff& value)
+{
+	Readint(buf, value.buff_id);
+	Readint16(buf, value.allValidTime);
+	Readint8(buf, value.remainTriggerCount);
+}
+
 Language GetCurrentLanguage()
 {
 	return _curLanguage;

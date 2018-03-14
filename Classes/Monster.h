@@ -16,12 +16,6 @@ enum
 	eMonsterWildAnimation_State_NotWilded,
 };
 
-struct ObjectBuff
-{
-	INT32 buff_id;
-	INT16 allValidTime;
-	INT8 remainTriggerCount;
-};
 struct LookInfoMonster
 {
 	INT32 id;
@@ -48,6 +42,7 @@ public:
 	static CMonster* node(void);
 
 	//virtual void draw();
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	virtual void update(float dt);
 
 	void updateDeathFly(float dt);

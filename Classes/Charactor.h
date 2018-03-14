@@ -93,6 +93,7 @@ public:
 public:
 	virtual void				update(float dt);
 	//virtual void				draw(void);
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	virtual void				DrawHP();
 
 	virtual	void				onDead( void );
