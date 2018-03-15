@@ -266,7 +266,11 @@ void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 		SAFE_DELETE(param3._Data._pStrData);
 	}
 }
-
+void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	log("----draw---DQAnimation::draw");
+	draw(0, 0, false);
+}
 void DQAnimation::draw(int x, int y, bool isGray)
 {
 	if ( m_sprite[eAnimPart_Body] == NULL ) return;

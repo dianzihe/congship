@@ -150,12 +150,12 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	}
 }
 
-
+/*
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	Charactor::draw(renderer, transform, flags);
 }
-
+*/
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {

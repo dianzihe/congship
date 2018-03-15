@@ -1,21 +1,7 @@
 #include "Actor.h"
 #include "GameScene.h"
-//#include "UIText.h"
-//#include "Hero.h"
 #include "ActorManager.h"
 #include "AnimDef.h"
-
-//#include "CharacterStateTransTable.h"
-//#include "GraphicsExtension.h"
-//#include "Map.h"
-//#include "Camera.h"
-//#include "../BaseModule/SFX/SFXModule.h"
-//#include "../BaseModule/AbnormalState/AbnormalStateModule.h"
-//#include "../BaseModule/DelayASpriteLoad/DelayASpriteLoadManager.h"
-//#include "BuffCfg.h"
-//#include "../gameui/TianTiSai/ChampionRankUI.h"
-//#include "SystemSetUI.h"
-//#include "../../cocos2dx/support/TransformUtils.h"
 
 #define TAIL_INTERVAL 0.02f
 const int TAIL_INIT_OPACITY = 150;
@@ -352,7 +338,8 @@ void Actor::update(float dt)
 
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	Node::draw();
+	log("---draw----actor::draw---->");
+	//Node::draw();
 	/*
 	DQMap* curMap = GameScene::GetScene()->GetCurMap();
 	if(curMap == NULL)
@@ -383,9 +370,9 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 	*/
 	if (!m_bEnableTails)
 		return;
-	
+#if 0	
 	kmGLPushMatrix();
-#if 0
+
 	// 渲染残影
 	{
 		// 保存动画参数
@@ -436,8 +423,9 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 		m_animation.setFrame(frame);
 		m_animation.setAnimID(animID);
 	}
-#endif
+
 	kmGLPopMatrix();
+#endif
 }
 
 void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex )

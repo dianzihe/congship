@@ -89,7 +89,7 @@ void CZhongGaoState::OnUpdate(float dt)
 
 void CZhongGaoState::OnDraw()
 {
-	log("zhonggao ondraw");
+	log("---draw--zhonggao ondraw");
 }
 
 void CZhongGaoState::OnDestroy()

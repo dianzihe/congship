@@ -119,4 +119,27 @@ protected:
 	CustomCommand _customCommand;
 };
 
+
+class DQTestFlushSprite : public Node
+{
+	TextureAtlas*        _textureAtlas;
+	Texture2D*           m_texture;
+	V3F_C4B_T2F_Quad*	m_pQuads;
+	unsigned int		m_uTotalQuads;
+	unsigned int		m_uCapacity;
+	GLushort*           m_pIndices;
+
+public:
+	CREATE_FUNC(DQTestFlushSprite);
+	void setupIndices();
+	void resizeCapicity(unsigned int capacity);
+	DQTestFlushSprite();
+	~DQTestFlushSprite();
+	virtual void draw(Renderer* renderer, const Mat4& transform, uint32_t flags) override;
+protected:
+	void onDraw(const Mat4& transform, uint32_t flags);
+protected:
+	CustomCommand _customCommand;
+};
+
 #endif

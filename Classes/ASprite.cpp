@@ -37,8 +37,8 @@ void arraycopy( char * src, int srcPos, char * dest, int destPos, int length )
 #endif
 
 void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray)
-{
-	/*
+{ 
+	log("-----------ASprite::DrawRegion");
 	if (!mIsTexAllLoaded)
 		return;
 
@@ -69,7 +69,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 	kmMat4 out;
 	kmMat4Multiply(&out, &modelView, &proj);
  
- 	Vertex4F bl, br, tl, tr;
+	Vec4 bl, br, tl, tr;
  	
  	float x1 = rect.origin.x;
  	float y1 = rect.origin.y;
@@ -78,10 +78,10 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 
 	float cameraFar = Director::getInstance()->getZEye();
  
- 	bl = vertex4(x1, y1, cameraFar, 1);
- 	br = vertex4(x2, y1, cameraFar, 1);
- 	tl = vertex4(x1, y2, cameraFar, 1);
- 	tr = vertex4(x2, y2, cameraFar, 1);
+ 	bl = Vec4(x1, y1, cameraFar, 1);
+	br = Vec4(x2, y1, cameraFar, 1);
+	tl = Vec4(x1, y2, cameraFar, 1);
+	tr = Vec4(x2, y2, cameraFar, 1);
 	
 	bl.x = RENDER_IN_SUBPIXEL(bl.x * out.m[0] + bl.y * out.m[4] + bl.z * out.m[8] + bl.w * out.m[12]);
 	bl.y = RENDER_IN_SUBPIXEL(bl.x * out.m[1] + bl.y * out.m[5] + bl.z * out.m[9] + bl.w * out.m[13]);
@@ -154,7 +154,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 		rect.size.width = (float)rectWidth;
 		rect.size.height = (float)rectHeight;
 
-		_RenderSprite.setVertexCoords(rect);
+		//_RenderSprite.setVertexCoords(rect);
 
 		if ( m_clipRect ){
 			//glEnable(GL_SCISSOR_TEST);
@@ -179,17 +179,16 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 
 
 		_RenderSprite.setOpacity(opacity);
-	    
-		_RenderSprite.updateBlendFunc();
+		_RenderSprite.visit();
+		//_RenderSprite.updateBlendFunc();
 
-		_RenderSprite.draw();
+		//_RenderSprite.draw();
 
 		if ( m_clipRect ){
 			//glDisable(GL_SCISSOR_TEST);
 			//myGLDisableScissorTest();
 		}
 	}
-	*/
 }
 
 ASprite::ASprite()
@@ -1063,15 +1062,14 @@ void ASprite::PaintFrame( int frame, int posX, int posY, int flags, int hx, int 
 	/*int nFModules = _frames_nfm[frame]&0xFF;*/
 	int nFModules = (_frames_nfm[frame]&0xFF);
 	
-	for (int fmodule = 0; fmodule < nFModules; fmodule++)
-	{
+	for (int fmodule = 0; fmodule < nFModules; fmodule++) {
 		PaintFModule( frame, fmodule, posX, posY, flags, hx, hy, opacity, isGray);
 	}
 }
 
 void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
-#if 0
+#if 1
 	int off = (_frames_fm_start[frame] + fmodule) << 2;
 	off += (_frames_fm_start[frame] + fmodule)<<2;
 	int fm_flags = (_fmodules[off+6]&0xFF) + ((_fmodules[off+7])<<8);
@@ -1114,8 +1112,8 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 
 void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
 {
-#if 0
-	//CCLog("---------------------name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
+#if 1
+	log("-----------ASprite::PaintModule----------name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
 	int texSizeX = _modules_w[module]&0xFFFF;
 	int texSizeY = _modules_h[module]&0xFFFF;
 	if (texSizeX <= 0 || texSizeY <= 0) return;

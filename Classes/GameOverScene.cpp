@@ -695,3 +695,225 @@ void DQNodeSprite::onDraw(const Mat4 &transform, uint32_t flags)
 	_textureAtlas->drawQuads();
 }
 
+
+
+DQTestFlushSprite::DQTestFlushSprite()
+{
+
+	m_uTotalQuads = 0;
+	m_uCapacity = 10;
+
+	unsigned int size = m_uCapacity * sizeof(ccV3F_C4B_T2F_Quad);
+	m_pQuads = (V3F_C4B_T2F_Quad*)malloc(size);
+	assert(m_pQuads);
+	memset(m_pQuads, 0, size);
+
+	size = m_uCapacity * 6 * sizeof(GLushort);
+	m_pIndices = (GLushort*)malloc(size);
+	assert(m_pIndices);
+	memset(m_pIndices, 0, size);
+
+	setupIndices();
+
+	setGLProgram(GLProgramCache::getInstance()->getProgram(GLProgram::SHADER_NAME_POSITION_TEXTURE));
+
+	m_texture = Director::getInstance()->getTextureCache()->addImage("gem_dark.png");
+	m_texture->retain();
+
+	auto s = Director::getInstance()->getWinSize();
+
+	//
+	// Notice: u,v tex coordinates are inverted
+	//
+	V3F_C4B_T2F_Quad quads[] =
+	{
+		{
+			{ Vec3(0, 0, 0), Color4B(0, 0, 0, 0), Tex2F(0.0f, 1.0f), },    // bottom left
+			{ Vec3(53, 0, 0), Color4B(0, 0, 0, 0), Tex2F(1.0f, 1.0f), },    // bottom right
+			{ Vec3(0, 53, 0), Color4B(0, 0, 0, 0), Tex2F(0.0f, 0.0f), },    // top left
+			{ Vec3(53, 53, 0), Color4B(0, 0, 0, 0), Tex2F(1.0f, 0.0f), },    // top right
+		},
+	};
+
+
+
+	if (m_uTotalQuads + 1 >= m_uCapacity){
+		unsigned int newCapacity = (m_uCapacity + 1) * 4 / 3;
+		resizeCapicity(newCapacity);
+	}
+	int x = 0, y = 0, width = 53, height = 53, u = 0, v = 0, texWidth = 53, texHeight = 53, atlasWidth = 53, atlasHeight = 53;
+	V3F_C4B_T2F_Quad quad;
+
+	Rect rectVertices;
+	rectVertices.origin.x = (float)x;
+	rectVertices.origin.y = (float)y;
+	rectVertices.size.width = (float)width;
+	rectVertices.size.height = (float)height;
+
+	float x1 = rectVertices.origin.x;
+	float y1 = rectVertices.origin.y;
+	float x2 = x1 + rectVertices.size.width;
+	float y2 = y1 + rectVertices.size.height;
+
+	// update transform
+
+	quad.bl.vertices = vertex3(x1, y1, 0);
+	quad.br.vertices = vertex3(x2, y1, 0);
+	quad.tl.vertices = vertex3(x1, y2, 0);
+	quad.tr.vertices = vertex3(x2, y2, 0);
+
+	Rect rectTexture;
+	rectTexture.origin.x = (float)u;
+	rectTexture.origin.y = (float)v;
+	rectTexture.size.width = (float)texWidth;
+	rectTexture.size.height = (float)texHeight;
+
+	float left, right, top, bottom;
+#if CC_FIX_ARTIFACTS_BY_STRECHING_TEXEL
+	left = (2 * rectTexture.origin.x + 1) / (2 * atlasWidth);
+	right = left + (rectTexture.size.width * 2 - 2) / (2 * atlasWidth);
+	top = (2 * rectTexture.origin.y + 1) / (2 * atlasHeight);
+	bottom = top + (rectTexture.size.height * 2 - 2) / (2 * atlasHeight);
+#else
+	left = rectTexture.origin.x / atlasWidth;
+	right = (rectTexture.origin.x + rectTexture.size.width) / atlasWidth;
+	top = rectTexture.origin.y / atlasHeight;
+	bottom = (rectTexture.origin.y + rectTexture.size.height) / atlasHeight;
+#endif
+
+	quad.bl.texCoords.u = left;
+	quad.bl.texCoords.v = bottom;
+	quad.br.texCoords.u = right;
+	quad.br.texCoords.v = bottom;
+	quad.tl.texCoords.u = left;
+	quad.tl.texCoords.v = top;
+	quad.tr.texCoords.u = right;
+	quad.tr.texCoords.v = top;
+
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = Color4B::GREEN;
+
+	m_uTotalQuads++;
+	assert(m_uTotalQuads <= m_uCapacity);
+
+	m_pQuads[m_uTotalQuads - 1] = quad;
+}
+
+void DQTestFlushSprite::setupIndices()
+{
+	if (m_uCapacity == 0)
+		return;
+	for (unsigned int i = 0; i < m_uCapacity; ++i){
+		m_pIndices[i * 6 + 0] = i * 4 + 0;
+		m_pIndices[i * 6 + 1] = i * 4 + 1;
+		m_pIndices[i * 6 + 2] = i * 4 + 2;
+
+		m_pIndices[i * 6 + 3] = i * 4 + 3;
+		m_pIndices[i * 6 + 4] = i * 4 + 2;
+		m_pIndices[i * 6 + 5] = i * 4 + 1;
+	}
+}
+
+
+DQTestFlushSprite::~DQTestFlushSprite()
+{
+	_textureAtlas->release();
+}
+
+void DQTestFlushSprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	log("DQTestFlushSprite::draw");
+	if (m_uTotalQuads == 0)
+		return;
+
+#define kQuadSize sizeof(m_pQuads[0].bl)
+	long offset = (long)&m_pQuads[0];
+
+	// vertex
+	int diff = offsetof(V3F_C4B_T2F, vertices);
+	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+	// texCoods
+	diff = offsetof(V3F_C4B_T2F, texCoords);
+	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+	// color
+	diff = offsetof(V3F_C4B_T2F, colors);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD1);
+
+	//bind texture
+	GL::bindTextureN(0, m_texture->getName());
+	//glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER0), 0);
+
+	//draw
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+	glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
+
+
+	//ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
+
+	CC_INCREMENT_GL_DRAWS(1);
+
+	//kmGLPopMatrix();
+
+	m_uTotalQuads = 0;
+}
+
+void DQTestFlushSprite::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	getGLProgram()->use();
+	getGLProgram()->setUniformsForBuiltins(transform);
+	_textureAtlas->drawQuads();
+}
+
+
+void DQTestFlushSprite::resizeCapicity(unsigned int capacity)
+{
+	if (m_uCapacity == capacity)
+		return;
+
+	unsigned int oldCapacity = capacity;
+
+	m_uTotalQuads = MIN(m_uTotalQuads, capacity);
+	m_uCapacity = capacity;
+
+	V3F_C4B_T2F_Quad* tmpQuads = NULL;
+
+	if (!m_pQuads) {
+		tmpQuads = (V3F_C4B_T2F_Quad*)malloc(sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+		assert(tmpQuads);
+		memset(tmpQuads, 0, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+	}
+	else {
+		tmpQuads = (V3F_C4B_T2F_Quad*)realloc(m_pQuads, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+		assert(tmpQuads);
+		if (m_uCapacity > oldCapacity) {
+			memset(tmpQuads + oldCapacity, 0, sizeof(V3F_C4B_T2F_Quad) * (m_uCapacity - oldCapacity));
+		}
+	}
+
+	GLushort* tmpIndices = NULL;
+
+	if (!m_pIndices){
+		tmpIndices = (GLushort*)malloc(sizeof(GLushort) * 6 * m_uCapacity);
+		assert(tmpIndices);
+		memset(tmpIndices, 0, sizeof(GLushort) * 6 * m_uCapacity);
+	}
+	else{
+		tmpIndices = (GLushort*)realloc(m_pIndices, sizeof(GLushort) * 6 * m_uCapacity);
+		assert(tmpIndices);
+		if (m_uCapacity > oldCapacity){
+			memset(tmpIndices + oldCapacity, 0, sizeof(GLushort) * 6 * (m_uCapacity - oldCapacity));
+		}
+	}
+
+	m_pQuads = tmpQuads;
+	m_pIndices = tmpIndices;
+
+	setupIndices();
+}

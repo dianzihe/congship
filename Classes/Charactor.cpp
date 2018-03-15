@@ -5,28 +5,7 @@
 #include "CharDefine.h"
 #include "SkillCfg.h"
 //#include "UIText.h"
-/*
-#include "MyMathExtension.h"
-#include "effect.h"
-#include "GameState.h"
-#include "GameMainUI.h"
-#include "../BaseModule/Combat/CombatModule.h"
-#include "Target.h"
-#include "ColorCfg.h"
-#include "BuffCfg.h"
-#include "../BaseModule/AbnormalState/AbnormalStateModule.h"
-#include "../BaseModule/Motion/MotionManager.h"
-#include "CCEGLView.h"
-#include "../InputSystem/GameCMDSystem.h"
-#include "HeroPet.h"
-#include "Map.h"
-#include "Teamlogic.h"
 
-#include "SitDown.h"
-#include "GameHangUp.h"
-#include "TargetList.h"
-#include "ChampionSituation.h"
-*/
 bool	isPropertyShowRate( int type )
 {
 	switch( type )
@@ -152,6 +131,7 @@ void Charactor::update(float dt)
 
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
+	log("---draw---Charactor::draw---->");
 	Actor::draw(renderer, transform, flags);
 
 	/*
