@@ -142,4 +142,29 @@ protected:
 	CustomCommand _customCommand;
 };
 
+
+
+//
+// MySprite: Used by CameraTest1 and CameraTest2
+//
+class MySprite : public Sprite
+{
+public:
+	static MySprite* create(const std::string &spritefilename)
+	{
+		auto sprite = new (std::nothrow) MySprite;
+		sprite->initWithFile(spritefilename);
+		sprite->autorelease();
+
+		auto shaderState = GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR);
+		sprite->setGLProgramState(shaderState);
+		return sprite;
+	}
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	void onDraw(const Mat4 &transform, uint32_t flags);
+
+protected:
+	CustomCommand _customCommand;
+
+};
 #endif

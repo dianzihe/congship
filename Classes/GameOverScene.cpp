@@ -276,15 +276,11 @@ void MultiSprite::renderMultiSprite()
 	float size = sizeof(V3F_C4F_T2F2);
 
 	// Load the vertex position
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT,
-		GL_FALSE, size, &_verts[0]);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT,
-		GL_FALSE, size, &(_verts[0].color));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, size, &_verts[0]);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, size, &(_verts[0].color));
 	// Load the texture coordinate
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT,
-		GL_FALSE, size, &(_verts[0].texCoords));
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD1, 2, GL_FLOAT,
-		GL_FALSE, size, &(_verts[0].texCoords1));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, size, &(_verts[0].texCoords));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD1, 2, GL_FLOAT,	GL_FALSE, size, &(_verts[0].texCoords1));
 
 	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
 	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
@@ -735,8 +731,6 @@ DQTestFlushSprite::DQTestFlushSprite()
 		},
 	};
 
-
-
 	if (m_uTotalQuads + 1 >= m_uCapacity){
 		unsigned int newCapacity = (m_uCapacity + 1) * 4 / 3;
 		resizeCapicity(newCapacity);
@@ -794,6 +788,22 @@ DQTestFlushSprite::DQTestFlushSprite()
 		quad.br.colors =
 		quad.tl.colors =
 		quad.tr.colors = Color4B::GREEN;
+	
+	//reset to custome 
+	quad.bl.vertices = Vec3(0, 0, 0);
+	quad.br.vertices = Vec3(53, 0, 0);
+	quad.tl.vertices = Vec3(0, 53, 0);
+	quad.tr.vertices = Vec3(53, 53, 0);
+
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = Color4B(0, 0, 0, 0);
+
+	quad.bl.texCoords = Tex2F(0.0f, 1.0f);
+	quad.br.texCoords = Tex2F(1.0f, 1.0f);
+	quad.tl.texCoords = Tex2F(0.0f, 0.0f);
+	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
 
 	m_uTotalQuads++;
 	assert(m_uTotalQuads <= m_uCapacity);
@@ -824,10 +834,14 @@ DQTestFlushSprite::~DQTestFlushSprite()
 
 void DQTestFlushSprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("DQTestFlushSprite::draw");
-	if (m_uTotalQuads == 0)
-		return;
+	log("DQTestFlushSprite::draw m_uTotalQuads=%d", m_uTotalQuads);
+	//if (m_uTotalQuads == 0)
+	//	return;
 
+	//bind texture
+	GL::bindTextureN(0, m_texture->getName());
+
+#if 1
 #define kQuadSize sizeof(m_pQuads[0].bl)
 	long offset = (long)&m_pQuads[0];
 
@@ -841,23 +855,28 @@ void DQTestFlushSprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t
 	diff = offsetof(V3F_C4B_T2F, colors);
 	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
 
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
-	glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD1);
-
-	//bind texture
-	GL::bindTextureN(0, m_texture->getName());
-	//glUniform1i(_glProgramState->getGLProgram()->getUniformLocation(GLProgram::UNIFORM_NAME_SAMPLER0), 0);
-
+	//glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+	log("-----");
+#else
+#define kQuadSize sizeof(m_pQuads[0].bl)
+	long offset = (long)&m_pQuads[0];
+	// Load the vertex position
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, size, &m_pQuads[0]);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, size, &(m_pQuads[0].));
+	// Load the texture coordinate
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, size, &(m_pQuads[0].texCoords)););
 	//draw
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
-	glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
 
+#endif 
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_POSITION);
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_COLOR);
+	//glEnableVertexAttribArray(GLProgram::VERTEX_ATTRIB_TEX_COORD);
 
 	//ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex);
 
-	CC_INCREMENT_GL_DRAWS(1);
+	//CC_INCREMENT_GL_DRAWS(1);
 
 	//kmGLPopMatrix();
 
@@ -916,4 +935,46 @@ void DQTestFlushSprite::resizeCapicity(unsigned int capacity)
 	m_pIndices = tmpIndices;
 
 	setupIndices();
+}
+
+
+
+
+
+void MySprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	_customCommand.init(_globalZOrder, transform, flags);
+	_customCommand.func = CC_CALLBACK_0(MySprite::onDraw, this, transform, flags);
+	renderer->addCommand(&_customCommand);
+}
+
+void MySprite::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	getGLProgram()->use();
+	getGLProgram()->setUniformsForBuiltins(transform);
+
+	GL::blendFunc(_blendFunc.src, _blendFunc.dst);
+
+	GL::bindTexture2D(_texture->getName());
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
+
+#define kQuadSize sizeof(_quad.bl)
+	size_t offset = (size_t)&_quad;
+
+	// vertex
+	int diff = offsetof(V3F_C4B_T2F, vertices);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// texCoords
+	diff = offsetof(V3F_C4B_T2F, texCoords);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// color
+	diff = offsetof(V3F_C4B_T2F, colors);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	CHECK_GL_ERROR_DEBUG();
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 }

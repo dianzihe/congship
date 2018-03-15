@@ -367,7 +367,7 @@ void UIBatchRenderer::drawImage(int u, int v, int texWidth, int texHeight, int a
 
 void UIBatchRenderer::flush()
 {
-	log("UIBatchRenderer::flush->m_uTotalQuads=%d, m_uCapacity=%d", m_uTotalQuads, m_uCapacity);
+	//log("UIBatchRenderer::flush->m_uTotalQuads=%d, m_uCapacity=%d", m_uTotalQuads, m_uCapacity);
 	if (m_uTotalQuads == 0)
 		return;
 #ifdef DQ_BATCH_RENDERER
