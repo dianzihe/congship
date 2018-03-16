@@ -150,11 +150,14 @@ protected:
 class MySprite : public Sprite
 {
 public:
+	Texture2D*           m_texture;
 	static MySprite* create(const std::string &spritefilename)
 	{
 		auto sprite = new (std::nothrow) MySprite;
 		sprite->initWithFile(spritefilename);
 		sprite->autorelease();
+
+
 
 		auto shaderState = GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_TEXTURE_COLOR);
 		sprite->setGLProgramState(shaderState);

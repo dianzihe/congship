@@ -245,34 +245,27 @@ void CMonster::update( float dt )
 {
 	Charactor::update(dt);
 
-	/*
-	switch ( m_eWildAinmationState )
-	{
+	
+	switch ( m_eWildAinmationState ) {
 	case eMonsterWildAnimation_State_Enter:
-		if( m_fWildScale < m_fMaxWildScale )
-		{
+		if( m_fWildScale < m_fMaxWildScale ) {
 			m_fWildScale += MonsterWild_Scale_Speed*dt;
 			m_animation.setScale( m_fCfgScale*m_fWildScale );
-		}
-		else
-		{
+		} else {
 			ChangeWildAnimationState( eMonsterWildAnimation_State_Wilded );
 		}
 		break;
 
 	case eMonsterWildAnimation_State_Leave:
-		if( m_fWildScale > 1.0f )
-		{
+		if( m_fWildScale > 1.0f ) {
 			m_fWildScale -= MonsterWild_Scale_Speed*dt;
 			m_animation.setScale( m_fCfgScale*m_fWildScale );
-		}
-		else
-		{
+		} else {
 			ChangeWildAnimationState( eMonsterWildAnimation_State_NotWilded );
 		}
 		break;
 	}
-	*/
+	
 	updateDeathFly(dt);
 }
 
@@ -346,6 +339,7 @@ void CMonster::DelayASpriteLoadCallBack()
 {
 	Actor::DelayASpriteLoadCallBack();
 	// 处理金银岛
+	
 	/*
 	int mapID = GameScene::GetScene()->GetCurMap()->getMapID();
 	if (mapID ==45||mapID==48)
@@ -353,7 +347,7 @@ void CMonster::DelayASpriteLoadCallBack()
 		CCLabelBMFont *pName = dynamic_cast<CCLabelBMFont*>(getChildByTag(ACTORCHILD_NAME));
 		if(GetSprite() != NULL && GetSprite()->IsDataLoaded() == true && pName )
 		{
-			CCRect rect = GetSprite()->getRectSelect();
+			Rect rect = GetSprite()->getRectSelect();
 			pName->setPosition(ccp(0, rect.size.height + 20));
 		}
 	}
@@ -378,7 +372,7 @@ void	CMonster::ChangeWildState( int state )
 
 void	CMonster::ChangeWildAnimationState( int state )
 {
-	/*
+	
 	switch( state )
 	{
 	case eMonsterWildAnimation_State_Enter:
@@ -407,7 +401,7 @@ void	CMonster::ChangeWildAnimationState( int state )
 		RemoveWildEffect();
 		break;
 	}
-	*/
+	
 }
 
 

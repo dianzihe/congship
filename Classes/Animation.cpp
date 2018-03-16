@@ -53,8 +53,7 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 	if( p && p->IsTextureDelayLoad() && m_pHostEventHandler)
 	{
 		ASprite* pReplace = AspriteManager::instance().FindReplaceSpriteWhenMemoryLack(_SpriteInfo);
-		if(pReplace)
-		{
+		if(pReplace) {
 			pReplace->retain();
 			GrayPart gPart = eGrayPart_Body;
 			if(type == ACTORTYPE_MOUNT)
@@ -66,14 +65,10 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 			AspriteManager::instance().AddAnimationDelayLoad( this, p, type, gPart );
 			m_pHostEventHandler->setGray(gPart, true);
 			AddASprite(pReplace, type);
-		}
-		else
-		{
+		} else {
 			AddASprite(p, type);
 		}
-	}
-	else
-	{
+	} else {
 		AddASprite(p, type);
 	}
 }
@@ -148,24 +143,20 @@ void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 
 void DQAnimation::setAnim( int id, int flag, int loop, int animaLayerIndex )
 {
-    if(m_sprite[eAnimPart_Body] == NULL || id < 0)
-	{
+	log("======DQAnimation::setAnim ID:%d, flag:%d, loop:%d, animaLayerIndex:%d", id, flag, loop, animaLayerIndex);
+    if(m_sprite[eAnimPart_Body] == NULL || id < 0) {
 		return;
 	}
-	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false && m_pHostEventHandler ) 
-	{
+	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false && m_pHostEventHandler ) {
 		//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
 	}
-	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id+1) > m_sprite[eAnimPart_Body]->GetAnimNumber() )
-	{
+	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id+1) > m_sprite[eAnimPart_Body]->GetAnimNumber() ) {
 		return;
 	}
 
 	m_flipFlag = flag;
-	if ( loop == -1 )
-	{
-		if ( id == m_animID )
-		{
+	if ( loop == -1 ) {
+		if ( id == m_animID ) {
 			m_loop = loop;
 			m_frameTime = 0.0;
 			return;
@@ -213,22 +204,18 @@ void DQAnimation::update(float dt)
 
 		// clear frameTime
 		// where less frame , e.g. debug
-		if ( m_frameTime > 1.0 )
-		{
+		if ( m_frameTime > 1.0 ) {
 			m_frameTime = 0.0;
 		}
 
 		// max frame
-		if ( m_frame >= frameCount )
-		{
+		if ( m_frame >= frameCount ) {
 			// loop anim deal
-			if ( m_loop > 0 )
-			{
+			if ( m_loop > 0 ) {
 				m_loop--;
 
 				// set frame to 0 when end loop
-				if ( m_loop == 0 ) 
-				{
+				if ( m_loop == 0 ) {
 					m_frame = frameCount - 1;
 					return;
 				}
@@ -268,25 +255,24 @@ void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 }
 void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("----draw---DQAnimation::draw");
+	
 	draw(0, 0, false);
 }
 void DQAnimation::draw(int x, int y, bool isGray)
 {
+	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, ", mIsMutiAsprite, m_animID);
 	if ( m_sprite[eAnimPart_Body] == NULL ) return;
 	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false ) return;
 
-	if(m_animID < 0 || (m_animID+1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
+	if(m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
 		return;
 	
 	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID,m_frame);
 
-	if(mIsMutiAsprite)
-	{
+	if(mIsMutiAsprite) {
 		int mountHeight = 0;
 		bool isShowPet = true;				//小师妹出战，坐骑上才显示小师妹
-		if(m_pHostEventHandler)
-		{
+		if(m_pHostEventHandler) {
 #if 0
 			CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
 			if(pPlayer)
@@ -303,8 +289,8 @@ void DQAnimation::draw(int x, int y, bool isGray)
 			}
 #endif
 		}
-		for (int i = eAnimPart_Body; i < eAnimPart_Count; ++i)
-		{
+		for (int i = eAnimPart_Body; i < eAnimPart_Count; ++i) {
+			log("----draw---DQAnimation::draw---> part %d", i);
 #if 0
 			AnimPart curPart = PlayerLayerCfg::instance().GetAnimPartBySequence(
 				m_HostCamp,
@@ -360,12 +346,9 @@ void DQAnimation::draw(int x, int y, bool isGray)
 #endif
 		}
 
-	}
-	else
-	{
+	} else {
 		//如果是小师妹，根据主人性别与打坐类型，改变小师妹打坐方向
-		if(m_pHostEventHandler&&m_pHostEventHandler->getActorType() ==  ACTORTYPE_PET&&m_animID == ANIM_XSM_SIT2_LEFT)
-		{
+		if(m_pHostEventHandler&&m_pHostEventHandler->getActorType() ==  ACTORTYPE_PET&&m_animID == ANIM_XSM_SIT2_LEFT) {
 #if 0
 			CPet* pPet = dynamic_cast<CPet*>(m_pHostEventHandler);
 			if(pPet)

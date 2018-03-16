@@ -691,6 +691,52 @@ void DQNodeSprite::onDraw(const Mat4 &transform, uint32_t flags)
 	_textureAtlas->drawQuads();
 }
 
+void DQTestFlushSprite::resizeCapicity(unsigned int capacity)
+{
+	if (m_uCapacity == capacity)
+		return;
+
+	unsigned int oldCapacity = capacity;
+
+	m_uTotalQuads = MIN(m_uTotalQuads, capacity);
+	m_uCapacity = capacity;
+
+	V3F_C4B_T2F_Quad* tmpQuads = NULL;
+
+	if (!m_pQuads) {
+		tmpQuads = (V3F_C4B_T2F_Quad*)malloc(sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+		assert(tmpQuads);
+		memset(tmpQuads, 0, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+	}
+	else {
+		tmpQuads = (V3F_C4B_T2F_Quad*)realloc(m_pQuads, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
+		assert(tmpQuads);
+		if (m_uCapacity > oldCapacity) {
+			memset(tmpQuads + oldCapacity, 0, sizeof(V3F_C4B_T2F_Quad) * (m_uCapacity - oldCapacity));
+		}
+	}
+
+	GLushort* tmpIndices = NULL;
+
+	if (!m_pIndices){
+		tmpIndices = (GLushort*)malloc(sizeof(GLushort) * 6 * m_uCapacity);
+		assert(tmpIndices);
+		memset(tmpIndices, 0, sizeof(GLushort) * 6 * m_uCapacity);
+	}
+	else{
+		tmpIndices = (GLushort*)realloc(m_pIndices, sizeof(GLushort) * 6 * m_uCapacity);
+		assert(tmpIndices);
+		if (m_uCapacity > oldCapacity){
+			memset(tmpIndices + oldCapacity, 0, sizeof(GLushort) * 6 * (m_uCapacity - oldCapacity));
+		}
+	}
+
+	m_pQuads = tmpQuads;
+	m_pIndices = tmpIndices;
+
+	setupIndices();
+}
+
 
 
 DQTestFlushSprite::DQTestFlushSprite()
@@ -839,24 +885,58 @@ void DQTestFlushSprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t
 	//	return;
 
 	//bind texture
-	GL::bindTextureN(0, m_texture->getName());
+	getGLProgram()->use();
+	getGLProgram()->setUniformsForBuiltins(transform);
 
+	//GL::blendFunc(_blendFunc.src, _blendFunc.dst);
+
+	m_texture = Director::getInstance()->getTextureCache()->addImage("gem_fire.png");
+	m_texture->retain();
+
+	//GL::bindTexture2D(_texture->getName());
+	GL::bindTexture2D(m_texture->getName());
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 #if 1
-#define kQuadSize sizeof(m_pQuads[0].bl)
-	long offset = (long)&m_pQuads[0];
 
+	V3F_C4B_T2F_Quad quad;
+	//reset to custome 
+	quad.bl.vertices = Vec3(0, 0, 0);
+	quad.br.vertices = Vec3(53, 0, 0);
+	quad.tl.vertices = Vec3(0, 53, 0);
+	quad.tr.vertices = Vec3(53, 53, 0);
+
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = Color4B(255, 255, 255, 255);
+
+	quad.bl.texCoords = Tex2F(0.0f, 1.0f);
+	quad.br.texCoords = Tex2F(1.0f, 1.0f);
+	quad.tl.texCoords = Tex2F(0.0f, 0.0f);
+	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
+
+
+#define kQuadSize sizeof(quad.bl) 
+	size_t offset = (size_t)&quad;
+	
+	offset = (size_t)&quad;
 	// vertex
 	int diff = offsetof(V3F_C4B_T2F, vertices);
-	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
-	// texCoods
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// texCoords
 	diff = offsetof(V3F_C4B_T2F, texCoords);
-	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
 	// color
 	diff = offsetof(V3F_C4B_T2F, colors);
-	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
 
-	//glDrawElements(GL_TRIANGLES, (GLsizei)m_uTotalQuads * 6, GL_UNSIGNED_SHORT, (GLvoid*)(m_pIndices));
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+
+	CHECK_GL_ERROR_DEBUG();
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);	
 	log("-----");
 #else
 #define kQuadSize sizeof(m_pQuads[0].bl)
@@ -891,52 +971,6 @@ void DQTestFlushSprite::onDraw(const Mat4 &transform, uint32_t flags)
 }
 
 
-void DQTestFlushSprite::resizeCapicity(unsigned int capacity)
-{
-	if (m_uCapacity == capacity)
-		return;
-
-	unsigned int oldCapacity = capacity;
-
-	m_uTotalQuads = MIN(m_uTotalQuads, capacity);
-	m_uCapacity = capacity;
-
-	V3F_C4B_T2F_Quad* tmpQuads = NULL;
-
-	if (!m_pQuads) {
-		tmpQuads = (V3F_C4B_T2F_Quad*)malloc(sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
-		assert(tmpQuads);
-		memset(tmpQuads, 0, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
-	}
-	else {
-		tmpQuads = (V3F_C4B_T2F_Quad*)realloc(m_pQuads, sizeof(V3F_C4B_T2F_Quad) * m_uCapacity);
-		assert(tmpQuads);
-		if (m_uCapacity > oldCapacity) {
-			memset(tmpQuads + oldCapacity, 0, sizeof(V3F_C4B_T2F_Quad) * (m_uCapacity - oldCapacity));
-		}
-	}
-
-	GLushort* tmpIndices = NULL;
-
-	if (!m_pIndices){
-		tmpIndices = (GLushort*)malloc(sizeof(GLushort) * 6 * m_uCapacity);
-		assert(tmpIndices);
-		memset(tmpIndices, 0, sizeof(GLushort) * 6 * m_uCapacity);
-	}
-	else{
-		tmpIndices = (GLushort*)realloc(m_pIndices, sizeof(GLushort) * 6 * m_uCapacity);
-		assert(tmpIndices);
-		if (m_uCapacity > oldCapacity){
-			memset(tmpIndices + oldCapacity, 0, sizeof(GLushort) * 6 * (m_uCapacity - oldCapacity));
-		}
-	}
-
-	m_pQuads = tmpQuads;
-	m_pIndices = tmpIndices;
-
-	setupIndices();
-}
-
 
 
 
@@ -953,14 +987,54 @@ void MySprite::onDraw(const Mat4 &transform, uint32_t flags)
 	getGLProgram()->use();
 	getGLProgram()->setUniformsForBuiltins(transform);
 
-	GL::blendFunc(_blendFunc.src, _blendFunc.dst);
+	//GL::blendFunc(_blendFunc.src, _blendFunc.dst);
 
+	_texture = Director::getInstance()->getTextureCache()->addImage("gem_wood.png");
+	_texture->retain();
+
+	//GL::bindTexture2D(_texture->getName());
 	GL::bindTexture2D(_texture->getName());
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 
-#define kQuadSize sizeof(_quad.bl)
-	size_t offset = (size_t)&_quad;
+	V3F_C4B_T2F_Quad quad;
+	//reset to custome 
+	quad.bl.vertices = Vec3(0, 0, 0);
+	quad.br.vertices = Vec3(53, 0, 0);
+	quad.tl.vertices = Vec3(0, 53, 0);
+	quad.tr.vertices = Vec3(53, 53, 0);
 
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = Color4B(255, 255, 255, 255);
+
+	quad.bl.texCoords = Tex2F(0.0f, 1.0f);
+	quad.br.texCoords = Tex2F(1.0f, 1.0f);
+	quad.tl.texCoords = Tex2F(0.0f, 0.0f);
+	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
+
+
+#define kQuadSize sizeof(_quad.bl) 
+	size_t offset = (size_t)&_quad;
+	log("-----vertices-----");
+	log("bl [%d, %d, %d]", _quad.bl.vertices.x, _quad.bl.vertices.y, _quad.bl.vertices.z);
+	log("br [%d, %d, %d]", _quad.br.vertices.x, _quad.br.vertices.y, _quad.br.vertices.z);
+	log("tl [%d, %d, %d]", _quad.tl.vertices.x, _quad.tl.vertices.y, _quad.tl.vertices.z);
+	log("tr [%d, %d, %d]", _quad.tr.vertices.x, _quad.tr.vertices.y, _quad.tr.vertices.z);
+
+	log("-----texCoords-----");
+	log("bl [%d, %d]", _quad.bl.texCoords.u, _quad.bl.texCoords.v);
+	log("br [%d, %d]", _quad.br.texCoords.u, _quad.br.texCoords.v);
+	log("tl [%d, %d]", _quad.tl.texCoords.u, _quad.tl.texCoords.v);
+	log("tr [%d, %d]", _quad.tr.texCoords.u, _quad.tr.texCoords.v);
+
+	log("-----colors-----");
+	log("bl [%d, %d, %d, %d]", _quad.bl.colors.r, _quad.bl.colors.g, _quad.bl.colors.b, _quad.bl.colors.a);
+	log("br [%d, %d, %d, %d]", _quad.br.colors.r, _quad.br.colors.g, _quad.br.colors.b, _quad.br.colors.a);
+	log("tl [%d, %d, %d, %d]", _quad.tl.colors.r, _quad.tl.colors.g, _quad.tl.colors.b, _quad.tl.colors.a);
+	log("tr [%d, %d, %d, %d]", _quad.tr.colors.r, _quad.tr.colors.g, _quad.tr.colors.b, _quad.tr.colors.a);
+
+	offset = (size_t)&quad;
 	// vertex
 	int diff = offsetof(V3F_C4B_T2F, vertices);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
@@ -974,6 +1048,7 @@ void MySprite::onDraw(const Mat4 &transform, uint32_t flags)
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
 
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
 
 	CHECK_GL_ERROR_DEBUG();
 	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);

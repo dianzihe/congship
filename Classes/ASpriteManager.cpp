@@ -42,8 +42,10 @@ void AspriteManager::RemoveSprite(ASprite* pSprite)
 ASprite* AspriteManager::LoadSprite(SpriteInfo& nSpriteInfo, bool nIsMustLoad, bool isRecursiveCall)
 {
 	std::string spriteName = GetSpriteName(nSpriteInfo);
+	log("AspriteManager::LoadSprite-->%s", spriteName.c_str());
 	std::string spriteFile = GetSpritePath(nSpriteInfo._ActorType) + spriteName;
 	ASprite* sprite = GetSprite(spriteName);
+	log("AspriteManager::LoadSprite-->%s", spriteFile.c_str());
 	if ( sprite == NULL){
 		sprite = new ASprite();
 
@@ -79,7 +81,7 @@ bool AspriteManager::IsSpriteLoaded(SpriteInfo& nSpriteInfo)
 
 ASprite* AspriteManager::GetSprite( const std::string& nSpriteName )
 {
-	log("get sprint %s", nSpriteName.c_str());
+	log("======== GetSprite %s", nSpriteName.c_str());
 	SpriteContainer::iterator it = gSprites.find(nSpriteName);
 	if(it != gSprites.end()){
 		return it->second;

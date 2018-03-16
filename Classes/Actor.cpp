@@ -110,8 +110,8 @@ void Actor::RemoveShadow()
 
 void Actor::addAnimationSprite( int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad )
 {
-	//m_animation.SetHostEventHandler(this);
-	//m_animation.LoadASprite( id, type, sex, equiplevel, isMustLoad );
+	m_animation.SetHostEventHandler(this);
+	m_animation.LoadASprite( id, type, sex, equiplevel, isMustLoad );
 }
 /*
 Rect& Actor::getSelectRect()
@@ -778,7 +778,7 @@ void Actor::setGray( GrayPart gray, bool trueOrFalse )
 
 void Actor::DelayASpriteLoadCallBack()
 {
-	//m_animation.setAnim(m_animation.getAnim());
+	m_animation.setAnim(m_animation.getAnim());
 }
 
 void Actor::EnableTail(bool enable)

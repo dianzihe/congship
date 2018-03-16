@@ -69,15 +69,24 @@ bool GameScene::init()
 	}
 #endif
 
-#if 1
+#if 0
 	//test flush correct
 	auto bbsprite = DQTestFlushSprite::create();
 	addChild(bbsprite);
-	bbsprite->setPosition(100, 100);
-
+	//bbsprite->setPosition(100, 100);
 #endif
-	
+
 #if 0
+	auto s = Director::getInstance()->getWinSize();
+
+	auto _sprite1 = MySprite::create("gem_dark.png");
+	addChild(_sprite1);
+	_sprite1->setPosition(Vec2(1 * s.width / 4, s.height / 2));
+	_sprite1->setScale(0.5);
+#endif
+
+
+#if 1
 	//monster≤‚ ‘
 	MonsterCfg::instance().init("monster");
 

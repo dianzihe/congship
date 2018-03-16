@@ -275,7 +275,9 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 	sprintf(fileNameBuffer, "%s.plist", resName);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("test.plist");
-#if 0
+
+	log("ASprite::Load-->%s, actorType:%d", resName, actorType);
+#if 1
 	std::string plist_content = FileUtils::getInstance()->getStringFromFile(fileNameBuffer);
 
 	sprintf(fileNameBuffer, "%s.png", resName);
@@ -293,15 +295,14 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 	cache->addSpriteFramesWithFileContent(plist_content, texture);
 #endif
 	
-#if 0
+#if 1
 	bool ret = false;
 
 	mIsDataLoaded = false;
 
 	int imageIndex = 0;
 
-	char fileNameBuffer[256];
-	ssize_t len = 0;
+	len = 0;
 	sprintf(fileNameBuffer, "%s.bsprite", resName);
 	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
 		log("---file %s not find", fileNameBuffer);
@@ -733,6 +734,11 @@ void ASprite::onLoadData(Ref* obj)
 	mIsDataLoaded = true;
 
 	//DelayASpriteLoadManager::instance().DelayASpriteLoadedCallBack( this );
+	/*
+	Actor* pCallBack = GameScene::GetActorManager()->FindActor(*itCB);
+	if (pCallBack)
+		pCallBack->DelayASpriteLoadCallBack();
+	*/
 }
 
 void ASprite::onAsyncLoadedTexture(Texture2D* pTexture)
@@ -1026,10 +1032,12 @@ void ASprite::GetModuleRect(int * rc, int module, int posX, int posY, int flags)
 
 void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
+	log("-----ASprite:PaintAFrame anim:%d, aframe:%d, x:%d, y:%d, flag:%d, hx:%d, hy:%d, opacity:%d", anim, aframe, posX, posY, hx, hy, opacity);
 	if (!mIsTexAllLoaded || !mIsDataLoaded)
 		return;
 	if (GetAFrames(anim) <= aframe)
 		return;
+	log(".");
 	int off = (_anims_af_start[anim] + aframe) * 5;
 	int frame = _aframes[off] & 0xFFFF;
 
@@ -1069,6 +1077,7 @@ void ASprite::PaintFrame( int frame, int posX, int posY, int flags, int hx, int 
 
 void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
+	log("-----ASprite:PaintFModule");
 #if 1
 	int off = (_frames_fm_start[frame] + fmodule) << 2;
 	off += (_frames_fm_start[frame] + fmodule)<<2;
