@@ -20,12 +20,45 @@ enum AnimPart
 	eAnimPart_Count,
 };
 
+
+
 class Actor;
 class DQAnimation : public Node
 {
 public:
 	DQAnimation(void);
 	~DQAnimation(void);
+
+
+
+	/**
+	* @brief 获取输入串(如:bhead=”head1”)中的键名和键值
+	* @param KeyName [out] 键名
+	* @param Value        [out] 键值
+	*/
+	static bool getKeyAndValue(const char * pLine, string &KeyName, string &Value);
+
+	/**
+	*   @brief 把服务器存的装备描述组合列表转换为动画描述表
+	*   @param strList { bhead=”head1”, bface=”face1”, bbody=”body1”, weapon=”weapon1”}
+	*/
+	static map<string, string> TransToAnimationDesc(const vector<string> &strList);
+
+
+	/**
+	* @brief 获取一个简单的动画
+	*
+	*/
+	//static cwSngSprite *GetSampleAnimation(const string &iwconame, const string &animationName, float delay = 0.1);
+
+	static void addAnimationToCharater(const string &iwconame, const string &animationName, cwSngSprite *pChara, int animationId,
+		map<string, string> desc, float aniDelay = 0.2, bool filter = false);
+
+	//WAnimationManagerSng::addAnimationToCharater(iwco_name, "melee_attack1", lpGuai, MonsterAnimationType::DEF_MOVE, desc, 0.1);
+	/**
+	* @brief 根据数据表生成管理列表
+	*/
+	static void BuildIWcoManagerList();
 
 	void SetHostEventHandler( Actor* hostHandler );
 	void LoadASprite(int id, ACTORTYPE type = ACTORTYPE_ANIMATION, int sex = 0, int equipLevel = 1, bool isMustLoad = false);	//
@@ -61,10 +94,10 @@ public:
 
 	void SetCampAndSex( int camp, int sex ) { m_HostCamp = camp; m_HostSex = sex; } 
 	float GetBaseFrameTime( int animId );
-protected:
+
 	struct AnimMatcher
 	{
-		typedef int (*AnimPartMatchFunc)( int );
+		typedef int(*AnimPartMatchFunc)(int);
 		AnimMatcher()
 		{
 			_AnimPartMatchFunc[eAnimPart_Body] = NULL;
@@ -75,8 +108,10 @@ protected:
 		}
 		AnimPartMatchFunc _AnimPartMatchFunc[eAnimPart_Count];
 	};
+protected:
 private:
 	ASprite*	m_sprite[eAnimPart_Count];
+	Animation*  m_stdAnimationp[MonsterAnimationType::DEF_GUAI_ANIMATION_MAX];
 	static AnimMatcher _AnimMatcher;
 	mark_info   m_markInfo;
 	int			m_loop;

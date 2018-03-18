@@ -13,6 +13,37 @@ enum MonsterType
 	MonsterType_CopyMapBoss,//副本boss
 	MonsterType_FieldBoss,//野外boss
 };
+//动画状态
+enum MonsterAnimationType
+{
+	DEF_NORMAL = 0,      //一般待机
+	DEF_NORMAL_2,       //待机2
+	DEF_SUREWIN,           //胜利手式
+	DEF_ITEMSKILL,         //使用道具动画
+	DEF_MOVE,                //移动
+	DEF_SHOOT,
+
+	DEF_SHOOT_START, //开始射击动画
+	DEF_SHOOT_REPEAT,//重复射击动画
+	DEF_SHOOT_END,      //射击结束
+
+	DEF_SHOOT_BIG_START, //开始射击动画(大招)
+	DEF_SHOOT_BIG_REPEAT,//重复射击动画(大招)
+	DEF_SHOOT_BIG_END,      //射击结束(大招)
+	DEF_HURT,                 //受到伤害
+	DEF_FLY,                     //飞行
+	DEF_ANGRY,
+	DEF_TOGHOST,
+	DEF_GHOST,               //鬼魂
+	DEF_MELEE_1,    //进攻1
+	DEF_MELEE_2,    //进攻2
+	DEF_MELEE_3,    //进攻3 
+
+
+
+	DEF_GUAI_ANIMATION_MAX,
+
+};
 
 struct MonsterData
 {

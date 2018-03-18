@@ -42,24 +42,23 @@ void AspriteManager::RemoveSprite(ASprite* pSprite)
 ASprite* AspriteManager::LoadSprite(SpriteInfo& nSpriteInfo, bool nIsMustLoad, bool isRecursiveCall)
 {
 	std::string spriteName = GetSpriteName(nSpriteInfo);
-	log("AspriteManager::LoadSprite-->%s", spriteName.c_str());
 	std::string spriteFile = GetSpritePath(nSpriteInfo._ActorType) + spriteName;
 	ASprite* sprite = GetSprite(spriteName);
-	log("AspriteManager::LoadSprite-->%s", spriteFile.c_str());
+	log("AspriteManager::LoadSprite-->spriteName:%s,%s", spriteName.c_str(), spriteFile.c_str());
 	if ( sprite == NULL){
 		sprite = new ASprite();
 
 		if( sprite->Load(spriteFile.c_str(), nSpriteInfo._ActorType, nIsMustLoad | isMustLoad(nSpriteInfo._ActorType)) ){
 			sprite->setSpriteName(spriteName);
 			gSprites[spriteName] = sprite;
-		}else{
+		} else {
 			sprite->release();
 			sprite = NULL;
 
 			if(!isRecursiveCall) //·ÀµÝ¹éµ÷ÓÃ
 				sprite = FindReplaceSpriteWhenResourceMiss(nSpriteInfo);
 		}
-	}else{
+	} else {
 		if(nIsMustLoad)
 			sprite->ForceLoadTexture();
 		sprite->retain();
@@ -81,7 +80,7 @@ bool AspriteManager::IsSpriteLoaded(SpriteInfo& nSpriteInfo)
 
 ASprite* AspriteManager::GetSprite( const std::string& nSpriteName )
 {
-	log("======== GetSprite %s", nSpriteName.c_str());
+	//log("======== GetSprite %s", nSpriteName.c_str());
 	SpriteContainer::iterator it = gSprites.find(nSpriteName);
 	if(it != gSprites.end()){
 		return it->second;
@@ -111,12 +110,9 @@ std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
 {
 	const char* nameStart;
 	char name[256];
-	if(nSpriteInfo._ActorType == ACTORTYPE_ANIMATION)
-	{
+	if(nSpriteInfo._ActorType == ACTORTYPE_ANIMATION) {
 		nameStart = OtherResName[nSpriteInfo._ActorID];
-	}
-	else
-	{
+	} else {
 		nameStart = ResNameStart[nSpriteInfo._ActorType];
 	}
 
@@ -168,9 +164,7 @@ std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
 		break;
 	default:
 		{
-			sprintf(name, "%s%d",
-				nameStart,
-				nSpriteInfo._ActorID);
+			sprintf(name, "%s%d", nameStart, nSpriteInfo._ActorID);
 		}
 		break;
 	}

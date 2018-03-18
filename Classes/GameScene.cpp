@@ -12,6 +12,7 @@
 #include "ZhongGaoState.h"
 #include "base.h"
 #include "UIBatchRenderer.h"
+#include "PlayerLayerCfg.h"
 using namespace CocosDenshion;
 
 //GameScene* GameScene::m_gamelayer = nullptr;
@@ -32,6 +33,7 @@ bool GameScene::init()
 
 	// create UI elements
 	AspriteManager::instance().initilize();
+	PlayerLayerCfg::instance().init("playerlayer");
 
 	m_actorManager = new ActorManager();
 	log("GameScene---m_actorManager---->%x", m_actorManager);

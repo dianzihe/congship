@@ -34,10 +34,10 @@ public:
 		return s;
 	}
 
-	bool			init( const char* pszPlayerLayerCfgName );
+	bool init( const char* pszPlayerLayerCfgName );
 
 	// Gender : 0-male 1-female
-	inline AnimPart		GetAnimPartBySequence( int playerId, int nGender, AnimPlayer action, int sequence, int animaLayerIndex )
+	inline AnimPart GetAnimPartBySequence( int playerId, int nGender, AnimPlayer action, int sequence, int animaLayerIndex )
 	{
 		int nPlayerIndex = playerId * 2 + nGender;
 		if(action >= ANIM_PLAYER_ATTACK2_DOWN && action <= ANIM_PLAYER_ATTACK6_UP)

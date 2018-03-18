@@ -2,7 +2,7 @@
 #include "Actor.h"
 #include "ASprite.h"
 //#include "Player.h"
-//#include "PlayerLayerCfg.h"
+#include "PlayerLayerCfg.h"
 //#include "DelayASpriteLoadManager.h"
 //#include "Pet.h"
 //#include "SitDown.h"
@@ -50,8 +50,7 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 	_SpriteInfo._ActorType = type;
 	_SpriteInfo._EquipLevel = equipLevel;
 	ASprite* p = AspriteManager::instance().LoadSprite(_SpriteInfo, isMustLoad);
-	if( p && p->IsTextureDelayLoad() && m_pHostEventHandler)
-	{
+	if( p && p->IsTextureDelayLoad() && m_pHostEventHandler) {
 		ASprite* pReplace = AspriteManager::instance().FindReplaceSpriteWhenMemoryLack(_SpriteInfo);
 		if(pReplace) {
 			pReplace->retain();
@@ -73,68 +72,42 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 	}
 }
 
-void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* pReplace, ACTORTYPE type, GrayPart gpart)
-{
-	if(origin == NULL || pReplace == NULL || pReplace == origin)
-		return;
-	m_pHostEventHandler = host;
-	pReplace->retain();
-	origin->retain();
-	origin->ReleaseTextureToDelayLoad();
-	AspriteManager::instance().AddAnimationDelayLoad( this, origin, type, gpart );
-	//m_pHostEventHandler->setGray(gpart, true);
-	AddASprite(pReplace, type);
-}
-
 void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 {
+	log("--------DQAnimation::AddASprite");
 	//CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
-	if(type == ACTORTYPE_WEAPON)
-	{
-		if (m_sprite[eAnimPart_Weapon])
-		{
+	if(type == ACTORTYPE_WEAPON) {
+		if (m_sprite[eAnimPart_Weapon])	{
 			m_sprite[eAnimPart_Weapon]->release();
 		}
 
 		m_sprite[eAnimPart_Weapon] = p;
 		mIsMutiAsprite = true;
-	}
-	else if(type == ACTORTYPE_MOUNT)
-	{
-		if (m_sprite[eAnimPart_Mount])
-		{
+	}else if(type == ACTORTYPE_MOUNT) {
+		if (m_sprite[eAnimPart_Mount]) {
 			m_sprite[eAnimPart_Mount]->release();
 		}
 
 		m_sprite[eAnimPart_Mount] = p;
 		mIsMutiAsprite = true;
-	}
-	else if(type == ACTORTYPE_WING)
-	{
-		if (m_sprite[eAnimPart_Wing])
-		{
+	} else if(type == ACTORTYPE_WING) {
+		if (m_sprite[eAnimPart_Wing]) {
 			m_sprite[eAnimPart_Wing]->release();
 		}
 		m_sprite[eAnimPart_Wing] = p;
 		mIsMutiAsprite = true;
-	}
-	else if(type == ACTORTYPE_PET/*&&pPlayer&&pPlayer->IsInMount()*/)				//如果玩家在坐骑上,添加小师妹模型
+	} else if(type == ACTORTYPE_PET/*&&pPlayer&&pPlayer->IsInMount()*/)				//如果玩家在坐骑上,添加小师妹模型
 	{
-		if(m_sprite[eAnimPart_Pet])
-		{
+		if(m_sprite[eAnimPart_Pet]) {
 			m_sprite[eAnimPart_Pet]->release();
 		}
 		m_sprite[eAnimPart_Pet] = p;
 		mIsMutiAsprite = true;
-	}
-	else
-	{
-		if (m_sprite[eAnimPart_Body])
-		{
+	} else {
+		if (m_sprite[eAnimPart_Body]) {
 			m_sprite[eAnimPart_Body]->release();
 		}
-		if(p && m_pHostEventHandler && p->IsDataLoaded() == false)
-		{
+		if(p && m_pHostEventHandler && p->IsDataLoaded() == false) {
 			//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( p, m_pHostEventHandler->getActorID() );
 		}
 		m_sprite[eAnimPart_Body] = p;
@@ -153,7 +126,6 @@ void DQAnimation::setAnim( int id, int flag, int loop, int animaLayerIndex )
 	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id+1) > m_sprite[eAnimPart_Body]->GetAnimNumber() ) {
 		return;
 	}
-
 	m_flipFlag = flag;
 	if ( loop == -1 ) {
 		if ( id == m_animID ) {
@@ -162,7 +134,6 @@ void DQAnimation::setAnim( int id, int flag, int loop, int animaLayerIndex )
 			return;
 		}
 	}
-
 	m_animID		= id;
 	m_frame			= 0;
 	m_frameTime		= 0.0;
@@ -188,14 +159,12 @@ void DQAnimation::update(float dt)
 
 	int frameCount	= m_sprite[eAnimPart_Body]->GetAFrames(m_animID);  //
 	float frameTime	= m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
-	if ( m_frameTime > frameTime )
-	{
+	if ( m_frameTime > frameTime ) {
 		// next frame
 		m_frame++;
 		m_frameTime -= frameTime;
 
-		if (m_markInfo.m_markExist)
-		{
+		if (m_markInfo.m_markExist) {
 			m_markInfo.m_markExist = false;
 			Point pos = GetMarkLOC();
 			const char* desc = GetMarkDesc();
@@ -255,20 +224,17 @@ void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 }
 void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	
 	draw(0, 0, false);
 }
 void DQAnimation::draw(int x, int y, bool isGray)
 {
-	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, ", mIsMutiAsprite, m_animID);
+	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
 	if ( m_sprite[eAnimPart_Body] == NULL ) return;
 	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false ) return;
-
+	log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
 	if(m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
 		return;
-	
 	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID,m_frame);
-
 	if(mIsMutiAsprite) {
 		int mountHeight = 0;
 		bool isShowPet = true;				//小师妹出战，坐骑上才显示小师妹
@@ -376,6 +342,18 @@ void DQAnimation::draw(int x, int y, bool isGray)
 		}
 		m_sprite[eAnimPart_Body]->PaintAFrame(m_animID,m_frame,x,y,m_flipFlag,0,0, m_opacity, isGray);
 	}
+}
+void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* pReplace, ACTORTYPE type, GrayPart gpart)
+{
+	if (origin == NULL || pReplace == NULL || pReplace == origin)
+		return;
+	m_pHostEventHandler = host;
+	pReplace->retain();
+	origin->retain();
+	origin->ReleaseTextureToDelayLoad();
+	AspriteManager::instance().AddAnimationDelayLoad(this, origin, type, gpart);
+	//m_pHostEventHandler->setGray(gpart, true);
+	AddASprite(pReplace, type);
 }
 
 float DQAnimation::getAnimTime( int id )
