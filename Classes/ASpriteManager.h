@@ -39,7 +39,7 @@ private:
 public:
 	ASprite*		LoadSprite( SpriteInfo& nSpriteInfo, bool nIsMustLoad = false, bool isRecursiveCall = false );
 	bool            IsSpriteLoaded(SpriteInfo& nSpriteInfo);
-	std::string		GetSpriteName( SpriteInfo& nSpriteInfo );
+	static std::string		GetSpriteName( SpriteInfo& nSpriteInfo );
 	ASprite*		GetSprite( const std::string& nSpriteName );
 	void			initilize();
 	void			uninitilize();
@@ -52,14 +52,12 @@ public:
 	void			RemoveAnimationDelayLoad(DQAnimation* pAnima);
 	void			RemoveAnimationDelayLoad(ASprite* pSprite);
 	void			AnimationDelayLoadCall(ASprite* pSprite);
-protected:
-	const char*		GetSpritePath( ACTORTYPE actorType );
+	static const char*		GetSpritePath( ACTORTYPE actorType );
 	void			RemoveSprite(ASprite* pSprite);
-private:
 	typedef std::map<std::string, ASprite*> SpriteContainer;
 	SpriteContainer gSprites;
-	char* ResPath[ACTORTYPE_Count];
-	char* ResNameStart[ACTORTYPE_Count];
+	static char* ResPath[ACTORTYPE_Count];
+	static char* ResNameStart[ACTORTYPE_Count];
 	ASprite* m_preLoad[6];
 	typedef std::map<ASprite*, DelayAnimInfo> DelayAnimationMap;
 	DelayAnimationMap mAnimationDelayLoadMap;

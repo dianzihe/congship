@@ -80,7 +80,6 @@ bool AspriteManager::IsSpriteLoaded(SpriteInfo& nSpriteInfo)
 
 ASprite* AspriteManager::GetSprite( const std::string& nSpriteName )
 {
-	//log("======== GetSprite %s", nSpriteName.c_str());
 	SpriteContainer::iterator it = gSprites.find(nSpriteName);
 	if(it != gSprites.end()){
 		return it->second;
@@ -103,7 +102,7 @@ bool AspriteManager::isMustLoad(ACTORTYPE actorType)
 
 const char* AspriteManager::GetSpritePath( ACTORTYPE actorType )
 {
-	return ResPath[actorType];
+	return AspriteManager::ResPath[actorType];
 }
 
 std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
@@ -113,7 +112,7 @@ std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
 	if(nSpriteInfo._ActorType == ACTORTYPE_ANIMATION) {
 		nameStart = OtherResName[nSpriteInfo._ActorID];
 	} else {
-		nameStart = ResNameStart[nSpriteInfo._ActorType];
+		nameStart = AspriteManager::ResNameStart[nSpriteInfo._ActorType];
 	}
 
 	switch(nSpriteInfo._ActorType)
@@ -173,49 +172,49 @@ std::string AspriteManager::GetSpriteName( SpriteInfo& nSpriteInfo )
 
 AspriteManager::AspriteManager()
 {
-	ResPath[ACTORTYPE_ANIMATION]	= "Sprite/object/";
-	ResPath[ACTORTYPE_PLAYER]		= "Sprite/player/";
-	ResPath[ACTORTYPE_WEAPON]		= "Sprite/weapon/";
-	ResPath[ACTORTYPE_WEAPONSFX]	= "Sprite/weaponSFX/";
-	ResPath[ACTORTYPE_MOUNT]		= "Sprite/mount/";
-	ResPath[ACTORTYPE_WING]			= "Sprite/wing/";
-	ResPath[ACTORTYPE_NPC]			= "Sprite/npc/";
-	ResPath[ACTORTYPE_MONSTER]		= "Sprite/monster/";
-	ResPath[ACTORTYPE_HERO]			= ResPath[ACTORTYPE_PLAYER];
-	ResPath[ACTORTYPE_SKILLSFX]		= "";
-	ResPath[ACTORTYPE_OTHERSFX]		= "Sprite/otherSFX/";
+	ResPath[ACTORTYPE_ANIMATION] = "Sprite/object/";
+	ResPath[ACTORTYPE_PLAYER] = "Sprite/player/";
+	ResPath[ACTORTYPE_WEAPON] = "Sprite/weapon/";
+	ResPath[ACTORTYPE_WEAPONSFX] = "Sprite/weaponSFX/";
+	ResPath[ACTORTYPE_MOUNT] = "Sprite/mount/";
+	ResPath[ACTORTYPE_WING] = "Sprite/wing/";
+	ResPath[ACTORTYPE_NPC] = "Sprite/npc/";
+	ResPath[ACTORTYPE_MONSTER] = "Sprite/monster/";
+	ResPath[ACTORTYPE_HERO] = ResPath[ACTORTYPE_PLAYER];
+	:ResPath[ACTORTYPE_SKILLSFX] = "";
+	ResPath[ACTORTYPE_OTHERSFX] = "Sprite/otherSFX/";
 	//ResPath[ACTORTYPE_PETSFX] = "Sprite/object/";
-	ResPath[ACTORTYPE_TRANSPORT]	= ResPath[ACTORTYPE_ANIMATION];
-	ResPath[ACTORTYPE_COLLECT]		= "Sprite/Collection/";
-	ResPath[ACTORTYPE_FLAG]			= "Sprite/Collection/";
+	:ResPath[ACTORTYPE_TRANSPORT] = ResPath[ACTORTYPE_ANIMATION];
+	ResPath[ACTORTYPE_COLLECT] = "Sprite/Collection/";
+	ResPath[ACTORTYPE_FLAG] = "Sprite/Collection/";
 	ResPath[ACTORTYPE_PATHFIND_POINT] = ResPath[ACTORTYPE_ANIMATION];
-	ResPath[ACTORTYPE_PET]			= "Sprite/xsm/";
+	ResPath[ACTORTYPE_PET] = "Sprite/xsm/";
 	ResPath[ACTORTYPE_OBJECT_NORMAL] = ResPath[ACTORTYPE_ANIMATION];
-	ResPath[ACTORTYPE_SCENEOBJECT]	= "Sprite/sceneObject/";
-	ResPath[ACTORTYPE_CONVOY]		= ResPath[ACTORTYPE_MONSTER];
+	ResPath[ACTORTYPE_SCENEOBJECT] = "Sprite/sceneObject/";
+	ResPath[ACTORTYPE_CONVOY] = ResPath[ACTORTYPE_MONSTER];
 	ResPath[ACTORTYPE_MAGICWEAPONSFX] = "Sprite/MagicWeaponSFX/";
 
-	ResNameStart[ACTORTYPE_ANIMATION]	= "";
-	ResNameStart[ACTORTYPE_PLAYER]		= "p";
-	ResNameStart[ACTORTYPE_WEAPON]		= "w";
-	ResNameStart[ACTORTYPE_WEAPONSFX]	= "d";
-	ResNameStart[ACTORTYPE_MOUNT]		= "mot";
-	ResNameStart[ACTORTYPE_WING]		= "w";
-	ResNameStart[ACTORTYPE_NPC]			= "n";
-	ResNameStart[ACTORTYPE_MONSTER]		= "m";
-	ResNameStart[ACTORTYPE_HERO]		= ResNameStart[ACTORTYPE_PLAYER];
-	ResNameStart[ACTORTYPE_SKILLSFX]	= "e";
-	ResNameStart[ACTORTYPE_OTHERSFX]	= "otherSFX";
+	AspriteManager::ResNameStart[ACTORTYPE_ANIMATION] = "";
+	AspriteManager::ResNameStart[ACTORTYPE_PLAYER] = "p";
+	AspriteManager::ResNameStart[ACTORTYPE_WEAPON] = "w";
+	AspriteManager::ResNameStart[ACTORTYPE_WEAPONSFX] = "d";
+	AspriteManager::ResNameStart[ACTORTYPE_MOUNT] = "mot";
+	AspriteManager::ResNameStart[ACTORTYPE_WING] = "w";
+	AspriteManager::ResNameStart[ACTORTYPE_NPC] = "n";
+	AspriteManager::ResNameStart[ACTORTYPE_MONSTER] = "m";
+	AspriteManager::ResNameStart[ACTORTYPE_HERO] = ResNameStart[ACTORTYPE_PLAYER];
+	AspriteManager::ResNameStart[ACTORTYPE_SKILLSFX] = "e";
+	AspriteManager::ResNameStart[ACTORTYPE_OTHERSFX] = "otherSFX";
 	//ResNameStart[ACTORTYPE_PETSFX] = "eye";
-	ResNameStart[ACTORTYPE_TRANSPORT]	= "transport";
-	ResNameStart[ACTORTYPE_COLLECT]		= "c";
-	ResNameStart[ACTORTYPE_FLAG]		= "c";
-	ResNameStart[ACTORTYPE_PATHFIND_POINT] = "";
-	ResNameStart[ACTORTYPE_PET]			= "xsm";
-	ResNameStart[ACTORTYPE_OBJECT_NORMAL] = "tongyong";
-	ResNameStart[ACTORTYPE_SCENEOBJECT] = "sceneObj";
-	ResNameStart[ACTORTYPE_CONVOY]		= ResNameStart[ACTORTYPE_MONSTER];
-	ResNameStart[ACTORTYPE_MAGICWEAPONSFX] = "fb_";
+	AspriteManager::ResNameStart[ACTORTYPE_TRANSPORT] = "transport";
+	AspriteManager::ResNameStart[ACTORTYPE_COLLECT] = "c";
+	AspriteManager::ResNameStart[ACTORTYPE_FLAG] = "c";
+	AspriteManager::ResNameStart[ACTORTYPE_PATHFIND_POINT] = "";
+	AspriteManager::ResNameStart[ACTORTYPE_PET] = "xsm";
+	AspriteManager::ResNameStart[ACTORTYPE_OBJECT_NORMAL] = "tongyong";
+	AspriteManager::ResNameStart[ACTORTYPE_SCENEOBJECT] = "sceneObj";
+	AspriteManager::ResNameStart[ACTORTYPE_CONVOY] = ResNameStart[ACTORTYPE_MONSTER];
+	AspriteManager::ResNameStart[ACTORTYPE_MAGICWEAPONSFX] = "fb_";
 
 	m_preLoad[0] = NULL;
 	m_preLoad[1] = NULL;

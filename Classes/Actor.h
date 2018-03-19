@@ -223,6 +223,7 @@ public:
 	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
 
 	void				addAnimationSprite( int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false );
+	void addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
 	virtual void		SetShowName( const std::string& name);
 	void				SetPKProctIcon(bool bShow);
 

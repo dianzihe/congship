@@ -108,11 +108,6 @@ void Actor::RemoveShadow()
 #endif
 }
 
-void Actor::addAnimationSprite( int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad )
-{
-	m_animation.SetHostEventHandler(this);
-	m_animation.LoadASprite( id, type, sex, equiplevel, isMustLoad );
-}
 /*
 Rect& Actor::getSelectRect()
 {

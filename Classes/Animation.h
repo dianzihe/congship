@@ -3,6 +3,7 @@
 #include "ActorType.h"
 #include "ASpriteManager.h"
 #include "AnimDef.h"
+#include "MonsterCfg.h"
 class ASprite;
 
 #define ANIM_FLAG_FLIP_X            (1<<0) 
@@ -23,6 +24,12 @@ enum AnimPart
 
 
 class Actor;
+
+/*
+1, build relationship between animation and event
+2, multi layer animation
+*/
+
 class DQAnimation : public Node
 {
 public:
@@ -51,17 +58,13 @@ public:
 	*/
 	//static cwSngSprite *GetSampleAnimation(const string &iwconame, const string &animationName, float delay = 0.1);
 
-	static void addAnimationToCharater(const string &iwconame, const string &animationName, cwSngSprite *pChara, int animationId,
-		map<string, string> desc, float aniDelay = 0.2, bool filter = false);
+	//void addAnimationToCharater(const string &actorName, float aniDelay = 0.2, bool filter = false);
 
 	//WAnimationManagerSng::addAnimationToCharater(iwco_name, "melee_attack1", lpGuai, MonsterAnimationType::DEF_MOVE, desc, 0.1);
-	/**
-	* @brief 根据数据表生成管理列表
-	*/
-	static void BuildIWcoManagerList();
-
+	
 	void SetHostEventHandler( Actor* hostHandler );
 	void LoadASprite(int id, ACTORTYPE type = ACTORTYPE_ANIMATION, int sex = 0, int equipLevel = 1, bool isMustLoad = false);	//
+	bool addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad);
 	void setAnim( int id, int flag = 0, int loop = -1, int animaLayerIndex = 0 ); // -1：loop 1：noloop
 	int    getAnim(){ return m_animID;};
 	void   setAnimID(int animID) { m_animID = animID; }
@@ -112,6 +115,9 @@ protected:
 private:
 	ASprite*	m_sprite[eAnimPart_Count];
 	Animation*  m_stdAnimationp[MonsterAnimationType::DEF_GUAI_ANIMATION_MAX];
+	
+	std::map< std::string, Animation* >		m_mapAnimation;
+
 	static AnimMatcher _AnimMatcher;
 	mark_info   m_markInfo;
 	int			m_loop;

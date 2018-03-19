@@ -11,21 +11,42 @@
 //#include "HeroPet.h"
 #include "SimpleEventDefine.h"
 
+static const char* DQAnimationMotionType[] =
+{
+	"attack/attack_up",
+	"attack/attack_down",
+	"attack/attack_left",
+	"attack/attack_right",
+	"dead/dead_up",
+	"dead/dead_down",
+	"dead/dead_left",
+	"dead/dead_right",
+	"idle/idle_up",
+	"idle/idle_down",
+	"idle/idle_left",
+	"idle/idle_right",
+	"move/move_up",
+	"move/move_down",
+	"move/move_left",
+	"move/move_right",
+};
+
+
 DQAnimation::DQAnimation(void)
-: m_pHostEventHandler(NULL)
-, mIsMutiAsprite(false)
-, mIsGray(false)
-, m_animaLayerIndex(0)
-, m_HostCamp(-1)
-, m_HostSex(0)
-, m_frameTime(0)
-, m_loop(-1)
+	: m_pHostEventHandler(NULL)
+	, mIsMutiAsprite(false)
+	, mIsGray(false)
+	, m_animaLayerIndex(0)
+	, m_HostCamp(-1)
+	, m_HostSex(0)
+	, m_frameTime(0)
+	, m_loop(-1)
 {
 	memset(m_sprite, 0, sizeof(m_sprite));
 	m_flipFlag = 0;
 	m_opacity = 255;
-    m_frame = 0;
-	m_animID= 0;
+	m_frame = 0;
+	m_animID = 0;
 }
 
 DQAnimation::~DQAnimation(void)
@@ -39,9 +60,9 @@ DQAnimation::~DQAnimation(void)
 		}
 	}
 
-	AspriteManager::instance().RemoveAnimationDelayLoad( this );
+	AspriteManager::instance().RemoveAnimationDelayLoad(this);
 }
- 
+
 void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, bool isMustLoad)
 {
 	SpriteInfo _SpriteInfo;
@@ -50,25 +71,88 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 	_SpriteInfo._ActorType = type;
 	_SpriteInfo._EquipLevel = equipLevel;
 	ASprite* p = AspriteManager::instance().LoadSprite(_SpriteInfo, isMustLoad);
-	if( p && p->IsTextureDelayLoad() && m_pHostEventHandler) {
+	if (p && p->IsTextureDelayLoad() && m_pHostEventHandler) {
 		ASprite* pReplace = AspriteManager::instance().FindReplaceSpriteWhenMemoryLack(_SpriteInfo);
-		if(pReplace) {
+		if (pReplace) {
 			pReplace->retain();
 			GrayPart gPart = eGrayPart_Body;
-			if(type == ACTORTYPE_MOUNT)
+			if (type == ACTORTYPE_MOUNT)
 				gPart = eGrayPart_Mount;
-			else if(type == ACTORTYPE_WEAPON)
+			else if (type == ACTORTYPE_WEAPON)
 				gPart = eGrayPart_Weapon;
-			else if(type == ACTORTYPE_WING)
+			else if (type == ACTORTYPE_WING)
 				gPart = eGrayPart_Wing;
-			AspriteManager::instance().AddAnimationDelayLoad( this, p, type, gPart );
+			AspriteManager::instance().AddAnimationDelayLoad(this, p, type, gPart);
 			m_pHostEventHandler->setGray(gPart, true);
 			AddASprite(pReplace, type);
-		} else {
+		}
+		else {
 			AddASprite(p, type);
 		}
-	} else {
+	}
+	else {
 		AddASprite(p, type);
+	}
+}
+
+
+bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad)
+{
+	SpriteInfo _SpriteInfo;
+	_SpriteInfo._ActorGender = sex;
+	_SpriteInfo._ActorID = id;
+	_SpriteInfo._ActorType = type;
+	//_SpriteInfo._EquipLevel = equipLevel;
+
+	std::string spriteName = AspriteManager::GetSpriteName(_SpriteInfo);
+	std::string spriteFile = AspriteManager::GetSpritePath(_SpriteInfo._ActorType) + spriteName;
+
+	log("DQAnimation::addAnimation-->%s:%s", spriteName.c_str(), spriteFile.c_str());
+	char fileNameBuffer[256];
+	char plistfileNameBuffer[256];
+	ssize_t len = 0;
+
+#if defined _WIN32 | WIN32
+	sprintf(fileNameBuffer, "%s.png", spriteFile.c_str());
+#else
+	sprintf(fileNameBuffer, "%s.pvr.ccz", spriteFile.c_str());
+#endif
+	sprintf(plistfileNameBuffer, "%s.plist", spriteFile.c_str());
+
+	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
+		log("---ERROR---file %s not find", fileNameBuffer);
+		return false;
+	}
+	log("----DQAnimation::addAnimation::Load-->fileNameBuffer:%s", fileNameBuffer);
+	std::string plist_content = FileUtils::getInstance()->getStringFromFile(plistfileNameBuffer);
+
+	Data image_content = FileUtils::getInstance()->getDataFromFile(fileNameBuffer);
+
+	Image* image = new (std::nothrow) Image();
+	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
+	Texture2D* texture = new (std::nothrow) Texture2D();
+	texture->initWithImage(image);
+	texture->autorelease();
+
+	CC_SAFE_RELEASE(image);
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
+
+	for (int i = 0; i < sizeof(DQAnimationMotionType); i++){
+		Vector<SpriteFrame*> animFrames(15);
+		char str[100] = { 0 };
+		for (int j = 1; j < 15; j++) {
+			sprintf(str, "%s_%02d.png", DQAnimationMotionType[i], j);
+			auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
+			log("--add to frame cache-->%s", str);
+			if(NULL != frame)
+				animFrames.pushBack(frame);
+		}
+
+		auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+
+		// Add an animation to the Cache
+		AnimationCache::getInstance()->addAnimation(animation, DQAnimationMotionType[i]);
 	}
 }
 
@@ -76,90 +160,94 @@ void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 {
 	log("--------DQAnimation::AddASprite");
 	//CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
-	if(type == ACTORTYPE_WEAPON) {
+	if (type == ACTORTYPE_WEAPON) {
 		if (m_sprite[eAnimPart_Weapon])	{
 			m_sprite[eAnimPart_Weapon]->release();
 		}
 
 		m_sprite[eAnimPart_Weapon] = p;
 		mIsMutiAsprite = true;
-	}else if(type == ACTORTYPE_MOUNT) {
+	}
+	else if (type == ACTORTYPE_MOUNT) {
 		if (m_sprite[eAnimPart_Mount]) {
 			m_sprite[eAnimPart_Mount]->release();
 		}
 
 		m_sprite[eAnimPart_Mount] = p;
 		mIsMutiAsprite = true;
-	} else if(type == ACTORTYPE_WING) {
+	}
+	else if (type == ACTORTYPE_WING) {
 		if (m_sprite[eAnimPart_Wing]) {
 			m_sprite[eAnimPart_Wing]->release();
 		}
 		m_sprite[eAnimPart_Wing] = p;
 		mIsMutiAsprite = true;
-	} else if(type == ACTORTYPE_PET/*&&pPlayer&&pPlayer->IsInMount()*/)				//如果玩家在坐骑上,添加小师妹模型
+	}
+	else if (type == ACTORTYPE_PET/*&&pPlayer&&pPlayer->IsInMount()*/)				//如果玩家在坐骑上,添加小师妹模型
 	{
-		if(m_sprite[eAnimPart_Pet]) {
+		if (m_sprite[eAnimPart_Pet]) {
 			m_sprite[eAnimPart_Pet]->release();
 		}
 		m_sprite[eAnimPart_Pet] = p;
 		mIsMutiAsprite = true;
-	} else {
+	}
+	else {
 		if (m_sprite[eAnimPart_Body]) {
 			m_sprite[eAnimPart_Body]->release();
 		}
-		if(p && m_pHostEventHandler && p->IsDataLoaded() == false) {
+		if (p && m_pHostEventHandler && p->IsDataLoaded() == false) {
 			//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( p, m_pHostEventHandler->getActorID() );
 		}
 		m_sprite[eAnimPart_Body] = p;
 	}
 }
 
-void DQAnimation::setAnim( int id, int flag, int loop, int animaLayerIndex )
+void DQAnimation::setAnim(int id, int flag, int loop, int animaLayerIndex)
 {
 	log("======DQAnimation::setAnim ID:%d, flag:%d, loop:%d, animaLayerIndex:%d", id, flag, loop, animaLayerIndex);
-    if(m_sprite[eAnimPart_Body] == NULL || id < 0) {
+	if (m_sprite[eAnimPart_Body] == NULL || id < 0) {
 		return;
 	}
-	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false && m_pHostEventHandler ) {
+	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false && m_pHostEventHandler) {
 		//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
 	}
-	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id+1) > m_sprite[eAnimPart_Body]->GetAnimNumber() ) {
+	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber()) {
 		return;
 	}
 	m_flipFlag = flag;
-	if ( loop == -1 ) {
-		if ( id == m_animID ) {
+	if (loop == -1) {
+		if (id == m_animID) {
 			m_loop = loop;
 			m_frameTime = 0.0;
 			return;
 		}
 	}
-	m_animID		= id;
-	m_frame			= 0;
-	m_frameTime		= 0.0;
-	m_loop			= loop;
+	m_animID = id;
+	m_frame = 0;
+	m_frameTime = 0.0;
+	m_loop = loop;
 	m_animaLayerIndex = animaLayerIndex;
 }
 
 bool DQAnimation::isEnd()
 {
-	return (m_loop == 0 );
+	return (m_loop == 0);
 }
 
 void DQAnimation::update(float dt)
 {
-	if ( m_sprite[eAnimPart_Body] == NULL ) return;
-	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false ) return;
+	if (m_sprite[eAnimPart_Body] == NULL) return;
+	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
 
-	if ( isEnd() ) return;
-	if(m_animID < 0 || (m_animID+1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
+	if (isEnd()) return;
+	if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
 		return;
 
 	m_frameTime += dt;
 
-	int frameCount	= m_sprite[eAnimPart_Body]->GetAFrames(m_animID);  //
-	float frameTime	= m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
-	if ( m_frameTime > frameTime ) {
+	int frameCount = m_sprite[eAnimPart_Body]->GetAFrames(m_animID);  //
+	float frameTime = m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
+	if (m_frameTime > frameTime) {
 		// next frame
 		m_frame++;
 		m_frameTime -= frameTime;
@@ -173,31 +261,31 @@ void DQAnimation::update(float dt)
 
 		// clear frameTime
 		// where less frame , e.g. debug
-		if ( m_frameTime > 1.0 ) {
+		if (m_frameTime > 1.0) {
 			m_frameTime = 0.0;
 		}
 
 		// max frame
-		if ( m_frame >= frameCount ) {
+		if (m_frame >= frameCount) {
 			// loop anim deal
-			if ( m_loop > 0 ) {
+			if (m_loop > 0) {
 				m_loop--;
 
 				// set frame to 0 when end loop
-				if ( m_loop == 0 ) {
+				if (m_loop == 0) {
 					m_frame = frameCount - 1;
 					return;
 				}
 			}
-			
-			m_frame = 0;			
-		}		
+
+			m_frame = 0;
+		}
 	}
 }
 
 void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 {
-	if(m_pHostEventHandler)
+	if (m_pHostEventHandler)
 	{
 		AnimaEvent marker;
 		marker._EventType = eAnimaEventType_Marker;
@@ -212,7 +300,7 @@ void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 		param3._Type = eType_str;
 		param3._Data._pStrData = new char[256];
 		memset(param3._Data._pStrData, 0, 256);
-		if(desc != NULL)
+		if (desc != NULL)
 			strcpy(param3._Data._pStrData, desc);
 
 		marker._EventParamList.push_back(param1);
@@ -229,13 +317,13 @@ void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags
 void DQAnimation::draw(int x, int y, bool isGray)
 {
 	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
-	if ( m_sprite[eAnimPart_Body] == NULL ) return;
-	if ( m_sprite[eAnimPart_Body]->IsDataLoaded() == false ) return;
+	if (m_sprite[eAnimPart_Body] == NULL) return;
+	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
 	log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
-	if(m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
+	if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
 		return;
-	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID,m_frame);
-	if(mIsMutiAsprite) {
+	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID, m_frame);
+	if (mIsMutiAsprite) {
 		int mountHeight = 0;
 		bool isShowPet = true;				//小师妹出战，坐骑上才显示小师妹
 		if(m_pHostEventHandler) {
@@ -252,9 +340,9 @@ void DQAnimation::draw(int x, int y, bool isGray)
 					isShowPet = false;*/
 				if(pPlayer->getFightPetModelId() < 0)
 					isShowPet = false;
-			}
+	}
 #endif
-		}
+}
 		for (int i = eAnimPart_Body; i < eAnimPart_Count; ++i) {
 			log("----draw---DQAnimation::draw---> part %d", i);
 #if 0
@@ -308,11 +396,12 @@ void DQAnimation::draw(int x, int y, bool isGray)
 							m_sprite[curPart]->PaintAFrame(realAnimID,m_frame,x,y + addHeight,m_flipFlag,0,0, m_opacity, isGray);
 					}
 				}
-			}
+		}
 #endif
 		}
 
-	} else {
+	}
+	else {
 		//如果是小师妹，根据主人性别与打坐类型，改变小师妹打坐方向
 		if(m_pHostEventHandler&&m_pHostEventHandler->getActorType() ==  ACTORTYPE_PET&&m_animID == ANIM_XSM_SIT2_LEFT) {
 #if 0
@@ -337,10 +426,10 @@ void DQAnimation::draw(int x, int y, bool isGray)
 							m_flipFlag = 1;
 					}
 				}
-			}
+	}
 #endif
 		}
-		m_sprite[eAnimPart_Body]->PaintAFrame(m_animID,m_frame,x,y,m_flipFlag,0,0, m_opacity, isGray);
+		m_sprite[eAnimPart_Body]->PaintAFrame(m_animID, m_frame, x, y, m_flipFlag, 0, 0, m_opacity, isGray);
 	}
 }
 void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* pReplace, ACTORTYPE type, GrayPart gpart)
@@ -356,35 +445,35 @@ void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* 
 	AddASprite(pReplace, type);
 }
 
-float DQAnimation::getAnimTime( int id )
+float DQAnimation::getAnimTime(int id)
 {
-	if ( m_sprite[eAnimPart_Body] == NULL ) return 0.0f;
+	if (m_sprite[eAnimPart_Body] == NULL) return 0.0f;
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false)
 	{
 		//if(m_pHostEventHandler)
 		//	DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
 		return 0.6f;
 	}
-	int frameCount	= m_sprite[eAnimPart_Body]->GetRealAFrames(id);  //
+	int frameCount = m_sprite[eAnimPart_Body]->GetRealAFrames(id);  //
 	return (frameCount * GetBaseFrameTime(id));
 }
 
-void DQAnimation::SetHostEventHandler( Actor* hostHandler )
+void DQAnimation::SetHostEventHandler(Actor* hostHandler)
 {
 	m_pHostEventHandler = hostHandler;
 }
 
 Point DQAnimation::GetMarkLOC()
 {
-	if(m_sprite[eAnimPart_Body] == NULL || m_sprite[eAnimPart_Body]->IsDataLoaded() == false)
-		return Point(0,0);
+	if (m_sprite[eAnimPart_Body] == NULL || m_sprite[eAnimPart_Body]->IsDataLoaded() == false)
+		return Point(0, 0);
 	int rc[4];
-	m_sprite[eAnimPart_Body]->GetFModuleRect(rc, m_markInfo.mark_frame, m_markInfo.mark_moudeID, 0,0,0,0,0);
+	m_sprite[eAnimPart_Body]->GetFModuleRect(rc, m_markInfo.mark_frame, m_markInfo.mark_moudeID, 0, 0, 0, 0, 0);
 
 	Point pos = Point(rc[0], rc[1]);
-    pos.x -= 515;
-    pos.y -= 425;
-	if(m_flipFlag == 1)
+	pos.x -= 515;
+	pos.y -= 425;
+	if (m_flipFlag == 1)
 	{
 		pos.x = -pos.x;
 	}
@@ -396,13 +485,13 @@ const char* DQAnimation::GetMarkDesc()
 	return m_markInfo.mark_desc.c_str();
 }
 
-int DQAnimation::GetWeaponMatch( int playerAnimId )
+int DQAnimation::GetWeaponMatch(int playerAnimId)
 {
 	struct WeaponMatch
 	{
 		WeaponMatch()
 		{
-			memset( sAinmPlayerToWeapon, 0, sizeof(sAinmPlayerToWeapon) );
+			memset(sAinmPlayerToWeapon, 0, sizeof(sAinmPlayerToWeapon));
 			sAinmPlayerToWeapon[ANIM_PLAYER_ATTACK1_DOWN] = ANIM_WEAPON_ATTACK1_DOWN;
 			sAinmPlayerToWeapon[ANIM_PLAYER_ATTACK1_LEFT] = ANIM_WEAPON_ATTACK1_LEFT;
 			sAinmPlayerToWeapon[ANIM_PLAYER_ATTACK1_UP] = ANIM_WEAPON_ATTACK1_UP;
@@ -427,12 +516,12 @@ int DQAnimation::GetWeaponMatch( int playerAnimId )
 			sAinmPlayerToWeapon[ANIM_PLAYER_IDLE_DOWN] = ANIM_WEAPON_IDLE_DOWN;
 			sAinmPlayerToWeapon[ANIM_PLAYER_IDLE_LEFT] = ANIM_WEAPON_IDLE_LEFT;
 			sAinmPlayerToWeapon[ANIM_PLAYER_IDLE_UP] = ANIM_WEAPON_IDLE_UP;
- 			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTIDLE_DOWN] = ANIM_WEAPON_MOUNTIDLE_DOWN;
- 			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTIDLE_LEFT] = ANIM_WEAPON_MOUNTIDLE_LEFT;
- 			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTIDLE_UP] = ANIM_WEAPON_MOUNTIDLE_UP;
- 			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTMOVE_DOWN] = ANIM_WEAPON_MOUNTMOVE_DOWN;
- 			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTMOVE_LEFT] = ANIM_WEAPON_MOUNTMOVE_LEFT;
- 			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTMOVE_UP] = ANIM_WEAPON_MOUNTMOVE_UP;
+			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTIDLE_DOWN] = ANIM_WEAPON_MOUNTIDLE_DOWN;
+			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTIDLE_LEFT] = ANIM_WEAPON_MOUNTIDLE_LEFT;
+			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTIDLE_UP] = ANIM_WEAPON_MOUNTIDLE_UP;
+			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTMOVE_DOWN] = ANIM_WEAPON_MOUNTMOVE_DOWN;
+			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTMOVE_LEFT] = ANIM_WEAPON_MOUNTMOVE_LEFT;
+			sAinmPlayerToWeapon[ANIM_PLAYER_MOUNTMOVE_UP] = ANIM_WEAPON_MOUNTMOVE_UP;
 			sAinmPlayerToWeapon[ANIM_PLAYER_SIT1_DOWN] = ANIM_WEAPON_SIT1_DOWN;
 			sAinmPlayerToWeapon[ANIM_PLAYER_SIT2_LEFT] = ANIM_WEAPON_SIT2_LEFT;
 			sAinmPlayerToWeapon[ANIM_PLAYER_MOVE_DOWN] = ANIM_WEAPON_MOVE_DOWN;
@@ -445,13 +534,13 @@ int DQAnimation::GetWeaponMatch( int playerAnimId )
 	return sWeaponMatcher.sAinmPlayerToWeapon[playerAnimId];
 }
 
-int DQAnimation::GetMountMatch( int playerAnimId )
+int DQAnimation::GetMountMatch(int playerAnimId)
 {
 	struct MountMatch
 	{
 		MountMatch()
 		{
-			memset( sAinmPlayerToMount, 0, sizeof(sAinmPlayerToMount) );
+			memset(sAinmPlayerToMount, 0, sizeof(sAinmPlayerToMount));
 			sAinmPlayerToMount[ANIM_PLAYER_ATTACK1_DOWN] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_ATTACK1_LEFT] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_ATTACK1_UP] = -1;
@@ -476,12 +565,12 @@ int DQAnimation::GetMountMatch( int playerAnimId )
 			sAinmPlayerToMount[ANIM_PLAYER_IDLE_DOWN] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_IDLE_LEFT] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_IDLE_UP] = -1;
- 			sAinmPlayerToMount[ANIM_PLAYER_MOUNTIDLE_DOWN] = ANIM_MONT_MOUNTIDLE_DOWN;
- 			sAinmPlayerToMount[ANIM_PLAYER_MOUNTIDLE_LEFT] = ANIM_MONT_MOUNTIDLE_LEFT;
- 			sAinmPlayerToMount[ANIM_PLAYER_MOUNTIDLE_UP] = ANIM_MONT_MOUNTIDLE_UP;
- 			sAinmPlayerToMount[ANIM_PLAYER_MOUNTMOVE_DOWN] = ANIM_MONT_MOUNTMOVE_DOWN;
- 			sAinmPlayerToMount[ANIM_PLAYER_MOUNTMOVE_LEFT] = ANIM_MONT_MOUNTMOVE_LEFT;
- 			sAinmPlayerToMount[ANIM_PLAYER_MOUNTMOVE_UP] = ANIM_MONT_MOUNTMOVE_UP;
+			sAinmPlayerToMount[ANIM_PLAYER_MOUNTIDLE_DOWN] = ANIM_MONT_MOUNTIDLE_DOWN;
+			sAinmPlayerToMount[ANIM_PLAYER_MOUNTIDLE_LEFT] = ANIM_MONT_MOUNTIDLE_LEFT;
+			sAinmPlayerToMount[ANIM_PLAYER_MOUNTIDLE_UP] = ANIM_MONT_MOUNTIDLE_UP;
+			sAinmPlayerToMount[ANIM_PLAYER_MOUNTMOVE_DOWN] = ANIM_MONT_MOUNTMOVE_DOWN;
+			sAinmPlayerToMount[ANIM_PLAYER_MOUNTMOVE_LEFT] = ANIM_MONT_MOUNTMOVE_LEFT;
+			sAinmPlayerToMount[ANIM_PLAYER_MOUNTMOVE_UP] = ANIM_MONT_MOUNTMOVE_UP;
 			sAinmPlayerToMount[ANIM_PLAYER_MOVE_DOWN] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_MOVE_LEFT] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_MOVE_UP] = -1;
@@ -494,13 +583,13 @@ int DQAnimation::GetMountMatch( int playerAnimId )
 	return sMountMatcher.sAinmPlayerToMount[playerAnimId];
 }
 
-int DQAnimation::GetPetMatch( int playerAnimId )
+int DQAnimation::GetPetMatch(int playerAnimId)
 {
 	struct PetMatch
 	{
 		PetMatch()
 		{
-			memset( sAinmPlayerToMount, 0, sizeof(sAinmPlayerToMount) );
+			memset(sAinmPlayerToMount, 0, sizeof(sAinmPlayerToMount));
 			sAinmPlayerToMount[ANIM_PLAYER_ATTACK1_DOWN] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_ATTACK1_LEFT] = -1;
 			sAinmPlayerToMount[ANIM_PLAYER_ATTACK1_UP] = -1;
@@ -536,42 +625,42 @@ int DQAnimation::GetPetMatch( int playerAnimId )
 	return sPetMatcher.sAinmPlayerToMount[playerAnimId];
 }
 
-bool DQAnimation::GetAnimRectFast( Rect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */ )
+bool DQAnimation::GetAnimRectFast(Rect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */)
 {
 	ASprite* pSprite = GetSprite(nAnimPart);
-	if(pSprite == NULL || pSprite->IsDataLoaded() == false)
+	if (pSprite == NULL || pSprite->IsDataLoaded() == false)
 		return false;
 	int frameCount = pSprite->GetAFrames(animId);
-	if(frameCount <= 0)
+	if (frameCount <= 0)
 		return false;
-	if(animId >= pSprite->GetAnimNumber())
+	if (animId >= pSprite->GetAnimNumber())
 		return false;
-	int frameIndex = pSprite->GetAnimFrame(animId, frameCount>>1);
+	int frameIndex = pSprite->GetAnimFrame(animId, frameCount >> 1);
 	retRect.size.width = (float)pSprite->GetModuleWidth(frameIndex);
 	retRect.size.height = (float)pSprite->GetModuleHeight(frameIndex);
 	return true;
 }
 
-bool DQAnimation::GetAnimRect( Rect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */ )
+bool DQAnimation::GetAnimRect(Rect& retRect, int animId, AnimPart nAnimPart /*= eAnimPart_Body */)
 {
 	ASprite* pSprite = GetSprite(nAnimPart);
-	if(pSprite == NULL || pSprite->IsDataLoaded() == false)
+	if (pSprite == NULL || pSprite->IsDataLoaded() == false)
 		return false;
 	int frameCount = pSprite->GetAFrames(animId);
-	if(frameCount <= 0)
+	if (frameCount <= 0)
 		return false;
-	if(animId >= pSprite->GetAnimNumber())
+	if (animId >= pSprite->GetAnimNumber())
 		return false;
-	for(int i=0; i<frameCount; i++)
+	for (int i = 0; i < frameCount; i++)
 	{
 		int frameIndex = pSprite->GetAnimFrame(animId, i);
 		int curWidth = pSprite->GetModuleWidth(frameIndex);
 		int curHeight = pSprite->GetModuleHeight(frameIndex);
-		if(retRect.size.width < (float)curWidth)
+		if (retRect.size.width < (float)curWidth)
 		{
 			retRect.size.width = (float)curWidth;
 		}
-		if(retRect.size.height < (float)curHeight)
+		if (retRect.size.height < (float)curHeight)
 		{
 			retRect.size.height = (float)curHeight;
 		}
@@ -579,23 +668,23 @@ bool DQAnimation::GetAnimRect( Rect& retRect, int animId, AnimPart nAnimPart /*=
 	return true;
 }
 
-float DQAnimation::GetBaseFrameTime( int animId )
+float DQAnimation::GetBaseFrameTime(int animId)
 {
-	if(m_sprite[eAnimPart_Body] && m_sprite[eAnimPart_Body]->mSpriteName.at(0) == 'd') // ACTORTYPE_WEAPONSFX
+	if (m_sprite[eAnimPart_Body] && m_sprite[eAnimPart_Body]->mSpriteName.at(0) == 'd') // ACTORTYPE_WEAPONSFX
 	{
 		return 0.07f;
 	}
-	if(m_HostCamp >= 0 && m_HostCamp < 4)
+	if (m_HostCamp >= 0 && m_HostCamp < 4)
 	{
-		if(animId >= ANIM_PLAYER_ATTACK1_DOWN && animId < ANIM_PLAYER_DEAD_DOWN)
+		if (animId >= ANIM_PLAYER_ATTACK1_DOWN && animId < ANIM_PLAYER_DEAD_DOWN)
 		{
 			return 0.07f;
 		}
 	}
-	if(m_pHostEventHandler &&
-		( m_pHostEventHandler->getActorType() == ACTORTYPE_NPC || 
-		  m_pHostEventHandler->getActorType() == ACTORTYPE_MONSTER ) )
-		 return 0.15f;
+	if (m_pHostEventHandler &&
+		(m_pHostEventHandler->getActorType() == ACTORTYPE_NPC ||
+		m_pHostEventHandler->getActorType() == ACTORTYPE_MONSTER))
+		return 0.15f;
 	return 0.1f;
 }
 
