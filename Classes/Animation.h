@@ -112,7 +112,7 @@ public:
 		AnimPartMatchFunc _AnimPartMatchFunc[eAnimPart_Count];
 	};
 protected:
-private:
+public:
 	ASprite*	m_sprite[eAnimPart_Count];
 	Animation*  m_stdAnimationp[MonsterAnimationType::DEF_GUAI_ANIMATION_MAX];
 	

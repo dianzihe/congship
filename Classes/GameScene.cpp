@@ -88,7 +88,7 @@ bool GameScene::init()
 #endif
 
 
-#if 1
+#if 0
 	//monster²âÊÔ
 	MonsterCfg::instance().init("monster");
 
@@ -109,7 +109,34 @@ bool GameScene::init()
 
 	pMonster->onLookInfoMonster(monsterInfo);
 #endif
+#if 1
+	std::string plist_content = FileUtils::getInstance()->getStringFromFile("Sprite/monster/m16.plist");
 
+	Data image_content = FileUtils::getInstance()->getDataFromFile("Sprite/monster/m16.png");
+
+	Image* image = new (std::nothrow) Image();
+	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
+	Texture2D* texture = new (std::nothrow) Texture2D();
+	texture->initWithImage(image);
+	texture->autorelease();
+
+	CC_SAFE_RELEASE(image);
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
+
+		Vector<SpriteFrame*> animFrames(15);
+		char str[100] = { 0 };
+		for (int j = 1; j < 50; j++) {
+			sprintf(str, "%s_%04d.png", "attack/attack_up", j);
+			auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
+			log("--add to frame cache-->%s", str);
+			if (NULL != frame)
+				animFrames.pushBack(frame);
+		}
+
+		auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+		//m_uiNode->runAction(RepeatForever::create(Animate::create(animation)));
+#endif
 	return true;
 }
 GameScene::GameScene(void)

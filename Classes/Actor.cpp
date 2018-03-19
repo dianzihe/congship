@@ -448,6 +448,12 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 	m_dir = dir;
 }
 
+void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad)
+{
+	m_animation.SetHostEventHandler(this);
+	//m_animation.LoadASprite(id, type, sex, equiplevel, isMustLoad);
+	m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
+}
 float Actor::GetAnimationTime( int animID )
 {
 	int anim = GetAnimID(animID, m_dir);

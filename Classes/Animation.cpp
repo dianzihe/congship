@@ -104,8 +104,8 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 	_SpriteInfo._ActorType = type;
 	//_SpriteInfo._EquipLevel = equipLevel;
 
-	std::string spriteName = AspriteManager::GetSpriteName(_SpriteInfo);
-	std::string spriteFile = AspriteManager::GetSpritePath(_SpriteInfo._ActorType) + spriteName;
+	std::string spriteName = AspriteManager::instance().GetSpriteName(_SpriteInfo);
+	std::string spriteFile = AspriteManager::instance().GetSpritePath(_SpriteInfo._ActorType) + spriteName;
 
 	log("DQAnimation::addAnimation-->%s:%s", spriteName.c_str(), spriteFile.c_str());
 	char fileNameBuffer[256];
@@ -137,12 +137,12 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 	CC_SAFE_RELEASE(image);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
-
-	for (int i = 0; i < sizeof(DQAnimationMotionType); i++){
+	
+	for (int i = 0; i < sizeof(DQAnimationMotionType) / sizeof(DQAnimationMotionType[0]); i++){
 		Vector<SpriteFrame*> animFrames(15);
 		char str[100] = { 0 };
-		for (int j = 1; j < 15; j++) {
-			sprintf(str, "%s_%02d.png", DQAnimationMotionType[i], j);
+		for (int j = 1; j < 50; j++) {
+			sprintf(str, "%s_%04d.png", DQAnimationMotionType[i], j);
 			auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
 			log("--add to frame cache-->%s", str);
 			if(NULL != frame)
@@ -150,7 +150,7 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 		}
 
 		auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
-
+		m_mapAnimation[DQAnimationMotionType[i]] = animation;
 		// Add an animation to the Cache
 		AnimationCache::getInstance()->addAnimation(animation, DQAnimationMotionType[i]);
 	}

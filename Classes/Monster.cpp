@@ -152,12 +152,13 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	}
 }
 
-/*
+
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	Charactor::draw(renderer, transform, flags);
+	//Charactor::draw(renderer, transform, flags);
+	//runAction(RepeatForever::create(Animate::create(m_animation.m_mapAnimation["attack/attack_up"])));
 }
-*/
+
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
