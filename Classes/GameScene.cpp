@@ -13,6 +13,8 @@
 #include "base.h"
 #include "UIBatchRenderer.h"
 #include "PlayerLayerCfg.h"
+#include "BossGameFrontLayer.h"
+
 using namespace CocosDenshion;
 
 //GameScene* GameScene::m_gamelayer = nullptr;
@@ -98,27 +100,6 @@ bool GameScene::init()
 	//monster²âÊÔ
 	MonsterCfg::instance().init("monster");
 
-	CMonster * pMonster = CMonster::node();
-	LookInfoMonster *monsterInfo = new LookInfoMonster();
-	monsterInfo->monster_data_id = 13;
-	monsterInfo->id = 0;
-	monsterInfo->move_target_x = 100;
-	monsterInfo->move_target_y = 100;
-	monsterInfo->move_speed = 2;
-	monsterInfo->x = 50;
-	monsterInfo->y = 100;
-	monsterInfo->lifePercent = 80;
-	monsterInfo->faction = 0;
-	monsterInfo->charState = 0;
-	monsterInfo->wildState = 0;
-	m_actorManager->AddActor(pMonster);
-
-	pMonster->onLookInfoMonster(monsterInfo);
-
-	char animationCacheName[256];
-	sprintf(animationCacheName, "%d_%d_%s", monsterInfo->monster_data_id, ACTORTYPE_MONSTER, "attack/attack_up");
-	auto animation = AnimationCache::getInstance()->getAnimation("16_3_move/move_left");
-	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
 #endif
 #if 1
 	/*
@@ -192,7 +173,45 @@ GameScene::~GameScene(void){
 	log("=======>release gamescene");
 }
 
+void GameScene::onEnter()
+{
+	setGameLayer(new BossGameFrontLayer());
+	getGameLayer()->setBattleScene(this);
+	getGameLayer()->setPosition(Vec2(0, 0));
+	getGameLayer()->setAnchorPoint(Point(0.5, 0.5));
+	//getGameLayer()->LoadMap(pMap);
 
+	addChild(getGameLayer());
+
+	//WBossGuai *lpGuai = NULL;
+	//lpGuai = WBoss4::BuildGuai();
+
+
+	CMonster * pMonster = CMonster::node();
+	LookInfoMonster *monsterInfo = new LookInfoMonster();
+	monsterInfo->monster_data_id = 13;
+	monsterInfo->id = 0;
+	monsterInfo->move_target_x = 100;
+	monsterInfo->move_target_y = 100;
+	monsterInfo->move_speed = 2;
+	monsterInfo->x = 50;
+	monsterInfo->y = 100;
+	monsterInfo->lifePercent = 80;
+	monsterInfo->faction = 0;
+	monsterInfo->charState = 0;
+	monsterInfo->wildState = 0;
+	m_actorManager->AddActor(pMonster);
+
+	pMonster->onLookInfoMonster(monsterInfo);
+
+	char animationCacheName[256];
+	sprintf(animationCacheName, "%d_%d_%s", monsterInfo->monster_data_id, ACTORTYPE_MONSTER, "attack/attack_up");
+	auto animation = AnimationCache::getInstance()->getAnimation("16_3_move/move_left");
+	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
+
+
+
+}
 GameScene* GameScene::GetScene()
 {
 	//return (GameScene*)(Director::getInstance()->getRunningScene());

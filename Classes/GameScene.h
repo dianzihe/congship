@@ -10,6 +10,8 @@
 //#include "Camera.h"
 #include "GameState.h"
 #include "Map.h"
+//#include "GameFrontLayer.h"
+#include "BossGameFrontLayer.h"
 USING_NS_CC;
 
 class PlaneEnemy;
@@ -69,6 +71,8 @@ class GameScene : public Scene
 {
     //以下是游戏配置信息
 public:
+	CC_SYNTHESIZE(BossGameFrontLayer *, m_GameLayer, GameLayer)
+
 	friend class Singleton<GameScene, Tag_Singleton_Auto>;
     enum NodeTag
     {
@@ -113,6 +117,7 @@ public:
 	
 	GameScene(void);
 	~GameScene(void);
+	virtual void onEnter();
 	virtual bool init();
 	static GameScene* inst;
 	static GameScene* create()

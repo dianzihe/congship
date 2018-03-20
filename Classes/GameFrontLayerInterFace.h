@@ -16,7 +16,7 @@
 
 #define DEF_GameFrontLayerInterFace_TAG 0xFF1312
 
-class GameFrontLayerInterFace:public CCLayer
+class GameFrontLayerInterFace:public Layer
 {
     CC_SYNTHESIZE(Vec2, m_gravityFly,GravityFly);  ///< 飞行时的重力加速度
     CC_SYNTHESIZE(Vec2, m_gravity,Gravity);           ///< 重力加速度

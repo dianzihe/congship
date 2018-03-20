@@ -158,6 +158,49 @@ void BossGameFrontLayer::onExit()
 
 void BossGameFrontLayer::BuildHero()
 {
+	/*
+	m_heros = WDDD_GLOBAL.m_lpBattleGlobal->m_bossHeros;
+	m_heros->retain();
+
+	for (int i = 0; i<m_heros->count(); i++)
+	{
+		WBossHero *lpHero = (WBossHero *)m_heros->objectAtIndex(i);
+		lpHero->setGameFrontLayer(this);
+		lpHero->start();
+		WLog("HeroPos:%f,%f", lpHero->getMoverPosition().x, lpHero->getMoverPosition().y);
+		addChild(lpHero, 1);
+	}
+
+	m_guais = WDDD_GLOBAL.m_lpBattleGlobal->m_bossGuais;
+	m_guais->retain();
+	*/
+	for (int i = 0; i<m_guais->count(); i++)
+	{
+		WBossGuai *lpGuai = (WBossGuai *)m_guais->objectAtIndex(i);
+		if (lpGuai->getPlayerId() != -1)
+		{
+			lpGuai->setGameFrontLayer(this);
+			lpGuai->start();
+			addChild(lpGuai);
+		}
+	}
+
+	// m_currentHero=0;
+
+	//m_lastScrCenterPoint = WDDD_GLOBAL.m_lpBattleGlobal->m_bossMyHero->getPositionInPixels();
+
+	WAnimationNode *pNode = WCharacter::AnimationWithFileCircle(WDDD_GLOBAL.getLocalResFile(DEF_SYSTEM_HUD_PATH"Photosphere.png"), 4, 166, 166, 0, 0, 0.4);
+
+	m_myHeroCircle = WCharacter::node();
+	m_myHeroCircle->AddAnimationToDict(0, pNode);
+	m_myHeroCircle->setAnimation(0);
+	//WDDD_GLOBAL.m_aniManager.GetSampleAnimation(WANI_IWCO_BATTLEEFFICIENTS, "Photosphere");
+	CCPoint pos = WDDD_GLOBAL.m_lpBattleGlobal->m_bossMyHero->getAnchorPointInPixels();
+	pos.y += 30;
+	m_myHeroCircle->setPositionInPixels(pos);
+	m_myHeroCircle->PlayRepeat();
+
+	WDDD_GLOBAL.m_lpBattleGlobal->m_bossMyHero->addChild(m_myHeroCircle, -2);
 }
 
 bool BossGameFrontLayer::getStartSpeedNormal(Vec2 &startPos,

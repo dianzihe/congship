@@ -28,7 +28,7 @@ class BossGameFrontLayer :public GameFrontLayerInterFace
 {
 
 	//CC_SYNTHESIZE(BossBattleScene *, m_BattleScene, BattleScene);
-
+	CC_SYNTHESIZE(Scene *, m_BattleScene, BattleScene);
 
 
 	// CC_SYNTHESIZE(int,m_currentHero,CurrentHero);   //当前轮到这个角色操作

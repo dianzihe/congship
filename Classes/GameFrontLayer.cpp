@@ -302,14 +302,14 @@ void GameFrontLayer::BuildHero()
 }
 
 
-
+/*
 void GameFrontLayer::LoadMap(WMap *pMap)
 {
 	//initMap(pMap);
 
 	BuildHero();
 }
-
+*/
 
 
 

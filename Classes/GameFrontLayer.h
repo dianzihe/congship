@@ -18,13 +18,13 @@
 //#include "../battle_base/WBPixelByte.h"
 #include "GameFrontLayerInterFace.h"
 
-class BattleScene;
-class WMap;
+//class BattleScene;
+//class WMap;
 
 class GameFrontLayer:public GameFrontLayerInterFace
  {
  
-    CC_SYNTHESIZE(BattleScene *, m_BattleScene, BattleScene);
+    CC_SYNTHESIZE(Scene *, m_BattleScene, BattleScene);
     
 
    
@@ -230,8 +230,8 @@ public:
     
     
      
-    void LoadMap(WMap *pMap);
-     void testLoadMap(WMap *pMap);
+    //void LoadMap(WMap *pMap);
+    //void testLoadMap(WMap *pMap);
     void BuildHero();
     
     virtual void onEnter();
