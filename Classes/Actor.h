@@ -85,7 +85,7 @@ class ASprite;
 
 typedef long long	ActorID;
 
-class Actor : public cocos2d::Node
+class Actor : public Sprite
 {
 	CC_SYNTHESIZE(int, m_animID, animID);		//ACTORSTATE
 	CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE

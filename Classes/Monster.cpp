@@ -61,7 +61,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		return;
 	}
 	setActorID( pLookInfoMonster->id );
-	log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
+	//log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
 	setDataID( pLookInfoMonster->monster_data_id );
 	setFaction(pMonsterData->faction);
 	setLevel( pMonsterData->level );
@@ -87,6 +87,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 	GameScene::GetActorManager()->AddActor(this);
 	SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
+	//SetNewPos(Point(300, 600));
 	/*
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
@@ -126,11 +127,12 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		AddBuff(buff);
 	}
 	*/
-	log( "onLookInfoMonster [%lld %s] pos[%d %d]", 
+	log( "onLookInfoMonster [%lld %s] pos[%d %d] animation[%d]", 
 		getActorID(),
 		GetName().c_str(),
 		(int)getPosition().x,
-		(int)getPosition().y );
+		(int)getPosition().y,
+		pMonsterData->animation);
 
 
 	m_fCfgScale = pMonsterData->modelscale;

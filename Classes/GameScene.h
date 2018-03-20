@@ -158,6 +158,7 @@ public:
 	ActorManager*	m_actorManager;
 	DQMap*			m_map;
 	Node*			m_uiNode;
+	Sprite*			m_uiSprite;
 	GAME_STATE		m_eGameState;
 	CRunState*		m_pRunState;
    // static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象

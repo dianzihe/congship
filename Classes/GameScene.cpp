@@ -33,7 +33,7 @@ bool GameScene::init()
 
 	// create UI elements
 	AspriteManager::instance().initilize();
-	PlayerLayerCfg::instance().init("playerlayer");
+	//PlayerLayerCfg::instance().init("playerlayer");
 
 	m_actorManager = new ActorManager();
 	log("GameScene---m_actorManager---->%x", m_actorManager);
@@ -46,7 +46,13 @@ bool GameScene::init()
 	//addChild(SceneTestLayer1::create());
 	
 	m_uiNode = Node::create();
-	addChild(m_uiNode, GAME_LAYER_UI);
+	auto winSize = Director::getInstance()->getWinSize();
+	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	//addChild(m_uiNode, GAME_LAYER_UI);
+
+	m_uiSprite = Sprite::create();
+	m_uiSprite->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	addChild(m_uiSprite, GAME_LAYER_UI);
 
 	/*
 	//Í¼Æ¬¶Ñµþ²âÊÔ´úÂë
@@ -88,7 +94,7 @@ bool GameScene::init()
 #endif
 
 
-#if 0
+#if 1
 	//monster²âÊÔ
 	MonsterCfg::instance().init("monster");
 
@@ -96,8 +102,8 @@ bool GameScene::init()
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
 	monsterInfo->id = 0;
-	monsterInfo->move_target_x = 300;
-	monsterInfo->move_target_y = 600;
+	monsterInfo->move_target_x = 100;
+	monsterInfo->move_target_y = 100;
 	monsterInfo->move_speed = 2;
 	monsterInfo->x = 50;
 	monsterInfo->y = 100;
@@ -108,8 +114,14 @@ bool GameScene::init()
 	m_actorManager->AddActor(pMonster);
 
 	pMonster->onLookInfoMonster(monsterInfo);
+
+	char animationCacheName[256];
+	sprintf(animationCacheName, "%d_%d_%s", monsterInfo->monster_data_id, ACTORTYPE_MONSTER, "attack/attack_up");
+	auto animation = AnimationCache::getInstance()->getAnimation("16_3_move/move_left");
+	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
 #endif
 #if 1
+	/*
 	std::string plist_content = FileUtils::getInstance()->getStringFromFile("Sprite/monster/m16.plist");
 
 	Data image_content = FileUtils::getInstance()->getDataFromFile("Sprite/monster/m16.png");
@@ -123,8 +135,9 @@ bool GameScene::init()
 	CC_SAFE_RELEASE(image);
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
-
-		Vector<SpriteFrame*> animFrames(15);
+	Vector<SpriteFrame*> animFrames(15);
+	
+		
 		char str[100] = { 0 };
 		for (int j = 1; j < 50; j++) {
 			sprintf(str, "%s_%04d.png", "attack/attack_up", j);
@@ -133,9 +146,40 @@ bool GameScene::init()
 			if (NULL != frame)
 				animFrames.pushBack(frame);
 		}
-
+	
 		auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
-		//m_uiNode->runAction(RepeatForever::create(Animate::create(animation)));
+		*/
+
+#endif
+
+#if 0
+    auto frameCache = SpriteFrameCache::getInstance();
+    frameCache->addSpriteFramesWithFile("grossini.plist");
+
+	Vector<SpriteFrame*> animFrames(15);
+    char str[100] = {0};
+    for(int i = 1; i < 15; i++) {
+        sprintf(str, "grossini_dance_%02d.png",i);
+        auto frame = frameCache->getSpriteFrameByName(str);
+        animFrames.pushBack(frame);
+    }
+
+    auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+
+    // Add an animation to the Cache
+    AnimationCache::getInstance()->addAnimation(animation, "dance");
+	// create an sprite without texture
+	auto grossini = Sprite::create();
+	//auto frame = frameCache->getSpriteFrameByName("grossini_dance_01.png");
+	//grossini->setSpriteFrame(frame);
+	/*
+	auto winSize = Director::getInstance()->getWinSize();
+	grossini->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	addChild(grossini);
+	*/
+	// run the animation
+	//grossini->runAction(RepeatForever::create(Animate::create(animation)));
+	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
 #endif
 	return true;
 }
