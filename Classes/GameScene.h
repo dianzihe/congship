@@ -162,7 +162,7 @@ public:
 	Sprite* background;
 	ActorManager*	m_actorManager;
 	DQMap*			m_map;
-	Node*			m_uiNode;
+	//Node*			m_uiNode;
 	Sprite*			m_uiSprite;
 	GAME_STATE		m_eGameState;
 	CRunState*		m_pRunState;
@@ -171,7 +171,7 @@ public:
 private:
     //static GameScene* m_gamelayer; //游戏场景层的单例对象
 public:
-	Node* GetUI();
+	//Node* GetUI();
     SpriteBatchNode* getBulletBox() { return m_bulletBox; }	 //获取子弹渲染器
     void AdjustHeroPosition(Node* hero);
     void gameover();

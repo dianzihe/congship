@@ -45,12 +45,12 @@ bool GameScene::init()
 	m_actorManager->setMap(m_map);
 	addChild(m_map, GAME_LAYER_MAP);
 	
-	//addChild(SceneTestLayer1::create());
-	
-	m_uiNode = Node::create();
 	auto winSize = Director::getInstance()->getWinSize();
+	/*
+	m_uiNode = Node::create();
 	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	//addChild(m_uiNode, GAME_LAYER_UI);
+	*/
 
 	m_uiSprite = Sprite::create();
 	m_uiSprite->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
@@ -186,7 +186,6 @@ void GameScene::onEnter()
 	//WBossGuai *lpGuai = NULL;
 	//lpGuai = WBoss4::BuildGuai();
 
-
 	CMonster * pMonster = CMonster::node();
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
@@ -203,6 +202,8 @@ void GameScene::onEnter()
 	m_actorManager->AddActor(pMonster);
 
 	pMonster->onLookInfoMonster(monsterInfo);
+
+	//getGameLayer()->addChild(pMonster);
 
 	char animationCacheName[256];
 	sprintf(animationCacheName, "%d_%d_%s", monsterInfo->monster_data_id, ACTORTYPE_MONSTER, "attack/attack_up");
@@ -228,11 +229,12 @@ void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
 		m_pRunState->OnDraw();
 }
 
+/*
 Node* GameScene::GetUI()
 {
 	return GameScene::GetScene()->m_uiNode;
 }
-
+*/
 void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 {
 	Readint64(buf, value.id);

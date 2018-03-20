@@ -250,6 +250,7 @@ void UIManager::addItemToChildMap(const string name,UI* thisUi)
 	vector<string> tempNameVec;
 	if (thisUi)	{
 		tempNameVec.push_back(thisUi->m_name);
+		/*
 		if(thisUi != scene->m_uiNode) {
 			UI*	findParents = (UI*)(thisUi->getParent());
 			while(findParents && findParents != scene->m_uiNode) {
@@ -257,6 +258,7 @@ void UIManager::addItemToChildMap(const string name,UI* thisUi)
 				findParents = (UI*)(findParents->getParent());
 			}
 		}
+		*/
 		ChildUiLocateItem locateItem;
 		int layerNum = tempNameVec.size() - 1;
 		locateItem.parentNameArr.resize(tempNameVec.size());
@@ -469,7 +471,7 @@ void UIManager::addUI(UI* pUI, bool isTop)
 		if(m_uiMap[pUI->m_name] != NULL){	
 			return;
 		}
-		GameScene::GetScene()->m_uiNode->addChild(pUI, 10000);
+		//GameScene::GetScene()->m_uiNode->addChild(pUI, 10000);
 		m_uiMap[pUI->m_name] = pUI;
 	}
 
@@ -485,7 +487,7 @@ void UIManager::addUI(UI* pUI, int id, bool isTop)
 		if(m_uiMap[pUI->m_name] != NULL)	{	
 			return;
 		}
-		GameScene::GetScene()->m_uiNode->addChild(pUI, 0);
+		//GameScene::GetScene()->m_uiNode->addChild(pUI, 0);
 		m_uiMap[pUI->m_name] = pUI;
 	}
 

@@ -173,8 +173,8 @@ void BossGameFrontLayer::BuildHero()
 
 	m_guais = WDDD_GLOBAL.m_lpBattleGlobal->m_bossGuais;
 	m_guais->retain();
-	*/
-	for (int i = 0; i<m_guais->count(); i++)
+	
+	for (int i = 0; i < m_guais->count(); i++)
 	{
 		WBossGuai *lpGuai = (WBossGuai *)m_guais->objectAtIndex(i);
 		if (lpGuai->getPlayerId() != -1)
@@ -201,6 +201,7 @@ void BossGameFrontLayer::BuildHero()
 	m_myHeroCircle->PlayRepeat();
 
 	WDDD_GLOBAL.m_lpBattleGlobal->m_bossMyHero->addChild(m_myHeroCircle, -2);
+	*/
 }
 
 bool BossGameFrontLayer::getStartSpeedNormal(Vec2 &startPos,

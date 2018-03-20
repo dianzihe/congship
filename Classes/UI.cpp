@@ -230,7 +230,7 @@ UI* UIDataGroup::createUI(int zoder)
 	if (NULL == p)
 		log("ERROR:UIDataGroup::createUI-----> null");
 	GameScene* scene = GameScene::GetScene();
-	scene->m_uiNode->addChild(p, zoder);
+	//scene->m_uiNode->addChild(p, zoder);
 
 	//Sprite* b = GetSprite("loading_bg.jpg");
 	//scene->m_uiNode->addChild(b, zoder);
