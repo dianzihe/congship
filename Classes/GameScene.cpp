@@ -203,7 +203,7 @@ void GameScene::onEnter()
 
 	pMonster->onLookInfoMonster(monsterInfo);
 
-	//getGameLayer()->addChild(pMonster);
+	getGameLayer()->addChild(pMonster);
 
 	char animationCacheName[256];
 	sprintf(animationCacheName, "%d_%d_%s", monsterInfo->monster_data_id, ACTORTYPE_MONSTER, "attack/attack_up");

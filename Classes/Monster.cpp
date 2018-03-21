@@ -78,7 +78,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	m_animation.SetHostEventHandler(this);
 	addAnimationSprite( pMonsterData->animation, ACTORTYPE_MONSTER, 0, 1, true );
 	//Actor::DelayASpriteLoadCallBack();
-	m_animation.setAnim(m_animation.getAnim());
+	//m_animation.setAnim(m_animation.getAnim());
 
 	char str[128];
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);

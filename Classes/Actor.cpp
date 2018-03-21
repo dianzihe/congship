@@ -166,7 +166,7 @@ Rect& Actor::getSelectRect()
 void Actor::SetNewPos(  Point& pos )
 {
 	setPosition(pos);
-	getParent()->reorderChild(this, GetZOrder());
+	//getParent()->reorderChild(this, GetZOrder());
 #if 0
 	if(m_bTianTiFight)
 	{
