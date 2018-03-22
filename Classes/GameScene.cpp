@@ -51,11 +51,11 @@ bool GameScene::init()
 	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	//addChild(m_uiNode, GAME_LAYER_UI);
 	*/
-
+	/*
 	m_uiSprite = Sprite::create();
 	m_uiSprite->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
 	addChild(m_uiSprite, GAME_LAYER_UI);
-
+	*/
 	/*
 	//Í¼Æ¬¶Ñµþ²âÊÔ´úÂë
 	auto sprite = MultiSprite::create("gem_light.png", "guangquan_lan.png");
@@ -162,19 +162,7 @@ bool GameScene::init()
 	//grossini->runAction(RepeatForever::create(Animate::create(animation)));
 	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
 #endif
-	return true;
-}
-GameScene::GameScene(void)
-{
-	UIBatchRenderer::instance()->initilize();
-	m_pRunState = NULL;
-}
-GameScene::~GameScene(void){
-	log("=======>release gamescene");
-}
 
-void GameScene::onEnter()
-{
 	setGameLayer(new BossGameFrontLayer());
 	getGameLayer()->setBattleScene(this);
 	getGameLayer()->setPosition(Vec2(0, 0));
@@ -203,16 +191,23 @@ void GameScene::onEnter()
 
 	pMonster->onLookInfoMonster(monsterInfo);
 
-	getGameLayer()->addChild(pMonster);
+	/*
+	auto sprite = Sprite::create("gem_light.png");
+	getGameLayer()->addChild(sprite);
+	getGameLayer()->setPosition(100, 100);
+	*/
 
-	char animationCacheName[256];
-	sprintf(animationCacheName, "%d_%d_%s", monsterInfo->monster_data_id, ACTORTYPE_MONSTER, "attack/attack_up");
-	auto animation = AnimationCache::getInstance()->getAnimation("16_3_move/move_left");
-	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
-
-
-
+	return true;
 }
+GameScene::GameScene(void)
+{
+	UIBatchRenderer::instance()->initilize();
+	m_pRunState = NULL;
+}
+GameScene::~GameScene(void){
+	log("=======>release gamescene");
+}
+
 GameScene* GameScene::GetScene()
 {
 	//return (GameScene*)(Director::getInstance()->getRunningScene());

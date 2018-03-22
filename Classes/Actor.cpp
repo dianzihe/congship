@@ -334,7 +334,7 @@ void Actor::update(float dt)
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	log("---draw----actor::draw---->");
-	//Node::draw();
+	//Node::visit();
 	/*
 	DQMap* curMap = GameScene::GetScene()->GetCurMap();
 	if(curMap == NULL)
@@ -424,7 +424,13 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 }
 
 void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex )
-{	
+{
+	auto sprite = Sprite::create();
+	char animationCacheName[256];
+	sprintf(animationCacheName, "%d_%d_%s/%s_%d", animID, m_nActorType, "attack/attack_up");
+	auto animation = AnimationCache::getInstance()->getAnimation("16_3_move/move_left");
+	sprite->runAction(RepeatForever::create(Animate::create(animation)));
+	GameScene::GetScene()->getGameLayer()->addChild(sprite);
 	if(m_animID != animID || m_dir != dir)
 	{
 		/*

@@ -29,6 +29,25 @@ const int DIRECTION_RIGHT = 5;
 const int DIRECTION_DOWN = 6;
 const int DIRECTION_LEFT = 7;
 
+static const char* DQAnimationMotionType[] =
+{
+	"attack/attack_up",
+	"attack/attack_down",
+	"attack/attack_left",
+	"attack/attack_right",
+	"dead/dead_up",
+	"dead/dead_down",
+	"dead/dead_left",
+	"dead/dead_right",
+	"idle/idle_up",
+	"idle/idle_down",
+	"idle/idle_left",
+	"idle/idle_right",
+	"move/move_up",
+	"move/move_down",
+	"move/move_left",
+	"move/move_right",
+};
 
 struct TransportDst
 {
@@ -91,6 +110,7 @@ class Actor : public Sprite
 	CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE
 	CC_SYNTHESIZE(int, m_flyState, FlyState);	//MOVESTATE
 	CC_SYNTHESIZE(int, m_dir, Dir);				//ACTORDIR	
+	CC_SYNTHESIZE(int, m_runStatus, RunStatus);//
 
 //	CC_SYNTHESIZE(int, m_mapID, MapID);//µØÍ¼ID
 

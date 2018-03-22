@@ -83,7 +83,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	char str[128];
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
-	//m_pStateMachine->setStateForce(eCharactorState_Idle, m_dir);
+	onStateEnter(eCharactorState_Idle, m_dir);
 
 	GameScene::GetActorManager()->AddActor(this);
 	SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
@@ -157,7 +157,9 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	//Charactor::draw(renderer, transform, flags);
+	log("CMonster::draw");
+	//Charactor::visit();
+	Charactor::draw(renderer, transform, flags);
 	//runAction(RepeatForever::create(Animate::create(m_animation.m_mapAnimation["attack/attack_up"])));
 }
 

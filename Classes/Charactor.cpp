@@ -132,6 +132,7 @@ void Charactor::update(float dt)
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	log("---draw---Charactor::draw---->");
+	//Actor::visit();
 	Actor::draw(renderer, transform, flags);
 
 	/*

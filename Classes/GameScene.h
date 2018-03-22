@@ -117,7 +117,7 @@ public:
 	
 	GameScene(void);
 	~GameScene(void);
-	virtual void onEnter();
+	//virtual void onEnter();
 	virtual bool init();
 	static GameScene* inst;
 	static GameScene* create()
