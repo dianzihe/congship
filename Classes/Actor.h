@@ -31,22 +31,18 @@ const int DIRECTION_LEFT = 7;
 
 static const char* DQAnimationMotionType[] =
 {
-	"attack/attack_up",
 	"attack/attack_down",
 	"attack/attack_left",
-	"attack/attack_right",
-	"dead/dead_up",
+	"attack/attack_up",
 	"dead/dead_down",
 	"dead/dead_left",
-	"dead/dead_right",
-	"idle/idle_up",
+	"dead/dead_up",
 	"idle/idle_down",
 	"idle/idle_left",
-	"idle/idle_right",
-	"move/move_up",
+	"idle/idle_up",
 	"move/move_down",
 	"move/move_left",
-	"move/move_right",
+	"move/move_up",
 };
 
 struct TransportDst

@@ -11,27 +11,6 @@
 //#include "HeroPet.h"
 #include "SimpleEventDefine.h"
 
-static const char* DQAnimationMotionType[] =
-{
-	"attack/attack_up",
-	"attack/attack_down",
-	"attack/attack_left",
-	"attack/attack_right",
-	"dead/dead_up",
-	"dead/dead_down",
-	"dead/dead_left",
-	"dead/dead_right",
-	"idle/idle_up",
-	"idle/idle_down",
-	"idle/idle_left",
-	"idle/idle_right",
-	"move/move_up",
-	"move/move_down",
-	"move/move_left",
-	"move/move_right",
-};
-
-
 DQAnimation::DQAnimation(void)
 	: m_pHostEventHandler(NULL)
 	, mIsMutiAsprite(false)
@@ -154,7 +133,7 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 		m_mapAnimation[DQAnimationMotionType[i]] = animation;
 
 		// Add an animation to the Cache
-		sprintf(animationCacheName, "%d_%d_%s", id, type, DQAnimationMotionType[i]);
+		sprintf(animationCacheName, "%d_%d_%d", id, type, i);
 		log("----DQAnimation::addAnimation::add to cache:%s", animationCacheName);
 		AnimationCache::getInstance()->addAnimation(animation, animationCacheName);
 	}

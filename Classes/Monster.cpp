@@ -76,7 +76,9 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	else
 		setTargetIconSheild(true);
 	m_animation.SetHostEventHandler(this);
-	addAnimationSprite( pMonsterData->animation, ACTORTYPE_MONSTER, 0, 1, true );
+	log("CMonster::onLookInfoMonster  %d---%d", pLookInfoMonster->monster_data_id, pMonsterData->animation);
+	setanimID(pMonsterData->animation);
+	addAnimationSprite(getanimID(), ACTORTYPE_MONSTER, 0, 1, true);
 	//Actor::DelayASpriteLoadCallBack();
 	//m_animation.setAnim(m_animation.getAnim());
 
@@ -166,6 +168,7 @@ void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
+	log("CMonster::onStateEnter");
 	Charactor::onStateEnter(stateToEnter, stateParam);
 	switch(stateToEnter)
 	{

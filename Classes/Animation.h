@@ -37,7 +37,6 @@ public:
 	~DQAnimation(void);
 
 
-
 	/**
 	* @brief 获取输入串(如:bhead=”head1”)中的键名和键值
 	* @param KeyName [out] 键名
