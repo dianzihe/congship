@@ -165,7 +165,9 @@ Rect& Actor::getSelectRect()
 
 void Actor::SetNewPos(  Point& pos )
 {
+	log("Actor::SetNewPos--->[%d, %d]", pos.x, pos.y);
 	setPosition(pos);
+	
 	//getParent()->reorderChild(this, GetZOrder());
 #if 0
 	if(m_bTianTiFight)
@@ -429,9 +431,10 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 	auto sprite = Sprite::create();
 	char animationCacheName[256];
 	sprintf(animationCacheName, "%d_%d_%d", getanimID(), m_nActorType, animID);
-	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, getPosition().x, getPosition().y);
+	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, dq_position.x, dq_position.y);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
-	sprite->setPosition(getPosition());
+	//sprite->setPosition(getPosition());
+	sprite->setPosition(dq_position);
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
 	if(m_animID != animID || m_dir != dir)

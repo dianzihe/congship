@@ -1,7 +1,7 @@
 #include "DirectionModule.h"
 #include "Charactor.h"
 //#include "MyMathExtension.h"
-//#include "Map.h"
+#include "Map.h"
 #include "GameScene.h"
 //#include "../../BaseModule/Navigation/NavigationModule.h"
 
@@ -78,16 +78,16 @@ void DirectionModule::UpdateMotion( float dt )
 
 bool	DirectionModule::UpdateDirection( eDirection dir, float realSpeed, bool isEnter )
 {
-	/*
-	Map *pMap = GameScene::GetMap();
+	DQMap *pMap = GameScene::GetMap();
 	if( !pMap )
 		return false;
+	/*
 	CPlayer *pPlayer = dynamic_cast<CPlayer*>(m_pHost);
 	if( !pPlayer )
 		return false;
 	if( !pPlayer->canMove() )
 		return false;
-
+	*/
 	CCPoint dirVec = m_sDirVec[dir];
 	CCPoint curPosition = m_pHost->getPosition();
 	CCPoint nextPosition = ccp( curPosition.x+dirVec.x*realSpeed, curPosition.y+dirVec.y*realSpeed);
@@ -181,9 +181,9 @@ bool	DirectionModule::UpdateDirection( eDirection dir, float realSpeed, bool isE
 	m_RealDirection = dir;
 	int newDir=0;
 	SET_DIR_BY_TWOPOINT(curPosition, nextPosition, newDir);
-	m_pHost->GetStateMachine()->setState(eCharactorState_Run, dir);
+	//m_pHost->GetStateMachine()->setState(eCharactorState_Run, dir);
 	m_pHost->SetNewPos(nextPosition);
-	*/
+	
 	return true;
 }
 

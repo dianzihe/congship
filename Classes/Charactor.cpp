@@ -89,20 +89,20 @@ Charactor::Charactor()
 
 	m_bTianTiFight = false;
 	//m_pStateMachine = new StateMachine(this);
-	//m_pGameCMDSystem = new GameCMDSystem();
+	m_pGameCMDSystem = new GameCMDSystem();
 }
 
 Charactor::~Charactor()
 {
 	//SAFE_DELETE(m_pStateMachine);
-	//SAFE_DELETE(m_pGameCMDSystem);
-	//SAFE_DELETE(m_pMotionMananger);
+	SAFE_DELETE(m_pGameCMDSystem);
+	SAFE_DELETE(m_pMotionMananger);
 }
 
 
 bool Charactor::init( void )
 {
-	//m_pMotionMananger = new MotionManager(this);
+	m_pMotionMananger = new DQMotionManager(this );
 	Actor::onLookInfoSceneObject();
 	return true;
 }
@@ -113,20 +113,18 @@ void Charactor::update(float dt)
 //	if(dt > 1.0f)
 //		return;
 //#endif
-	//m_pGameCMDSystem->UpdateCMDSystem();
+	m_pGameCMDSystem->UpdateCMDSystem();
 	Actor::update(dt);
-	/*
-	if(m_animation.isEnd())
-	{
-		m_pStateMachine->setState(eCharactorState_Idle, m_dir);
+	
+	if(m_animation.isEnd()){
+		//m_pStateMachine->setState(eCharactorState_Idle, m_dir);
 	}
 	
-	if(!isDead())
-	{
+	if(!isDead()){
 		m_pMotionMananger->Update(dt);
 	}
-	m_pStateMachine->updateMachine(dt);
-	*/
+	//m_pStateMachine->updateMachine(dt);
+	
 }
 
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
@@ -264,7 +262,7 @@ void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	case eCharactorState_Attack:
 		{
 			m_CharactorCombatState = eCharactorCombatState_Attack;
-			//GetMotionManager()->StopMotion();
+			GetMotionManager()->StopMotion();
 		}
 		break;
 	case eCharactorState_UnderAttack:
@@ -274,7 +272,7 @@ void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 		break;
 	case eCharactorState_Death:
 		{
-			//GetMotionManager()->StopMotion();
+			GetMotionManager()->StopMotion();
 			//Target::instance().HideTargetInfo();
 		}
 		break;
@@ -339,11 +337,12 @@ void Charactor::ProcessAnimaEvent( AnimaEvent* event )
 	pos.y = (float)event->_EventParamList[1]._Data._IntData;
 	string desc = event->_EventParamList[2]._Data._pStrData;
 	//CombatModule::instance().HandleAttackSuccess(m_CurCombatID, pos);
-	/*
+	
 	switch(event->_EventType)
 	{
 	case eAnimaEventType_Marker:
 		{
+			/*
 			if( m_pStateMachine->getCurrentState() == eCharactorState_Attack )
 			{
 			
@@ -359,11 +358,13 @@ void Charactor::ProcessAnimaEvent( AnimaEvent* event )
 					m_CharactorCombatState = eCharactorCombatState_CombatAccept;
 			
 			}
+			*/
 		}
+		
 	default:
 		break;
 	}
-	*/
+	
 }
 
 
@@ -436,7 +437,7 @@ void Charactor::onDead()
 {
 	setLife( 0 );
 	setperlife( 0.0f );
-	//addStateFlag(Actor_State_Flag_Dead);
+	addStateFlag(Actor_State_Flag_Dead);
 	//GetRoutingModule()->CleanPath();
 }
 

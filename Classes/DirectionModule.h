@@ -4,7 +4,7 @@
 #include "base.h"
 #include "IMotionModule.h"
 #include "AnimDef.h"
-#include "Charactor.h"
+//#include "Charactor.h"
 
 #define		DirectionArray_Count		16
 

@@ -1,19 +1,15 @@
-#ifndef _MOTIONMANAGER_H__
-#define _MOTIONMANAGER_H__
+#ifndef _DQMOTIONMANAGER_H__
+#define _DQMOTIONMANAGER_H__
 
 #include "IMotionModule.h"
-#include "Charactor.h"
-//#include "RoutingModule.h"
-#include "DirectionModule.h"
-//#include "HeroRoutingModule.h"
-//#include "TeleportModule.h"
 
+class Charactor;
 
-class MotionManager
+class DQMotionManager
 {
 public:
-	MotionManager(Charactor* pHost);
-	~MotionManager();
+	DQMotionManager(Charactor* pHost);
+	~DQMotionManager();
 
 public:
 	inline IMotionModule* GetMotionModule( MotionType nMotionType ) { return mMotionModule[nMotionType]; }

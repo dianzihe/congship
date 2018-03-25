@@ -100,6 +100,13 @@ void ReadObjectBuff(char*& buf, ObjectBuff& value);
 	_pos+=_size;\
 	break;\
 	}
+
+#define FLOAT_PI	(3.14159265358979323846)//(3.1415926535f)
+#define GET_SIN(x)	(sinf(2*FLOAT_PI*x/360))
+
+#define GET_SPEED_SUB(v1, v2, speed) (speed * fabsf(v1) / sqrtf(v1*v1 + v2*v2))
+
+void SET_DIR_BY_TWOPOINT(const Point &p1, const Point &p2, int& dir);
 /*
 #define GET_SPEED_SUB(v1, v2, speed) (speed * fabsf(v1) / sqrtf(v1*v1 + v2*v2))
 

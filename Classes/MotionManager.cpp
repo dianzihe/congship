@@ -1,15 +1,20 @@
 #include "base.h"
 #include "MotionManager.h"
-#include "Hero.h"
+//#include "Hero.h"
+//#include "Charactor.h"
+#include "RoutingModule.h"
+#include "DirectionModule.h"
+//#include "HeroRoutingModule.h"
+//#include "TeleportModule.h"
 
 
-MotionManager::MotionManager(Charactor* pHost)
+DQMotionManager::DQMotionManager(Charactor* pHost)
 : m_pHost(pHost)
 , mNewMotion(eMotionType_NULL)
 , mCurMotion(eMotionType_NULL)
 {
 	memset(mMotionModule, 0, sizeof(mMotionModule));
-	//mMotionModule[eMotionType_Routing] = new RoutingModule(m_pHost);
+	mMotionModule[eMotionType_Routing] = new RoutingModule(m_pHost);
 	mMotionModule[eMotionType_Direction] = new DirectionModule(m_pHost);
 	//mMotionModule[eMotionType_Teleport] = new TeleportModule(m_pHost);
 #if 0
@@ -29,14 +34,14 @@ MotionManager::MotionManager(Charactor* pHost)
 #endif
 }
 
-MotionManager::~MotionManager()
+DQMotionManager::~DQMotionManager()
 {
 	SAFE_DELETE(mMotionModule[eMotionType_Routing]);
 	SAFE_DELETE(mMotionModule[eMotionType_Direction]);
 	SAFE_DELETE(mMotionModule[eMotionType_Teleport]);
 }
 
-void MotionManager::Update( float dt )
+void DQMotionManager::Update(float dt)
 {
 	if(mNewMotion != mCurMotion)
 	{
@@ -52,7 +57,7 @@ void MotionManager::Update( float dt )
 		mMotionModule[mCurMotion]->UpdateMotion(dt);
 }
 
-void MotionManager::ChangeToMotion( MotionType nMotion )
+void DQMotionManager::ChangeToMotion(MotionType nMotion)
 {
 	if(IsCurMotionCanExit())
 	{
@@ -60,7 +65,7 @@ void MotionManager::ChangeToMotion( MotionType nMotion )
 	}
 }
 
-bool MotionManager::IsCurMotionCanExit()
+bool DQMotionManager::IsCurMotionCanExit()
 {
 	if( mMotionModule[mCurMotion] == NULL || mMotionModule[mCurMotion]->CanBeCancel() )
 	{
@@ -69,7 +74,7 @@ bool MotionManager::IsCurMotionCanExit()
 	return false;
 }
 
-void MotionManager::StopMotion()
+void DQMotionManager::StopMotion()
 {
 	if(mMotionModule[mCurMotion])
 	{

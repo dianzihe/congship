@@ -117,6 +117,7 @@ protected:
 	bool				m_cleanFlag;	//	切换地图的时候是否清除 默认为true
 	bool				m_canBeenClick;	//	能否被选中，默认=true
 public:
+	Vec2				dq_position;
 	ActorID				getActorID()const				{ return m_nActorID; }
 	void				setActorID( ActorID n )			{ m_nActorID = n; }
 

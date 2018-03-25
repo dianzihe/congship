@@ -4,11 +4,11 @@
 #include "GameScene.h"
 #include "ActorManager.h"
 #include "SkillCfg.h"
+#include "RoutingModule.h"
+#include "GameCMDSystem.h"
 
 /*
 #include "Map.h"
-#include "../BaseModule/Motion/RoutingModule.h"
-#include "../InputSystem/GameCMDSystem.h"
 #include "../BaseModule/SFX/SFXModule.h"
 */
 
@@ -76,7 +76,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	else
 		setTargetIconSheild(true);
 	m_animation.SetHostEventHandler(this);
-	log("CMonster::onLookInfoMonster  %d---%d", pLookInfoMonster->monster_data_id, pMonsterData->animation);
+	
 	setanimID(pMonsterData->animation);
 	addAnimationSprite(getanimID(), ACTORTYPE_MONSTER, 0, 1, true);
 	//Actor::DelayASpriteLoadCallBack();
@@ -85,18 +85,20 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	char str[128];
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
-	onStateEnter(eCharactorState_Idle, m_dir);
+	
 
 	GameScene::GetActorManager()->AddActor(this);
-	SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
+	log("CMonster::onLookInfoMonster  %d---%d", pLookInfoMonster->x, pLookInfoMonster->y);
+	//SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
+	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
 	//SetNewPos(Point(300, 600));
-	/*
+	
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
 		GetGameCMDSystem()->PushGameCMD(newCMD);
 		GetRoutingModule()->AddTargetPath( ccp( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
 	}
-	*/
+	
 	const SkillInfo* pBaseSkill = SkillCfg::instance().getSkillCfgData(pMonsterData->baseSkillID);
 	if(pBaseSkill){
 		SpriteInfo _SpriteInfo;
@@ -129,13 +131,15 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		AddBuff(buff);
 	}
 	*/
+	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
+	dq_position = Vec2(pLookInfoMonster->x, pLookInfoMonster->y);
 	log( "onLookInfoMonster [%lld %s] pos[%d %d] animation[%d]", 
 		getActorID(),
 		GetName().c_str(),
 		(int)getPosition().x,
 		(int)getPosition().y,
 		pMonsterData->animation);
-
+	onStateEnter(eCharactorState_Idle, m_dir);
 
 	m_fCfgScale = pMonsterData->modelscale;
 	m_fMaxWildScale = pMonsterData->wildMaxScale;
@@ -164,6 +168,7 @@ void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 	Charactor::draw(renderer, transform, flags);
 	//runAction(RepeatForever::create(Animate::create(m_animation.m_mapAnimation["attack/attack_up"])));
 }
+
 
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )

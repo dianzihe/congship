@@ -2,17 +2,22 @@
 
 #include "Actor.h"
 #include "CharacterStateTransTable.h"
-//#include "StateMachine.h"
-//#include "MotionManager.h"
-//#include "AbnormalStateModule.h"
+#include "GameCMDSystem.h"
+#include "MotionManager.h"
+#include "RoutingModule.h"
+#include "DirectionModule.h"
+#include <vector>
 
 //#include "platform.h"
+//#include "StateMachine.h"
+//#include "AbnormalStateModule.h"
+
 using namespace std;
 struct	CharactorBuff 
 {
 	long	startTime;
 	int		buff_id;
-	ActorID	casterID;
+	long long 	casterID;
 	int		allValidTime;
 	int		remainTriggerCount;
 	int		buffIcon;
@@ -25,14 +30,11 @@ enum CharactorCombatState
 	eCharactorCombatState_CombatAccept,
 	eCharactorCombatState_End,
 };
-
-/*
 class RoutingModule;
 class GameCMDSystem;
 class DirectionModule;
 class TeleportModule;
-class MotionManager;
-*/
+//class MotionManager;
 class Charactor : public Actor/*, public ITransationInfo*/
 {
 	
@@ -121,6 +123,8 @@ public:
 
 	bool IsAbleToMove();
 
+	DQMotionManager*		m_pMotionMananger;
+
 	//AbnormalStateModule* GetAbnormalStateModule() { return m_AbnormalStateModule; }
 	// New State Machine, Old Discard
 	virtual bool getStateTransitionInfo( int src, int dest );
@@ -130,25 +134,25 @@ public:
 
 	virtual void DelayASpriteLoadCallBack();
 
-	//inline MotionManager* GetMotionManager() { return m_pMotionMananger; }
+	DQMotionManager* GetMotionManager() { return m_pMotionMananger; }
 
-	//inline RoutingModule* GetRoutingModule() { return (RoutingModule*)m_pMotionMananger->GetMotionModule(eMotionType_Routing); }
+	RoutingModule* GetRoutingModule() { return (RoutingModule*)(m_pMotionMananger->GetMotionModule(eMotionType_Routing)); }
 
-	//inline DirectionModule* GetDirectionModule() { return (DirectionModule*)m_pMotionMananger->GetMotionModule(eMotionType_Direction); }
+	DirectionModule* GetDirectionModule() { return (DirectionModule*)m_pMotionMananger->GetMotionModule(eMotionType_Direction); }
 
 	//inline TeleportModule* GetTeleportModule() { return (TeleportModule*)m_pMotionMananger->GetMotionModule(eMotionType_Teleport); }
 
-	//inline GameCMDSystem* GetGameCMDSystem() { return m_pGameCMDSystem; }
+	GameCMDSystem* GetGameCMDSystem() { return m_pGameCMDSystem; }
 
-	inline CharactorCombatState GetCharactorCombatState() { return m_CharactorCombatState; }
+	CharactorCombatState GetCharactorCombatState() { return m_CharactorCombatState; }
 
 	//ÉèÖÃ´ò×ø×´Ì¬
 	void setSitDownState(int sitDownType);
 	const int getSitDownSate(){return m_sitDownType;}
 
-protected:
-	//GameCMDSystem*		m_pGameCMDSystem;
-	//MotionManager*		m_pMotionMananger;
+private:
+	GameCMDSystem*		m_pGameCMDSystem;
+	
 	//StateMachine*		m_pStateMachine;
 	int					m_CurCombatID;
 	int                 m_nAttackSum;

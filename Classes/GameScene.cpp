@@ -203,6 +203,7 @@ GameScene::GameScene(void)
 {
 	UIBatchRenderer::instance()->initilize();
 	m_pRunState = NULL;
+	schedule(schedule_selector(GameScene::Update), 1.f);
 }
 GameScene::~GameScene(void){
 	log("=======>release gamescene");
@@ -254,6 +255,10 @@ void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 		}  
 	}
 	Readint8(buf, value.wildState);
+}
+DQMap* GameScene::GetMap()
+{
+	return GameScene::GetScene()->m_map;
 }
 
 ActorManager* GameScene::GetActorManager()
@@ -556,9 +561,10 @@ void GameScene::Update(float dt)
     //behaviac::Workspace::GetInstance()->LogFrames();
     //behaviac::Workspace::GetInstance()->HandleRequests();
     //m_NPC->btexec();
-	log("UpdateLoop\n");
+	log("UpdateLoop--->\n");
 	{
-		AspriteManager::instance().tick(dt);
+		//AspriteManager::instance().tick(dt);
+		GameScene::GetActorManager()->update(dt);
 	}
 #if 0
 	int frames = 0;
