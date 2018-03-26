@@ -272,8 +272,8 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 	sprintf(animationCacheName, "%d_%d_%d", getanimID(), m_nActorType, animID);
 	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, pos_x, pos_y);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
-	//sprite->setPosition(getPosition());
-	sprite->setPosition(Vec2(pos_x, pos_y));
+	sprite->setPosition(getPosition());
+	//sprite->setPosition(Vec2(pos_x, pos_y));
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
 	if(m_animID != animID || m_dir != dir)

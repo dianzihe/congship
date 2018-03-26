@@ -249,9 +249,14 @@ public:
 	//ASprite*			GetSprite()				{return m_animation.GetSprite();}
 	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
 	void				addAnimationSprite( int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false );
-	void addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
+	void				addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
 	void				SetName(const std::string& name){ m_name = name; };
 	const std::string&	GetName()const { return m_name; };
+	unsigned int		m_nStateFlag;
+	unsigned int		getStateFlag(void)const		{ return m_nStateFlag; }
+	void				setStateFlag(unsigned int nSetValue);
+	bool				isStateFlag(unsigned int nFlag)const		{ return (m_nStateFlag & nFlag) != 0; }
+	bool				isDead(void)const			{ return isStateFlag(Actor_State_Flag_Dead); }
 	/*
 	virtual void		SetShowName( const std::string& name);
 	void				SetPKProctIcon(bool bShow);
@@ -267,14 +272,13 @@ public:
 
 //////////////////////////////////////////////////////////////////////////
 private:
-	unsigned int		m_nStateFlag;
+	
 public:
-	unsigned int		getStateFlag( void )const		{ return m_nStateFlag; }
-	void				setStateFlag( unsigned int nSetValue );
 
-	bool				isStateFlag( unsigned int nFlag )const		{ return (m_nStateFlag & nFlag) != 0; }
 
-	bool				isDead( void )const			{ return isStateFlag(Actor_State_Flag_Dead); }
+	
+
+	
 
 	virtual void		addStateFlag( unsigned int nFlag );
 	virtual void		removeStateFlag( unsigned int nFlag );

@@ -70,9 +70,9 @@ bool	isPropertyShowRate( int type )
 	return false;
 }
 Charactor::Charactor()
+	: m_CurCombatID(0)
+	, m_pMotionMananger(NULL)
 /*
-: m_CurCombatID(0)
-, m_pMotionMananger(NULL)
 , m_CharactorCombatState(eCharactorCombatState_Idle)
 */
 {
@@ -91,31 +91,26 @@ Charactor::Charactor()
 
 	//m_bTianTiFight = false;
 	//m_pStateMachine = new StateMachine(this);
-	//m_pGameCMDSystem = new GameCMDSystem();
+	m_pGameCMDSystem = new GameCMDSystem();
 }
 
 Charactor::~Charactor()
 {
 	//SAFE_DELETE(m_pStateMachine);
-	//SAFE_DELETE(m_pGameCMDSystem);
-	//SAFE_DELETE(m_pMotionMananger);
+	SAFE_DELETE(m_pGameCMDSystem);
+	SAFE_DELETE(m_pMotionMananger);
 }
 
 
 bool Charactor::init( void )
 {
-	//m_pMotionMananger = new DQMotionManager(this );
+	m_pMotionMananger = new DQMotionManager(this );
 	//Actor::onLookInfoSceneObject();
 	return true;
 }
 
 void Charactor::update(float dt)
 {
-//#if defined WIN32 | _WIN32
-//	if(dt > 1.0f)
-//		return;
-//#endif
-#if 0
 	log("---->charactor update");
 	m_pGameCMDSystem->UpdateCMDSystem();
 	Actor::update(dt);
@@ -128,13 +123,11 @@ void Charactor::update(float dt)
 		m_pMotionMananger->Update(dt);
 	}
 	//m_pStateMachine->updateMachine(dt);
-#endif
 }
 
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	log("---draw---Charactor::draw---->ID: %d, position [%d, %d]", getActorID(), pos_x, pos_y);
-	//Actor::visit();
 	Actor::draw(renderer, transform, flags);
 
 	/*
@@ -148,6 +141,47 @@ void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 	}
 	*/
 }
+
+void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
+{
+	switch(stateToEnter)
+	{
+	case eCharactorState_Idle:
+	{
+	}
+	break;
+	case eCharactorState_Attack:
+	{
+		//m_CharactorCombatState = eCharactorCombatState_Attack;
+		//GetMotionManager()->StopMotion();
+	}
+	break;
+	case eCharactorState_UnderAttack:
+	{
+		//ClearPath();
+	}
+	break;
+	case eCharactorState_Death:
+	{
+		//GetMotionManager()->StopMotion();
+		//Target::instance().HideTargetInfo();
+	}
+	break;
+	case eCharactorState_DeleteSelf:
+	{
+		/*
+		if(this->getActorType() != ACTORTYPE_PLAYER && this->getActorType() != ACTORTYPE_HERO)
+		GameScene::GetActorManager()->DelayDelActor( getActorID() );
+		if(Target::instance().getTargetID() == this->getActorID())
+		Target::instance().HideTargetInfo();
+		*/
+	}
+	break;
+	default:
+		break;
+	}
+}
+
 #if 0
 void Charactor::checkCanBeenAttackByHero_DrawName()
 {
@@ -255,45 +289,6 @@ void Charactor::onStateExit( int stateToExit, int stateParam /*= 0 */ )
 	}
 }
 
-void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
-{
-	switch(stateToEnter)
-	{
-	case eCharactorState_Idle:
-		{
-		}
-		break;
-	case eCharactorState_Attack:
-		{
-			m_CharactorCombatState = eCharactorCombatState_Attack;
-			GetMotionManager()->StopMotion();
-		}
-		break;
-	case eCharactorState_UnderAttack:
-		{
-			//ClearPath();
-		}
-		break;
-	case eCharactorState_Death:
-		{
-			GetMotionManager()->StopMotion();
-			//Target::instance().HideTargetInfo();
-		}
-		break;
-	case eCharactorState_DeleteSelf:
-		{
-			/*
-			if(this->getActorType() != ACTORTYPE_PLAYER && this->getActorType() != ACTORTYPE_HERO)
-				GameScene::GetActorManager()->DelayDelActor( getActorID() );
-			if(Target::instance().getTargetID() == this->getActorID())
-				Target::instance().HideTargetInfo();
-			*/
-		}
-		break;
-	default:
-		break;
-	}
-}
 
 bool Charactor::IsAbleToAttack( int skillId )
 {

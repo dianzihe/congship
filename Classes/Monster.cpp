@@ -63,7 +63,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		return;
 	}
 	setActorID( pLookInfoMonster->id );
-	//log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
+	log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
 	//setDataID( pLookInfoMonster->monster_data_id );
 	setFaction(pMonsterData->faction);
 	setLevel( pMonsterData->level );
@@ -80,8 +80,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	
 	setanimID(pMonsterData->animation);
 	addAnimationSprite(getanimID(), ACTORTYPE_MONSTER, 0, 1, true);
-	//Actor::DelayASpriteLoadCallBack();
-
+	
 	char str[128];
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
@@ -92,8 +91,8 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
-		//GetGameCMDSystem()->PushGameCMD(newCMD);
-		//GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
+		GetGameCMDSystem()->PushGameCMD(newCMD);
+		GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
 	}
 	
 	const SkillInfo* pBaseSkill = SkillCfg::instance().getSkillCfgData(pMonsterData->baseSkillID);
@@ -131,7 +130,9 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	setDQPosition(Vec2(300, 300));
 	pos_x = 100;
 	pos_y = 100;
-	//log("--->%d", );
+
+	onStateEnter(eCharactorState_Idle, m_dir);
+
 #if 0
 	log( "onLookInfoMonster [%lld %s] animation[%d]", 
 		getActorID(),
@@ -139,7 +140,6 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		//(int)getDQPosition().x,
 		//(int)getDQPosition().y,
 		pMonsterData->animation);
-	//onStateEnter(eCharactorState_Idle, m_dir);
 
 	m_fCfgScale = pMonsterData->modelscale;
 	m_fMaxWildScale = pMonsterData->wildMaxScale;
@@ -165,9 +165,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	log("CMonster::draw-> position [%d, %d]", getDQPosition().x, getDQPosition().y);
-	//Charactor::visit();
 	Charactor::draw(renderer, transform, flags);
-	//runAction(RepeatForever::create(Animate::create(m_animation.m_mapAnimation["attack/attack_up"])));
 }
 
 void CMonster::update(float dt)
@@ -201,8 +199,6 @@ void CMonster::update(float dt)
 	*/
 }
 
-#if 0
-
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
 	log("CMonster::onStateEnter");
@@ -210,61 +206,63 @@ void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	switch(stateToEnter)
 	{
 	case eCharactorState_Idle:
-		{
-			ChangeAnimation(ANIM_MONSTER_IDLE_DOWN, m_dir);		
-		}
-		break;
+	{
+		ChangeAnimation(ANIM_MONSTER_IDLE_DOWN, m_dir);		
+	}
+	break;
 	case eCharactorState_Run:
-		{
-			int newDir = stateParam;
-			ChangeAnimation(ANIM_MONSTER_MOVE_DOWN, newDir);		
-		}
-		break;
+	{
+		int newDir = stateParam;
+		ChangeAnimation(ANIM_MONSTER_MOVE_DOWN, newDir);		
+	}
+	break;
 	case eCharactorState_Attack:
-		{
-			ChangeAnimation(ANIM_MONSTER_ATTACK_DOWN, m_dir, false);
+	{
+		ChangeAnimation(ANIM_MONSTER_ATTACK_DOWN, m_dir, false);
 
-		}
-		break;
+	}
+	break;
 	case eCharactorState_UnderAttack:
-		{
-			//ChangeAnimation(ANIM_MONSTER_HURT_DOWN, m_dir);
-		}
-		break;
+	{
+		//ChangeAnimation(ANIM_MONSTER_HURT_DOWN, m_dir);
+	}
+	break;
 	case eCharactorState_Death:
-		{
-			/*
-			addStateFlag(Actor_State_Flag_Dead);
+	{
+		/*
+		addStateFlag(Actor_State_Flag_Dead);
 
-			Actor* atkObj = GameScene::GetActorManager()->FindActor(mHostAtkObjID);
-			if(atkObj)
-			{
-				mDeathFlyDir.x = getPositionX() - atkObj->getPositionX();
-				mDeathFlyDir.y = getPositionY() - atkObj->getPositionY();
-				float dis = sqrtf(mDeathFlyDir.x*mDeathFlyDir.x + mDeathFlyDir.y*mDeathFlyDir.y);
-				if(dis == 0.0f)
-				{
-					mDeathFlyDir.x = 0;
-					mDeathFlyDir.y = 1;
-				}
-				else
-				{
-					mDeathFlyDir.x = mDeathFlyDir.x / dis;
-					mDeathFlyDir.y = mDeathFlyDir.y / dis;
-				}
-				//mCurDecresSpeed = sDeathFlySpeed;
-				//mDeathFlyTime = 0.03f;
-				mCurDecresSpeed = 0;
-				mDeathFlyTime = 0;
-			}
-			ChangeAnimation(ANIM_MONSTER_DEAD_DOWN, m_dir, false);
-			*/
+		Actor* atkObj = GameScene::GetActorManager()->FindActor(mHostAtkObjID);
+		if(atkObj)
+		{
+		mDeathFlyDir.x = getPositionX() - atkObj->getPositionX();
+		mDeathFlyDir.y = getPositionY() - atkObj->getPositionY();
+		float dis = sqrtf(mDeathFlyDir.x*mDeathFlyDir.x + mDeathFlyDir.y*mDeathFlyDir.y);
+		if(dis == 0.0f)
+		{
+		mDeathFlyDir.x = 0;
+		mDeathFlyDir.y = 1;
 		}
-		break;
+		else
+		{
+		mDeathFlyDir.x = mDeathFlyDir.x / dis;
+		mDeathFlyDir.y = mDeathFlyDir.y / dis;
+		}
+		//mCurDecresSpeed = sDeathFlySpeed;
+		//mDeathFlyTime = 0.03f;
+		mCurDecresSpeed = 0;
+		mDeathFlyTime = 0;
+		}
+		ChangeAnimation(ANIM_MONSTER_DEAD_DOWN, m_dir, false);
+		*/
+	}
+	break;
 	default:
 		break;
 	}
 }
+#if 0
+
 
 /*
 float CMonster::getStateAnimTime( CharactorState state, int stateParam )

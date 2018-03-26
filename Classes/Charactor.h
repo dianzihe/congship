@@ -52,7 +52,7 @@ protected:
 	int							m_nLifeMax;				//最大生命
 	float                       m_percentage_Life;      //生命百分比
 	int							m_head;					//小头像id
-
+	int							m_CurCombatID;
 
 public:
 	bool						init( void );
@@ -86,11 +86,25 @@ public:
 
 	virtual void				update(float dt);
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
+	virtual void onStateEnter(int stateToEnter, int stateParam = 0);
 
-	/*
+
+	DQMotionManager*		m_pMotionMananger;
+	GameCMDSystem*		m_pGameCMDSystem;
+
+	DQMotionManager* GetMotionManager() { return m_pMotionMananger; }
+	RoutingModule* GetRoutingModule() { return (RoutingModule*)(m_pMotionMananger->GetMotionModule(eMotionType_Routing)); }
+	DirectionModule* GetDirectionModule() { return (DirectionModule*)m_pMotionMananger->GetMotionModule(eMotionType_Direction); }
+
+	//inline TeleportModule* GetTeleportModule() { return (TeleportModule*)m_pMotionMananger->GetMotionModule(eMotionType_Teleport); }
+
+	GameCMDSystem* GetGameCMDSystem() { return m_pGameCMDSystem; }
+
+
+
 	int							getCurCombatID()				{ return m_CurCombatID; }
 	void						setCurCombatID( int n )			{ m_CurCombatID = n; }
-
+	/*
 	int                         getAttackSum( void )const       { return m_nAttackSum; }
 	void                        setAttackSum( int n )           { m_nAttackSum = n; }
 
@@ -126,26 +140,18 @@ public:
 
 	bool IsAbleToMove();
 	
-	DQMotionManager*		m_pMotionMananger;
-	DQMotionManager* GetMotionManager() { return m_pMotionMananger; }
+
 	
 	//AbnormalStateModule* GetAbnormalStateModule() { return m_AbnormalStateModule; }
 	// New State Machine, Old Discard
 	//virtual bool getStateTransitionInfo( int src, int dest );
 	virtual void onStateExit( int stateToExit, int stateParam = 0 );
-	virtual void onStateEnter( int stateToEnter, int stateParam = 0 );
 	*/
 	/*
 	virtual float getStateAnimTime( CharactorState state, int stateParam = 0 );
 	virtual void DelayASpriteLoadCallBack();
 
-	RoutingModule* GetRoutingModule() { return (RoutingModule*)(m_pMotionMananger->GetMotionModule(eMotionType_Routing)); }
 
-	DirectionModule* GetDirectionModule() { return (DirectionModule*)m_pMotionMananger->GetMotionModule(eMotionType_Direction); }
-
-	//inline TeleportModule* GetTeleportModule() { return (TeleportModule*)m_pMotionMananger->GetMotionModule(eMotionType_Teleport); }
-
-	GameCMDSystem* GetGameCMDSystem() { return m_pGameCMDSystem; }
 
 	CharactorCombatState GetCharactorCombatState() { return m_CharactorCombatState; }
 
@@ -155,10 +161,10 @@ public:
 	*/
 private:
 #if 0
-	GameCMDSystem*		m_pGameCMDSystem;
+
 	
 	//StateMachine*		m_pStateMachine;
-	int					m_CurCombatID;
+
 	int                 m_nAttackSum;
 	int                 m_nSkillMac;
 	std::vector<CharactorBuff>		m_BuffList;
