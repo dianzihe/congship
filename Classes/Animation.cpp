@@ -62,7 +62,7 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 			else if (type == ACTORTYPE_WING)
 				gPart = eGrayPart_Wing;
 			AspriteManager::instance().AddAnimationDelayLoad(this, p, type, gPart);
-			m_pHostEventHandler->setGray(gPart, true);
+			//m_pHostEventHandler->setGray(gPart, true);
 			AddASprite(pReplace, type);
 		}
 		else {
@@ -289,7 +289,7 @@ void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 		marker._EventParamList.push_back(param1);
 		marker._EventParamList.push_back(param2);
 		marker._EventParamList.push_back(param3);
-		m_pHostEventHandler->ProcessAnimaEvent(&marker);
+		//m_pHostEventHandler->ProcessAnimaEvent(&marker);
 		SAFE_DELETE(param3._Data._pStrData);
 	}
 }
@@ -299,7 +299,7 @@ void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags
 }
 void DQAnimation::draw(int x, int y, bool isGray)
 {
-	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
+	//log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
 	if (m_sprite[eAnimPart_Body] == NULL) return;
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
 	log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);

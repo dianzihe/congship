@@ -30,11 +30,14 @@ bool GameScene::init()
 	if (!Scene::init())
 		return false;
 	
+	//¼ÓÔØplistÎÄ¼þ
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("shoot.plist");
+	
 	// launch network thread.
 	//PuzzleRPC::getInstance()->launch();
 
 	// create UI elements
-	AspriteManager::instance().initilize();
+	//AspriteManager::instance().initilize();
 	//PlayerLayerCfg::instance().init("playerlayer");
 
 	m_actorManager = new ActorManager();
@@ -98,11 +101,10 @@ bool GameScene::init()
 
 #if 1
 	//monster²âÊÔ
-	MonsterCfg::instance().init("monster");
+	//MonsterCfg::instance().init("monster");
 
 #endif
-#if 1
-	/*
+#if 0
 	std::string plist_content = FileUtils::getInstance()->getStringFromFile("Sprite/monster/m16.plist");
 
 	Data image_content = FileUtils::getInstance()->getDataFromFile("Sprite/monster/m16.png");
@@ -129,8 +131,6 @@ bool GameScene::init()
 		}
 	
 		auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
-		*/
-
 #endif
 
 #if 0
@@ -177,7 +177,7 @@ bool GameScene::init()
 	CMonster * pMonster = CMonster::node();
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
-	monsterInfo->id = 0;
+	monsterInfo->id = 17750;
 	monsterInfo->move_target_x = 100;
 	monsterInfo->move_target_y = 100;
 	monsterInfo->move_speed = 2;
@@ -187,21 +187,44 @@ bool GameScene::init()
 	monsterInfo->faction = 0;
 	monsterInfo->charState = 0;
 	monsterInfo->wildState = 0;
-	m_actorManager->AddActor(pMonster);
 
 	pMonster->onLookInfoMonster(monsterInfo);
 
-	/*
-	auto sprite = Sprite::create("gem_light.png");
-	getGameLayer()->addChild(sprite);
-	getGameLayer()->setPosition(100, 100);
-	*/
 
+	m_uiSprite = Sprite::create();
+	m_uiSprite->setPosition(Vec2(300, 300));
+	addChild(m_uiSprite);
 	return true;
 }
+
+//create Update for behaviac
+void GameScene::Update(float dt)
+{
+	//behaviac::Workspace::GetInstance()->LogFrames();
+	//behaviac::Workspace::GetInstance()->HandleRequests();
+	//m_NPC->btexec();
+	log("UpdateLoop--->[%d, %d]\n", m_uiSprite->getPosition().x, m_uiSprite->getPosition().y);
+	{
+		//AspriteManager::instance().tick(dt);
+		GameScene::GetActorManager()->update(dt);
+	}
+#if 0
+	int frames = 0;
+	behaviac::EBTStatus status = behaviac::BT_RUNNING;
+
+	while (status == behaviac::BT_RUNNING)
+	{
+		printf("frame %d\n", ++frames);
+		status = g_SecondAgent->btexec();
+	}
+#endif
+	behaviac::Workspace::GetInstance()->Update();
+	cleanBehaviacAgentDeleteQueue();
+}
+
 GameScene::GameScene(void)
 {
-	UIBatchRenderer::instance()->initilize();
+	//UIBatchRenderer::instance()->initilize();
 	m_pRunState = NULL;
 	schedule(schedule_selector(GameScene::Update), 1.f);
 }
@@ -219,12 +242,25 @@ GameScene* GameScene::GetScene()
 
 	return inst;
 }
+DQMap* GameScene::GetMap()
+{
+	return GameScene::GetScene()->m_map;
+}
+
+ActorManager* GameScene::GetActorManager()
+{
+	//return m_actorManager;
+	return GameScene::GetScene()->m_actorManager;
+}
+
+/*
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
 	UIBatchRenderer::instance()->flush();
 	if (m_pRunState)
 		m_pRunState->OnDraw();
-}
 
+}
+*/
 /*
 Node* GameScene::GetUI()
 {
@@ -255,18 +291,6 @@ void GameScene::ReadLookInfoMonster(char*& buf, LookInfoMonster& value)
 		}  
 	}
 	Readint8(buf, value.wildState);
-}
-DQMap* GameScene::GetMap()
-{
-	return GameScene::GetScene()->m_map;
-}
-
-ActorManager* GameScene::GetActorManager()
-{
-	//return m_actorManager;
-	if (NULL == GameScene::GetScene())
-		log("00000000000000000000000000000");
-	return GameScene::GetScene()->m_actorManager;
 }
 /*
 DQCamera* GameScene::GetCamera()
@@ -555,30 +579,6 @@ void GameScene::resetBoss(float dt)
 	*/
 }
 
-//create Update for behaviac
-void GameScene::Update(float dt)
-{
-    //behaviac::Workspace::GetInstance()->LogFrames();
-    //behaviac::Workspace::GetInstance()->HandleRequests();
-    //m_NPC->btexec();
-	log("UpdateLoop--->\n");
-	{
-		//AspriteManager::instance().tick(dt);
-		GameScene::GetActorManager()->update(dt);
-	}
-#if 0
-	int frames = 0;
-	behaviac::EBTStatus status = behaviac::BT_RUNNING;
-
-	while (status == behaviac::BT_RUNNING)
-	{
-		printf("frame %d\n", ++frames);
-		status = g_SecondAgent->btexec();
-	}
-#endif
-    behaviac::Workspace::GetInstance()->Update();
-    cleanBehaviacAgentDeleteQueue();
-}
 /*
 bool GameScene::initilize()
 {

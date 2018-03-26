@@ -18,7 +18,7 @@ RoutingModule::~RoutingModule()
 
 void RoutingModule::AddTargetPath( const Point& pos )
 {
-	m_path.push_back(ccp(pos.x, pos.y));
+	m_path.push_back(Point(pos.x, pos.y));
 }
 
 void RoutingModule::CleanPath()
@@ -47,6 +47,10 @@ void RoutingModule::ExitMotion()
 
 void RoutingModule::UpdateMotion(float dt)
 {
+	log("RoutingModule::UpdateMotion---->[%lld %s]  Speed:%d-->[%d, %d]", 
+		m_pHost->getActorID(),
+		m_pHost->GetName().c_str(),
+		m_pHost->getSpeed(), m_pHost->pos_x, m_pHost->pos_y);
 	int newDir=0;
 	float realSpeed = m_pHost->getSpeed() * dt;
 	if (IsInMovingState()){
@@ -58,11 +62,11 @@ void RoutingModule::UpdateMotion(float dt)
 			Point p = m_path.front();
 			SetNextPos(p);
 			if(IsNear(GetNextPos(), realSpeed)) {
-				m_pHost->SetNewPos(GetNextPos());
+				//m_pHost->SetNewPos(GetNextPos());
 				ResetNextPos();
 			} else {
 				//开始移动或者在拐点处切换移动方向 重新计算动画的位置和方向
-				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
+				//SET_DIR_BY_TWOPOINT(m_pHost->getDQPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
 			}
 			if(m_path.size())
@@ -76,20 +80,20 @@ void RoutingModule::UpdateMotion(float dt)
 
 bool RoutingModule::IsNear( const Point& pos, float speed )
 {
-	return ccpDistance( m_pHost->getPosition(), pos) < speed;
+	return ccpDistance( /*m_pHost->getDQPosition()*/ Vec2(0, 0), pos) < speed;
 }
 
 void RoutingModule::MoveToNextPos(float realSpeed)
 {	
 	if(GetNextPos().x >= 0) {
-		Point tPosition = m_pHost->getPosition();
+		Point tPosition = Vec2(0, 0);// m_pHost->getDQPosition();
 		float xoff = GetNextPos().x - tPosition.x;
 		float yoff = GetNextPos().y - tPosition.y;
 		float l = sqrtf(xoff*xoff+yoff*yoff);
 		if(l < 0.0001f ) {
-			m_pHost->SetNewPos(GetNextPos());
+			//m_pHost->SetNewPos(GetNextPos());
 			if( m_path.size() ) {
-				SetNextPos(ccp( m_path.front().x, m_path.front().y));
+				SetNextPos(Point( m_path.front().x, m_path.front().y));
 				m_path.pop_front();
 				MoveToNextPos( realSpeed );
 			}
@@ -100,7 +104,7 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 				Point nextPos = GetNextPos();
 				float realDis = sqrtf((tPosition.x-nextPos.x)*(tPosition.x-nextPos.x) + (tPosition.y-nextPos.y)*(tPosition.y-nextPos.y));
 				if( realSpeed <= realDis ) {
-					m_pHost->SetNewPos(ccp(x,y));
+					//m_pHost->SetNewPos(Point(x,y));
 				} else {
 					x = nextPos.x;
 					y = nextPos.y;
@@ -122,7 +126,7 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 							if( m_path.size() <= 0 )
 								ResetNextPos();
 							else
-								SetNextPos( ccp( m_path.front().x,  m_path.front().y ) );
+								SetNextPos( Point( m_path.front().x,  m_path.front().y ) );
 
 							it = m_path.begin();
 						} else {
@@ -131,21 +135,21 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 							l = sqrtf(xoff*xoff+yoff*yoff);
 							x = x+xoff/l*diffDis;
 							y = y+yoff/l*diffDis;
-							SetNextPos(ccp(it->x, it->y));
+							SetNextPos(Point(it->x, it->y));
 							m_path.pop_front();
 							break;
 						}
 					}
-					m_pHost->SetNewPos(ccp(x,y));
+					//m_pHost->SetNewPos(Point(x,y));
 				}
 			} else {
-				m_pHost->SetNewPos(ccp(x,y));
+				//m_pHost->SetNewPos(Point(x,y));
 			}
 			if(IsNear(GetNextPos(), realSpeed)) {
 				ResetNextPos();
 			} else {
 				int newDir = 0;
-				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
+				//SET_DIR_BY_TWOPOINT(m_pHost->getDQPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
 			}
 		}

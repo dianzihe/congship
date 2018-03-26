@@ -182,7 +182,7 @@ bool	DirectionModule::UpdateDirection( eDirection dir, float realSpeed, bool isE
 	int newDir=0;
 	SET_DIR_BY_TWOPOINT(curPosition, nextPosition, newDir);
 	//m_pHost->GetStateMachine()->setState(eCharactorState_Run, dir);
-	m_pHost->SetNewPos(nextPosition);
+	//m_pHost->SetNewPos(nextPosition);
 	
 	return true;
 }

@@ -450,7 +450,7 @@ void AspriteManager::AnimationDelayLoadCall( ASprite* pSprite )
 	DelayAnimationMap::iterator it = mAnimationDelayLoadMap.find(pSprite);
 	if(it != mAnimationDelayLoadMap.end()){
 		it->second._HostAnimation->AddASprite(pSprite, it->second._ActorType);
-		it->second._HostAnimation->m_pHostEventHandler->setGray(it->second._GrayPart, false);
+		//it->second._HostAnimation->m_pHostEventHandler->setGray(it->second._GrayPart, false);
 		mAnimationDelayLoadMap.erase(it);
 	}
 }

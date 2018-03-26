@@ -34,9 +34,8 @@ struct LookInfoMonster
 
 class CMonster : public Charactor
 {
-private:
-	CMonster();
 public:
+	CMonster();
 	virtual ~CMonster();
 
 	static CMonster* node(void);
@@ -45,18 +44,21 @@ public:
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	virtual void update(float dt);
 
-	void updateDeathFly(float dt);
-
 	void onStateEnter( int stateToEnter, int stateParam /*= 0 */ );
-	float getStateAnimTime( CharactorState state, int stateParam = 0 );
-//////////////////////////////////////////////////////////////////////////
-	void setHostAtkObjID( ActorID id ) { mHostAtkObjID = id; }
 
+	Vec2 dq_position;
+	Vec2				getDQPosition()const				{ return dq_position; }
+	void				setDQPosition(Vec2 n)				{ dq_position = n; }
+
+//////////////////////////////////////////////////////////////////////////
+#if 0
+	void updateDeathFly(float dt);
+	void setHostAtkObjID( ActorID id ) { mHostAtkObjID = id; }
+	float getStateAnimTime( CharactorState state, int stateParam = 0 );
 	virtual void	SetUnShowName();
 	virtual void	SetShowName( const string& name);
 
 	void	ChangeWildState( int state );
-
 	void	ChangeWildAnimationState( int state );
 
 	void	AddWildEffect();
@@ -70,19 +72,22 @@ public:
 		mCurDecresSpeed = speed;
 		mDeathFlyTime = time;
 	}
+#endif
 //Msg
 public:
 	void	onLookInfoMonster( LookInfoMonster* pLookInfoMonster );
+#if 0
 	float	mDeathFlyTime;
 	float	mCurDecresSpeed;
 	Point	mDeathFlyDir;
 	static float sDeathFlySpeed;
 	static float sDeathFlyAcceleration;
 	ActorID mHostAtkObjID;
-	ASprite*		m_cacheSkillSprite;
+	//ASprite*		m_cacheSkillSprite;
 	int		m_eWildState;
 	int		m_eWildAinmationState;
 	float	m_fCfgScale;
 	float	m_fWildScale;
 	float	m_fMaxWildScale;
+#endif
 };

@@ -17,15 +17,15 @@ RoutingCMD::~RoutingCMD()
 bool RoutingCMD::CanBeExecute()
 {
 	Charactor* m_pHost = GetHost();
-	if(m_pHost == NULL || !m_pHost->IsAbleToMove() )
-		return false;
+	//if(m_pHost == NULL || !m_pHost->IsAbleToMove() )
+	//	return false;
 	return true;
 }
 
 void RoutingCMD::Enter()
 {
 	Charactor* m_pHost = GetHost();
-	m_pHost->GetMotionManager()->ChangeToMotion(eMotionType_Routing);
+	//m_pHost->GetMotionManager()->ChangeToMotion(eMotionType_Routing);
 	mGameCMDState = eGameCMDState_Finished;
 }
 

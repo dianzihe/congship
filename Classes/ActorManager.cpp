@@ -41,7 +41,7 @@ void ActorManager::update(float dt)   //改
 	for (MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter)
 	{
 		Actor* pActor = iter->second;
-		pActor->setIsSheild(false);
+		//pActor->setIsSheild(false);
 		log("----->ActorManager::update--->%s", pActor->GetName().c_str());
 		pActor->update(dt);
 	}
@@ -352,6 +352,8 @@ void ActorManager::DelayDelActor( ActorID nActorID )
 
 void ActorManager::onChangeMap()
 {
+	/*
+
 	MAP_ACTORS mapTemp( m_mapActors );
 	for( MAP_ACTORS::iterator iter = mapTemp.begin(); iter != mapTemp.end(); ++iter )
 	{
@@ -362,7 +364,6 @@ void ActorManager::onChangeMap()
 		}
 	}
 
-	/*
 	// 切换地图，取消挂机状态
 	NavigationModule *heroNavigation = GameScene::GetHeroNavigation();
 
@@ -442,7 +443,7 @@ void ActorManager::getActors( int nActorType, int nDataID, vector<Actor*>& vOut 
 	vOut.clear();
 	for( MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter ){
 		Actor* pActor = iter->second;
-		if( pActor->getActorType() == nActorType &&	pActor->getDataID() == nDataID ){
+		if( pActor->getActorType() == nActorType /*&&	pActor->getDataID() == nDataID */){
 			vOut.push_back( pActor );
 		}
 	}

@@ -69,13 +69,15 @@ bool	isPropertyShowRate( int type )
 	}
 	return false;
 }
-//, m_pMotionMananger(NULL)
 Charactor::Charactor()
+/*
 : m_CurCombatID(0)
+, m_pMotionMananger(NULL)
 , m_CharactorCombatState(eCharactorCombatState_Idle)
+*/
 {
-	m_nAttackSum = 0;
-	m_nSkillMac = 0;
+	//m_nAttackSum = 0;
+	//m_nSkillMac = 0;
 	m_camp	= 0;
 	m_speed = 0;				//移动速度 每秒移动多少像素
 	m_nLevel = 0;				//等级
@@ -84,26 +86,26 @@ Charactor::Charactor()
 	m_nLife = 0;				//生命
 	m_nLifeMax = 0;				//最大生命
 	m_percentage_Life = 1.0f;
-	m_nNameColorType = CharNameColorType_CanNotAttack;
+	//m_nNameColorType = CharNameColorType_CanNotAttack;
 	//m_sitDownType = SitDown_None;
 
-	m_bTianTiFight = false;
+	//m_bTianTiFight = false;
 	//m_pStateMachine = new StateMachine(this);
-	m_pGameCMDSystem = new GameCMDSystem();
+	//m_pGameCMDSystem = new GameCMDSystem();
 }
 
 Charactor::~Charactor()
 {
 	//SAFE_DELETE(m_pStateMachine);
-	SAFE_DELETE(m_pGameCMDSystem);
-	SAFE_DELETE(m_pMotionMananger);
+	//SAFE_DELETE(m_pGameCMDSystem);
+	//SAFE_DELETE(m_pMotionMananger);
 }
 
 
 bool Charactor::init( void )
 {
-	m_pMotionMananger = new DQMotionManager(this );
-	Actor::onLookInfoSceneObject();
+	//m_pMotionMananger = new DQMotionManager(this );
+	//Actor::onLookInfoSceneObject();
 	return true;
 }
 
@@ -113,6 +115,8 @@ void Charactor::update(float dt)
 //	if(dt > 1.0f)
 //		return;
 //#endif
+#if 0
+	log("---->charactor update");
 	m_pGameCMDSystem->UpdateCMDSystem();
 	Actor::update(dt);
 	
@@ -124,12 +128,12 @@ void Charactor::update(float dt)
 		m_pMotionMananger->Update(dt);
 	}
 	//m_pStateMachine->updateMachine(dt);
-	
+#endif
 }
 
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("---draw---Charactor::draw---->");
+	log("---draw---Charactor::draw---->ID: %d, position [%d, %d]", getActorID(), pos_x, pos_y);
 	//Actor::visit();
 	Actor::draw(renderer, transform, flags);
 
@@ -144,7 +148,7 @@ void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 	}
 	*/
 }
-
+#if 0
 void Charactor::checkCanBeenAttackByHero_DrawName()
 {
 	/*
@@ -332,6 +336,7 @@ bool Charactor::IsAbleToBeenAttack()
 
 void Charactor::ProcessAnimaEvent( AnimaEvent* event )
 {
+	log("important: Charactor::ProcessAnimaEvent");
 	Point pos;
 	pos.x = (float)event->_EventParamList[0]._Data._IntData;
 	pos.y = (float)event->_EventParamList[1]._Data._IntData;
@@ -651,3 +656,4 @@ void Charactor::setSitDownState(int sitDownType)
 	}
 	*/
 }
+#endif

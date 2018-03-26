@@ -48,8 +48,10 @@ void DelayASpriteLoadManager::DelayASpriteLoadedCallBack( ASprite* pDelayASprite
 		while(itCB != itCBEnd)
 		{
 			Actor* pCallBack = GameScene::GetActorManager()->FindActor(*itCB);
+			/*
 			if(pCallBack)
 				pCallBack->DelayASpriteLoadCallBack();
+			*/
 			++itCB;
 		}
 		RemoveDelayASprite(pDelayASprite);

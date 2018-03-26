@@ -43,7 +43,7 @@ void SceneObj::onLookInfoSceneObject( int nSceneObjId, Point& position, const Sc
 	ActorID id = rand() * rand();
 	setActorID( id );
 
-	setDataID( nSceneObjId );
+	//setDataID( nSceneObjId );
 
 	setActorType(ACTORTYPE_SCENEOBJECT);
 
@@ -59,7 +59,7 @@ void SceneObj::onLookInfoSceneObject( int nSceneObjId, Point& position, const Sc
 
 	if(pObjData->m_Layer == eSceneObjLayer_Actor){
 		GameScene::GetActorManager()->AddActor(this);
-		SetNewPos(position);
+		//SetNewPos(position);
 	}
 
 	setPosition(position);

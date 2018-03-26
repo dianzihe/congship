@@ -55,13 +55,13 @@ protected:
 
 
 public:
-	virtual bool				init( void );
+	bool						init( void );
 
 	int							getSpeed( void )const			{ return	m_speed; }
 	void						setSpeed( int n )				{ m_speed = n; }
 
 	float                       getperlife(void)const           {return m_percentage_Life;}
-	virtual void                setperlife(float n)             {m_percentage_Life = n;}
+	void				       setperlife(float n)             {m_percentage_Life = n;}
 
 	int							getLevel( void )const			{ return m_nLevel; }
 	void						setLevel( int n )				{ m_nLevel = n; }
@@ -84,6 +84,10 @@ public:
 	int							getHead( void )const			{ return m_head; }
 	void						setHead( int n )				{ m_head = n; }
 
+	virtual void				update(float dt);
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
+
+	/*
 	int							getCurCombatID()				{ return m_CurCombatID; }
 	void						setCurCombatID( int n )			{ m_CurCombatID = n; }
 
@@ -92,10 +96,9 @@ public:
 
 	int                         getSkillMac( void )const       { return m_nSkillMac; }
 	void                        setSkillMac( int n )           { m_nSkillMac = n; }
+	*/
 public:
-	virtual void				update(float dt);
-	//virtual void				draw(void);
-	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
+	/*
 	virtual void				DrawHP();
 
 	virtual	void				onDead( void );
@@ -122,19 +125,19 @@ public:
 	bool IsAbleToBeenAttack();
 
 	bool IsAbleToMove();
-
+	
 	DQMotionManager*		m_pMotionMananger;
-
+	DQMotionManager* GetMotionManager() { return m_pMotionMananger; }
+	
 	//AbnormalStateModule* GetAbnormalStateModule() { return m_AbnormalStateModule; }
 	// New State Machine, Old Discard
-	virtual bool getStateTransitionInfo( int src, int dest );
+	//virtual bool getStateTransitionInfo( int src, int dest );
 	virtual void onStateExit( int stateToExit, int stateParam = 0 );
 	virtual void onStateEnter( int stateToEnter, int stateParam = 0 );
-	//virtual float getStateAnimTime( CharactorState state, int stateParam = 0 );
-
+	*/
+	/*
+	virtual float getStateAnimTime( CharactorState state, int stateParam = 0 );
 	virtual void DelayASpriteLoadCallBack();
-
-	DQMotionManager* GetMotionManager() { return m_pMotionMananger; }
 
 	RoutingModule* GetRoutingModule() { return (RoutingModule*)(m_pMotionMananger->GetMotionModule(eMotionType_Routing)); }
 
@@ -149,8 +152,9 @@ public:
 	//设置打坐状态
 	void setSitDownState(int sitDownType);
 	const int getSitDownSate(){return m_sitDownType;}
-
+	*/
 private:
+#if 0
 	GameCMDSystem*		m_pGameCMDSystem;
 	
 	//StateMachine*		m_pStateMachine;
@@ -166,4 +170,5 @@ private:
 	void drawPkKillOtherName();
 
 	int m_sitDownType;				//打坐类型
+#endif 
 };

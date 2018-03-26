@@ -6,14 +6,14 @@
 #define TAIL_INTERVAL 0.02f
 const int TAIL_INIT_OPACITY = 150;
 
-//: m_SFXModule(NULL)
-//, m_AbnormalStateModule(NULL)
-//, m_flyState(Object_FlyState_Land)
-//, m_pShadowSFX(NULL)
-//: m_NameText(NULL)
-//, m_PKProctedIcon(NULL)
-//, m_buttle(NULL)
-Actor::Actor(void)
+/*
+: m_SFXModule(NULL)
+, m_AbnormalStateModule(NULL)
+, m_flyState(Object_FlyState_Land)
+, m_pShadowSFX(NULL)
+: m_NameText(NULL)
+, m_PKProctedIcon(NULL)
+, m_buttle(NULL)
 : m_hasSetShowNamePos(true)
 , m_bIsSheild(false)
 , m_bIsTargetIconSheild(false)
@@ -21,20 +21,21 @@ Actor::Actor(void)
 , m_bStartDisableTails(false)
 , m_totalTails(5)
 , m_tails(NULL)
-
+*/
+Actor::Actor(void)
 {
 	m_nActorID = 0;
 	m_nActorType = ACTORTYPE_ANIMATION;
 	m_nDataID = 0;
 	m_animID = -1;
-	//m_dir = eDirection_Right;
-	m_cleanFlag = true;
+	m_dir = eDirection_Right;
+	//m_cleanFlag = true;
 	//m_moveState = (Object_MoveState_Stand<<2) | Object_FlyState_Land;
 	//m_AbnormalStateModule = new AbnormalStateModule(this);
 	//m_SFXModule = new SFXModule;
-	m_nStateFlag = 0;
-	m_canBeenClick = true;
-	mGrayInfo = false;
+	//m_nStateFlag = 0;
+	//m_canBeenClick = true;
+	//mGrayInfo = false;
 }
 
 Actor::~Actor(void)
@@ -47,30 +48,6 @@ Actor::~Actor(void)
 	//m_pShadowSFX = NULL;
 }
 
-void Actor::onLookInfoSceneObject()
-{
-	if(m_nActorType == ACTORTYPE_MONSTER || m_nActorType == ACTORTYPE_HERO || 
-		m_nActorType == ACTORTYPE_NPC  ||  m_nActorType == ACTORTYPE_PLAYER ||
-		m_nActorType == ACTORTYPE_PET || m_nActorType == ACTORTYPE_OTHERSFX )
-	{
-#if 0
-		m_SFXModule->Initialize(m_nActorID);
-
-		Map* pCurMap = GetMap();
-		if(pCurMap)
-		{
-			if(pCurMap->getMapID() != BathRoom_MapID)//泡澡地图不显示阴影
-			{
-				AddShadow();
-			}
-			else
-			{
-				RemoveShadow();
-			}
-		}
-#endif
-	}
-}
 
 Actor* Actor::node(void)
 {
@@ -79,147 +56,6 @@ Actor* Actor::node(void)
 	return pRet;
 }
 
-void Actor::AddShadow()
-{
-#if 0
-	if(m_pShadowSFX)
-	{
-		m_SFXModule->DelSFX(m_pShadowSFX);
-	}
-
-	m_pShadowSFX = new AnimSFX;
-	m_pShadowSFX->Initialize();
-	m_pShadowSFX->GetAnimation()->LoadASprite(SPRITE_SHADOW, ACTORTYPE_ANIMATION);//加载阴影
-	m_pShadowSFX->GetAnimation()->setAnim(0);
-	m_pShadowSFX->SetSFXLocation(eSFXLocation_Back);
-	m_pShadowSFX->SetLifeStyle( eLife_Allways );
-	m_pShadowSFX->SetLifeTime( m_pShadowSFX->GetAnimation()->getAnimTime( 0 ) );
-	m_SFXModule->AddSFX(m_pShadowSFX);
-#endif
-}
-
-void Actor::RemoveShadow()
-{
-#if 0
-	if(m_pShadowSFX)
-	{
-		m_SFXModule->DelSFX(m_pShadowSFX);
-	}
-#endif
-}
-
-/*
-Rect& Actor::getSelectRect()
-{
-	static CCRect tmp(0,0,0,0);
-	
-	ASprite* sprite = GetSprite();
-	if(sprite)
-		return sprite->getRectSelect();
-	else
-		return tmp;
-	
-	return tmp;
-}
-*/
-//int Actor::GetType()
-//{
-//	if(m_nTag < 5000)
-//		return ACTORTYPE_ANIMAL;
-//	else if(m_nTag < 10000)
-//		return ACTORTYPE_TRANSPORT;
-//	else if(m_nTag < 20000)
-//		return ACTORTYPE_NPC;
-//	else if(m_nTag < 30000)
-//		return ACTORTYPE_MONSTER;		
-//	else 
-//	{
-//		return ACTORTYPE_PLAYER;
-//	}
-//}
-//
-//int Actor::GetID()
-//{
-//	if(m_nTag < 5000)
-//	{
-//		return m_nTag;
-//	}
-//	else if(m_nTag < 10000)
-//		return m_nTag - 5000;
-//	else if(m_nTag < 20000)
-//		return m_nTag - 10000;
-//	else if(m_nTag < 30000)
-//		return m_nTag - 20000;
-//	else 
-//	{
-//		return m_nTag - 30000;
-//	}
-//}
-
-//Map* Actor::GetMap()
-//{
-//	return GameScene::GetScene()->GetCurMap();
-//}
-
-
-
-void Actor::SetNewPos(  Point& pos )
-{
-	log("Actor::SetNewPos--->[%d, %d]", pos.x, pos.y);
-	setPosition(pos);
-	
-	//getParent()->reorderChild(this, GetZOrder());
-#if 0
-	if(m_bTianTiFight)
-	{
-		if (CChampionRankUI::Instance().GetAttactID())
-		{
-			if (getActorID() == CChampionRankUI::Instance().GetAttactID())
-			{
-				Map* curMap = GetMap();
-				if(curMap != NULL)
-				{
-					curMap->SetCameraTarget(pos);
-				}
-				return;
-			}
-		}
-	}
-	else
-	{
-		if(m_nActorType == ACTORTYPE_HERO)
-		{
-			Map* curMap = GetMap();
-			if(curMap != NULL)
-			{
-				curMap->SetCameraTarget(pos);
-			}
-
-			GameScene::GetActorManager()->onHeroPosSet();
-		}
-	}
-#endif
-}
-
-//fromTag = true: TagID ->Normal ID
-//fromTag = false: Normal ID -> TagID
-//int Actor::SwitchTagAndID(int type, int id,  bool fromTag)
-//{
-//	int off = 0;
-//	if(type == ACTORTYPE_TRANSPORT)
-//		off = 5000;
-//	else if(type == ACTORTYPE_NPC)
-//		off = 10000;
-//	else if(type == ACTORTYPE_MONSTER)
-//		off = 20000;
-//	else if(type == ACTORTYPE_PLAYER || type == ACTORTYPE_HERO)
-//		off = 30000;
-//	if(fromTag)
-//		return id - off;
-//	else
-//		return id + off;
-//
-//}
 
 void Actor::update(float dt)
 {
@@ -241,7 +77,7 @@ void Actor::update(float dt)
 // 			m_NameText->setVisible( !m_bIsSheild);
 //	}
 	
-	updateShowNamePos();
+	//updateShowNamePos();
 #if 0
 	if ( m_pChildren ) 
 	{
@@ -273,9 +109,10 @@ void Actor::update(float dt)
 		}
 
 	}
-	
-	m_animation.update(dt);
+#endif
 
+	//m_animation.update(dt);
+#if 0
 	if(m_SFXModule)
 	{
 		m_SFXModule->Update(dt);
@@ -335,7 +172,7 @@ void Actor::update(float dt)
 
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("---draw----actor::draw---->");
+	log("---draw----actor::draw---->ID: %d, position [%d, %d]",getActorID(), pos_x, pos_y);
 	//Node::visit();
 	/*
 	DQMap* curMap = GameScene::GetScene()->GetCurMap();
@@ -353,20 +190,22 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 			m_animation.m_opacity = 255;
 		}
 	}
-	*/
+	
 	if(m_flyState == Object_FlyState_Flying) {
 		m_animation.setPosition(0, Object_Fly_Height);
 	}
 	m_animation.SetGray(!!mGrayInfo);
 	m_animation.visit();
+	*/
 
 	/*
 	if(m_SFXModule)	{
 		m_SFXModule->RenderFront();
 	}
-	*/
+	
 	if (!m_bEnableTails)
 		return;
+	*/
 #if 0	
 	kmGLPushMatrix();
 
@@ -431,10 +270,10 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 	auto sprite = Sprite::create();
 	char animationCacheName[256];
 	sprintf(animationCacheName, "%d_%d_%d", getanimID(), m_nActorType, animID);
-	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, dq_position.x, dq_position.y);
+	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, pos_x, pos_y);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
 	//sprite->setPosition(getPosition());
-	sprite->setPosition(dq_position);
+	sprite->setPosition(Vec2(pos_x, pos_y));
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
 	if(m_animID != animID || m_dir != dir)
@@ -466,6 +305,150 @@ void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, 
 	//m_animation.LoadASprite(id, type, sex, equiplevel, isMustLoad);
 	m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
 }
+
+#if 0
+
+void Actor::AddShadow()
+{
+#if 0
+	if(m_pShadowSFX)
+	{
+		m_SFXModule->DelSFX(m_pShadowSFX);
+	}
+
+	m_pShadowSFX = new AnimSFX;
+	m_pShadowSFX->Initialize();
+	m_pShadowSFX->GetAnimation()->LoadASprite(SPRITE_SHADOW, ACTORTYPE_ANIMATION);//加载阴影
+	m_pShadowSFX->GetAnimation()->setAnim(0);
+	m_pShadowSFX->SetSFXLocation(eSFXLocation_Back);
+	m_pShadowSFX->SetLifeStyle( eLife_Allways );
+	m_pShadowSFX->SetLifeTime( m_pShadowSFX->GetAnimation()->getAnimTime( 0 ) );
+	m_SFXModule->AddSFX(m_pShadowSFX);
+#endif
+}
+
+void Actor::RemoveShadow()
+{
+#if 0
+	if(m_pShadowSFX)
+	{
+		m_SFXModule->DelSFX(m_pShadowSFX);
+	}
+#endif
+}
+
+/*
+Rect& Actor::getSelectRect()
+{
+static CCRect tmp(0,0,0,0);
+
+ASprite* sprite = GetSprite();
+if(sprite)
+return sprite->getRectSelect();
+else
+return tmp;
+
+return tmp;
+}
+*/
+//int Actor::GetType()
+//{
+//	if(m_nTag < 5000)
+//		return ACTORTYPE_ANIMAL;
+//	else if(m_nTag < 10000)
+//		return ACTORTYPE_TRANSPORT;
+//	else if(m_nTag < 20000)
+//		return ACTORTYPE_NPC;
+//	else if(m_nTag < 30000)
+//		return ACTORTYPE_MONSTER;		
+//	else 
+//	{
+//		return ACTORTYPE_PLAYER;
+//	}
+//}
+//
+//int Actor::GetID()
+//{
+//	if(m_nTag < 5000)
+//	{
+//		return m_nTag;
+//	}
+//	else if(m_nTag < 10000)
+//		return m_nTag - 5000;
+//	else if(m_nTag < 20000)
+//		return m_nTag - 10000;
+//	else if(m_nTag < 30000)
+//		return m_nTag - 20000;
+//	else 
+//	{
+//		return m_nTag - 30000;
+//	}
+//}
+
+//Map* Actor::GetMap()
+//{
+//	return GameScene::GetScene()->GetCurMap();
+//}
+
+
+
+void Actor::SetNewPos(  Point& pos )
+{
+	log("Actor::SetNewPos--->[%d, %d]", pos.x, pos.y);
+	setPosition(pos);
+
+	//getParent()->reorderChild(this, GetZOrder());
+#if 0
+	if(m_bTianTiFight)
+	{
+		if (CChampionRankUI::Instance().GetAttactID())
+		{
+			if (getActorID() == CChampionRankUI::Instance().GetAttactID())
+			{
+				Map* curMap = GetMap();
+				if(curMap != NULL)
+				{
+					curMap->SetCameraTarget(pos);
+				}
+				return;
+			}
+		}
+	}
+	else
+	{
+		if(m_nActorType == ACTORTYPE_HERO)
+		{
+			Map* curMap = GetMap();
+			if(curMap != NULL)
+			{
+				curMap->SetCameraTarget(pos);
+			}
+
+			GameScene::GetActorManager()->onHeroPosSet();
+		}
+	}
+#endif
+}
+
+//fromTag = true: TagID ->Normal ID
+//fromTag = false: Normal ID -> TagID
+//int Actor::SwitchTagAndID(int type, int id,  bool fromTag)
+//{
+//	int off = 0;
+//	if(type == ACTORTYPE_TRANSPORT)
+//		off = 5000;
+//	else if(type == ACTORTYPE_NPC)
+//		off = 10000;
+//	else if(type == ACTORTYPE_MONSTER)
+//		off = 20000;
+//	else if(type == ACTORTYPE_PLAYER || type == ACTORTYPE_HERO)
+//		off = 30000;
+//	if(fromTag)
+//		return id - off;
+//	else
+//		return id + off;
+//
+//}
 float Actor::GetAnimationTime( int animID )
 {
 	int anim = GetAnimID(animID, m_dir);
@@ -481,7 +464,7 @@ void Actor::ChangeFlyState(int flyState)
 int Actor::GetAnimID(int state, int dir)
 {
 	int anim = state;// * ACTOR_ANIM_DIR_COUNT;
-	switch(dir)
+	switch (dir)
 	{
 	case eDirection_Left:
 	case eDirection_Right:
@@ -501,24 +484,24 @@ int Actor::GetAnimID(int state, int dir)
 }
 
 void Actor::updateShowNamePos()
-{	
+{
 	/*
 	if (!m_hasSetShowNamePos && m_NameText)
 	{
-		if(m_animation.getReferenceCount())
-		{
-			CCRect rect = GetSprite()->getRectSelect();
-			m_NameText->setPosition(ccp(-m_NameText->m_width/2, rect.size.height + 20));
-			m_hasSetShowNamePos = true;
-			if (m_nShowName==m_sShowNameNoPKAppend||m_sShowNameNoPKAppend=="")
-			{
-				SetPKProctIcon(false);
-			}
-			else
-			{
-				SetPKProctIcon(true);
-			}
-		}
+	if(m_animation.getReferenceCount())
+	{
+	CCRect rect = GetSprite()->getRectSelect();
+	m_NameText->setPosition(ccp(-m_NameText->m_width/2, rect.size.height + 20));
+	m_hasSetShowNamePos = true;
+	if (m_nShowName==m_sShowNameNoPKAppend||m_sShowNameNoPKAppend=="")
+	{
+	SetPKProctIcon(false);
+	}
+	else
+	{
+	SetPKProctIcon(true);
+	}
+	}
 	}
 	*/
 }
@@ -528,21 +511,20 @@ void Actor::SetUnShowName()
 	/*
 	if(m_NameText)
 	{
-		removeChildByTag(ACTORCHILD_NAME, true);
-		m_NameText = NULL;
+	removeChildByTag(ACTORCHILD_NAME, true);
+	m_NameText = NULL;
 	}
 
 	if(m_PKProctedIcon)
 	{
-		removeChildByTag(ACTORCHILD_PKPROCTEDICON, true);
-		m_PKProctedIcon = NULL;
+	removeChildByTag(ACTORCHILD_PKPROCTEDICON, true);
+	m_PKProctedIcon = NULL;
 	}
 	*/
 }
 
 void Actor::SetPKProctIcon(bool bShow)
 {
-	/*
 	removeChildByTag(ACTORCHILD_PKPROCTEDICON, true);
 	if (!bShow)
 	{
@@ -550,7 +532,7 @@ void Actor::SetPKProctIcon(bool bShow)
 	}
 	UIData pData;
 	pData.type = UI_BASE;
-	m_PKProctedIcon= pData.createUI();
+	m_PKProctedIcon = pData.createUI();
 	if (!m_PKProctedIcon)
 	{
 		return;
@@ -565,48 +547,44 @@ void Actor::SetPKProctIcon(bool bShow)
 		//名字长度杨全福搞不定，跟策划确认改为保护图标显示在名字上面
 
 		CCRect rect = GetSprite()->getRectSelect();
-		float xPos=0;
+		float xPos = 0;
 		if (m_NameText)
 		{
-			xPos=m_NameText->m_width/2;
+			xPos = m_NameText->m_width / 2;
 		}
-		xPos+=m_PKProctedIcon->m_width/2;
-		*/
+		xPos += m_PKProctedIcon->m_width / 2;
 
-		/*
 		CCRect rect = GetSprite()->getRectSelect();
-		float xPos=0;
-		float yPos=rect.size.height + 46;
+		float xPos = 0;
+		float yPos = rect.size.height + 46;
 		if (m_NameText)
 		{
-			yPos=m_NameText->getPositionY()+46;
+			yPos = m_NameText->getPositionY() + 46;
 		}
-		
-		xPos+=m_PKProctedIcon->m_width/2;
+
+		xPos += m_PKProctedIcon->m_width / 2;
 		m_PKProctedIcon->setPosition(ccp(-xPos, yPos));
-		
+
 	}
 
 	addChild(m_PKProctedIcon, 0, ACTORCHILD_PKPROCTEDICON);
-	*/
 }
 
 void Actor::SetShowName(const std::string& name)
 {
-	/*
-	if (name.empty() )
+	if (name.empty())
 	{
 		return;
 	}
-	
+
 	m_nShowName = name;
-	m_sShowNameNoPKAppend=m_nShowName;
+	m_sShowNameNoPKAppend = m_nShowName;
 	//m_nShowName+=GetPkProctedAppendName();
 	removeChildByTag(ACTORCHILD_NAME, true);
 
-	m_NameText = UIText::initUITextWithString( m_nShowName, 18, CCSizeMake( 0, 0), tAlignCenterX | tAlignCenterY, false);
+	m_NameText = UIText::initUITextWithString(m_nShowName, 18, CCSizeMake(0, 0), tAlignCenterX | tAlignCenterY, false);
 	m_NameText->setUseAlphaTest(true);
-	
+
 	if (m_animation.getReferenceCount())
 	{
 		//m_animation.get
@@ -619,19 +597,19 @@ void Actor::SetShowName(const std::string& name)
 		m_hasSetShowNamePos = false;
 	}
 
-	if( !m_buttle)
+	if (!m_buttle)
 	{
 		m_buttle = initBubble();
-		if( m_buttle)
+		if (m_buttle)
 		{
-			m_buttle->setPosition( -m_buttle->m_width/2, (int)m_NameText->getPositionY() + m_buttle->m_height + 50);
+			m_buttle->setPosition(-m_buttle->m_width / 2, (int)m_NameText->getPositionY() + m_buttle->m_height + 50);
 		}
-		addChild( m_buttle, 0, ACTORCHILD_BUBBLE);
+		addChild(m_buttle, 0, ACTORCHILD_BUBBLE);
 	}
 
 	addChild(m_NameText, 0, ACTORCHILD_NAME);
 
-	if (m_nShowName==m_sShowNameNoPKAppend)
+	if (m_nShowName == m_sShowNameNoPKAppend)
 	{
 		SetPKProctIcon(false);
 	}
@@ -639,10 +617,9 @@ void Actor::SetShowName(const std::string& name)
 	{
 		SetPKProctIcon(true);
 	}
-	*/
 }
 
-void Actor::showBubble( bool isShow, std::string text, int anim)
+void Actor::showBubble(bool isShow, std::string text, int anim)
 {
 #if 0
 	if( isShow)
@@ -671,32 +648,32 @@ void Actor::showBubble( bool isShow, std::string text, int anim)
 /*
 UI* Actor::initBubble()
 {
-	UI* ui = new UI();
+UI* ui = new UI();
 
-	UIDataGroup group;
-	group.Load("PZ_biaoqing.ui");
+UIDataGroup group;
+group.Load("PZ_biaoqing.ui");
 
-	ui->autorelease();
-	ui->m_name = group.name;
-	ui->m_align = group.align;
+ui->autorelease();
+ui->m_name = group.name;
+ui->m_align = group.align;
 
-	for (int i = 0; i < group.count; i++ )
-	{
-		UI* pChild = group.data[i].createUI();
-		ui->addChild(pChild);
-	}
-	ui->init();
-	if( ui)
-	{
-		ui->findUI( "null1")->setIgnoreTouch( true);
-		ui->findUI( "null2")->setIgnoreTouch( true);
-		ui->findUI( "Npc_ChatText1")->setIgnoreTouch( true);
-		ui->m_height = ui->findUI("Npc_ChatText1")->m_height;
-		ui->m_width = ui->findUI( "Npc_ChatText1")->m_width;
-		ui->setVisible( false);
-		return ui;
-	}
-	return NULL;
+for (int i = 0; i < group.count; i++ )
+{
+UI* pChild = group.data[i].createUI();
+ui->addChild(pChild);
+}
+ui->init();
+if( ui)
+{
+ui->findUI( "null1")->setIgnoreTouch( true);
+ui->findUI( "null2")->setIgnoreTouch( true);
+ui->findUI( "Npc_ChatText1")->setIgnoreTouch( true);
+ui->m_height = ui->findUI("Npc_ChatText1")->m_height;
+ui->m_width = ui->findUI( "Npc_ChatText1")->m_width;
+ui->setVisible( false);
+return ui;
+}
+return NULL;
 }
 */
 //玩家上马时，名字位置
@@ -707,12 +684,12 @@ void Actor::OnMountSetShowName(void)
 	//m_NameText->setUseAlphaTest(true);
 	//m_NameText->setAutoNewLine(false);
 
-	if( m_animation.getReferenceCount() != NULL )
+	if (m_animation.getReferenceCount() != NULL)
 	{
 		//CCRect rect = GetSprite()->getRectSelect();
 		//m_NameText->setPosition(ccp(-m_NameText->m_width/2, rect.size.height+30));
 	}
-	
+
 	//addChild(m_NameText, 0, ACTORCHILD_NAME);
 }
 //玩家下马时，名字位置
@@ -722,7 +699,7 @@ void Actor::DownMountSetShowName(void)
 	//m_NameText = UIText::initUITextWithString( m_nShowName, 18, CCSizeMake( 0, 0), tAlignCenterX | tAlignCenterY);
 	//m_NameText->setUseAlphaTest(true);
 
-	if( m_animation.getReferenceCount() )
+	if (m_animation.getReferenceCount())
 	{
 		//CCRect rect = GetSprite()->getRectSelect();
 		//m_NameText->setPosition(ccp(-m_NameText->m_width/2, rect.size.height+10));
@@ -733,53 +710,53 @@ void Actor::DownMountSetShowName(void)
 
 
 //////////////////////////////////////////////////////////////////////////
-void Actor::setStateFlag( unsigned int nSetValue )
+void Actor::setStateFlag(unsigned int nSetValue)
 {
 	unsigned int nOldValue = m_nStateFlag;
 
 	m_nStateFlag = nSetValue;
 
-	for( int i = 0; i < 32; ++i )
+	for (int i = 0; i < 32; ++i)
 	{
-		unsigned int nState = (1<<i);
-		bool bSetOnOrOff = ( nState & nSetValue ) != 0;
-		bool bOldOnOrOff = ( nState & nOldValue ) != 0;
-		if( bSetOnOrOff )
+		unsigned int nState = (1 << i);
+		bool bSetOnOrOff = (nState & nSetValue) != 0;
+		bool bOldOnOrOff = (nState & nOldValue) != 0;
+		if (bSetOnOrOff)
 		{
-			if( !bOldOnOrOff )
+			if (!bOldOnOrOff)
 			{
-				onStateFlagChanged( nState, true );
+				onStateFlagChanged(nState, true);
 			}
 		}
 		else
 		{
-			if( bOldOnOrOff )
+			if (bOldOnOrOff)
 			{
-				onStateFlagChanged( nState, false );
+				onStateFlagChanged(nState, false);
 			}
 		}
 	}
 }
 
-void Actor::addStateFlag( unsigned int nFlag )
+void Actor::addStateFlag(unsigned int nFlag)
 {
 	m_nStateFlag |= nFlag;
-	onStateFlagChanged( nFlag, true );
+	onStateFlagChanged(nFlag, true);
 }
 
-void Actor::removeStateFlag( unsigned int nFlag )
+void Actor::removeStateFlag(unsigned int nFlag)
 {
 	m_nStateFlag &= (~nFlag);
-	onStateFlagChanged( nFlag, true );
+	onStateFlagChanged(nFlag, true);
 }
 
-void Actor::onStateFlagChanged( unsigned int nChangeStateFlag, bool bAddOrRemove )
+void Actor::onStateFlagChanged(unsigned int nChangeStateFlag, bool bAddOrRemove)
 {
 }
 
-void Actor::setGray( GrayPart gray, bool trueOrFalse )
+void Actor::setGray(GrayPart gray, bool trueOrFalse)
 {
-	if( trueOrFalse )
+	if (trueOrFalse)
 	{
 		mGrayInfo = mGrayInfo | gray;
 	}
@@ -805,7 +782,7 @@ void Actor::EnableTail(bool enable)
 		m_curTailNum = 0;
 		m_lastUpdateTailTime = 0.f;
 		m_totalUpdateTailTime = 0.f;
-		
+
 	}
 	else
 	{
@@ -820,9 +797,9 @@ void Actor::startDisableTail()
 
 void Actor::SetTailNum(int num)
 {
-	if (num	== 0)
+	if (num == 0)
 		return;
-	
+
 	if (m_totalTails != num)
 	{
 		m_totalTails = num;
@@ -834,15 +811,41 @@ void Actor::SetTailNum(int num)
 	}
 }
 
-void Actor::isShowName( bool b )
+void Actor::isShowName(bool b)
 {
 	/*
 	if (m_NameText)
 	{
-		m_NameText->setVisible(b);
+	m_NameText->setVisible(b);
 	}
 	*/
 }
+
+void Actor::onLookInfoSceneObject()
+{
+	if (m_nActorType == ACTORTYPE_MONSTER || m_nActorType == ACTORTYPE_HERO ||
+		m_nActorType == ACTORTYPE_NPC || m_nActorType == ACTORTYPE_PLAYER ||
+		m_nActorType == ACTORTYPE_PET || m_nActorType == ACTORTYPE_OTHERSFX)
+	{
+#if 0
+		m_SFXModule->Initialize(m_nActorID);
+
+		Map* pCurMap = GetMap();
+		if (pCurMap)
+		{
+			if (pCurMap->getMapID() != BathRoom_MapID)//泡澡地图不显示阴影
+			{
+				AddShadow();
+			}
+			else
+			{
+				RemoveShadow();
+			}
+		}
+#endif
+	}
+}
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 //

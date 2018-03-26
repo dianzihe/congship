@@ -10,15 +10,14 @@
 /*
 #include "Map.h"
 #include "../BaseModule/SFX/SFXModule.h"
-*/
+
 
 float CMonster::sDeathFlySpeed = 1200;
 float CMonster::sDeathFlyAcceleration = 10000;
-
+*/
 #define	MonsterWild_Scale_Speed	4.0f
 #define MONSTER_FONT_SCALE 1.3f
-
-CMonster::CMonster()
+/*
 : mDeathFlyTime(0)
 , mCurDecresSpeed(0)
 , mHostAtkObjID(0)
@@ -27,13 +26,16 @@ CMonster::CMonster()
 , m_fCfgScale( 1.0f )
 , m_fWildScale( 1.0f )
 , m_eWildAinmationState( eMonsterWildAnimation_State_NotWilded )
+*/
+CMonster::CMonster()
 {
-	mDeathFlyDir.x = 0;
-	mDeathFlyDir.y = 0;
+	//mDeathFlyDir.x = 0;
+	//mDeathFlyDir.y = 0;
 }
 
 CMonster::~CMonster()
 {
+	log("important:  CMonster release");
 	/*
 	if (m_cacheSkillSprite)
 	{
@@ -62,41 +64,36 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	}
 	setActorID( pLookInfoMonster->id );
 	//log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
-	setDataID( pLookInfoMonster->monster_data_id );
+	//setDataID( pLookInfoMonster->monster_data_id );
 	setFaction(pMonsterData->faction);
 	setLevel( pMonsterData->level );
 	setperlife(float(pLookInfoMonster->lifePercent) / 100.0f);
 	setHead(pMonsterData->mobHead);
 	setSpeed(pLookInfoMonster->move_speed);
-	setStateFlag(pLookInfoMonster->charState);
-	if(pMonsterData->monstertype == MonsterType_NormalBoss ||
-		pMonsterData->monstertype == MonsterType_CopyMapBoss ||
-		pMonsterData->monstertype == MonsterType_FieldBoss)
-		setTargetIconSheild(false); // by wzq 2013.12.23 去掉屏蔽头像功能
-	else
-		setTargetIconSheild(true);
+	//setStateFlag(pLookInfoMonster->charState);
+	//if(pMonsterData->monstertype == MonsterType_NormalBoss || pMonsterData->monstertype == MonsterType_CopyMapBoss ||
+	//	pMonsterData->monstertype == MonsterType_FieldBoss)
+	//	setTargetIconSheild(false); // by wzq 2013.12.23 去掉屏蔽头像功能
+	//else
+	//	setTargetIconSheild(true);
 	m_animation.SetHostEventHandler(this);
 	
 	setanimID(pMonsterData->animation);
 	addAnimationSprite(getanimID(), ACTORTYPE_MONSTER, 0, 1, true);
 	//Actor::DelayASpriteLoadCallBack();
-	//m_animation.setAnim(m_animation.getAnim());
 
 	char str[128];
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
-	
 
 	GameScene::GetActorManager()->AddActor(this);
-	log("CMonster::onLookInfoMonster  %d---%d", pLookInfoMonster->x, pLookInfoMonster->y);
-	//SetNewPos(Point(pLookInfoMonster->x, pLookInfoMonster->y));
 	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
-	//SetNewPos(Point(300, 600));
-	
+	//setDQPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
+
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
-		GetGameCMDSystem()->PushGameCMD(newCMD);
-		GetRoutingModule()->AddTargetPath( ccp( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
+		//GetGameCMDSystem()->PushGameCMD(newCMD);
+		//GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
 	}
 	
 	const SkillInfo* pBaseSkill = SkillCfg::instance().getSkillCfgData(pMonsterData->baseSkillID);
@@ -104,12 +101,12 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		SpriteInfo _SpriteInfo;
 		_SpriteInfo._ActorType = ACTORTYPE_SKILLSFX;
 		_SpriteInfo._ActorID = pBaseSkill->EffectGroup;
-		m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
+		//m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
 	}else{
 		SpriteInfo _SpriteInfo;
 		_SpriteInfo._ActorType = ACTORTYPE_SKILLSFX;
 		_SpriteInfo._ActorID = 5;
-		m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
+		//m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
 	}
 	/*
 	// 处理金银岛
@@ -131,15 +128,18 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		AddBuff(buff);
 	}
 	*/
-	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
-	dq_position = Vec2(pLookInfoMonster->x, pLookInfoMonster->y);
-	log( "onLookInfoMonster [%lld %s] pos[%d %d] animation[%d]", 
+	setDQPosition(Vec2(300, 300));
+	pos_x = 100;
+	pos_y = 100;
+	//log("--->%d", );
+#if 0
+	log( "onLookInfoMonster [%lld %s] animation[%d]", 
 		getActorID(),
 		GetName().c_str(),
-		(int)getPosition().x,
-		(int)getPosition().y,
+		//(int)getDQPosition().x,
+		//(int)getDQPosition().y,
 		pMonsterData->animation);
-	onStateEnter(eCharactorState_Idle, m_dir);
+	//onStateEnter(eCharactorState_Idle, m_dir);
 
 	m_fCfgScale = pMonsterData->modelscale;
 	m_fMaxWildScale = pMonsterData->wildMaxScale;
@@ -158,18 +158,50 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		AddWildEffect();
 		break;
 	}
+#endif
 }
 
 
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("CMonster::draw");
+	log("CMonster::draw-> position [%d, %d]", getDQPosition().x, getDQPosition().y);
 	//Charactor::visit();
 	Charactor::draw(renderer, transform, flags);
 	//runAction(RepeatForever::create(Animate::create(m_animation.m_mapAnimation["attack/attack_up"])));
 }
 
+void CMonster::update(float dt)
+{
+	Charactor::update(dt);
 
+	/*
+	switch (m_eWildAinmationState) {
+	case eMonsterWildAnimation_State_Enter:
+		if (m_fWildScale < m_fMaxWildScale) {
+			m_fWildScale += MonsterWild_Scale_Speed*dt;
+			m_animation.setScale(m_fCfgScale*m_fWildScale);
+		}
+		else {
+			ChangeWildAnimationState(eMonsterWildAnimation_State_Wilded);
+		}
+		break;
+
+	case eMonsterWildAnimation_State_Leave:
+		if (m_fWildScale > 1.0f) {
+			m_fWildScale -= MonsterWild_Scale_Speed*dt;
+			m_animation.setScale(m_fCfgScale*m_fWildScale);
+		}
+		else {
+			ChangeWildAnimationState(eMonsterWildAnimation_State_NotWilded);
+		}
+		break;
+	}
+
+	updateDeathFly(dt);
+	*/
+}
+
+#if 0
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
@@ -256,34 +288,6 @@ float CMonster::getStateAnimTime( CharactorState state, int stateParam )
 	return time;
 }
 */
-void CMonster::update( float dt )
-{
-	Charactor::update(dt);
-
-	
-	switch ( m_eWildAinmationState ) {
-	case eMonsterWildAnimation_State_Enter:
-		if( m_fWildScale < m_fMaxWildScale ) {
-			m_fWildScale += MonsterWild_Scale_Speed*dt;
-			m_animation.setScale( m_fCfgScale*m_fWildScale );
-		} else {
-			ChangeWildAnimationState( eMonsterWildAnimation_State_Wilded );
-		}
-		break;
-
-	case eMonsterWildAnimation_State_Leave:
-		if( m_fWildScale > 1.0f ) {
-			m_fWildScale -= MonsterWild_Scale_Speed*dt;
-			m_animation.setScale( m_fCfgScale*m_fWildScale );
-		} else {
-			ChangeWildAnimationState( eMonsterWildAnimation_State_NotWilded );
-		}
-		break;
-	}
-	
-	updateDeathFly(dt);
-}
-
 void CMonster::updateDeathFly( float dt )
 {
 	/*
@@ -453,3 +457,4 @@ void	CMonster::RemoveWildEffect()
 	}
 	*/
 }
+#endif

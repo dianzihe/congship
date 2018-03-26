@@ -132,7 +132,7 @@ inline float CHECK_SET_POS(float v, float minV, float maxV)
 }
 
 */
-typedef long long	ActorID;
+typedef long	ActorID;
 
 /*
 #define DEBUG_LOG( format, ... )	Log::GetInstance().debug_out( format, ##__VA_ARGS__ );

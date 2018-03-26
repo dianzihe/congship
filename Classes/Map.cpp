@@ -285,11 +285,7 @@ void DQMap::addActorToMap(Actor *actor)
 	if(actor == NULL )
 		return;
 	
-	if (NULL == m_pTileNode)
-		log("fdsafdsafdsafdasfdsafdas");
-	if (NULL == m_pActorNode)
-		log("===========m_pActorNode is null");
-	//m_pActorNode->addChild(actor);
+	m_pActorNode->addChild(actor);
 }
 
 void DQMap::delActorFromMap(Actor *actor)
