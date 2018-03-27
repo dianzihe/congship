@@ -25,7 +25,7 @@ bool RoutingCMD::CanBeExecute()
 void RoutingCMD::Enter()
 {
 	Charactor* m_pHost = GetHost();
-	//m_pHost->GetMotionManager()->ChangeToMotion(eMotionType_Routing);
+	m_pHost->GetMotionManager()->ChangeToMotion(eMotionType_Routing);
 	mGameCMDState = eGameCMDState_Finished;
 }
 

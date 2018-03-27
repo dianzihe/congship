@@ -47,10 +47,10 @@ void RoutingModule::ExitMotion()
 
 void RoutingModule::UpdateMotion(float dt)
 {
-	log("RoutingModule::UpdateMotion---->[%lld %s]  Speed:%d-->[%d, %d]", 
+	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%d, %d]", 
 		m_pHost->getActorID(),
-		m_pHost->GetName().c_str(),
-		m_pHost->getSpeed(), m_pHost->pos_x, m_pHost->pos_y);
+		m_pHost->getSpeed(), 
+		m_pHost->pos_x, m_pHost->pos_y);
 	int newDir=0;
 	float realSpeed = m_pHost->getSpeed() * dt;
 	if (IsInMovingState()){
@@ -62,11 +62,11 @@ void RoutingModule::UpdateMotion(float dt)
 			Point p = m_path.front();
 			SetNextPos(p);
 			if(IsNear(GetNextPos(), realSpeed)) {
-				//m_pHost->SetNewPos(GetNextPos());
+				m_pHost->SetNewPos(GetNextPos());
 				ResetNextPos();
 			} else {
 				//开始移动或者在拐点处切换移动方向 重新计算动画的位置和方向
-				//SET_DIR_BY_TWOPOINT(m_pHost->getDQPosition(), GetNextPos(), newDir);
+				SET_DIR_BY_TWOPOINT(m_pHost->getDQPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
 			}
 			if(m_path.size())

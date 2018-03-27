@@ -127,7 +127,7 @@ void Charactor::update(float dt)
 
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("---draw---Charactor::draw---->ID: %d, position [%d, %d]", getActorID(), pos_x, pos_y);
+	//log("---draw---Charactor::draw---->ID: %d, position [%d, %d]", getActorID(), pos_x, pos_y);
 	Actor::draw(renderer, transform, flags);
 
 	/*

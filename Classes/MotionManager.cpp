@@ -43,8 +43,8 @@ DQMotionManager::~DQMotionManager()
 
 void DQMotionManager::Update(float dt)
 {
-	if(mNewMotion != mCurMotion)
-	{
+	log("DQMotionManager::Update--->%d", mNewMotion);
+	if(mNewMotion != mCurMotion){
 		if(mMotionModule[mCurMotion])
 			mMotionModule[mCurMotion]->ExitMotion();
 		if(mMotionModule[mNewMotion])
@@ -53,8 +53,10 @@ void DQMotionManager::Update(float dt)
 		mCurMotion = mNewMotion;
 	}
 
-	if(mMotionModule[mCurMotion])
+	if (mMotionModule[mCurMotion]){
+		log("00000000");
 		mMotionModule[mCurMotion]->UpdateMotion(dt);
+	}
 }
 
 void DQMotionManager::ChangeToMotion(MotionType nMotion)

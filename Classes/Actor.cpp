@@ -33,7 +33,7 @@ Actor::Actor(void)
 	//m_moveState = (Object_MoveState_Stand<<2) | Object_FlyState_Land;
 	//m_AbnormalStateModule = new AbnormalStateModule(this);
 	//m_SFXModule = new SFXModule;
-	//m_nStateFlag = 0;
+	m_nStateFlag = 0;
 	//m_canBeenClick = true;
 	//mGrayInfo = false;
 }
@@ -111,7 +111,7 @@ void Actor::update(float dt)
 	}
 #endif
 
-	//m_animation.update(dt);
+	m_animation.update(dt);
 #if 0
 	if(m_SFXModule)
 	{
@@ -172,7 +172,7 @@ void Actor::update(float dt)
 
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("---draw----actor::draw---->ID: %d, position [%d, %d]",getActorID(), pos_x, pos_y);
+	//log("---draw----actor::draw---->ID: %d, position [%d, %d]",getActorID(), pos_x, pos_y);
 	//Node::visit();
 	/*
 	DQMap* curMap = GameScene::GetScene()->GetCurMap();
@@ -273,7 +273,6 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, pos_x, pos_y);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
 	sprite->setPosition(getPosition());
-	//sprite->setPosition(Vec2(pos_x, pos_y));
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
 	if(m_animID != animID || m_dir != dir)

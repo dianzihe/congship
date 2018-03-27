@@ -87,7 +87,6 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 	GameScene::GetActorManager()->AddActor(this);
 	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
-	//setDQPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
 
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
@@ -164,7 +163,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("CMonster::draw-> position [%d, %d]", getDQPosition().x, getDQPosition().y);
+	//log("CMonster::draw-> position [%d, %d]", getDQPosition().x, getDQPosition().y);
 	Charactor::draw(renderer, transform, flags);
 }
 
