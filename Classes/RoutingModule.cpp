@@ -47,31 +47,38 @@ void RoutingModule::ExitMotion()
 
 void RoutingModule::UpdateMotion(float dt)
 {
-	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%d, %d]", 
+	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%d, %d],[%d, %d], [%d, %d]", 
 		m_pHost->getActorID(),
 		m_pHost->getSpeed(), 
-		m_pHost->pos_x, m_pHost->pos_y);
+		m_pHost->convertToWorldSpace(Vec2::ZERO).x, m_pHost->convertToWorldSpace(Vec2::ZERO).y,
+		m_pHost->getDQPosition().x, m_pHost->getDQPosition().y, 
+		m_pHost->pos_x, m_pHost->pos_x);
 	int newDir=0;
 	float realSpeed = m_pHost->getSpeed() * dt;
 	if (IsInMovingState()){
+		log("1");
 		//正在移动过程中
 		MoveToNextPos(realSpeed);
 	} else {
+		log("2");
 		//寻找下一个路点
 		if(m_path.size() > 0) {
 			Point p = m_path.front();
 			SetNextPos(p);
 			if(IsNear(GetNextPos(), realSpeed)) {
+				log("3");
 				m_pHost->SetNewPos(GetNextPos());
 				ResetNextPos();
 			} else {
+				log("4");
 				//开始移动或者在拐点处切换移动方向 重新计算动画的位置和方向
-				SET_DIR_BY_TWOPOINT(m_pHost->getDQPosition(), GetNextPos(), newDir);
+				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
 			}
 			if(m_path.size())
 				m_path.pop_front();
 		} else {
+			log("5");
 			//没有路点可以走了 玩家应退出移动状态
 			//m_pHost->GetStateMachine()->setState(eCharactorState_Idle, m_pHost->getDir());
 		}
@@ -80,16 +87,19 @@ void RoutingModule::UpdateMotion(float dt)
 
 bool RoutingModule::IsNear( const Point& pos, float speed )
 {
-	return ccpDistance( /*m_pHost->getDQPosition()*/ Vec2(0, 0), pos) < speed;
+	return ccpDistance( m_pHost->getPosition(), pos) < speed;
 }
 
 void RoutingModule::MoveToNextPos(float realSpeed)
 {	
+	log("RoutingModule::MoveToNextPos-->[%d, %d]->[%d, %d]", 
+		m_pHost->getPosition().x, m_pHost->getPosition().y,
+		GetNextPos().x, GetNextPos().y);
 	if(GetNextPos().x >= 0) {
-		Point tPosition = Vec2(0, 0);// m_pHost->getDQPosition();
+		Point tPosition = m_pHost->getPosition();
 		float xoff = GetNextPos().x - tPosition.x;
 		float yoff = GetNextPos().y - tPosition.y;
-		float l = sqrtf(xoff*xoff+yoff*yoff);
+		float l = sqrtf(xoff * xoff + yoff * yoff);
 		if(l < 0.0001f ) {
 			//m_pHost->SetNewPos(GetNextPos());
 			if( m_path.size() ) {
@@ -140,16 +150,16 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 							break;
 						}
 					}
-					//m_pHost->SetNewPos(Point(x,y));
+					m_pHost->SetNewPos(Point(x,y));
 				}
 			} else {
-				//m_pHost->SetNewPos(Point(x,y));
+				m_pHost->SetNewPos(Point(x,y));
 			}
 			if(IsNear(GetNextPos(), realSpeed)) {
 				ResetNextPos();
 			} else {
 				int newDir = 0;
-				//SET_DIR_BY_TWOPOINT(m_pHost->getDQPosition(), GetNextPos(), newDir);
+				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
 			}
 		}

@@ -87,7 +87,8 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 	GameScene::GetActorManager()->AddActor(this);
 	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
-
+	this->pos_x = pLookInfoMonster->x;
+	this->pos_y = pLookInfoMonster->y;
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
 		RoutingCMD* newCMD = new RoutingCMD(getActorID());
 		GetGameCMDSystem()->PushGameCMD(newCMD);

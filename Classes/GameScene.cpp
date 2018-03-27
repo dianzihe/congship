@@ -46,9 +46,10 @@ bool GameScene::init()
 	m_map->autorelease();
 	m_map->setActorManager(m_actorManager);
 	m_actorManager->setMap(m_map);
-	addChild(m_map, GAME_LAYER_MAP);
+	//addChild(m_map, GAME_LAYER_MAP);
 	
 	auto winSize = Director::getInstance()->getWinSize();
+	log("winSize---->%d, %d", winSize.width, winSize.height);
 	/*
 	m_uiNode = Node::create();
 	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
@@ -166,10 +167,11 @@ bool GameScene::init()
 	setGameLayer(new BossGameFrontLayer());
 	getGameLayer()->setBattleScene(this);
 	getGameLayer()->setPosition(Vec2(0, 0));
+	getGameLayer()->setContentSize(Size(winSize.width, winSize.height) );
 	getGameLayer()->setAnchorPoint(Point(0.5, 0.5));
 	//getGameLayer()->LoadMap(pMap);
 
-	addChild(getGameLayer());
+	addChild(getGameLayer(), 0);
 
 	//WBossGuai *lpGuai = NULL;
 	//lpGuai = WBoss4::BuildGuai();
@@ -190,20 +192,19 @@ bool GameScene::init()
 
 	pMonster->onLookInfoMonster(monsterInfo);
 
-
-	m_uiSprite = Sprite::create();
-	m_uiSprite->setPosition(Vec2(300, 300));
-	addChild(m_uiSprite);
 	return true;
 }
 
 //create Update for behaviac
 void GameScene::Update(float dt)
 {
+	log("--->[%d, %d]-->[%d, %d]", 
+		getGameLayer()->getPosition().x, getGameLayer()->getPosition().y,
+		getGameLayer()->getContentSize().width, getGameLayer()->getContentSize().height);
 	//behaviac::Workspace::GetInstance()->LogFrames();
 	//behaviac::Workspace::GetInstance()->HandleRequests();
 	//m_NPC->btexec();
-	log("UpdateLoop--->[%d, %d]\n", m_uiSprite->getPosition().x, m_uiSprite->getPosition().y);
+	//log("UpdateLoop--->[%d, %d]\n", m_uiSprite->getPosition().x, m_uiSprite->getPosition().y);
 	{
 		//AspriteManager::instance().tick(dt);
 		GameScene::GetActorManager()->update(dt);

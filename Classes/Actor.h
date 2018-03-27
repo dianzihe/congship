@@ -108,7 +108,7 @@ public:
 	//CC_SYNTHESIZE(int, m_animID, animID);		//ACTORSTATE
 	//CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE
 	//CC_SYNTHESIZE(int, m_dir, Dir);				//ACTORDIR	
-	//CC_SYNTHESIZE(Vec2, dq_position, DQPosition);//
+	CC_SYNTHESIZE(Vec2, dq_position, DQPosition);//
 	//CC_SYNTHESIZE(int, m_flyState, FlyState);	//MOVESTATE
 	//CC_SYNTHESIZE(int, m_runStatus, RunStatus);//
 	//CC_SYNTHESIZE(int, m_mapID, MapID);//µØÍ¼ID
@@ -170,6 +170,7 @@ public:
 	virtual void update(float dt);	
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	void ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
+	void SetNewPos(Point& pos);
 
 	/*
 	virtual int GetZOrder() { return (int)(getPositionX() + (getPositionY())*(-10000));};
@@ -180,7 +181,6 @@ public:
 
 	//Map* GetMap();
 
-	void SetNewPos( Point& pos);
 
 	virtual void ProcessAnimaEvent( AnimaEvent* event ){}
 

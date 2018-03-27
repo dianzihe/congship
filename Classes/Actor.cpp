@@ -305,6 +305,44 @@ void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, 
 	m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
 }
 
+
+void Actor::SetNewPos(  Point& pos )
+{
+	log("Actor::SetNewPos--->[%d, %d]", pos.x, pos.y);
+	setPosition(pos);
+
+	//getParent()->reorderChild(this, GetZOrder());
+#if 0
+	if(m_bTianTiFight)
+	{
+		if (CChampionRankUI::Instance().GetAttactID())
+		{
+			if (getActorID() == CChampionRankUI::Instance().GetAttactID())
+			{
+				Map* curMap = GetMap();
+				if(curMap != NULL)
+				{
+					curMap->SetCameraTarget(pos);
+				}
+				return;
+			}
+		}
+	}
+	else
+	{
+		if(m_nActorType == ACTORTYPE_HERO)
+		{
+			Map* curMap = GetMap();
+			if(curMap != NULL)
+			{
+				curMap->SetCameraTarget(pos);
+			}
+
+			GameScene::GetActorManager()->onHeroPosSet();
+		}
+	}
+#endif
+}
 #if 0
 
 void Actor::AddShadow()
@@ -391,43 +429,6 @@ return tmp;
 
 
 
-void Actor::SetNewPos(  Point& pos )
-{
-	log("Actor::SetNewPos--->[%d, %d]", pos.x, pos.y);
-	setPosition(pos);
-
-	//getParent()->reorderChild(this, GetZOrder());
-#if 0
-	if(m_bTianTiFight)
-	{
-		if (CChampionRankUI::Instance().GetAttactID())
-		{
-			if (getActorID() == CChampionRankUI::Instance().GetAttactID())
-			{
-				Map* curMap = GetMap();
-				if(curMap != NULL)
-				{
-					curMap->SetCameraTarget(pos);
-				}
-				return;
-			}
-		}
-	}
-	else
-	{
-		if(m_nActorType == ACTORTYPE_HERO)
-		{
-			Map* curMap = GetMap();
-			if(curMap != NULL)
-			{
-				curMap->SetCameraTarget(pos);
-			}
-
-			GameScene::GetActorManager()->onHeroPosSet();
-		}
-	}
-#endif
-}
 
 //fromTag = true: TagID ->Normal ID
 //fromTag = false: Normal ID -> TagID

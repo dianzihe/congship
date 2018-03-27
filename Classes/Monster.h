@@ -46,9 +46,9 @@ public:
 
 	void onStateEnter( int stateToEnter, int stateParam /*= 0 */ );
 
-	Vec2 dq_position;
-	Vec2				getDQPosition()const				{ return dq_position; }
-	void				setDQPosition(Vec2 n)				{ dq_position = n; }
+	//Vec2 dq_position;
+	//Vec2				getDQPosition()const				{ return dq_position; }
+	//void				setDQPosition(Vec2 n)				{ dq_position = n; }
 
 //////////////////////////////////////////////////////////////////////////
 #if 0
