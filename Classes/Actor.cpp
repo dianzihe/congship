@@ -270,23 +270,19 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 	auto sprite = Sprite::create();
 	char animationCacheName[256];
 	sprintf(animationCacheName, "%d_%d_%d", getanimID(), m_nActorType, animID);
-	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, pos_x, pos_y);
+	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, getanimID(), pos_y);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
 	sprite->setPosition(getPosition());
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
-	if(m_animID != animID || m_dir != dir)
-	{
+	if(m_animID != animID || m_dir != dir) {
 		/*
 		int flag = 0;
-		if(dir == eDirection_Left || 
-		   dir == eDirection_LeftUp)
-		{
+		if(dir == eDirection_Left || dir == eDirection_LeftUp) {
 			flag |= ANIM_FLAG_FLIP_X;
 		}
 		int anim = GetAnimID(animID, dir);
 
-		
 		if(loop)
 			m_animation.setAnim(anim, flag, -1, animaLayerIndex);
 		else
@@ -308,7 +304,7 @@ void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, 
 
 void Actor::SetNewPos(  Point& pos )
 {
-	log("Actor::SetNewPos--->[%d, %d]", pos.x, pos.y);
+	log("Actor::SetNewPos--->[%f, %f]", pos.x, pos.y);
 	setPosition(pos);
 
 	//getParent()->reorderChild(this, GetZOrder());

@@ -117,10 +117,10 @@ bool _isTextUTF8(const char* str, size_t length)
 
 void SET_DIR_BY_TWOPOINT(const Point &p1, const Point &p2, int& dir)
 {
-	Point p3 = ccpSub(p2, p1);
+	Point p3 = p2 - p1;
 	if (!(fabs(p3.x) < FLT_EPSILON && fabs(p3.y) < FLT_EPSILON))
 	{
-		double r = ccpAngleSigned(ccp(10, 0), p3);
+		double r = ccpAngleSigned(Vec2(10, 0), p3);
 		if (r < 0) r += (FLOAT_PI * 2);
 		r = r + FLOAT_PI / 8 - 0.01f;
 		int quadrant = (int)(r / (FLOAT_PI / 4));

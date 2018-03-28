@@ -101,13 +101,12 @@ static const float Buttle_Life_Time_Max = 5.0f;
 class Actor : public Node
 {
 public:
-	int m_animID;
+	//int m_animID;
 	//int m_moveState;
-	int m_dir;
 
-	//CC_SYNTHESIZE(int, m_animID, animID);		//ACTORSTATE
+	CC_SYNTHESIZE(int, m_animID, animID);		//ACTORSTATE
 	//CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE
-	//CC_SYNTHESIZE(int, m_dir, Dir);				//ACTORDIR	
+	CC_SYNTHESIZE(int, m_dir, Dir);				//ACTORDIR	
 	CC_SYNTHESIZE(Vec2, dq_position, DQPosition);//
 	//CC_SYNTHESIZE(int, m_flyState, FlyState);	//MOVESTATE
 	//CC_SYNTHESIZE(int, m_runStatus, RunStatus);//
@@ -124,13 +123,6 @@ public:
 public:
 	int					pos_x;
 	int					pos_y;
-
-	int					getanimID()const				{ return m_animID; }
-	void				setanimID(int n)				{ m_animID = n; }
-
-	int					getDir()const					{ return m_dir; }
-	void				setDir(int n)					{ m_dir = n; }
-
 
 	long				getActorID()const				{ return m_nActorID; }
 	void				setActorID( long n )			{ m_nActorID = n; }
@@ -169,6 +161,7 @@ public:
 
 	virtual void update(float dt);	
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
+	void onStateEnter(int stateToEnter, int stateParam /*= 0 */){};
 	void ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
 	void SetNewPos(Point& pos);
 
@@ -204,7 +197,7 @@ private:
 	unsigned int mGrayInfo;
 	*/
 public:
-	int GetAnimID(int state, int dir);
+	//int GetAnimID(int state, int dir);
 	//void updateShowNamePos();
 
 public:

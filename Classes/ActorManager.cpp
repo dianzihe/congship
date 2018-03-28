@@ -42,7 +42,7 @@ void ActorManager::update(float dt)   //¸Ä
 	{
 		Actor* pActor = iter->second;
 		//pActor->setIsSheild(false);
-		log("----->ActorManager::update--->%s", pActor->GetName().c_str());
+		log("----->ActorManager::update--->%s--%d", pActor->GetName().c_str(), pActor->getanimID());
 		pActor->update(dt);
 	}
 	/*

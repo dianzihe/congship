@@ -63,7 +63,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		return;
 	}
 	setActorID( pLookInfoMonster->id );
-	log("pMonsterData->name.c_str()====>%s", pMonsterData->name.c_str());
+	log("pMonsterData->name.c_str()====>%s--%d", pMonsterData->name.c_str(), pMonsterData->animation);
 	//setDataID( pLookInfoMonster->monster_data_id );
 	setFaction(pMonsterData->faction);
 	setLevel( pMonsterData->level );
@@ -201,7 +201,7 @@ void CMonster::update(float dt)
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
-	log("CMonster::onStateEnter");
+	log("CMonster::onStateEnter-----Param, %d", stateParam);
 	Charactor::onStateEnter(stateToEnter, stateParam);
 	switch(stateToEnter)
 	{

@@ -47,7 +47,7 @@ void RoutingModule::ExitMotion()
 
 void RoutingModule::UpdateMotion(float dt)
 {
-	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%d, %d],[%d, %d], [%d, %d]", 
+	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%f, %f],[%f, %f], [%d, %d]", 
 		m_pHost->getActorID(),
 		m_pHost->getSpeed(), 
 		m_pHost->convertToWorldSpace(Vec2::ZERO).x, m_pHost->convertToWorldSpace(Vec2::ZERO).y,
@@ -92,15 +92,16 @@ bool RoutingModule::IsNear( const Point& pos, float speed )
 
 void RoutingModule::MoveToNextPos(float realSpeed)
 {	
-	log("RoutingModule::MoveToNextPos-->[%d, %d]->[%d, %d]", 
+	log("RoutingModule::MoveToNextPos-->[%f, %f]->[%f, %f]", 
 		m_pHost->getPosition().x, m_pHost->getPosition().y,
 		GetNextPos().x, GetNextPos().y);
-	if(GetNextPos().x >= 0) {
+	if(GetNextPos().x >= 0.) {
 		Point tPosition = m_pHost->getPosition();
 		float xoff = GetNextPos().x - tPosition.x;
 		float yoff = GetNextPos().y - tPosition.y;
 		float l = sqrtf(xoff * xoff + yoff * yoff);
 		if(l < 0.0001f ) {
+			log("MoveToNextPos-->1");
 			//m_pHost->SetNewPos(GetNextPos());
 			if( m_path.size() ) {
 				SetNextPos(Point( m_path.front().x, m_path.front().y));
@@ -108,13 +109,14 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 				MoveToNextPos( realSpeed );
 			}
 		} else {
+			log("MoveToNextPos-->2");
 			float x = tPosition.x + xoff / l * realSpeed;
 			float y = tPosition.y + yoff / l * realSpeed;
 			if( m_pHost->getActorType() == ACTORTYPE_HERO ) {
 				Point nextPos = GetNextPos();
-				float realDis = sqrtf((tPosition.x-nextPos.x)*(tPosition.x-nextPos.x) + (tPosition.y-nextPos.y)*(tPosition.y-nextPos.y));
+				float realDis = sqrtf((tPosition.x - nextPos.x)*(tPosition.x - nextPos.x) + (tPosition.y - nextPos.y) * (tPosition.y - nextPos.y));
 				if( realSpeed <= realDis ) {
-					//m_pHost->SetNewPos(Point(x,y));
+					m_pHost->SetNewPos(Point(x,y));
 				} else {
 					x = nextPos.x;
 					y = nextPos.y;
@@ -142,9 +144,9 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 						} else {
 							xoff = it->x - x;
 							yoff = it->y - y;
-							l = sqrtf(xoff*xoff+yoff*yoff);
-							x = x+xoff/l*diffDis;
-							y = y+yoff/l*diffDis;
+							l = sqrtf(xoff * xoff + yoff * yoff);
+							x = x+xoff / l * diffDis;
+							y = y+yoff / l * diffDis;
 							SetNextPos(Point(it->x, it->y));
 							m_path.pop_front();
 							break;
@@ -153,14 +155,18 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 					m_pHost->SetNewPos(Point(x,y));
 				}
 			} else {
+				log("MoveToNextPos-->3");
 				m_pHost->SetNewPos(Point(x,y));
 			}
 			if(IsNear(GetNextPos(), realSpeed)) {
+				log("MoveToNextPos-->4");
 				ResetNextPos();
 			} else {
+				log("MoveToNextPos-->5");
 				int newDir = 0;
 				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
+				m_pHost->onStateEnter(eCharactorState_Run, newDir);
 			}
 		}
 	}
