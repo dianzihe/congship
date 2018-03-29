@@ -265,22 +265,18 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 #endif
 }
 
-void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex )
+void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerIndex )
 {
 	log("-------------------------changeanimation");
-	this->print();
 	auto sprite = Sprite::create();
 	char animationCacheName[256];
-	sprintf(animationCacheName, "%d_%d_%d", getanimID(), getActorType(), animID);
+	sprintf(animationCacheName, "%d_%d_%d", getanimID(), getActorType(), actionID);
 	log("Actor::ChangeAnimation--->%s, %d", animationCacheName, getanimID(), animationCacheName);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
 	sprite->setPosition(getPosition());
-	this->print();
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
-	this->print();
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
-	this->print();
-	if(m_animID != animID || m_dir != dir) {
+	if (m_animID != actionID || m_dir != dir) {
 		/*
 		int flag = 0;
 		if(dir == eDirection_Left || dir == eDirection_LeftUp) {
@@ -295,7 +291,7 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 		*/
 	}
 
-	m_animID = animID;
+	//m_animID = animID;
 	m_dir = dir;
 	log("-------------------------changeanimation----end   %d  %d", m_animID, m_dir);
 }

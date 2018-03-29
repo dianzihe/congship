@@ -64,8 +64,10 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		return;
 	}
 	setActorID( pLookInfoMonster->id );
-	log("pMonsterData->name.c_str()====>%s--%d", pMonsterData->name.c_str(), pMonsterData->animation);
-	//setDataID( pLookInfoMonster->monster_data_id );
+	setDataID(pLookInfoMonster->monster_data_id);
+	log("pMonsterData->name.c_str()====>%s--ANIMATION:%d  DATAID:%d", 
+		pMonsterData->name.c_str(), pMonsterData->animation, getDataID());
+	
 	setFaction(pMonsterData->faction);
 	setLevel( pMonsterData->level );
 	setperlife(float(pLookInfoMonster->lifePercent) / 100.0f);
@@ -85,14 +87,14 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
 
-	//GameScene::GetActorManager()->AddActor(this);
+	GameScene::GetActorManager()->AddActor(this);
 	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
 	
 	
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
-		//RoutingCMD* newCMD = new RoutingCMD(getActorID());
-		//GetGameCMDSystem()->PushGameCMD(newCMD);
-		//GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
+		RoutingCMD* newCMD = new RoutingCMD(getActorID());
+		GetGameCMDSystem()->PushGameCMD(newCMD);
+		GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
 	}
 	
 	/*
@@ -130,7 +132,6 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	}
 	*/
 	onStateEnter(eCharactorState_Idle, m_dir);
-	this->print();
 #if 0
 	log( "onLookInfoMonster [%lld %s] animation[%d]", 
 		getActorID(),
@@ -201,11 +202,7 @@ void CMonster::update(float dt)
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
 	log("CMonster::onStateEnter-----Param, %d", stateParam);
-	log("1");
-	this->print();
 	Charactor::onStateEnter(stateToEnter, stateParam);
-	log("2");
-	this->print();
 	switch(stateToEnter)
 	{
 	case eCharactorState_Idle:
@@ -263,8 +260,6 @@ void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	default:
 		break;
 	}
-	this->print();
-	log("CMonster::onStateEnter--------------------end");
 }
 #if 0
 
