@@ -14,7 +14,7 @@ DelayASpriteLoadManager::~DelayASpriteLoadManager()
 	mDelayASpriteContainer.clear();
 }
 
-void DelayASpriteLoadManager::AddDelayASpriteAndCallBack( ASprite* pDelayASprite, ActorID nHost )
+void DelayASpriteLoadManager::AddDelayASpriteAndCallBack( ASprite* pDelayASprite, long nHost )
 {
 	DelayASpriteContainer::iterator it = mDelayASpriteContainer.find(pDelayASprite);
 	if(it != mDelayASpriteContainer.end())

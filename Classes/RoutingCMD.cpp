@@ -3,7 +3,7 @@
 #include "Charactor.h"
 #include "DirectionModule.h"
 
-RoutingCMD::RoutingCMD(ActorID nHost)
+RoutingCMD::RoutingCMD(long nHost)
 : GameCMD(eGameCMDType_Direction, nHost)
 {
 

@@ -6,7 +6,7 @@
 class RoutingCMD : public GameCMD
 {
 public:
-	RoutingCMD(ActorID nHost);
+	RoutingCMD(long nHost);
 	virtual ~RoutingCMD();
 public:
 	virtual bool CanBeExecute();

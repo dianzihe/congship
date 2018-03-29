@@ -29,13 +29,14 @@ float CMonster::sDeathFlyAcceleration = 10000;
 */
 CMonster::CMonster()
 {
+	log("important:  CMonster create************************************");
 	//mDeathFlyDir.x = 0;
 	//mDeathFlyDir.y = 0;
 }
 
 CMonster::~CMonster()
 {
-	log("important:  CMonster release");
+	log("important:  CMonster release************************************");
 	/*
 	if (m_cacheSkillSprite)
 	{
@@ -77,7 +78,6 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	//else
 	//	setTargetIconSheild(true);
 	m_animation.SetHostEventHandler(this);
-	
 	setanimID(pMonsterData->animation);
 	addAnimationSprite(getanimID(), ACTORTYPE_MONSTER, 0, 1, true);
 	
@@ -85,16 +85,17 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 	sprintf(str, "%s(LV%d)", pMonsterData->name.c_str(), pMonsterData->level);
 	SetName( str ); //必须放在模型设置完毕之后再显示  否则无法读取模型高度  会出现名字在脚下的BUG
 
-	GameScene::GetActorManager()->AddActor(this);
+	//GameScene::GetActorManager()->AddActor(this);
 	setPosition(Vec2(pLookInfoMonster->x, pLookInfoMonster->y));
-	this->pos_x = pLookInfoMonster->x;
-	this->pos_y = pLookInfoMonster->y;
+	
+	
 	if( pLookInfoMonster->move_target_x > 0 || pLookInfoMonster->move_target_y > 0 ){
-		RoutingCMD* newCMD = new RoutingCMD(getActorID());
-		GetGameCMDSystem()->PushGameCMD(newCMD);
-		GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
+		//RoutingCMD* newCMD = new RoutingCMD(getActorID());
+		//GetGameCMDSystem()->PushGameCMD(newCMD);
+		//GetRoutingModule()->AddTargetPath( Point( pLookInfoMonster->move_target_x, pLookInfoMonster->move_target_y ) );
 	}
 	
+	/*
 	const SkillInfo* pBaseSkill = SkillCfg::instance().getSkillCfgData(pMonsterData->baseSkillID);
 	if(pBaseSkill){
 		SpriteInfo _SpriteInfo;
@@ -107,6 +108,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		_SpriteInfo._ActorID = 5;
 		//m_cacheSkillSprite = AspriteManager::instance().LoadSprite(_SpriteInfo);
 	}
+	*/
 	/*
 	// 处理金银岛
 	int mapID = GameScene::GetScene()->GetCurMap()->getMapID();
@@ -127,12 +129,8 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		AddBuff(buff);
 	}
 	*/
-	setDQPosition(Vec2(300, 300));
-	pos_x = 100;
-	pos_y = 100;
-
 	onStateEnter(eCharactorState_Idle, m_dir);
-
+	this->print();
 #if 0
 	log( "onLookInfoMonster [%lld %s] animation[%d]", 
 		getActorID(),
@@ -159,6 +157,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		break;
 	}
 #endif
+	log("--------------onLookInfoMonster----------------");
 }
 
 
@@ -202,7 +201,11 @@ void CMonster::update(float dt)
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
 	log("CMonster::onStateEnter-----Param, %d", stateParam);
+	log("1");
+	this->print();
 	Charactor::onStateEnter(stateToEnter, stateParam);
+	log("2");
+	this->print();
 	switch(stateToEnter)
 	{
 	case eCharactorState_Idle:
@@ -260,6 +263,8 @@ void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	default:
 		break;
 	}
+	this->print();
+	log("CMonster::onStateEnter--------------------end");
 }
 #if 0
 

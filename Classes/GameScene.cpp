@@ -191,7 +191,7 @@ bool GameScene::init()
 	monsterInfo->wildState = 0;
 
 	pMonster->onLookInfoMonster(monsterInfo);
-
+	GameScene::GetActorManager()->AddActor(pMonster);
 	return true;
 }
 

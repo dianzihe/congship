@@ -50,9 +50,7 @@ void RoutingModule::UpdateMotion(float dt)
 	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%f, %f],[%f, %f], [%d, %d]", 
 		m_pHost->getActorID(),
 		m_pHost->getSpeed(), 
-		m_pHost->convertToWorldSpace(Vec2::ZERO).x, m_pHost->convertToWorldSpace(Vec2::ZERO).y,
-		m_pHost->getDQPosition().x, m_pHost->getDQPosition().y, 
-		m_pHost->pos_x, m_pHost->pos_x);
+		m_pHost->convertToWorldSpace(Vec2::ZERO).x, m_pHost->convertToWorldSpace(Vec2::ZERO).y);
 	int newDir=0;
 	float realSpeed = m_pHost->getSpeed() * dt;
 	if (IsInMovingState()){

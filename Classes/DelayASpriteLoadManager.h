@@ -11,14 +11,14 @@ class DelayASpriteLoadManager : public Singleton<DelayASpriteLoadManager ,Tag_Si
 {
 protected:
 	friend class Singleton<DelayASpriteLoadManager, Tag_Singleton_Auto>;
-	typedef std::set<ActorID> CallBackContainer;
+	typedef std::set<long> CallBackContainer;
 	typedef std::map<ASprite*, CallBackContainer> DelayASpriteContainer;
 	DelayASpriteLoadManager();
 
 public:
 	virtual ~DelayASpriteLoadManager();
 
-	void AddDelayASpriteAndCallBack( ASprite* pDelayASprite, ActorID nHost );
+	void AddDelayASpriteAndCallBack( ASprite* pDelayASprite, long nHost );
 
 	void RemoveDelayASprite( ASprite* pDelayASprite );
 

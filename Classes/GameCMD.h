@@ -24,7 +24,7 @@ class Charactor;
 class GameCMD
 {
 public:
-	GameCMD( GameCMDType nGameCMDType, ActorID nHost );
+	GameCMD( GameCMDType nGameCMDType, long nHost );
 	virtual ~GameCMD() {}
 
 	GameCMDType GetGameCMDType() { return mGameCMDType; }
@@ -48,7 +48,7 @@ public:
 
 	virtual void SynchrToSever(Charactor* pHost) = 0;
 protected:
-	ActorID		mHostID;
+	long		mHostID;
 	GameCMDType mGameCMDType;
 	GameCMDState mGameCMDState;
 	bool mIsHost;

@@ -43,67 +43,35 @@ public:
 	virtual ~Charactor();
 
 protected:
-	int							m_speed;				//移动速度 每秒移动多少像素
-	int							m_camp;					//职业：0 ，1， 2， 3
-	int							m_nLevel;				//等级
-	int							m_nFaction;				//阵营
-	int							m_nSex;					//性别
-	int							m_nLife;				//生命
-	int							m_nLifeMax;				//最大生命
-	float                       m_percentage_Life;      //生命百分比
-	int							m_head;					//小头像id
-	int							m_CurCombatID;
+	CC_SYNTHESIZE(int, m_speed, Speed);			//移动速度 每秒移动多少像素
+	CC_SYNTHESIZE(int, m_camp, Camp);			//职业：0 ，1， 2， 3
+	CC_SYNTHESIZE(int, m_nLevel, Level);		//等级
+	CC_SYNTHESIZE(int, m_nFaction, Faction);	//阵营
+	CC_SYNTHESIZE(int, m_nSex, Sex);			//性别
+	CC_SYNTHESIZE(int, m_nLife, Life);			//生命
+	CC_SYNTHESIZE(int, m_nLifeMax, LifeMax);	//最大生命
+	CC_SYNTHESIZE(int, m_percentage_Life, perlife);//生命百分比
+	CC_SYNTHESIZE(int, m_head, Head);			//小头像id
+	CC_SYNTHESIZE(int, m_CurCombatID, CurCombatID);
 
 public:
-	bool						init( void );
+	bool		 init( void );
 
-	int							getSpeed( void )const			{ return	m_speed; }
-	void						setSpeed( int n )				{ m_speed = n; }
-
-	float                       getperlife(void)const           {return m_percentage_Life;}
-	void				       setperlife(float n)             {m_percentage_Life = n;}
-
-	int							getLevel( void )const			{ return m_nLevel; }
-	void						setLevel( int n )				{ m_nLevel = n; }
-
-	int							getFaction( void )const			{ return m_nFaction; }
-	void						setFaction( int n )				{ m_nFaction = n; }
-
-	int							getSex( void )const				{ return m_nSex; }
-	void						setSex( int n )					{ m_nSex = n; }
-
-	int							getLife( void )const			{ return m_nLife; }
-	void						setLife( int n )				{ m_nLife = n;}
-
-	int							getLifeMax( void )const			{ return m_nLifeMax; }
-	void						setLifeMax( int n )				{ m_nLifeMax = n; }
-
-	int							getCamp( void )const			{ return m_camp; }
-	void						setCamp( int n )				{ m_camp = n; }
-
-	int							getHead( void )const			{ return m_head; }
-	void						setHead( int n )				{ m_head = n; }
-
-	virtual void				update(float dt);
+	virtual void update(float dt);
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	virtual void onStateEnter(int stateToEnter, int stateParam = 0);
 
 
-	DQMotionManager*		m_pMotionMananger;
+	DQMotionManager*	m_pMotionMananger;
 	GameCMDSystem*		m_pGameCMDSystem;
 
-	DQMotionManager* GetMotionManager() { return m_pMotionMananger; }
-	RoutingModule* GetRoutingModule() { return (RoutingModule*)(m_pMotionMananger->GetMotionModule(eMotionType_Routing)); }
-	DirectionModule* GetDirectionModule() { return (DirectionModule*)m_pMotionMananger->GetMotionModule(eMotionType_Direction); }
+	DQMotionManager*	GetMotionManager() { return m_pMotionMananger; }
+	RoutingModule*		GetRoutingModule() { return (RoutingModule*)(m_pMotionMananger->GetMotionModule(eMotionType_Routing)); }
+	DirectionModule*	GetDirectionModule() { return (DirectionModule*)m_pMotionMananger->GetMotionModule(eMotionType_Direction); }
+	GameCMDSystem*		GetGameCMDSystem() { return m_pGameCMDSystem; }
 
 	//inline TeleportModule* GetTeleportModule() { return (TeleportModule*)m_pMotionMananger->GetMotionModule(eMotionType_Teleport); }
 
-	GameCMDSystem* GetGameCMDSystem() { return m_pGameCMDSystem; }
-
-
-
-	int							getCurCombatID()				{ return m_CurCombatID; }
-	void						setCurCombatID( int n )			{ m_CurCombatID = n; }
 	/*
 	int                         getAttackSum( void )const       { return m_nAttackSum; }
 	void                        setAttackSum( int n )           { m_nAttackSum = n; }

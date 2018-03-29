@@ -24,6 +24,7 @@ const int TAIL_INIT_OPACITY = 150;
 */
 Actor::Actor(void)
 {
+	log("important actor initial**************************");
 	m_nActorID = 0;
 	m_nActorType = ACTORTYPE_ANIMATION;
 	m_nDataID = 0;
@@ -40,6 +41,7 @@ Actor::Actor(void)
 
 Actor::~Actor(void)
 {
+	log("important release actor**************************");
 	//SAFE_DELETE(m_AbnormalStateModule);
 	//SAFE_DELETE(m_SFXModule);
 	//m_NameText = NULL;
@@ -51,11 +53,11 @@ Actor::~Actor(void)
 
 Actor* Actor::node(void)
 {
+	log("import Actor::node**************************************");
 	Actor* pRet = new Actor();
 	pRet->autorelease();
 	return pRet;
 }
-
 
 void Actor::update(float dt)
 {
@@ -65,17 +67,16 @@ void Actor::update(float dt)
 	{
 		child->update(dt);
 	}
-
+	//屏蔽其他玩家名字
+	if (m_NameText )
+	{
+	if (m_nActorType == ACTORTYPE_PLAYER || m_nActorType == ACTORTYPE_PET)
+	m_NameText->setVisible(!m_bIsSheild && !CSystemSetUI::instance().isSet(ShieldSet_OthersName) );
+	else if (m_nActorType == ACTORTYPE_PET)
+	m_NameText->setVisible( !m_bIsSheild);
+	}
 	*/
 
-	////屏蔽其他玩家名字
-//	if (m_NameText )
-//	{
-//		if (m_nActorType == ACTORTYPE_PLAYER || m_nActorType == ACTORTYPE_PET)
-//			m_NameText->setVisible(!m_bIsSheild && !CSystemSetUI::instance().isSet(ShieldSet_OthersName) );
-// 		else if (m_nActorType == ACTORTYPE_PET)
-// 			m_NameText->setVisible( !m_bIsSheild);
-//	}
 	
 	//updateShowNamePos();
 #if 0
@@ -266,15 +267,19 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex )
 {
-	
+	log("-------------------------changeanimation");
+	this->print();
 	auto sprite = Sprite::create();
 	char animationCacheName[256];
-	sprintf(animationCacheName, "%d_%d_%d", getanimID(), m_nActorType, animID);
-	log("Actor::ChangeAnimation--->%s, %d, %d", animationCacheName, getanimID(), pos_y);
+	sprintf(animationCacheName, "%d_%d_%d", getanimID(), getActorType(), animID);
+	log("Actor::ChangeAnimation--->%s, %d", animationCacheName, getanimID(), animationCacheName);
 	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
 	sprite->setPosition(getPosition());
+	this->print();
 	sprite->runAction(RepeatForever::create(Animate::create(animation)));
+	this->print();
 	GameScene::GetScene()->getGameLayer()->addChild(sprite);
+	this->print();
 	if(m_animID != animID || m_dir != dir) {
 		/*
 		int flag = 0;
@@ -292,6 +297,7 @@ void Actor::ChangeAnimation( int animID, int dir, bool loop, int animaLayerIndex
 
 	m_animID = animID;
 	m_dir = dir;
+	log("-------------------------changeanimation----end   %d  %d", m_animID, m_dir);
 }
 
 void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad)

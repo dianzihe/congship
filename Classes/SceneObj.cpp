@@ -40,7 +40,7 @@ void SceneObj::onLookInfoSceneObject( int nSceneObjId, Point& position, const Sc
 	}
 	m_pSceneObjData = pObjData;
 
-	ActorID id = rand() * rand();
+	long id = rand() * rand();
 	setActorID( id );
 
 	//setDataID( nSceneObjId );

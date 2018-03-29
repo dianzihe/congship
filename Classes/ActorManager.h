@@ -19,14 +19,14 @@ class LevelUp;
 class Map;
 */
 using namespace std;
-typedef std::map< ActorID, Actor* >	MAP_ACTORS;
+typedef std::map< long, Actor* >	MAP_ACTORS;
 
 using namespace cocos2d;
 
 class ActorManager /*: public OneEventObject*/
 {
 public:
-	ActorID							m_clientActorID;
+	long							m_clientActorID;
 
 	//CHero*							m_hero;
 	//Click*							m_click;
@@ -34,10 +34,10 @@ public:
 	//AOEpick*						m_aoe;
 	//LevelUp* m_level;
 	//int Deltag[];
-	std::map< ActorID, Actor* >		m_mapActors;
+	std::map< long, Actor* >		m_mapActors;
 	MAP_ACTORS						m_mapTransportActors;
 
-	typedef list< ActorID >			LIST_ACTORIDS;
+	typedef list< long >			LIST_ACTORIDS;
 	LIST_ACTORIDS					m_lstWaitToDelActorIDs;
 	long							timeNonce;
 
@@ -53,10 +53,10 @@ public:
 	//bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 
 	void AddActor(Actor* actor );
-	void DelActor(ActorID nActorID);
-	void DelayDelActor( ActorID nActorID );
+	void DelActor(long nActorID);
+	void DelayDelActor( long nActorID );
 	void cleartimeNonce(){timeNonce=0;}
-	Actor* FindActor(ActorID nActorID)
+	Actor* FindActor(long nActorID)
 	{
 		if (m_mapActors.empty())
 			return NULL;
@@ -87,7 +87,7 @@ public:
 	//void SetLevel(LevelUp*level){m_level = level;};
 	MAP_ACTORS& GetMapActors(){return m_mapActors;};
 
-	ActorID incClientActorID( void );
+	long incClientActorID( void );
 
 	void  setMap(DQMap *p){ m_pMap = p;};
 

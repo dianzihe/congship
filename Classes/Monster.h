@@ -34,8 +34,10 @@ struct LookInfoMonster
 
 class CMonster : public Charactor
 {
-public:
+private:
 	CMonster();
+public:
+	
 	virtual ~CMonster();
 
 	static CMonster* node(void);
@@ -44,11 +46,8 @@ public:
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	virtual void update(float dt);
 
-	void onStateEnter( int stateToEnter, int stateParam /*= 0 */ );
-
-	//Vec2 dq_position;
-	//Vec2				getDQPosition()const				{ return dq_position; }
-	//void				setDQPosition(Vec2 n)				{ dq_position = n; }
+	void	onStateEnter( int stateToEnter, int stateParam /*= 0 */ );
+	void	onLookInfoMonster(LookInfoMonster* pLookInfoMonster);
 
 //////////////////////////////////////////////////////////////////////////
 #if 0
@@ -75,7 +74,6 @@ public:
 #endif
 //Msg
 public:
-	void	onLookInfoMonster( LookInfoMonster* pLookInfoMonster );
 #if 0
 	float	mDeathFlyTime;
 	float	mCurDecresSpeed;

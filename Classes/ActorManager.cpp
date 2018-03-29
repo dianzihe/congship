@@ -15,13 +15,11 @@ ActorManager::ActorManager(void)
 	m_pMap = NULL;
 	// 跟服务器对应的封装方法
 	//%%构建物件ID，暂时32位(前1位永为0保持正数，8位服务器ID，4位类型ID，19位ID值)，以后改为64位
-	ActorID Index = 1;
-	ActorID ServerID = 1;
-	ActorID TypeID = 0xff;
+	long Index = 1;
+	long ServerID = 1;
+	long TypeID = 0xff;
 	timeNonce=0;
 
-	std::map< ActorID, Actor* >		zzzzz;
-	log("zzzzz->%d", zzzzz.size());
 	m_clientActorID = (ServerID << 55) | ( TypeID << 51 ) | Index;
 }
 
@@ -29,7 +27,7 @@ ActorManager::~ActorManager(void)
 {
 }
 
-ActorID ActorManager::incClientActorID()
+long ActorManager::incClientActorID()
 {
 	return ++m_clientActorID;
 }
@@ -42,6 +40,7 @@ void ActorManager::update(float dt)   //改
 	{
 		Actor* pActor = iter->second;
 		//pActor->setIsSheild(false);
+		pActor->print();
 		log("----->ActorManager::update--->%s--%d", pActor->GetName().c_str(), pActor->getanimID());
 		pActor->update(dt);
 	}
@@ -299,7 +298,7 @@ bool ActorManager::ccTouchBegan(CCTouch* touch, CCEvent* event)
 */
 void ActorManager::AddActor(Actor* actor)
 {
-	ActorID nActorID = actor->getActorID();
+	long nActorID = actor->getActorID();
 
 	if( FindActor(nActorID) ){
 		log( "ActorManager::AddActor nActorID[%lld] exist", nActorID );
@@ -318,7 +317,7 @@ void ActorManager::AddActor(Actor* actor)
  		m_mapTransportActors[nActorID] = actor;
 	}
 }
-void ActorManager::DelActor(ActorID nActorID)
+void ActorManager::DelActor(long nActorID)
 {
 	MAP_ACTORS::iterator iterFind = m_mapActors.find( nActorID );
 	if( iterFind != m_mapActors.end() )
@@ -345,7 +344,7 @@ void ActorManager::DelActor(ActorID nActorID)
 	}
 }
 
-void ActorManager::DelayDelActor( ActorID nActorID )
+void ActorManager::DelayDelActor(long nActorID)
 {
 	m_lstWaitToDelActorIDs.push_back( nActorID );
 }

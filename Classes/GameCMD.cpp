@@ -3,7 +3,7 @@
 #include "Charactor.h"
 #include "ActorManager.h"
 
-GameCMD::GameCMD( GameCMDType nGameCMDType, ActorID nHost )
+GameCMD::GameCMD( GameCMDType nGameCMDType, long nHost )
 : mGameCMDType(nGameCMDType)
 , mHostID(nHost)
 , mIsHost(false)

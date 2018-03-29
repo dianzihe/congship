@@ -101,34 +101,49 @@ static const float Buttle_Life_Time_Max = 5.0f;
 class Actor : public Node
 {
 public:
-	//int m_animID;
-	//int m_moveState;
+	CC_SYNTHESIZE(int, m_animID, animID);				//ACTORSTATE
+	CC_SYNTHESIZE(int, m_dir, Dir);						//ACTORDIR	
+	CC_SYNTHESIZE(long, m_nActorID, ActorID);			//与服务器同步的，唯一的物件id
+	CC_SYNTHESIZE(ACTORTYPE, m_nActorType, ActorType);	//物件类型
+	CC_SYNTHESIZE(unsigned int, m_nStateFlag, StateFlag);
+	CC_SYNTHESIZE(int, m_nDataID, DataID);				//根据m_nActorType，可能是Monster的、Npc的配置ID
 
-	CC_SYNTHESIZE(int, m_animID, animID);		//ACTORSTATE
-	//CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE
-	CC_SYNTHESIZE(int, m_dir, Dir);				//ACTORDIR	
-	CC_SYNTHESIZE(Vec2, dq_position, DQPosition);//
-	//CC_SYNTHESIZE(int, m_flyState, FlyState);	//MOVESTATE
-	//CC_SYNTHESIZE(int, m_runStatus, RunStatus);//
-	//CC_SYNTHESIZE(int, m_mapID, MapID);//地图ID
-	long 				m_nActorID;		//	与服务器同步的，唯一的物件id
-	ACTORTYPE			m_nActorType;	//	物件类型
-	int					m_nDataID;		//	根据m_nActorType，可能是Monster的、Npc的配置ID
+	DQAnimation m_animation;
+
+	void print(){
+		log(">>>>>>>>>>>ID:%d, DIR:%d, ACTID:%l, TYPE:%d, STATE:%d, DATA:%d", 
+			getanimID(), getDir(), getActorID(), getActorType(), getStateFlag(), getDataID());
+	};
+	//std::string m_name;
+	void			SetName(const string& name){ /*m_name = name; */};
+	std::string	GetName() { /*return m_name;*/ return std::string("zzzz"); };
+
+	static Actor*		node(void);
+	Actor(void);
+	virtual ~Actor(void);
+
+	
+
+	virtual void update(float dt);	
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
+	void onStateEnter(int stateToEnter, int stateParam /*= 0 */){};
+	
+	bool				isStateFlag(unsigned int nFlag)const		{ return (m_nStateFlag & nFlag) != 0; }
+	bool				isDead(void)const			{ return isStateFlag(Actor_State_Flag_Dead); }
+	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
+	void				addAnimationSprite(int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false);
+	void				ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
+	void				SetNewPos(Point& pos);
+
 #if 0
 public:
-	
+	void				addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
+
+
 	bool				m_cleanFlag;	//	切换地图的时候是否清除 默认为true
 	bool				m_canBeenClick;	//	能否被选中，默认=true
 #endif
 public:
-	int					pos_x;
-	int					pos_y;
-
-	long				getActorID()const				{ return m_nActorID; }
-	void				setActorID( long n )			{ m_nActorID = n; }
-
-	ACTORTYPE			getActorType()const				{ return m_nActorType; }
-	void				setActorType(ACTORTYPE n)		{ m_nActorType = n; }
 
 	/*
 
@@ -145,11 +160,6 @@ public:
 
 	void                isShowName(bool b);
 	*/
-public:
-	static Actor*		node(void);
-public:
-	Actor(void);
-	virtual ~Actor(void);
 
 	//virtual void		onLookInfoSceneObject( void );
 //	static inline int Id2Tag(int type, int id )  { return SwitchTagAndID(type, id,false); }
@@ -159,13 +169,12 @@ public:
 //	int GetType();
 //	int GetID();
 
-	virtual void update(float dt);	
-	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
-	void onStateEnter(int stateToEnter, int stateParam /*= 0 */){};
-	void ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
-	void SetNewPos(Point& pos);
-
 	/*
+	//CC_SYNTHESIZE(int, m_flyState, FlyState);	//MOVESTATE
+	//CC_SYNTHESIZE(int, m_runStatus, RunStatus);//
+	//CC_SYNTHESIZE(int, m_mapID, MapID);//地图ID
+	//CC_SYNTHESIZE(int, m_moveState, MoveState);	//MOVESTATE
+
 	virtual int GetZOrder() { return (int)(getPositionX() + (getPositionY())*(-10000));};
 
 	float GetAnimationTime( int animID );
@@ -201,8 +210,6 @@ public:
 	//void updateShowNamePos();
 
 public:
-	DQAnimation m_animation;
-	std::string m_name;
 	/*
 	//SFXModule* m_SFXModule;
 	//AnimSFX* m_pShadowSFX;
@@ -240,16 +247,6 @@ public:
 	*/
 public:
 	//ASprite*			GetSprite()				{return m_animation.GetSprite();}
-	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
-	void				addAnimationSprite( int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false );
-	void				addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
-	void				SetName(const std::string& name){ m_name = name; };
-	const std::string&	GetName()const { return m_name; };
-	unsigned int		m_nStateFlag;
-	unsigned int		getStateFlag(void)const		{ return m_nStateFlag; }
-	void				setStateFlag(unsigned int nSetValue);
-	bool				isStateFlag(unsigned int nFlag)const		{ return (m_nStateFlag & nFlag) != 0; }
-	bool				isDead(void)const			{ return isStateFlag(Actor_State_Flag_Dead); }
 	/*
 	virtual void		SetShowName( const std::string& name);
 	void				SetPKProctIcon(bool bShow);
@@ -267,12 +264,6 @@ public:
 private:
 	
 public:
-
-
-	
-
-	
-
 	virtual void		addStateFlag( unsigned int nFlag );
 	virtual void		removeStateFlag( unsigned int nFlag );
 	virtual void		onStateFlagChanged( unsigned int nChangeStateFlag, bool bAddOrRemove );

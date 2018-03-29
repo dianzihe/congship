@@ -76,6 +76,7 @@ Charactor::Charactor()
 , m_CharactorCombatState(eCharactorCombatState_Idle)
 */
 {
+	log("important: charactor initial**********************");
 	//m_nAttackSum = 0;
 	//m_nSkillMac = 0;
 	m_camp	= 0;
@@ -96,6 +97,7 @@ Charactor::Charactor()
 
 Charactor::~Charactor()
 {
+	log("important: charactor release**********************");
 	//SAFE_DELETE(m_pStateMachine);
 	SAFE_DELETE(m_pGameCMDSystem);
 	SAFE_DELETE(m_pMotionMananger);
