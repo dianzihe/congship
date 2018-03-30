@@ -5,19 +5,19 @@
 
 enum CharactorState
 {
-	eCharactorState_Idle = 0,//站立不动	
-	eCharactorState_Run,//跑
-	eCharactorState_Attack,//攻击
+	eCharactorState_Idle = 0,	//站立不动	
+	eCharactorState_Run,		//跑
+	eCharactorState_Attack,		//攻击
 	eCharactorState_UnderAttack,//受击
-	eCharactorState_Death, //死亡
+	eCharactorState_Death,		//死亡
 
 #ifdef USED_JUMP
-	eCharactorState_Jump,//起跳
-	eCharactorState_DoubleJump,//2段跳
-	eCharactorState_Land,//落地
+	eCharactorState_Jump,		//起跳
+	eCharactorState_DoubleJump,	//2段跳
+	eCharactorState_Land,		//落地
 #endif
 
-	eCharactorState_Meditation,//打坐
+	eCharactorState_Meditation,	//打坐
 
 	eCharactorState_DeleteSelf,
 

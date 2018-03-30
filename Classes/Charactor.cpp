@@ -155,7 +155,7 @@ void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	case eCharactorState_Attack:
 	{
 		//m_CharactorCombatState = eCharactorCombatState_Attack;
-		//GetMotionManager()->StopMotion();
+		GetMotionManager()->StopMotion();
 	}
 	break;
 	case eCharactorState_UnderAttack:
@@ -165,7 +165,7 @@ void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	break;
 	case eCharactorState_Death:
 	{
-		//GetMotionManager()->StopMotion();
+		GetMotionManager()->StopMotion();
 		//Target::instance().HideTargetInfo();
 	}
 	break;

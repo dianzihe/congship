@@ -89,27 +89,27 @@ enum Actor_State_Flag_Type
 {
 	// player、npc共享部分
 	Actor_State_Flag_Unkown						= 0,	//未初始化
-	Actor_State_Flag_Loading							= 1,	//加载中
+	Actor_State_Flag_Loading					= 1,	//加载中
 	Actor_State_Flag_WaitEnterMap				= 2,	//等待玩家进入地图
 	Actor_State_Flag_EnteredMap					= 4,	//玩家已经进入地图
-	Actor_State_Flag_Dead								= 8,	//已死亡
-	Actor_State_Flag_Fighting							= 32, //战斗状态
-	Actor_State_Flag_God								=64,	//无敌状态
-	Actor_State_Flag_Disable_Attack				=128,//禁止攻击状态
-	Actor_State_Flag_Disable_Move				=256,//禁止移动状态
-	Actor_State_Flag_Disable_Hold					=512,//昏迷状态
+	Actor_State_Flag_Dead						= 8,	//已死亡
+	Actor_State_Flag_Fighting					= 32,	//战斗状态
+	Actor_State_Flag_God						= 64,	//无敌状态
+	Actor_State_Flag_Disable_Attack				= 128,	//禁止攻击状态
+	Actor_State_Flag_Disable_Move				= 256,	//禁止移动状态
+	Actor_State_Flag_Disable_Hold				= 512,	//昏迷状态
 
 	// 玩家专享部分
 	Player_State_Flag_TalkingWithNpc			= 1024, //Npc对话中
-	Player_State_Flag_CollectingWithNpc		= 2048, //Npc采集中
+	Player_State_Flag_CollectingWithNpc			= 2048, //Npc采集中
 	Player_State_Flag_TradeWithPlayer			= 4096, //与玩家交互中（玩家交易）
-	Player_State_Flag_ChangingMap				=8192, //地图切换中
-	Player_State_Flag_PK_Kill				= 16384,	//%%0x4000	//	黄名
-	Player_State_Flag_PK_Kill_Value = 32768,            //0x8000	//	红名
-	Player_State_Flag_Just_Disable_Move=131072,			//	禁止移动状态，直接设置，技能不能解
+	Player_State_Flag_ChangingMap				= 8192, //地图切换中
+	Player_State_Flag_PK_Kill					= 16384,//%%0x4000	//	黄名
+	Player_State_Flag_PK_Kill_Value				= 32768, //0x8000	//	红名
+	Player_State_Flag_Just_Disable_Move			= 131072, //	禁止移动状态，直接设置，技能不能解
 
 	// Monster专享状态( 0x200000--0x4000000 )
-	Monster_State_Flag_GoBacking				=2097152, //0x200000 //往回跑重置
+	Monster_State_Flag_GoBacking				= 2097152, //0x200000 //往回跑重置
 
 };
 
@@ -152,7 +152,7 @@ enum SHALU_OP_RESULT
 
 //查看装备返回
 #define LookPlayerInfo_Failed_NotOnline			-1		//对方不在线
-#define LookPlayerInfo_Failed_Self					-2		//不能查看自己
+#define LookPlayerInfo_Failed_Self				-2		//不能查看自己
 #define LookPlayerInfo_Failed_UnKnow			-3		//未知错误
 
 //激活码领取结果返回

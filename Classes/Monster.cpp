@@ -201,6 +201,11 @@ void CMonster::update(float dt)
 
 void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 {
+	/*
+	如何确定animation？
+		根据actor状态判断animation的状态
+		根据方向来确定最终的animation cache
+	*/
 	log("CMonster::onStateEnter-----Param, %d", stateParam);
 	Charactor::onStateEnter(stateToEnter, stateParam);
 	switch(stateToEnter)

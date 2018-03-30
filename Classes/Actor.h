@@ -98,10 +98,11 @@ static const float Buttle_Life_Time_Max = 5.0f;
 //class UIText;
 //class AnimSFX;
 
-class Actor : public Node
+class Actor : public Sprite
 {
 public:
 	CC_SYNTHESIZE(int, m_animID, animID);				//ACTORSTATE
+	CC_SYNTHESIZE(int, m_currentAnimID, CurrentAnimID); //当前animation
 	CC_SYNTHESIZE(int, m_dir, Dir);						//ACTORDIR	
 	CC_SYNTHESIZE(long, m_nActorID, ActorID);			//与服务器同步的，唯一的物件id
 	CC_SYNTHESIZE(ACTORTYPE, m_nActorType, ActorType);	//物件类型
@@ -109,32 +110,30 @@ public:
 	CC_SYNTHESIZE(int, m_nDataID, DataID);				//根据m_nActorType，可能是Monster的、Npc的配置ID
 
 	DQAnimation m_animation;
-
+	Sprite* runAnimation;
 	void print(){
 		log(">>>>>>>>>>>ID:%d, DIR:%d, ACTID:%l, TYPE:%d, STATE:%d, DATA:%d", 
 			getanimID(), getDir(), getActorID(), getActorType(), getStateFlag(), getDataID());
 	};
-	//std::string m_name;
-	void			SetName(const string& name){ /*m_name = name; */};
-	std::string	GetName() { /*return m_name;*/ return std::string("zzzz"); };
+	std::string m_name;
+	void SetName(const string& name){ m_name = name; };
+	std::string	GetName() { return m_name;  };
 
-	static Actor*		node(void);
+	static Actor* node(void);
 	Actor(void);
 	virtual ~Actor(void);
-
-	
 
 	virtual void update(float dt);	
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
 	void onStateEnter(int stateToEnter, int stateParam /*= 0 */){};
 	
-	bool				isStateFlag(unsigned int nFlag)const		{ return (m_nStateFlag & nFlag) != 0; }
-	bool				isDead(void)const			{ return isStateFlag(Actor_State_Flag_Dead); }
-	inline DQAnimation*	GetAnimation()			{ return &m_animation; }
+	bool				isStateFlag(unsigned int nFlag)const { return (m_nStateFlag & nFlag) != 0; }
+	bool				isDead(void)const { return isStateFlag(Actor_State_Flag_Dead); }
+	inline DQAnimation*	GetAnimation() { return &m_animation; }
 	void				addAnimationSprite(int id, ACTORTYPE type, int sex = 0, int equipLevel = 1, bool isMustLoad = false);
 	void				ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
 	void				SetNewPos(Point& pos);
-
+	void				stopAction();
 #if 0
 public:
 	void				addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
@@ -146,10 +145,6 @@ public:
 public:
 
 	/*
-
-	int					getDataID()const				{ return m_nDataID; }
-	void				setDataID( int n )				{ m_nDataID = n; }
-
 	bool				getCleanFlag( void )const		{ return m_cleanFlag; }
 	void				setCleanFlag( bool b )			{ m_cleanFlag = b; }
 
@@ -206,7 +201,6 @@ private:
 	unsigned int mGrayInfo;
 	*/
 public:
-	//int GetAnimID(int state, int dir);
 	//void updateShowNamePos();
 
 public:
@@ -229,7 +223,7 @@ public:
 	bool   m_bEnableTails;
 	bool   m_bStartDisableTails;
 	bool   m_bIsTargetIconSheild;
-	bool                m_bTianTiFight;
+	bool   m_bTianTiFight;
 	int	   m_totalTails;
 
 	Tail_t *m_tails;

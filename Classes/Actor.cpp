@@ -30,6 +30,7 @@ Actor::Actor(void)
 	m_nDataID = 0;
 	m_animID = -1;
 	m_dir = eDirection_Right;
+	runAnimation = Sprite::create();
 	//m_cleanFlag = true;
 	//m_moveState = (Object_MoveState_Stand<<2) | Object_FlyState_Land;
 	//m_AbnormalStateModule = new AbnormalStateModule(this);
@@ -113,6 +114,7 @@ void Actor::update(float dt)
 #endif
 
 	m_animation.update(dt);
+	//runAnimation->setPosition(getPosition());
 #if 0
 	if(m_SFXModule)
 	{
@@ -267,16 +269,45 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerIndex )
 {
-	log("-------------------------changeanimation");
-	auto sprite = Sprite::create();
-	char animationCacheName[256];
-	sprintf(animationCacheName, "%d_%d_%d", getanimID(), getActorType(), actionID);
-	log("Actor::ChangeAnimation--->%s, %d", animationCacheName, getanimID(), animationCacheName);
-	auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
-	sprite->setPosition(getPosition());
-	sprite->runAction(RepeatForever::create(Animate::create(animation)));
-	GameScene::GetScene()->getGameLayer()->addChild(sprite);
-	if (m_animID != actionID || m_dir != dir) {
+	if (getCurrentAnimID() != actionID || m_dir != dir) {
+		this->stopAllActions();
+		log("-------------------------changeanimation");
+		if (runAnimation){
+			GameScene::GetScene()->getGameLayer()->removeChild(runAnimation);
+			//runAnimation->autorelease();
+		}
+		runAnimation = Sprite::create();
+		char animationCacheName[256];
+		sprintf(animationCacheName, "%d_%d_%d", getanimID(), getActorType(), actionID + dir);
+		log("Actor::ChangeAnimation--->%s ID:%d  DIR:%d", animationCacheName, actionID, dir);
+		auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
+		runAnimation->setPosition(getPosition());
+		/* on moving state */
+		Vec2 alpha = Vec2(0, -1);
+
+		switch (actionID + dir)
+		{
+			case 9:
+				alpha = Vec2(0, -1);/*down*/
+			case 10:
+				alpha = Vec2(-1, 0);/*left*/
+			case 11:
+				alpha = Vec2(0, 1);/*up*/
+			case 12:
+				alpha = Vec2(1, 0);/*right*/
+			default:
+				break;
+		}
+		if (12 > actionID && 9 < actionID){
+			auto pMove = MoveBy::create(1, alpha);
+			auto pCallback = CallFunc::create(CC_CALLBACK_0(Actor::stopAction, this));
+			auto pSequence = Sequence::create(pMove, pCallback, nullptr);
+			pSequence->setTag(actionID + dir);
+		}
+
+		runAnimation->runAction(RepeatForever::create(Animate::create(animation)));
+		GameScene::GetScene()->getGameLayer()->addChild(runAnimation);
+
 		/*
 		int flag = 0;
 		if(dir == eDirection_Left || dir == eDirection_LeftUp) {
@@ -292,10 +323,13 @@ void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerInd
 	}
 
 	//m_animID = animID;
-	m_dir = dir;
+	setCurrentAnimID(actionID + dir);
+	setDir(dir);
 	log("-------------------------changeanimation----end   %d  %d", m_animID, m_dir);
 }
-
+void Actor::stopAction(){
+	runAnimation->stopActionsByFlags(getCurrentAnimID());
+}
 void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad)
 {
 	m_animation.SetHostEventHandler(this);
