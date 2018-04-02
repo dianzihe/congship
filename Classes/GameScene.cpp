@@ -197,9 +197,6 @@ bool GameScene::init()
 //create Update for behaviac
 void GameScene::Update(float dt)
 {
-	log("--->[%d, %d]-->[%d, %d]", 
-		getGameLayer()->getPosition().x, getGameLayer()->getPosition().y,
-		getGameLayer()->getContentSize().width, getGameLayer()->getContentSize().height);
 	//behaviac::Workspace::GetInstance()->LogFrames();
 	//behaviac::Workspace::GetInstance()->HandleRequests();
 	//m_NPC->btexec();

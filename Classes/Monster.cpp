@@ -131,7 +131,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 		AddBuff(buff);
 	}
 	*/
-	onStateEnter(eCharactorState_Idle, m_dir);
+	onStateEnter(eCharactorState_Run, m_dir);
 #if 0
 	log( "onLookInfoMonster [%lld %s] animation[%d]", 
 		getActorID(),
@@ -218,6 +218,7 @@ void CMonster::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	case eCharactorState_Run:
 	{
 		int newDir = stateParam;
+		setState(eCharactorState_Run);
 		ChangeAnimation(ANIM_MONSTER_MOVE_DOWN, newDir);		
 	}
 	break;

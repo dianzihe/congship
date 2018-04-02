@@ -269,8 +269,8 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerIndex )
 {
-	if (getCurrentAnimID() != actionID || m_dir != dir) {
-		this->stopAllActions();
+	if (getCurrentAnimID() != actionID || m_dir != dir || getState() == eCharactorState_Run) {
+		runAnimation->stopAllActions();
 		log("-------------------------changeanimation");
 		if (runAnimation){
 			GameScene::GetScene()->getGameLayer()->removeChild(runAnimation);
@@ -278,13 +278,13 @@ void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerInd
 		}
 		runAnimation = Sprite::create();
 		char animationCacheName[256];
-		sprintf(animationCacheName, "%d_%d_%d", getanimID(), getActorType(), actionID + dir);
-		log("Actor::ChangeAnimation--->%s ID:%d  DIR:%d", animationCacheName, actionID, dir);
+		sprintf(animationCacheName, "%d_%d_%d_%d", getanimID(), getActorType(), getState(), dir);
+		log("Actor::ChangeAnimation--->%s ID:%d  DIR:%d, AnimID:%d", animationCacheName, actionID, dir, GetAnimID(actionID, dir));
 		auto animation = AnimationCache::getInstance()->getAnimation(animationCacheName);
 		runAnimation->setPosition(getPosition());
 		/* on moving state */
 		Vec2 alpha = Vec2(0, -1);
-
+		//int anim = GetAnimID(animID, dir);
 		switch (actionID + dir)
 		{
 			case 9:
@@ -298,14 +298,23 @@ void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerInd
 			default:
 				break;
 		}
-		if (12 > actionID && 9 < actionID){
-			auto pMove = MoveBy::create(1, alpha);
+		ActionInterval *doAnimation;
+		if (12 >= actionID && 9 <= actionID){
+			auto pMove = MoveBy::create(0.5, alpha);
 			auto pCallback = CallFunc::create(CC_CALLBACK_0(Actor::stopAction, this));
-			auto pSequence = Sequence::create(pMove, pCallback, nullptr);
-			pSequence->setTag(actionID + dir);
+			auto pSequence = Sequence::create(pMove,
+				([=]() {}),
+				pCallback,
+				NULL);
+				//pSequence->setTag(actionID + dir);
+			doAnimation = Spawn::create(Animate::create(animation),
+				pSequence,
+				NULL);
+		} else{
+			doAnimation = RepeatForever::create(Animate::create(animation));
 		}
 
-		runAnimation->runAction(RepeatForever::create(Animate::create(animation)));
+		runAnimation->runAction(doAnimation);
 		GameScene::GetScene()->getGameLayer()->addChild(runAnimation);
 
 		/*
@@ -337,6 +346,30 @@ void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, 
 	m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
 }
 
+int Actor::GetAnimID(int state, int dir)
+{
+	int anim = state;// * ACTOR_ANIM_DIR_COUNT;
+	switch (dir)
+	{
+	case eDirection_Left:
+	case eDirection_Right:
+	case eDirection_LeftUp:
+	case eDirection_RightUp:
+		anim = anim + 1;
+		return 1;
+		break;
+	case eDirection_Down:
+	case eDirection_LeftDown:
+	case eDirection_RightDown:
+		anim = anim + 0;
+		return 0;
+		break;
+	case eDirection_Up:
+		anim = anim + 2;
+		return 2;
+	}
+	return anim;
+}
 
 void Actor::SetNewPos(  Point& pos )
 {
@@ -493,27 +526,6 @@ void Actor::ChangeFlyState(int flyState)
 	m_flyState = flyState;
 }
 
-int Actor::GetAnimID(int state, int dir)
-{
-	int anim = state;// * ACTOR_ANIM_DIR_COUNT;
-	switch (dir)
-	{
-	case eDirection_Left:
-	case eDirection_Right:
-	case eDirection_LeftUp:
-	case eDirection_RightUp:
-		anim = anim + 1;
-		break;
-	case eDirection_Down:
-	case eDirection_LeftDown:
-	case eDirection_RightDown:
-		anim = anim + 0;
-		break;
-	case eDirection_Up:
-		anim = anim + 2;
-	}
-	return anim;
-}
 
 void Actor::updateShowNamePos()
 {

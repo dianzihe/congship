@@ -30,7 +30,7 @@ class CharacterStateTransTable
 public:
 	CharacterStateTransTable()
 	{
-		/*
+		
 		memset(mCharacterStateTransTable[0], 0, sizeof(mCharacterStateTransTable) );
 		mCharacterStateTransTable[eCharactorState_Idle][eCharactorState_Idle] = true;
 		mCharacterStateTransTable[eCharactorState_Idle][eCharactorState_Run] = true;
@@ -68,7 +68,7 @@ public:
 		mCharacterStateTransTable[eAnimation_DoubleJump][eAnimation_Land] = true;
 		mCharacterStateTransTable[eAnimation_Land][eCharactorState_Idle] = true;
 #endif
-	*/
+	
 	}
 
 	bool mCharacterStateTransTable[eCharactorState_Count][eCharactorState_Count];

@@ -118,6 +118,29 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
 	
+	for (int i = 0; i < sizeof(ZZAnimationMotionType) / sizeof(ZZAnimationMotionType[0]); i++){
+		for (int j = 0; j < sizeof(ZZAnimationDirection) / sizeof(ZZAnimationDirection[0]); j++){
+			Vector<SpriteFrame*> animFrames(15);
+			char str[100] = { 0 };
+			for (int k = 1; k < 50; k++) {
+				sprintf(str, "%s/%s_%s_%04d.png", ZZAnimationMotionType[i], ZZAnimationMotionType[i], ZZAnimationDirection[j], k);
+				auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
+				//log("--add to frame cache-->%s", str);
+				if (NULL != frame)
+					animFrames.pushBack(frame);
+			}
+
+			auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+			m_mapAnimation[DQAnimationMotionType[i]] = animation;
+
+			// Add an animation to the Cache
+			sprintf(animationCacheName, "%d_%d_%d_%d", id, type, i, j);
+			log("----DQAnimation::addAnimation::add to cache:%s", animationCacheName);
+			AnimationCache::getInstance()->addAnimation(animation, animationCacheName);
+
+		}
+	}
+	/*
 	for (int i = 0; i < sizeof(DQAnimationMotionType) / sizeof(DQAnimationMotionType[0]); i++){
 		Vector<SpriteFrame*> animFrames(15);
 		char str[100] = { 0 };
@@ -137,6 +160,7 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 		log("----DQAnimation::addAnimation::add to cache:%s", animationCacheName);
 		AnimationCache::getInstance()->addAnimation(animation, animationCacheName);
 	}
+	*/
 }
 
 void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)

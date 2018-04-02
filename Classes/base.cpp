@@ -2,15 +2,15 @@
 
 static int quadrantToDir[9] =
 {
-	0, //eDirection_Right,  // 0
-	1, //eDirection_RightUp,  // 1
-	2, //eDirection_Up,  // 2
-	3, //eDirection_LeftUp,  // 3
-	4, //eDirection_Left,  // 4
-	5, //eDirection_LeftDown,  // 5
-	6, //eDirection_Down,  // 6
+	0, //eDirection_Right,		// 0
+	1, //eDirection_RightUp,	// 1
+	2, //eDirection_Up,			// 2
+	3, //eDirection_LeftUp,		// 3
+	4, //eDirection_Left,		// 4
+	5, //eDirection_LeftDown,	// 5
+	6, //eDirection_Down,		// 6
 	7, //eDirection_RightDown,  // 7
-	8 //eDirection_Right,  // 8
+	8  //eDirection_Right,		// 8
 };
 
 void WriteObjectBuff(char*& buf, ObjectBuff& value)
@@ -118,13 +118,18 @@ bool _isTextUTF8(const char* str, size_t length)
 void SET_DIR_BY_TWOPOINT(const Point &p1, const Point &p2, int& dir)
 {
 	Point p3 = p2 - p1;
+	log("SET_DIR_BY_TWOPOINT-->[%.2f, %.2f]-->%.2f--%.2f", p3.x, p3.y, fabs(p3.x), fabs(p3.y));
 	if (!(fabs(p3.x) < FLT_EPSILON && fabs(p3.y) < FLT_EPSILON))
 	{
 		double r = ccpAngleSigned(Vec2(10, 0), p3);
-		if (r < 0) r += (FLOAT_PI * 2);
+		log("SET_DIR_BY_TWOPOINT-->r:%.2f", r);
+		if (r < 0) 
+			r += (FLOAT_PI * 2);
 		r = r + FLOAT_PI / 8 - 0.01f;
 		int quadrant = (int)(r / (FLOAT_PI / 4));
+		log("SET_DIR_BY_TWOPOINT-->r:%d", quadrant);
 		dir = quadrantToDir[quadrant];
+		log("SET_DIR_BY_TWOPOINT-->dir:%d", dir);
 	}
 }
 

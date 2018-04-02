@@ -47,28 +47,24 @@ void RoutingModule::ExitMotion()
 
 void RoutingModule::UpdateMotion(float dt)
 {
-	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%f, %f],[%f, %f], [%d, %d]", 
+	log("RoutingModule::UpdateMotion---->[%d]  Speed:%d-->[%2f, %2f]", 
 		m_pHost->getActorID(),
 		m_pHost->getSpeed(), 
 		m_pHost->convertToWorldSpace(Vec2::ZERO).x, m_pHost->convertToWorldSpace(Vec2::ZERO).y);
 	int newDir=0;
 	float realSpeed = m_pHost->getSpeed() * dt;
 	if (IsInMovingState()){
-		log("1");
 		//正在移动过程中
 		MoveToNextPos(realSpeed);
 	} else {
-		log("2");
 		//寻找下一个路点
 		if(m_path.size() > 0) {
 			Point p = m_path.front();
 			SetNextPos(p);
 			if(IsNear(GetNextPos(), realSpeed)) {
-				log("3");
 				m_pHost->SetNewPos(GetNextPos());
 				ResetNextPos();
 			} else {
-				log("4");
 				//开始移动或者在拐点处切换移动方向 重新计算动画的位置和方向
 				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
@@ -76,7 +72,6 @@ void RoutingModule::UpdateMotion(float dt)
 			if(m_path.size())
 				m_path.pop_front();
 		} else {
-			log("5");
 			//没有路点可以走了 玩家应退出移动状态
 			//m_pHost->GetStateMachine()->setState(eCharactorState_Idle, m_pHost->getDir());
 		}
@@ -90,7 +85,7 @@ bool RoutingModule::IsNear( const Point& pos, float speed )
 
 void RoutingModule::MoveToNextPos(float realSpeed)
 {	
-	log("RoutingModule::MoveToNextPos-->[%f, %f]->[%f, %f]", 
+	log("RoutingModule::MoveToNextPos-->[.%2f, .%2f]->[.%2f, %.2f]", 
 		m_pHost->getPosition().x, m_pHost->getPosition().y,
 		GetNextPos().x, GetNextPos().y);
 	if(GetNextPos().x >= 0.) {
@@ -111,8 +106,9 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 			float x = tPosition.x + xoff / l * realSpeed;
 			float y = tPosition.y + yoff / l * realSpeed;
 			if( m_pHost->getActorType() == ACTORTYPE_HERO ) {
+				/*
 				Point nextPos = GetNextPos();
-				float realDis = sqrtf((tPosition.x - nextPos.x)*(tPosition.x - nextPos.x) + (tPosition.y - nextPos.y) * (tPosition.y - nextPos.y));
+				float realDis = sqrtf((tPosition.x - nextPos.x) * (tPosition.x - nextPos.x) + (tPosition.y - nextPos.y) * (tPosition.y - nextPos.y));
 				if( realSpeed <= realDis ) {
 					m_pHost->SetNewPos(Point(x,y));
 				} else {
@@ -152,17 +148,20 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 					}
 					m_pHost->SetNewPos(Point(x,y));
 				}
+				*/
 			} else {
-				log("MoveToNextPos-->3");
+				log("MoveToNextPos-->3--->[%.2f, %.2f]", x, y);
 				m_pHost->SetNewPos(Point(x,y));
 			}
+
 			if(IsNear(GetNextPos(), realSpeed)) {
 				log("MoveToNextPos-->4");
 				ResetNextPos();
 			} else {
-				log("MoveToNextPos-->5");
+				
 				int newDir = 0;
 				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
+				log("MoveToNextPos-->5--->%d", newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
 				m_pHost->onStateEnter(eCharactorState_Run, newDir);
 			}

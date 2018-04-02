@@ -29,20 +29,74 @@ const int DIRECTION_RIGHT = 5;
 const int DIRECTION_DOWN = 6;
 const int DIRECTION_LEFT = 7;
 
+/*
+"idle/idle_down",
+"idle/idle_left",
+"idle/idle_up",
+"move/move_down",
+"move/move_left",
+"move/move_up",
+"attack/attack_down",
+"attack/attack_left",
+"attack/attack_up",
+"dead/dead_down",
+"dead/dead_left",
+"dead/dead_up",
+
+static int quadrantToDir[9] =
+{
+	0, //eDirection_Right,  // 0
+	1, //eDirection_RightUp,  // 1
+	2, //eDirection_Up,  // 2
+	3, //eDirection_LeftUp,  // 3
+	4, //eDirection_Left,  // 4
+	5, //eDirection_LeftDown,  // 5
+	6, //eDirection_Down,  // 6
+	7, //eDirection_RightDown,  // 7
+	8 //eDirection_Right,  // 8
+};
+enum CharactorState
+{
+eCharactorState_Idle = 0,	//站立不动
+eCharactorState_Run,		//跑
+eCharactorState_Attack,		//攻击
+eCharactorState_UnderAttack,//受击
+eCharactorState_Death,		//死亡
+
+#ifdef USED_JUMP
+eCharactorState_Jump,		//起跳
+eCharactorState_DoubleJump,	//2段跳
+eCharactorState_Land,		//落地
+#endif
+
+eCharactorState_Meditation,	//打坐
+eCharactorState_DeleteSelf,
+eCharactorState_Count,
+};
+*/
 static const char* DQAnimationMotionType[] =
 {
-	"attack/attack_down",
-	"attack/attack_left",
-	"attack/attack_up",
-	"dead/dead_down",
-	"dead/dead_left",
-	"dead/dead_up",
 	"idle/idle_down",
-	"idle/idle_left",
-	"idle/idle_up",
 	"move/move_down",
-	"move/move_left",
-	"move/move_up",
+	"attack/attack_down",
+	"underattack/underattack_down",
+	"dead/dead_down",
+};
+
+static const char* ZZAnimationMotionType[] =
+{
+	"idle",
+	"move",
+	"attack",
+	"underattack",
+	"dead",
+};
+
+static const char* ZZAnimationDirection[] =
+{
+	"down",
+	"left",
+	"up",
 };
 
 struct TransportDst
@@ -107,6 +161,7 @@ public:
 	CC_SYNTHESIZE(long, m_nActorID, ActorID);			//与服务器同步的，唯一的物件id
 	CC_SYNTHESIZE(ACTORTYPE, m_nActorType, ActorType);	//物件类型
 	CC_SYNTHESIZE(unsigned int, m_nStateFlag, StateFlag);
+	CC_SYNTHESIZE(unsigned int, m_state, State);
 	CC_SYNTHESIZE(int, m_nDataID, DataID);				//根据m_nActorType，可能是Monster的、Npc的配置ID
 
 	DQAnimation m_animation;
@@ -134,6 +189,7 @@ public:
 	void				ChangeAnimation(int animID, int dir, bool loop = true, int animaLayerIndex = 0);
 	void				SetNewPos(Point& pos);
 	void				stopAction();
+	int					GetAnimID(int state, int dir);
 #if 0
 public:
 	void				addAnimationToActor(int id, ACTORTYPE type, int sex, int equiplevel, float aniDelay = 0.2, bool filter = false);
