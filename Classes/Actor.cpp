@@ -300,16 +300,17 @@ void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerInd
 		}
 		ActionInterval *doAnimation;
 		if (12 >= actionID && 9 <= actionID){
-			auto pMove = MoveBy::create(0.5, alpha);
-			auto pCallback = CallFunc::create(CC_CALLBACK_0(Actor::stopAction, this));
+			auto pMove = MoveBy::create(1.0, alpha);
+			//auto pCallback = CallFunc::create(CC_CALLBACK_0(Actor::stopAction, this));
 			auto pSequence = Sequence::create(pMove,
-				([=]() {}),
-				pCallback,
-				NULL);
+				//([=]() {}),
+				//pCallback,
+				nullptr);
 				//pSequence->setTag(actionID + dir);
 			doAnimation = Spawn::create(Animate::create(animation),
 				pSequence,
 				NULL);
+			setPosition(getPosition() + alpha);
 		} else{
 			doAnimation = RepeatForever::create(Animate::create(animation));
 		}
