@@ -17,6 +17,8 @@ class MigSpriteNode;
 class MigSprite;
 class MigFrame;
 
+using namespace std;
+
 struct KeyFrameEventParameter
 {
 public:
@@ -48,18 +50,27 @@ public:
     CREATE_FUNC(MigSpriteNode);
     
     static MigSpriteNode* create(String* migXml, String* plistFile,const char* root=NULL,bool useBatchSprite = true,const char* defaultSpriteName = NULL,float delayPerUnit = DEFAULT_DELAY_PER_FRAME);
-    
     static MigSpriteNode* create(const char* migXml,const char* plistFile,const char* root=NULL,bool useBatchSprite = true,const char* defaultSpriteName = NULL,float delayPerUnit = DEFAULT_DELAY_PER_FRAME);
     
     void initWithFile(const char* migXmlFile,const char* plistFile,const char* root,bool useBatchSprite,const char* defaultSpriteName,float delayPerUnit);
     
     //CC_PROPERTY(const char*, m_sName, Name);
-    CC_PROPERTY(MigSprite*, pDefaultSprite, DefaultSprite);
-    CC_PROPERTY(float, m_delayPerUnit, DelayPerUnit);
-    CC_PROPERTY(const char*, m_sXmlName, XmlName);
-    CC_PROPERTY(const char*, m_sPlistName, PlistName);
-    CC_PROPERTY(const char*, m_sTextureName, TextureName);
-    
+	CC_SYNTHESIZE(MigSprite*, pDefaultSprite, DefaultSprite);
+	CC_SYNTHESIZE(float, m_delayPerUnit, DelayPerUnit);
+	CC_SYNTHESIZE(const char*, m_sXmlName, XmlName);
+	CC_SYNTHESIZE(const char*, m_sPlistName, PlistName);
+	CC_SYNTHESIZE(const char*, m_sTextureName, TextureName);
+	CC_SYNTHESIZE(unsigned int, _heroID, HeroID);
+	
+	//CC_SYNTHESIZE(ccBlendFunc, m_blendFunc, BlendFunc);
+	ccBlendFunc m_blendFunc;
+	void setBlendFunc(ccBlendFunc var);
+	ccBlendFunc getBlendFunc();
+
+	CC_SYNTHESIZE(bool, m_bFlipX, FlipX);
+	CC_SYNTHESIZE(bool, m_bFlipY, FlipY);
+	//CC_SYNTHESIZE_PASS_BY_REF(Color3B, m_sColor, Color);
+
     bool runAnimation(const char* name,unsigned int loop = 0,bool backToDefault = true);
     bool runAnimation(int index,unsigned int loop = 0,bool backToDefault = true);
     
@@ -67,16 +78,17 @@ public:
     
     int getLoopCount();
     int getExcutedLoopCount();
-    
-    CC_PROPERTY(GLubyte, m_nOpacity, Opacity)
-    CC_PROPERTY_PASS_BY_REF(ccColor3B, m_sColor, Color);
+
+	GLubyte  m_nOpacity;
+	GLubyte getOpacity(void);
+	void setOpacity(GLubyte opacity);
+
+	Color3B m_sColor;
+	//const Color3B& getColor();
+	void setColor(const Color3B& color3);
+
     virtual void setOpacityModifyRGB(bool bValue) {CC_UNUSED_PARAM(bValue);}
     virtual bool isOpacityModifyRGB(void) { return false;}
-    
-    CC_PROPERTY(ccBlendFunc, m_blendFunc, BlendFunc);
-    
-    CC_PROPERTY(bool, m_bFlipX, FlipX);
-    CC_PROPERTY(bool, m_bFlipY, FlipY);
     
     void setKeyFrameEventHandle(KeyFrameEventProtocol* handle);
     
@@ -137,8 +149,8 @@ public:
     virtual bool init();
     
     CREATE_FUNC(MigSprite);
-    CC_PROPERTY(const char*, name, Name);
-    
+	CC_SYNTHESIZE(const char*, name, Name);
+
     void addFrame(MigFrame* frame);
     Array* getAllFrames();
     int getFrameCount();
@@ -160,11 +172,13 @@ public:
     virtual ~MigFrame();
     virtual bool init();
     CREATE_FUNC(MigFrame);
-    CC_PROPERTY(int, duration,Duration);
-    CC_PROPERTY(int, flag, Flag);
-    CC_PROPERTY_PASS_BY_REF(CCRect, rectRed, RectRed);
-    CC_PROPERTY_PASS_BY_REF(CCRect, rectGreen, RectGreen);
-    void addModuleSprite(CCSprite* sprite);
+
+	CC_SYNTHESIZE(int, duration, Duration);
+	CC_SYNTHESIZE(int, flag, Flag);
+	CC_SYNTHESIZE_PASS_BY_REF(CCRect, rectRed, RectRed);
+	CC_SYNTHESIZE_PASS_BY_REF(CCRect, rectGreen, RectGreen);
+    
+	void addModuleSprite(CCSprite* sprite);
     CCArray* getAllModuleSprite();
 protected:
     CCArray* m_pModules;

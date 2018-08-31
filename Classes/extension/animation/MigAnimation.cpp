@@ -10,7 +10,25 @@
 #include "MigAnimation.h"
 #include "MigAnimationLoader.h"
 
-MigSpriteNode::MigSpriteNode() : m_pCurSprite(NULL),m_pCurFrame(NULL),pDefaultSprite(NULL),m_delayPerUnit(DEFAULT_DELAY_PER_FRAME),m_elapsed(0),m_spriteTotalDuration(0),m_loop(0),m_excutedLoop(0),m_bOnSpriteEndSkipToDefault(true),m_nOpacity(255),m_sColor(ccWHITE),m_pKeyFrameEventHandle(NULL),m_keyFrameEventParameter(),m_bAnimationDone(false),m_pSprites(new CCArray()),m_bFlipX(false),m_bFlipY(false),m_bNewFrame(false),m_pDrawNode(NULL),m_sTextureName(NULL)
+MigSpriteNode::MigSpriteNode() : m_pCurSprite(NULL),m_pCurFrame(NULL),
+	pDefaultSprite(NULL),
+	m_delayPerUnit(DEFAULT_DELAY_PER_FRAME),
+	m_elapsed(0),
+	m_spriteTotalDuration(0),
+	m_loop(0),
+	m_excutedLoop(0),
+	m_bOnSpriteEndSkipToDefault(true),
+	m_nOpacity(255),
+	m_sColor(Color3B::WHITE),
+	m_pKeyFrameEventHandle(NULL),
+	m_keyFrameEventParameter(),
+	m_bAnimationDone(false),
+	m_pSprites(new CCArray()),
+	m_bFlipX(false),
+	m_bFlipY(false),
+	m_bNewFrame(false),
+	m_pDrawNode(NULL),
+	m_sTextureName(NULL)
 {
     m_blendFunc = DEFAULT_BLEND_FUNC;
 }
@@ -52,10 +70,10 @@ MigSpriteNode* MigSpriteNode::create(const char* migXmlFile,const char* plistFil
 
 void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,const char* root,bool useBatchSprite,const char* defaultSpriteName,float delayPerUnit)
 {
-	CCLog("MigSpriteNode::initWithFile:start");
-	CCLog("MigSpriteNode::initWithFile:migXmlFile=%s.",migXmlFile);
+	log("MigSpriteNode::initWithFile:start");
+	log("MigSpriteNode::initWithFile:migXmlFile=%s.", migXmlFile);
     assert(migXmlFile && plistFile);
-	CCLog("MigSpriteNode::initWithFile:plistFile=%s.",plistFile);
+	log("MigSpriteNode::initWithFile:plistFile=%s.", plistFile);
     MigAnimationLoader* loader = new MigAnimationLoader(root);
     std::string str = migXmlFile;
     if (str.compare(str.size()-4, 4, ".dat") == 0)
@@ -75,12 +93,12 @@ void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,c
 		{
 			if (m_sTextureName != NULL)
 			{
-				CCLog("MigSpriteNode::initWithFile:m_sTextureName=%s.",m_sTextureName);
+				log("MigSpriteNode::initWithFile:m_sTextureName=%s.", m_sTextureName);
         		m_pDrawNode = CCSpriteBatchNode::create(m_sTextureName);
 			}
 			else
 			{
-				CCLog("MigSpriteNode::initWithFile:m_sTextureName=%s.",m_sTextureName);
+				log("MigSpriteNode::initWithFile:m_sTextureName=%s.", m_sTextureName);
 			}
         }
         else
@@ -88,15 +106,15 @@ void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,c
     		
         	m_pDrawNode = CCNode::create();
     	}
-		CCLog("MigSpriteNode::initWithFile:0");
+		log("MigSpriteNode::initWithFile:0");
 		if(m_pDrawNode != NULL)
 		{
 			
     		addChild(m_pDrawNode);
 		}
-		CCLog("MigSpriteNode::initWithFile:1");
+		log("MigSpriteNode::initWithFile:1");
     }
-	CCLog("MigSpriteNode::initWithFile:2");
+	log("MigSpriteNode::initWithFile:2");
     if(defaultSpriteName)
     {
         MigSprite* pSprite = getSpriteChildByName(defaultSpriteName);
@@ -115,7 +133,7 @@ void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,c
             }
         }
     }
-	CCLog("MigSpriteNode::initWithFile:end");
+	log("MigSpriteNode::initWithFile:end");
     setCurrentSprite(pDefaultSprite);
     setDelayPerUnit(delayPerUnit);
     setBlendFunc(m_blendFunc);
@@ -160,6 +178,7 @@ bool MigSpriteNode::isAnimationDone()
     return m_bAnimationDone;
 }
 
+/*
 const char* MigSpriteNode::getName()
 {
     return m_sName;
@@ -170,6 +189,8 @@ void MigSpriteNode::setName(const char *var)
     assert(var);
     m_sName = var;
 }
+
+
 
 const char* MigSpriteNode::getXmlName()
 {
@@ -238,7 +259,7 @@ void MigSpriteNode::setFlipY(bool var)
         setScaleY(scale>=0?-scale:scale);
     }
 }
-
+*/
 void MigSpriteNode::update(float dt)
 {
     updateAnimation(dt);
@@ -319,7 +340,7 @@ bool MigSpriteNode::runAnimation(const char *name, unsigned int loop, bool backT
     MigSprite* pSprite = getSpriteChildByName(name);
     if(!pSprite)
     {
-        CCLog("MigAnimation-runAnimation:cannot find animation by name=%s.",name);
+		log("MigAnimation-runAnimation:cannot find animation by name=%s.", name);
         return false;
     }
     runAnimation(pSprite, loop, backToDefault);
@@ -389,7 +410,7 @@ void MigSpriteNode::displayFrame(MigFrame *frame)
 		module->setOpacity(m_nOpacity);
     }
 }
-
+/*
 MigSprite* MigSpriteNode::getDefaultSprite()
 {
     return pDefaultSprite;
@@ -413,7 +434,7 @@ float MigSpriteNode::getDelayPerUnit()
 {
     return m_delayPerUnit;
 }
-
+*/
 int MigSpriteNode::getLoopCount()
 {
     return m_loop;
@@ -433,18 +454,20 @@ void MigSpriteNode::setOpacity(GLubyte opacity)
 {
     m_nOpacity = opacity;
     CCObject* pObj = NULL;
-    CCArray* array = getChildren();
-    CCARRAY_FOREACH(array, pObj)
-    {
+	auto& children = getChildren();
+	for (const auto &pObj : children) {
+   // CCARRAY_FOREACH(array, pObj)
+    //{
         CCRGBAProtocol* rgba = dynamic_cast<CCRGBAProtocol*>(pObj);
         if(rgba)
         {
             rgba->setOpacity(opacity);
         }
     }
-    array = m_pDrawNode->getChildren();
-    CCARRAY_FOREACH(array, pObj)
-    {
+	children = m_pDrawNode->getChildren();
+	for (const auto &pObj : children) {
+    //CCARRAY_FOREACH(array, pObj)
+    //{
         CCRGBAProtocol* rgba = dynamic_cast<CCRGBAProtocol*>(pObj);
         if(rgba)
         {
@@ -453,27 +476,28 @@ void MigSpriteNode::setOpacity(GLubyte opacity)
     }
 }
 
-const ccColor3B& MigSpriteNode::getColor()
+/*
+const Color3B& MigSpriteNode::getColor()
 {
     return m_sColor;
 }
-
-void MigSpriteNode::setColor(const ccColor3B& color3)
+*/
+void MigSpriteNode::setColor(const Color3B& color3)
 {
     m_sColor = color3;
     CCObject* pObj = NULL;
-    CCArray* array = getChildren();
-    CCARRAY_FOREACH(array, pObj)
-    {
+//    CCArray* array = getChildren();
+//    CCARRAY_FOREACH(array, pObj)
+	auto& children = getChildren();
+	for (const auto &pObj : children) {
         CCRGBAProtocol* rgba = dynamic_cast<CCRGBAProtocol*>(pObj);
         if(rgba)
         {
             rgba->setColor(color3);
         }
     }
-    array = m_pDrawNode->getChildren();
-    CCARRAY_FOREACH(array, pObj)
-    {
+	children = m_pDrawNode->getChildren();
+	for (const auto &pObj : children) {
         CCRGBAProtocol* rgba = dynamic_cast<CCRGBAProtocol*>(pObj);
         if(rgba)
         {
@@ -484,20 +508,19 @@ void MigSpriteNode::setColor(const ccColor3B& color3)
 
 void MigSpriteNode::setBlendFunc(ccBlendFunc var)
 {
+	
     m_blendFunc = var;
     CCObject* pObj = NULL;
-    CCArray* array = getChildren();
-    CCARRAY_FOREACH(array, pObj)
-    {
+	auto& children = getChildren();
+	for (const auto &pObj : children) {
         CCBlendProtocol* blend = dynamic_cast<CCBlendProtocol*>(pObj);
         if(blend)
         {
             blend->setBlendFunc(var);
         }
     }
-    array = m_pDrawNode->getChildren();
-    CCARRAY_FOREACH(array, pObj)
-    {
+	children = m_pDrawNode->getChildren();
+	for (const auto &pObj : children) {
         CCBlendProtocol* blend = dynamic_cast<CCBlendProtocol*>(pObj);
         if(blend)
         {
@@ -563,7 +586,7 @@ CCArray* MigSprite::getAllFrames()
 {
     return m_pFrames;
 }
-
+/*
 const char* MigSprite::getName()
 {
     return name;
@@ -574,7 +597,7 @@ void MigSprite::setName(const char *var)
     assert(var);
     name = var;
 }
-
+*/
 void MigSprite::refreshFrameInfo()
 {
     m_frameSplitTimes->clear();
@@ -617,7 +640,7 @@ bool MigFrame::init()
 {
     return true;
 }
-
+/*
 void MigFrame::setDuration(int var)
 {
     assert(var > 0);
@@ -658,7 +681,7 @@ const CCRect& MigFrame::getRectGreen()
 {
     return rectGreen;
 }
-
+*/
 void MigFrame::addModuleSprite(cocos2d::CCSprite *sprite)
 {
     assert(sprite);

@@ -95,17 +95,20 @@ public:
         int red = (value >> 16) & 0xff;
         int green = (value >> 8) & 0xff;
         int blue = value & 0xff;
-        ccColor3B color = {red,green,blue};
-        return color;
+		//Color3B *color = new Color3B(red, green, blue);
+		return Color3B(red, green, blue);
     }
     
     static inline const char* hel009(const char* path)
     {
-        std::string fullpath = CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(path);
+		std::string fullpath = FileUtils::getInstance()->fullPathForFilename(path);
         unsigned char* pData = NULL;
-        unsigned long len = 0;
-        pData = CCFileUtils::sharedFileUtils()->getFileData(fullpath.c_str(), "rb", &len);
-        std::string destpath = CCFileUtils::sharedFileUtils()->getWriteablePath();
+        ssize_t len = 0;
+		pData = FileUtils::getInstance()->getFileData(fullpath.c_str(), "rb", &len);
+		std::string destpath = FileUtils::getInstance()->getWritablePath();
+		//CCFileUtils::sharedFileUtils()->getWriteablePath();
+		//;
+		//std::string destpath = FileUtils::getInstance()->getWritablePath();
         std::string buf = path;
         {
             for (int i = 0; i < buf.size(); i++)

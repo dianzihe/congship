@@ -14,7 +14,7 @@
 
 USING_NS_CC;
 
-struct AnimationCache;
+struct DQAnimationCache;
 struct SpriteCache;
 struct FrameCache;
 struct ModuleCache;
@@ -24,8 +24,8 @@ class MigAnimationCache
 public:
     static MigAnimationCache* getShared();
 	static void purgeAll();
-    AnimationCache* getAnimationCache(const char* xmlName);
-    void addAnimationCache(AnimationCache* pCache);
+    DQAnimationCache* getAnimationCache(const char* xmlName);
+    void addAnimationCache(DQAnimationCache* pCache);
     void removeAnimationCache(const char* xmlName);
     void removeAllCache();
     void createAnimationFromCache(MigSpriteNode* pRoot,const char* xmlName,bool useBatchSprite);
@@ -34,17 +34,17 @@ private:
     ~ MigAnimationCache();
     
     CCArray* m_animationCaches;
-    
-    static MigAnimationCache* m_pSingleInstance;
+	CCArray* enemy3sToDelete;
+    //static MigAnimationCache* m_pSingleInstance;
     
     void createSpriteFromCache(MigSpriteNode* pRoot,SpriteCache* pCache);
     void createFrameFromCache(MigSpriteNode* pRoot,MigSprite* pSprite,FrameCache* pCache);
     
-    AnimationCache* m_pCurAnimationCache;
+    DQAnimationCache* m_pCurAnimationCache;
     bool m_bUseBatchSprite;
 };
 
-struct AnimationCache : CCObject
+struct DQAnimationCache : CCObject
 {
     CCString* name;
     CCString* xmlName;
@@ -52,12 +52,12 @@ struct AnimationCache : CCObject
     CCString* textureName;
     CCArray* sprites;
     
-    AnimationCache() : name(NULL),xmlName(NULL),plistName(NULL),sprites(new CCArray()),textureName(NULL)
+    DQAnimationCache() : name(NULL),xmlName(NULL),plistName(NULL),sprites(new CCArray()),textureName(NULL)
     {
         
     }
     
-    ~ AnimationCache()
+    ~ DQAnimationCache()
     {
         CC_SAFE_RELEASE_NULL(sprites);
         CC_SAFE_RELEASE_NULL(name);

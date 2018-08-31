@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "MigAnimationLoader.h"
-#include "../io/UIFeiDiaoLayer.h"
+//#include "../io/UIFeiDiaoLayer.h"
 
 
 MigAnimationLoader::MigAnimationLoader(const char* path):pAnimation(NULL),pAnimationCache(NULL),pSpriteCache(NULL),pFrameCache(NULL),pModuleCache(NULL),bufRect(),m_sPath(NULL)
@@ -42,7 +42,7 @@ bool MigAnimationLoader::load(MigSpriteNode* node,const char* pXmlFile,const cha
     CCString* xmlName = CCString::createWithFormat("%s%s",m_sPath->getCString(),pXmlFile);
     CCString* plistName = CCString::createWithFormat("%s%s",m_sPath->getCString(),plistFile);
     CCString* textureName = CCString::createWithFormat("%s%s",m_sPath->getCString(),getTextureNameFromPlist(plistName->getCString()));
-    AnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
+    DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
     if(cache){
         if(node)
         {
@@ -69,15 +69,44 @@ bool MigAnimationLoader::load(MigSpriteNode* node,const char* pXmlFile,const cha
     return true;
 }
 
+const char* MigAnimationLoader::hel009(const char* path)
+{
+	std::string fullpath = FileUtils::getInstance()->fullPathForFilename(path);
+	unsigned char* pData = NULL;
+	ssize_t len = 0;
+	pData = FileUtils::getInstance()->getFileData(fullpath.c_str(), "rb", &len);
+	std::string destpath = FileUtils::getInstance()->getWritablePath();
+	//CCFileUtils::sharedFileUtils()->getWriteablePath();
+	//;
+	//std::string destpath = FileUtils::getInstance()->getWritablePath();
+	std::string buf = path;
+	{
+		for (int i = 0; i < buf.size(); i++)
+		{
+			if (buf[i] == '/')
+				buf[i] = '_';
+		}
+	}
+	destpath += buf;
+	log("copy data from [%s] to [%s].", fullpath.c_str()
+		, destpath.c_str());
+	FILE* fp = fopen(destpath.c_str(), "w");
+	fwrite(pData, sizeof(char), len, fp);
+	fclose(fp);
+	delete pData;
+	pData = NULL;
+	return destpath.c_str();
+}
+
 bool MigAnimationLoader::loadBin(MigSpriteNode *node, const char *pBinFile, const char *plistFile, bool useBatchSprite)
 {
-	CCLog("MigAnimationLoader::loadBin-start1");
+	log("MigAnimationLoader::loadBin-start1");
     assert(pBinFile && plistFile);
-	CCLog("MigAnimationLoader::loadBin-start2");
+	log("MigAnimationLoader::loadBin-start2");
     CCString* xmlName = CCString::createWithFormat("%s%s",m_sPath->getCString(),pBinFile);
     CCString* plistName = CCString::createWithFormat("%s%s",m_sPath->getCString(),plistFile);
     CCString* textureName = CCString::createWithFormat("%s%s",m_sPath->getCString(),getTextureNameFromPlist(plistName->getCString()));
-    AnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
+    DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
     if(cache){
         if(node)
         {
@@ -85,7 +114,7 @@ bool MigAnimationLoader::loadBin(MigSpriteNode *node, const char *pBinFile, cons
         }
         return true;
     }
-    cache = new AnimationCache();
+    cache = new DQAnimationCache();
     cache->plistName = plistName;
     cache->xmlName = xmlName;
     cache->textureName = textureName;
@@ -97,50 +126,51 @@ bool MigAnimationLoader::loadBin(MigSpriteNode *node, const char *pBinFile, cons
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         const char* full_name = UIFeiDiaoLayer::hel009(xmlName->getCString());
 #else
-        const char* full_name = CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(xmlName->getCString());
+		const char* full_name = hel009(xmlName->getCString());
+        //const char* full_name = FileUtils::getInstance()->fullPathForFilename(xmlName->getCString());
 #endif
         FILE* pfile = fopen(full_name, "rb");
         assert(pfile);
-        CCLog("MigAnimationLoader::loadBin-0");
+        log("MigAnimationLoader::loadBin-0");
         //bin info
-        UIFeiDiaoLayer::sdafwefc(pfile);
+        sdafwefc(pfile);
         //animation info
-        cache->name = new CCString(UIFeiDiaoLayer::sdafwefc(pfile));
+        cache->name = new CCString(sdafwefc(pfile));
         //sprite count
-        int spriteCount = UIFeiDiaoLayer::hel001(pfile);
+        int spriteCount = hel001(pfile);
         for (int i = 0; i < spriteCount; i++)
         {
             SpriteCache* spriteCache = new SpriteCache();
-            spriteCache->name = new CCString(UIFeiDiaoLayer::sdafwefc(pfile));
+            spriteCache->name = new CCString(sdafwefc(pfile));
             //frame count
-            int frameCount = UIFeiDiaoLayer::hel001(pfile);
+            int frameCount = hel001(pfile);
             for (int j = 0; j < frameCount; j++)
             {
                 FrameCache* frameCache = new FrameCache();
-                frameCache->duration = UIFeiDiaoLayer::hel001(pfile);
-                frameCache->flag = UIFeiDiaoLayer::hel001(pfile);
+                frameCache->duration = hel001(pfile);
+                frameCache->flag = hel001(pfile);
                 //tile count
-                int tileCount = UIFeiDiaoLayer::hel001(pfile);
+                int tileCount = hel001(pfile);
                 for (int k = 0; k < tileCount; k++)
                 {
                     ModuleCache* moduleCache = new ModuleCache();
-                    moduleCache->name = new CCString(UIFeiDiaoLayer::sdafwefc(pfile));
-                    moduleCache->offsetX = UIFeiDiaoLayer::hel001(pfile);
-                    moduleCache->offsetY = UIFeiDiaoLayer::hel001(pfile);
-                    moduleCache->flip = UIFeiDiaoLayer::hel001(pfile);
-                    moduleCache->rotate = UIFeiDiaoLayer::hel001(pfile);
+                    moduleCache->name = new CCString(sdafwefc(pfile));
+                    moduleCache->offsetX = hel001(pfile);
+                    moduleCache->offsetY = hel001(pfile);
+                    moduleCache->flip = hel001(pfile);
+                    moduleCache->rotate = hel001(pfile);
                     frameCache->modules->addObject(moduleCache);
                     CC_SAFE_RELEASE_NULL(moduleCache);
                 }
-                int rx = UIFeiDiaoLayer::hel001(pfile);
-                int ry = UIFeiDiaoLayer::hel001(pfile);
-                int rw = UIFeiDiaoLayer::hel001(pfile);
-                int rh = UIFeiDiaoLayer::hel001(pfile);
+                int rx = hel001(pfile);
+                int ry = hel001(pfile);
+                int rw = hel001(pfile);
+                int rh = hel001(pfile);
                 frameCache->rectRed.setRect(rx, -ry-rh, rw, rh);
-                int gx = UIFeiDiaoLayer::hel001(pfile);
-                int gy = UIFeiDiaoLayer::hel001(pfile);
-                int gw = UIFeiDiaoLayer::hel001(pfile);
-                int gh = UIFeiDiaoLayer::hel001(pfile);
+                int gx = hel001(pfile);
+                int gy = hel001(pfile);
+                int gw = hel001(pfile);
+                int gh = hel001(pfile);
                 frameCache->rectGreen.setRect(gx, -gy-gh, gw, gh);
                 spriteCache->frames->addObject(frameCache);
                 CC_SAFE_RELEASE_NULL(frameCache);
@@ -155,7 +185,7 @@ bool MigAnimationLoader::loadBin(MigSpriteNode *node, const char *pBinFile, cons
     {
         MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
     }
-	CCLog("MigAnimationLoader::loadBin-end");
+	log("MigAnimationLoader::loadBin-end");
     CC_SAFE_RELEASE_NULL(cache);
     return true;
 }
@@ -165,7 +195,7 @@ void MigAnimationLoader::onResolveElement(const char *name)
     if(strcmp(name, "animation") == 0)
     {
         curResolveType = ResolveAnimation;
-        pAnimationCache = new AnimationCache();
+        pAnimationCache = new DQAnimationCache();
     }
     else if(strcmp(name, "sprite") == 0)
     {

@@ -9,7 +9,9 @@
 #include <iostream>
 #include "MigAnimationCache.h"
 
-MigAnimationCache* MigAnimationCache::m_pSingleInstance = NULL;
+//MigAnimationCache* MigAnimationCache::m_pSingleInstance = NULL;
+//static SpriteFrameCache *_sharedSpriteFrameCache = nullptr;
+static MigAnimationCache* m_pSingleInstance = NULL;
 
 MigAnimationCache* MigAnimationCache::getShared()
 {
@@ -20,9 +22,11 @@ MigAnimationCache* MigAnimationCache::getShared()
     return m_pSingleInstance;
 }
 
-MigAnimationCache::MigAnimationCache() : m_animationCaches(new CCArray())
+MigAnimationCache::MigAnimationCache()
 {
-    
+	m_animationCaches = CCArray::create();
+	
+	m_animationCaches->count();
 }
 
 MigAnimationCache::~ MigAnimationCache()
@@ -30,19 +34,21 @@ MigAnimationCache::~ MigAnimationCache()
     CC_SAFE_RELEASE_NULL(m_animationCaches);
 }
 
-AnimationCache* MigAnimationCache::getAnimationCache(const char *xmlName)
+DQAnimationCache* MigAnimationCache::getAnimationCache(const char *xmlName)
 {
     CCObject* pObj = NULL;
+	if (NULL == m_animationCaches || 0 == m_animationCaches->count())
+		return NULL;
     CCARRAY_FOREACH(m_animationCaches, pObj)
     {
-        AnimationCache* animCache = (AnimationCache*)(pObj);
+        DQAnimationCache* animCache = (DQAnimationCache*)(pObj);
         if(strcmp(animCache->xmlName->getCString(), xmlName) == 0)
             return animCache;
     }
     return NULL;
 }
 
-void MigAnimationCache::addAnimationCache(AnimationCache *pCache)
+void MigAnimationCache::addAnimationCache(DQAnimationCache *pCache)
 {
     assert(pCache);
     assert(getAnimationCache(pCache->xmlName->getCString()) == NULL);
@@ -54,7 +60,7 @@ void MigAnimationCache::removeAnimationCache(const char *xmlName)
     CCObject* pObj = NULL;
     CCARRAY_FOREACH(m_animationCaches, pObj)
     {
-        AnimationCache* animCache = (AnimationCache*)(pObj);
+        DQAnimationCache* animCache = (DQAnimationCache*)(pObj);
         if(strcmp(animCache->xmlName->getCString(), xmlName) == 0)
         {
             m_animationCaches->removeObject(animCache);
@@ -68,7 +74,7 @@ void MigAnimationCache::removeAllCache()
     CCObject* pObj = NULL;
     CCARRAY_FOREACH(m_animationCaches, pObj)
     {
-        AnimationCache* animCache = (AnimationCache*)(pObj);
+        DQAnimationCache* animCache = (DQAnimationCache*)(pObj);
         CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFramesFromFile(animCache->plistName->getCString());
     }
     m_animationCaches->removeAllObjects();
@@ -76,7 +82,7 @@ void MigAnimationCache::removeAllCache()
 
 void MigAnimationCache::createAnimationFromCache(MigSpriteNode *pRoot, const char *xmlName,bool useBatchSprite)
 {
-    AnimationCache* cache = getAnimationCache(xmlName);
+    DQAnimationCache* cache = getAnimationCache(xmlName);
     assert(cache);
     CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile(cache->plistName->getCString());//载入素材
     m_pCurAnimationCache = cache;

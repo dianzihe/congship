@@ -38,10 +38,33 @@ public:
     virtual void onResolveRectGreenAttribute(const char* name,const char* value);
     
     static const char* readTextureNameFromPlist(const char* plist);
-    
+	const char* hel009(const char* path);
+	static inline int hel001(FILE *pfile)
+	{
+		CCAssert(pfile, "ProjReader::hel001(FILE *pfile)-pfile is null!");
+		int num = 0;
+		fread(&num, sizeof(int), 1, pfile);
+		return num;
+	}
+	static inline std::string sdafwefc(FILE *pfile)
+	{
+		CCAssert(pfile, "ProjReader::readString(FILE *pfile)-pfile is null!");
+		int len_num = 0;
+		fread(&len_num, sizeof(int), 1, pfile);
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
+		char buffer[1024];
+#else
+		char buffer[len_num];
+#endif
+
+		int len = fread(buffer, sizeof(char), len_num, pfile);
+		buffer[len] = '\0';
+		std::string re(buffer);
+		return re;
+	}
 protected:
     MigSpriteNode* pAnimation;
-    AnimationCache* pAnimationCache;
+    DQAnimationCache* pAnimationCache;
     SpriteCache* pSpriteCache;
     FrameCache* pFrameCache;
     ModuleCache* pModuleCache;

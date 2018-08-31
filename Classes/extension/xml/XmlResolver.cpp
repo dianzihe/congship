@@ -19,7 +19,7 @@ void XmlResolver::loadXml(const char *xmlFile, XmlResolverListener* pListener)
     pXmlDoc->Parse(pFileContent, 0, TIXML_ENCODING_UTF8);
     delete [] pFileContent;
 #else
-    TiXmlDocument* pXmlDoc = new TiXmlDocument(CCFileUtils::sharedFileUtils()->fullPathFromRelativePath(xmlFile));
+	TiXmlDocument* pXmlDoc = new TiXmlDocument(FileUtils::getInstance()->fullPathForFilename(xmlFile).c_str());
     pXmlDoc->LoadFile();
 #endif
     TiXmlElement* pCurElement = pXmlDoc->RootElement();

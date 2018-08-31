@@ -14,6 +14,7 @@
 #include "UIBatchRenderer.h"
 #include "PlayerLayerCfg.h"
 #include "BossGameFrontLayer.h"
+#include "extension\animation\MigAnimation.h"
 
 using namespace CocosDenshion;
 
@@ -50,6 +51,8 @@ bool GameScene::init()
 	
 	auto winSize = Director::getInstance()->getWinSize();
 	log("winSize---->%d, %d", winSize.width, winSize.height);
+
+	MigSpriteNode::create("chef.dat", "chef.plist", "anim/", true, "walk_up", 0.1);
 	/*
 	m_uiNode = Node::create();
 	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
