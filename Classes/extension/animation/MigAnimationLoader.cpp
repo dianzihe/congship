@@ -18,7 +18,7 @@ MigAnimationLoader::MigAnimationLoader(const char* path):pAnimation(NULL),pAnima
 
 MigAnimationLoader::~ MigAnimationLoader()
 {
-    CC_SAFE_RELEASE_NULL(m_sPath);
+    //CC_SAFE_RELEASE_NULL(m_sPath);
 }
 
 const char* getTextureNameFromPlist(const char* plist)
@@ -42,14 +42,15 @@ bool MigAnimationLoader::load(MigSpriteNode* node,const char* pXmlFile,const cha
     CCString* xmlName = CCString::createWithFormat("%s%s",m_sPath->getCString(),pXmlFile);
     CCString* plistName = CCString::createWithFormat("%s%s",m_sPath->getCString(),plistFile);
     CCString* textureName = CCString::createWithFormat("%s%s",m_sPath->getCString(),getTextureNameFromPlist(plistName->getCString()));
+	
     DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
     if(cache){
-        if(node)
-        {
+        if(node) {
             MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
         }
         return true;
     }
+	
     curResolveType = ResolveNothing;
     XmlResolver* resolver = new XmlResolver();
     resolver->loadXml(xmlName->getCString(), this);
@@ -60,12 +61,13 @@ bool MigAnimationLoader::load(MigSpriteNode* node,const char* pXmlFile,const cha
     pAnimationCache->textureName = textureName;
     pAnimationCache->xmlName = xmlName;
     pAnimationCache->plistName = plistName;
+	
     MigAnimationCache::getShared()->addAnimationCache(pAnimationCache);
-    if(node)
-    {
-        MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
+    if(node) {
+        //MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
     }
-    CC_SAFE_RELEASE_NULL(pAnimationCache);
+	
+    //CC_SAFE_RELEASE_NULL(pAnimationCache);
     return true;
 }
 
@@ -75,7 +77,8 @@ const char* MigAnimationLoader::hel009(const char* path)
 	unsigned char* pData = NULL;
 	ssize_t len = 0;
 	pData = FileUtils::getInstance()->getFileData(fullpath.c_str(), "rb", &len);
-	std::string destpath = FileUtils::getInstance()->getWritablePath();
+	//std::string destpath = FileUtils::getInstance()->getWritablePath();
+	std::string destpath = fullpath + "dq";
 	//CCFileUtils::sharedFileUtils()->getWriteablePath();
 	//;
 	//std::string destpath = FileUtils::getInstance()->getWritablePath();
@@ -103,90 +106,169 @@ bool MigAnimationLoader::loadBin(MigSpriteNode *node, const char *pBinFile, cons
 	log("MigAnimationLoader::loadBin-start1");
     assert(pBinFile && plistFile);
 	log("MigAnimationLoader::loadBin-start2");
-    CCString* xmlName = CCString::createWithFormat("%s%s",m_sPath->getCString(),pBinFile);
-    CCString* plistName = CCString::createWithFormat("%s%s",m_sPath->getCString(),plistFile);
-    CCString* textureName = CCString::createWithFormat("%s%s",m_sPath->getCString(),getTextureNameFromPlist(plistName->getCString()));
-    DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
-    if(cache){
-        if(node)
-        {
+    CCString* xmlName = CCString::createWithFormat("%s%s", m_sPath->getCString(), pBinFile);
+    CCString* plistName = CCString::createWithFormat("%s%s", m_sPath->getCString(), plistFile);
+    CCString* textureName = CCString::createWithFormat("%s%s", m_sPath->getCString(), getTextureNameFromPlist(plistName->getCString()));
+
+	auto frameCache = SpriteFrameCache::getInstance();
+	frameCache->addSpriteFramesWithFile(plistName->getCString());
+
+	//DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
+	/*
+	if(cache){
+        if(node) {
             MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
         }
         return true;
     }
+	
     cache = new DQAnimationCache();
     cache->plistName = plistName;
     cache->xmlName = xmlName;
     cache->textureName = textureName;
-    CC_SAFE_RETAIN(plistName);
-    CC_SAFE_RETAIN(xmlName);
-    CC_SAFE_RETAIN(textureName);
+	*/
+	//CC_SAFE_RETAIN(plistName);
+	//CC_SAFE_RETAIN(xmlName);
+	//CC_SAFE_RETAIN(textureName);
     //load animation from bin
     {
 #if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         const char* full_name = UIFeiDiaoLayer::hel009(xmlName->getCString());
 #else
-		const char* full_name = hel009(xmlName->getCString());
+		//const char* full_name = hel009(xmlName->getCString());
         //const char* full_name = FileUtils::getInstance()->fullPathForFilename(xmlName->getCString());
+		auto fileUtiles = FileUtils::getInstance();
+		auto fragmentFullPath = fileUtiles->fullPathForFilename(xmlName->getCString());
 #endif
-        FILE* pfile = fopen(full_name, "rb");
-        assert(pfile);
+		FILE* pfile = fopen(fragmentFullPath.c_str(), "rb");
+        //assert(pfile);
+		if (NULL == pfile)
+			log("=======================================%s", fragmentFullPath.c_str());
         log("MigAnimationLoader::loadBin-0");
         //bin info
         sdafwefc(pfile);
         //animation info
-        cache->name = new CCString(sdafwefc(pfile));
+        string animationName = sdafwefc(pfile);
+		log("cache-name=%s\n", animationName);
         //sprite count
         int spriteCount = hel001(pfile);
+		log("spriteCount=%d", spriteCount);
         for (int i = 0; i < spriteCount; i++)
         {
-            SpriteCache* spriteCache = new SpriteCache();
-            spriteCache->name = new CCString(sdafwefc(pfile));
+#if 0
+			Vector<SpriteFrame*> animFrames(15);
+			char str[100] = { 0 };
+			for (int i = 1; i < 15; i++)
+			{
+				sprintf(str, "grossini_dance_%02d.png", i);
+				auto frame = frameCache->getSpriteFrameByName(str);
+				
+				animFrames.pushBack(frame);
+			}
+
+			auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+			
+			// Add an animation to the Cache
+			AnimationCache::getInstance()->addAnimation(animation, "dance");
+#endif			
+			/////////////////////////////////////////////////////////////////
+            //SpriteCache* spriteCache = new SpriteCache();
+            //spriteCache->name = new CCString(sdafwefc(pfile));
+			string actionName = sdafwefc(pfile);
+			log("spriteCache->name=%s", actionName);
             //frame count
             int frameCount = hel001(pfile);
+			log("frameCount=%d", frameCount);
+
             for (int j = 0; j < frameCount; j++)
             {
-                FrameCache* frameCache = new FrameCache();
-                frameCache->duration = hel001(pfile);
-                frameCache->flag = hel001(pfile);
+				//log("------1");
+                //FrameCache* frameCache = new FrameCache();
+                //frameCache->duration = hel001(pfile);
+                //frameCache->flag = hel001(pfile);
                 //tile count
-                int tileCount = hel001(pfile);
+				int duration = hel001(pfile);
+				int flag = hel001(pfile);
+				int tileCount = hel001(pfile);
+
+				Vector<SpriteFrame*> animFrames(30);
                 for (int k = 0; k < tileCount; k++)
                 {
+					/*
                     ModuleCache* moduleCache = new ModuleCache();
                     moduleCache->name = new CCString(sdafwefc(pfile));
+
                     moduleCache->offsetX = hel001(pfile);
                     moduleCache->offsetY = hel001(pfile);
                     moduleCache->flip = hel001(pfile);
                     moduleCache->rotate = hel001(pfile);
-                    frameCache->modules->addObject(moduleCache);
-                    CC_SAFE_RELEASE_NULL(moduleCache);
+					*/
+					string fileName = sdafwefc(pfile);
+					int offsetX = hel001(pfile);
+					int offsetY = hel001(pfile);
+					int flip	= hel001(pfile);
+					int rotate	= hel001(pfile);
+					/*
+					log("------2-[%d][%d][%d][%d]-%s",
+						moduleCache->offsetX,
+						moduleCache->offsetY,
+						moduleCache->flip,
+						moduleCache->rotate,
+						moduleCache->name->getCString());
+					*/
+					//log("------2---%d", frameCache->modules.size());
+                    //frameCache->modules.push_back(moduleCache);
+                    //CC_SAFE_RELEASE_NULL(moduleCache);
+					//auto frame = frameCache->getSpriteFrameByName(moduleCache->name->getCString());
+					//animFrames.pushBack(frame);
+
+					
+					auto frame = frameCache->getSpriteFrameByName(fileName);
+					frame->setOffset(Vec2(offsetX, offsetY));
+					frame->setRotated(rotate);
+					frame->setOffset(Vec2(offsetX, offsetY));
+					
+					animFrames.pushBack(frame);
                 }
+
+				auto animation = Animation::createWithSpriteFrames(animFrames, duration);
+				// Add an animation to the Cache
+				//log("add -----> %s", animationName + actionName + );
+				AnimationCache::getInstance()->addAnimation(animation, animationName + actionName );
+			
                 int rx = hel001(pfile);
                 int ry = hel001(pfile);
                 int rw = hel001(pfile);
                 int rh = hel001(pfile);
-                frameCache->rectRed.setRect(rx, -ry-rh, rw, rh);
+				//log("------3");
+                //frameCache->rectRed.setRect(rx, -ry-rh, rw, rh);
                 int gx = hel001(pfile);
                 int gy = hel001(pfile);
                 int gw = hel001(pfile);
-                int gh = hel001(pfile);
-                frameCache->rectGreen.setRect(gx, -gy-gh, gw, gh);
-                spriteCache->frames->addObject(frameCache);
-                CC_SAFE_RELEASE_NULL(frameCache);
+                int gh = hel001(pfile); 
+				//log("------4");
+                //frameCache->rectGreen.setRect(gx, -gy-gh, gw, gh);
+                //spriteCache->frames.push_back(frameCache);
+				log("--------------------------5");
+                //CC_SAFE_RELEASE_NULL(frameCache);
             }
-            cache->sprites->addObject(spriteCache);
-            CC_SAFE_RELEASE_NULL(spriteCache);
+			//log("------6---%d", spriteCache->frames.size());
+            //cache->sprites.push_back(spriteCache);
+            //CC_SAFE_RELEASE_NULL(spriteCache);
         }
+		//log("------7---%d", cache->sprites.size());
         fclose(pfile);
     }
-    MigAnimationCache::getShared()->addAnimationCache(cache);
-    if(node)
-    {
+	log("------8");
+    //MigAnimationCache::getShared()->addAnimationCache(cache);
+	log("------9");
+	/*
+    if(node) {
         MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
     }
+	*/
 	log("MigAnimationLoader::loadBin-end");
-    CC_SAFE_RELEASE_NULL(cache);
+    //CC_SAFE_RELEASE_NULL(cache);
     return true;
 }
 
@@ -201,22 +283,22 @@ void MigAnimationLoader::onResolveElement(const char *name)
     {
         curResolveType = ResolveSprite;
         pSpriteCache = new SpriteCache();
-        pAnimationCache->sprites->addObject(pSpriteCache);
-        pSpriteCache->release();
+        pAnimationCache->sprites.push_back(pSpriteCache);
+        //pSpriteCache->release();
     }
     else if(strcmp(name, "frame") == 0)
     {
         curResolveType = ResolveFrame;
         pFrameCache = new FrameCache();
-        pSpriteCache->frames->addObject(pFrameCache);
-        pFrameCache->release();
+        pSpriteCache->frames.push_back(pFrameCache);
+        //pFrameCache->release();
     }
     else if(strcmp(name, "module") == 0)
     {
         curResolveType = ResolveModule;
         pModuleCache = new ModuleCache();
-        pFrameCache->modules->addObject(pModuleCache);
-        pModuleCache->release();
+        pFrameCache->modules.push_back(pModuleCache);
+        //pModuleCache->release();
     }
     else if(strcmp(name, "red_rect") == 0)
     {
@@ -380,3 +462,116 @@ void MigAnimationLoader::onResolveAttribute(const char *name, const char *value)
             break;
     }
 }
+
+/*
+
+bool MigAnimationLoader::loadBin(MigSpriteNode *node, const char *pBinFile, const char *plistFile, bool useBatchSprite)
+{
+log("MigAnimationLoader::loadBin-start1");
+assert(pBinFile && plistFile);
+log("MigAnimationLoader::loadBin-start2");
+CCString* xmlName = CCString::createWithFormat("%s%s", m_sPath->getCString(), pBinFile);
+CCString* plistName = CCString::createWithFormat("%s%s", m_sPath->getCString(), plistFile);
+CCString* textureName = CCString::createWithFormat("%s%s", m_sPath->getCString(), getTextureNameFromPlist(plistName->getCString()));
+DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
+if(cache){
+if(node) {
+MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
+}
+return true;
+}
+cache = new DQAnimationCache();
+cache->plistName = plistName;
+cache->xmlName = xmlName;
+cache->textureName = textureName;
+//CC_SAFE_RETAIN(plistName);
+//CC_SAFE_RETAIN(xmlName);
+//CC_SAFE_RETAIN(textureName);
+//load animation from bin
+{
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+const char* full_name = UIFeiDiaoLayer::hel009(xmlName->getCString());
+#else
+//const char* full_name = hel009(xmlName->getCString());
+//const char* full_name = FileUtils::getInstance()->fullPathForFilename(xmlName->getCString());
+auto fileUtiles = FileUtils::getInstance();
+auto fragmentFullPath = fileUtiles->fullPathForFilename(xmlName->getCString());
+#endif
+FILE* pfile = fopen(fragmentFullPath.c_str(), "rb");
+//assert(pfile);
+if (NULL == pfile)
+log("=======================================%s", fragmentFullPath.c_str());
+log("MigAnimationLoader::loadBin-0");
+//bin info
+sdafwefc(pfile);
+//animation info
+cache->name = new CCString(sdafwefc(pfile));
+log("cache-name=%s\n", cache->name->getCString());
+//sprite count
+int spriteCount = hel001(pfile);
+log("spriteCount=%d", spriteCount);
+for (int i = 0; i < spriteCount; i++)
+{
+SpriteCache* spriteCache = new SpriteCache();
+spriteCache->name = new CCString(sdafwefc(pfile));
+log("spriteCache->name=%s", spriteCache->name->getCString());
+//frame count
+int frameCount = hel001(pfile);
+log("frameCount=%d", frameCount);
+for (int j = 0; j < frameCount; j++)
+{
+//log("------1");
+FrameCache* frameCache = new FrameCache();
+frameCache->duration = hel001(pfile);
+frameCache->flag = hel001(pfile);
+//tile count
+int tileCount = hel001(pfile);
+for (int k = 0; k < tileCount; k++)
+{
+//log("------2");
+
+ModuleCache* moduleCache = new ModuleCache();
+moduleCache->name = new CCString(sdafwefc(pfile));
+log("------2--%s", moduleCache->name->getCString());
+moduleCache->offsetX = hel001(pfile);
+moduleCache->offsetY = hel001(pfile);
+moduleCache->flip = hel001(pfile);
+moduleCache->rotate = hel001(pfile);
+//log("------2---%d", frameCache->modules.size());
+frameCache->modules.push_back(moduleCache);
+//CC_SAFE_RELEASE_NULL(moduleCache);
+}
+int rx = hel001(pfile);
+int ry = hel001(pfile);
+int rw = hel001(pfile);
+int rh = hel001(pfile);
+//log("------3");
+frameCache->rectRed.setRect(rx, -ry-rh, rw, rh);
+int gx = hel001(pfile);
+int gy = hel001(pfile);
+int gw = hel001(pfile);
+int gh = hel001(pfile);
+//log("------4");
+frameCache->rectGreen.setRect(gx, -gy-gh, gw, gh);
+spriteCache->frames.push_back(frameCache);
+log("--------------------------5");
+//CC_SAFE_RELEASE_NULL(frameCache);
+}
+log("------6---%d", spriteCache->frames.size());
+cache->sprites.push_back(spriteCache);
+//CC_SAFE_RELEASE_NULL(spriteCache);
+}
+log("------7---%d", cache->sprites.size());
+fclose(pfile);
+}
+log("------8");
+MigAnimationCache::getShared()->addAnimationCache(cache);
+log("------9");
+if(node) {
+MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
+}
+log("MigAnimationLoader::loadBin-end");
+//CC_SAFE_RELEASE_NULL(cache);
+return true;
+}
+*/

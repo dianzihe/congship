@@ -10,7 +10,8 @@
 #include "MigAnimation.h"
 #include "MigAnimationLoader.h"
 
-MigSpriteNode::MigSpriteNode() : m_pCurSprite(NULL),m_pCurFrame(NULL),
+MigSpriteNode::MigSpriteNode() : m_pCurSprite(NULL),
+	m_pCurFrame(NULL),
 	pDefaultSprite(NULL),
 	m_delayPerUnit(DEFAULT_DELAY_PER_FRAME),
 	m_elapsed(0),
@@ -23,7 +24,6 @@ MigSpriteNode::MigSpriteNode() : m_pCurSprite(NULL),m_pCurFrame(NULL),
 	m_pKeyFrameEventHandle(NULL),
 	m_keyFrameEventParameter(),
 	m_bAnimationDone(false),
-	m_pSprites(new CCArray()),
 	m_bFlipX(false),
 	m_bFlipY(false),
 	m_bNewFrame(false),
@@ -31,23 +31,25 @@ MigSpriteNode::MigSpriteNode() : m_pCurSprite(NULL),m_pCurFrame(NULL),
 	m_sTextureName(NULL)
 {
     m_blendFunc = DEFAULT_BLEND_FUNC;
+	m_pSprites = CCArray::create();
 }
 
 MigSpriteNode::~ MigSpriteNode()
 {
-    CC_SAFE_RELEASE_NULL(m_pSprites);
+	log("release MigSpriteNode");
+	//CC_SAFE_RELEASE_NULL(m_pSprites);
 }
 
 void MigSpriteNode::retain()
 {
-    CCNode::retain();
+    //CCNode::retain();
 //    CCLog("MigSpriteNode::retain()-ref=%d.",retainCount());
 }
 
 void MigSpriteNode::release()
 {
 //    CCLog("MigSpriteNode::release()-ref=%d.",retainCount()-1);
-    CCNode::release();
+    //CCNode::release();
 }
 
 bool MigSpriteNode::init()
@@ -63,9 +65,21 @@ MigSpriteNode* MigSpriteNode::create(cocos2d::CCString *migXml, cocos2d::CCStrin
 
 MigSpriteNode* MigSpriteNode::create(const char* migXmlFile,const char* plistFile,const char* root,bool useBatchSprite,const char* defaultSpriteName,float delayPerUnit)
 {
-    MigSpriteNode* node = create();
-    node->initWithFile(migXmlFile, plistFile,root,useBatchSprite,defaultSpriteName,delayPerUnit);
-    return node;
+	//自定义一个工厂方法，根据传入的战机类型，初始化敌方战机
+	auto node = new MigSpriteNode();
+	node->initWithFile(migXmlFile, plistFile, root, useBatchSprite, defaultSpriteName, delayPerUnit);
+	if (node && node->init()) {
+		node->autorelease();
+		return node;
+	} else {
+		CC_SAFE_DELETE(node);
+		return nullptr;
+	}
+
+    //MigSpriteNode* node = create();
+	//node->m_pSprites = CCArray::create();
+    //node->initWithFile(migXmlFile, plistFile,root,useBatchSprite,defaultSpriteName,delayPerUnit);
+    //return node;
 }
 
 void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,const char* root,bool useBatchSprite,const char* defaultSpriteName,float delayPerUnit)
@@ -76,58 +90,42 @@ void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,c
 	log("MigSpriteNode::initWithFile:plistFile=%s.", plistFile);
     MigAnimationLoader* loader = new MigAnimationLoader(root);
     std::string str = migXmlFile;
-    if (str.compare(str.size()-4, 4, ".dat") == 0)
-    {
-        //assert(loader->loadBin(this, migXmlFile, plistFile, useBatchSprite));
+    if (str.compare(str.size() - 4, 4, ".dat") == 0) {
         loader->loadBin(this, migXmlFile, plistFile, useBatchSprite);
-    }
-    else if(str.compare(str.size()-4,4,".xml") == 0)
-    {
-        //assert(loader->load(this,migXmlFile, plistFile,useBatchSprite));
+    } else if(str.compare(str.size() - 4,4,".xml") == 0) {
 		loader->load(this,migXmlFile, plistFile,useBatchSprite);
     }
-    delete loader;
+	log("MigSpriteNode::initWithFile-1");
+    //delete loader;
     //init draw node
     {
-        if(useBatchSprite)
-		{
-			if (m_sTextureName != NULL)
-			{
+        if(useBatchSprite) {
+			if (m_sTextureName != NULL) {
 				log("MigSpriteNode::initWithFile:m_sTextureName=%s.", m_sTextureName);
-        		m_pDrawNode = CCSpriteBatchNode::create(m_sTextureName);
-			}
-			else
-			{
+        		m_pDrawNode = SpriteBatchNode::create(m_sTextureName);
+			} else {
 				log("MigSpriteNode::initWithFile:m_sTextureName=%s.", m_sTextureName);
 			}
-        }
-        else
-    	{
-    		
-        	m_pDrawNode = CCNode::create();
+        } else {
+        	m_pDrawNode = Node::create();
     	}
 		log("MigSpriteNode::initWithFile:0");
-		if(m_pDrawNode != NULL)
-		{
-			
+		if(m_pDrawNode != NULL) {
     		addChild(m_pDrawNode);
 		}
 		log("MigSpriteNode::initWithFile:1");
     }
-	log("MigSpriteNode::initWithFile:2");
-    if(defaultSpriteName)
-    {
+	log("MigSpriteNode::initWithFile:2-->%s", defaultSpriteName);
+    if(defaultSpriteName) {
         MigSprite* pSprite = getSpriteChildByName(defaultSpriteName);
         setDefaultSprite(pSprite);
     }
-    if(getDefaultSprite() == NULL)
-    {
-        CCObject* pObj = NULL;
+    if(getDefaultSprite() == NULL) {
+        Object* pObj = NULL;
         CCARRAY_FOREACH(m_pSprites, pObj)
         {
             MigSprite* pSprite = dynamic_cast<MigSprite*>(pObj);
-            if(pSprite)//第一个sprite节点为默认动作
-            {
+			if (pSprite){ //第一个sprite节点为默认动作
                 setDefaultSprite(pSprite);
                 break;
             }
@@ -561,15 +559,16 @@ CCNode* MigSpriteNode::getDrawNode()
     return m_pDrawNode;
 }
 
-MigSprite::MigSprite() : m_frameCount(0),m_fTotalDelayUnits(0),m_frameSplitTimes(new std::vector<int>()),m_pFrames(NULL)
+MigSprite::MigSprite() : m_frameCount(0),m_fTotalDelayUnits(0),m_frameSplitTimes(new std::vector<int>())
 {
-    m_pFrames = new CCArray();
+    m_pFrames = CCArray::create();
 }
 
 MigSprite::~ MigSprite()
 {
-    CC_SAFE_DELETE(m_frameSplitTimes);
-    CC_SAFE_DELETE(m_pFrames);
+    //CC_SAFE_DELETE(m_frameSplitTimes);
+	m_frameSplitTimes->clear();
+    //CC_SAFE_DELETE(m_pFrames);
 }
 
 bool MigSprite::init()
@@ -626,14 +625,14 @@ float MigSprite::getTotalDelayUnits()
     return m_fTotalDelayUnits;
 }
 
-MigFrame::MigFrame():rectRed(),rectGreen(),m_pModules(NULL)
+MigFrame::MigFrame():rectRed(),rectGreen()
 {
-    m_pModules = new CCArray();
+    m_pModules = CCArray::create();
 }
 
 MigFrame::~MigFrame()
 {
-    delete m_pModules;
+	//CC_SAFE_RELEASE_NULL(m_pModules);
 }
 
 bool MigFrame::init()

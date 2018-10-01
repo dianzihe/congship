@@ -37,9 +37,19 @@ public:
 
 const ccBlendFunc DEFAULT_BLEND_FUNC = {GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA};
 
-
 const float DEFAULT_DELAY_PER_FRAME = 0.01666666666667;
 
+
+class TestMigSpriteNode : public Node/*, public BlendProtocol*/
+{
+public:
+	TestMigSpriteNode(){};
+	virtual ~TestMigSpriteNode(){};
+	virtual bool init(){};
+
+	//CREATE_FUNC(TestMigSpriteNode);
+	static TestMigSpriteNode* create(){ return nullptr; };
+};
 class MigSpriteNode : public Node/*, public BlendProtocol*/
 {
 public:
@@ -47,7 +57,7 @@ public:
     virtual ~ MigSpriteNode();
     virtual bool init();
     
-    CREATE_FUNC(MigSpriteNode);
+    //CREATE_FUNC(MigSpriteNode);
     
     static MigSpriteNode* create(String* migXml, String* plistFile,const char* root=NULL,bool useBatchSprite = true,const char* defaultSpriteName = NULL,float delayPerUnit = DEFAULT_DELAY_PER_FRAME);
     static MigSpriteNode* create(const char* migXml,const char* plistFile,const char* root=NULL,bool useBatchSprite = true,const char* defaultSpriteName = NULL,float delayPerUnit = DEFAULT_DELAY_PER_FRAME);

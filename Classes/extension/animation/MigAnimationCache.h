@@ -14,84 +14,98 @@
 
 USING_NS_CC;
 
-struct DQAnimationCache;
-struct SpriteCache;
-struct FrameCache;
-struct ModuleCache;
+class DQAnimationCache;
+class SpriteCache;
+class FrameCache;
+class ModuleCache;
 
 class MigAnimationCache
 {
 public:
     static MigAnimationCache* getShared();
+	bool init();
 	static void purgeAll();
     DQAnimationCache* getAnimationCache(const char* xmlName);
     void addAnimationCache(DQAnimationCache* pCache);
     void removeAnimationCache(const char* xmlName);
     void removeAllCache();
     void createAnimationFromCache(MigSpriteNode* pRoot,const char* xmlName,bool useBatchSprite);
-private:
+//private:
     MigAnimationCache();
     ~ MigAnimationCache();
     
-    CCArray* m_animationCaches;
-	CCArray* enemy3sToDelete;
+    //CCArray* m_animationCaches;
+	std::vector<DQAnimationCache*> m_animationCaches;
+	//CCArray* enemy3sToDelete;
+	//std::vector<std::string> enemy3sToDelete;
     //static MigAnimationCache* m_pSingleInstance;
     
     void createSpriteFromCache(MigSpriteNode* pRoot,SpriteCache* pCache);
     void createFrameFromCache(MigSpriteNode* pRoot,MigSprite* pSprite,FrameCache* pCache);
     
-    DQAnimationCache* m_pCurAnimationCache;
+    //DQAnimationCache* m_pCurAnimationCache;
     bool m_bUseBatchSprite;
 };
 
-struct DQAnimationCache : CCObject
+class DQAnimationCache : Ref
 {
+public:
     CCString* name;
     CCString* xmlName;
     CCString* plistName;
     CCString* textureName;
-    CCArray* sprites;
-    
-    DQAnimationCache() : name(NULL),xmlName(NULL),plistName(NULL),sprites(new CCArray()),textureName(NULL)
+    //CCArray* sprites;
+	std::vector<SpriteCache*> sprites;
+
+    DQAnimationCache() : name(NULL),xmlName(NULL),plistName(NULL),textureName(NULL)
     {
-        
+		//sprites = CCArray::create();
     }
     
     ~ DQAnimationCache()
     {
-        CC_SAFE_RELEASE_NULL(sprites);
+		//sprites->autorelease();
+        //CC_SAFE_RELEASE_NULL(sprites);
+		/*
         CC_SAFE_RELEASE_NULL(name);
         CC_SAFE_RELEASE_NULL(xmlName);
         CC_SAFE_RELEASE_NULL(plistName);
         CC_SAFE_RELEASE_NULL(textureName);
+		*/
     }
 };
 
-struct SpriteCache : CCObject
+class SpriteCache : Ref
 {
-    SpriteCache(): name(NULL),frames(new CCArray())
+public:
+
+    SpriteCache(): name(NULL)
     {
+		//frames = CCArray::create();
     }
     
     ~ SpriteCache()
     {
-        CC_SAFE_RELEASE_NULL(frames);
-        CC_SAFE_RELEASE_NULL(name);
+        //CC_SAFE_RELEASE_NULL(frames);
+        //CC_SAFE_RELEASE_NULL(name);
     }
     
     CCString* name;
-    CCArray* frames;
+	std::vector<FrameCache*> frames;
 };
 
-struct FrameCache : CCObject
+class FrameCache : Ref
 {
-    FrameCache() : flag(0),duration(1),rectRed(),rectGreen(),modules(new CCArray())
+public:
+
+    FrameCache() : flag(0),duration(1),rectRed(),rectGreen()
     {
+		//modules = CCArray::create();
     }
     
     ~ FrameCache()
     {
-        CC_SAFE_RELEASE_NULL(modules);
+        //CC_SAFE_RELEASE_NULL(modules);
 //        rectRed.release();
 //        rectGreen.release();
     }
@@ -100,11 +114,13 @@ struct FrameCache : CCObject
     int duration;
     CCRect rectRed;
     CCRect rectGreen;
-    CCArray* modules;
+	std::vector<ModuleCache*> modules;
 };
 
-struct ModuleCache : CCObject
+class ModuleCache : Ref
 {
+public:
+
     ModuleCache():name(NULL),offsetX(0),offsetY(0),flip(0),rotate(0)
     {
         
@@ -112,7 +128,7 @@ struct ModuleCache : CCObject
     
     ~ ModuleCache()
     {
-        CC_SAFE_RELEASE_NULL(name);
+        //CC_SAFE_RELEASE_NULL(name);
     }
     
     CCString* name;

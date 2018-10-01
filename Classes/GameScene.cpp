@@ -53,6 +53,7 @@ bool GameScene::init()
 	log("winSize---->%d, %d", winSize.width, winSize.height);
 
 	MigSpriteNode::create("chef.dat", "chef.plist", "anim/", true, "walk_up", 0.1);
+	//TestMigSpriteNode::create();
 	/*
 	m_uiNode = Node::create();
 	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
@@ -60,7 +61,7 @@ bool GameScene::init()
 	*/
 	/*
 	m_uiSprite = Sprite::create();
-	m_uiSprite->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	m_uiSprite->setPosition(Vec2(winSize.with / 2, winSize.height / 2));
 	addChild(m_uiSprite, GAME_LAYER_UI);
 	*/
 	/*
@@ -69,7 +70,6 @@ bool GameScene::init()
 	addChild(sprite);
 	sprite->setPosition(100, 100);
 	*/
-
 	/*
 	auto sprite = DQOPENGLSprite::create("gem_light.png");
 	addChild(sprite);
@@ -101,7 +101,6 @@ bool GameScene::init()
 	_sprite1->setPosition(Vec2(1 * s.width / 4, s.height / 2));
 	_sprite1->setScale(0.5);
 #endif
-
 
 #if 1
 	//monster≤‚ ‘

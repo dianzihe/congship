@@ -92,7 +92,7 @@ void WAnimationManager::addAnimationToCharater(const string &iwconame,
 	//2,将动画加入pool
 	//3,根据animationId，进行相关索引
 	//创建一个全局的结构，通过ID来获取相应的animation
-#if 0
+#if 1
 	Animation *animation = Animation::create();
 	animation->setDelayPerUnit(0.08);
 	for (int i = 1; i <= 11; i++){
@@ -116,8 +116,8 @@ void WAnimationManager::addAnimationToCharater(const string &iwconame,
 				self.images[key] = t
 #endif
 }
-*/
 
+*/
 
 /************************************************************************/
 /* 使用方法                                                                     */

@@ -20,8 +20,7 @@ class MigAnimationLoader :public Ref, public XmlResolverListener
 {
 public:
     MigAnimationLoader(const char* path);
-    
-    virtual ~ MigAnimationLoader();
+    ~ MigAnimationLoader();
     
     virtual bool load(MigSpriteNode* node,const char* pXmlFile,const char* plistFile,bool useBatchSprite);
     virtual bool loadBin(MigSpriteNode* node,const char* binFile,const char* plistFile,bool useBatchSprite);
@@ -72,7 +71,13 @@ protected:
     CCString* m_sPath;
     enum
     {
-        ResolveNothing,ResolveAnimation,ResolveSprite,ResolveFrame,ResolveModule,ResolveRectRed,ResolveRectGreen
+        ResolveNothing,
+		ResolveAnimation,
+		ResolveSprite,
+		ResolveFrame,
+		ResolveModule,
+		ResolveRectRed,
+		ResolveRectGreen
     } curResolveType;
 };
 #endif
