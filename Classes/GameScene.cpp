@@ -15,7 +15,7 @@
 #include "PlayerLayerCfg.h"
 #include "BossGameFrontLayer.h"
 #include "extension\animation\MigAnimation.h"
-
+#include <array>
 using namespace CocosDenshion;
 
 //GameScene* GameScene::m_gamelayer = nullptr;
@@ -33,7 +33,7 @@ bool GameScene::init()
 	
 	//¼ÓÔØplistÎÄ¼þ
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("shoot.plist");
-	
+	auto s = Director::getInstance()->getWinSize();
 	// launch network thread.
 	//PuzzleRPC::getInstance()->launch();
 
@@ -52,7 +52,7 @@ bool GameScene::init()
 	auto winSize = Director::getInstance()->getWinSize();
 	log("winSize---->%d, %d", winSize.width, winSize.height);
 
-	MigSpriteNode::create("chef.dat", "chef.plist", "anim/", true, "walk_up", 0.1);
+	MigSpriteNode::create("zhizhu.dat", "zhizhu.plist", "anim/", true, "walk_up", 0.1);
 	//TestMigSpriteNode::create();
 	/*
 	m_uiNode = Node::create();
@@ -63,18 +63,51 @@ bool GameScene::init()
 	m_uiSprite = Sprite::create();
 	m_uiSprite->setPosition(Vec2(winSize.with / 2, winSize.height / 2));
 	addChild(m_uiSprite, GAME_LAYER_UI);
-	*/
+	*/ 
 	/*
 	//Í¼Æ¬¶Ñµþ²âÊÔ´úÂë
 	auto sprite = MultiSprite::create("gem_light.png", "guangquan_lan.png");
 	addChild(sprite);
 	sprite->setPosition(100, 100);
 	*/
-	/*
-	auto sprite = DQOPENGLSprite::create("gem_light.png");
-	addChild(sprite);
-	sprite->setPosition(100, 100);
-	*/
+#if 0
+	auto animCache = AnimationCache::getInstance();
+	auto test_animation0 = animCache->getAnimation("zhizhuhurt_up0");
+	auto anim0 = Animate::create(test_animation0);
+	auto seq = Sequence::create(anim0, nullptr);
+
+	// create an sprite without texture
+	auto grossini = Sprite::create();
+	
+	grossini->setPosition(Vec2(1 * s.width / 4, s.height / 2));
+	addChild(grossini);
+	auto pRepeatScale = RepeatForever::create(seq);
+	grossini->runAction(pRepeatScale);
+#endif	
+
+#if 1
+	Sprite *sprite;
+	char str[100] = { 0 };
+	std::array<int, 15> arr = { 0, 19, 8, 25, 12, 23, 24, 21, 26, 12, 20, 13, 20, 15, 31 };
+	std::array<int, 15> offX = { -40, 11, 19, 11, 17, -19, -13, -11, -30, 30, -28, -33, -53, 26, -51 };
+	std::array<int, 15> offY = { -23, -28, -56, -21, -43, -42, -33, -5, -26, -23, -11, -29, -45, -36, -58 };
+	std::array<int, 15> flip = { 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1, 0 };
+	std::array<int, 15> rotate = { 0, 270, 0, 270, 0, 0, 0, 0, 270, 0, 0, 0, 0, 0, 0 };
+
+	for (int i = 0; i < 15; i++)
+	{
+		sprintf(str, "zhizhu_%d.png", arr[i]);
+		sprite = Sprite::createWithSpriteFrameName(str);
+		if (NULL == sprite)
+			continue;
+		//sprite->setPosition(Vec2(s.width/6*(i%5+1), s.height*2/3 - s.height*(i/5)/3));
+		sprite->setRotation(rotate[i]);
+		sprite->setPosition(Vec2(300 + offX[i], 400 + offY[i]));
+		//sprite->setScaleX(flip[i]);
+		addChild(sprite, i);
+	}
+#endif
+
 #if 0
 	//integrate zhonggao
 	m_pRunState = new CZhongGaoState();
@@ -104,7 +137,7 @@ bool GameScene::init()
 
 #if 1
 	//monster²âÊÔ
-	MonsterCfg::instance().init("monster");
+	//MonsterCfg::instance().init("monster");
 
 #endif
 #if 0
@@ -177,7 +210,7 @@ bool GameScene::init()
 
 	//WBossGuai *lpGuai = NULL;
 	//lpGuai = WBoss4::BuildGuai();
-
+	/*
 	CMonster * pMonster = CMonster::node();
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
@@ -193,6 +226,7 @@ bool GameScene::init()
 	monsterInfo->wildState = 0;
 
 	pMonster->onLookInfoMonster(monsterInfo);
+	*/
 	return true;
 }
 

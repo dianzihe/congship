@@ -121,6 +121,11 @@ void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,c
         setDefaultSprite(pSprite);
     }
     if(getDefaultSprite() == NULL) {
+		auto animCache = AnimationCache::getInstance();
+
+		//auto normal = animCache->getAnimation("dance");
+
+		/*
         Object* pObj = NULL;
         CCARRAY_FOREACH(m_pSprites, pObj)
         {
@@ -130,11 +135,12 @@ void MigSpriteNode::initWithFile(const char *migXmlFile, const char *plistFile,c
                 break;
             }
         }
+		*/
     }
 	log("MigSpriteNode::initWithFile:end");
-    setCurrentSprite(pDefaultSprite);
-    setDelayPerUnit(delayPerUnit);
-    setBlendFunc(m_blendFunc);
+    //setCurrentSprite(pDefaultSprite);
+    //setDelayPerUnit(delayPerUnit);
+    //setBlendFunc(m_blendFunc);
 }
 
 MigSprite* MigSpriteNode::getCurrentSprite() const

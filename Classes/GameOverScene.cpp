@@ -1016,6 +1016,7 @@ void MySprite::onDraw(const Mat4 &transform, uint32_t flags)
 
 #define kQuadSize sizeof(_quad.bl) 
 	size_t offset = (size_t)&_quad;
+	/*
 	log("-----vertices-----");
 	log("bl [%d, %d, %d]", _quad.bl.vertices.x, _quad.bl.vertices.y, _quad.bl.vertices.z);
 	log("br [%d, %d, %d]", _quad.br.vertices.x, _quad.br.vertices.y, _quad.br.vertices.z);
@@ -1033,7 +1034,7 @@ void MySprite::onDraw(const Mat4 &transform, uint32_t flags)
 	log("br [%d, %d, %d, %d]", _quad.br.colors.r, _quad.br.colors.g, _quad.br.colors.b, _quad.br.colors.a);
 	log("tl [%d, %d, %d, %d]", _quad.tl.colors.r, _quad.tl.colors.g, _quad.tl.colors.b, _quad.tl.colors.a);
 	log("tr [%d, %d, %d, %d]", _quad.tr.colors.r, _quad.tr.colors.g, _quad.tr.colors.b, _quad.tr.colors.a);
-
+	*/
 	offset = (size_t)&quad;
 	// vertex
 	int diff = offsetof(V3F_C4B_T2F, vertices);
