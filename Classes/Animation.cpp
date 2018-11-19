@@ -30,11 +30,9 @@ DQAnimation::DQAnimation(void)
 
 DQAnimation::~DQAnimation(void)
 {
-	for (int n = eAnimPart_Body; n < eAnimPart_Count; ++n)
-	{
+	for (int n = eAnimPart_Body; n < eAnimPart_Count; ++n) {
 		ASprite* p = m_sprite[n];
-		if (p)
-		{
+		if (p) {
 			p->release();
 		}
 	}
@@ -64,12 +62,11 @@ void DQAnimation::LoadASprite(int id, ACTORTYPE type, int sex, int equipLevel, b
 			AspriteManager::instance().AddAnimationDelayLoad(this, p, type, gPart);
 			//m_pHostEventHandler->setGray(gPart, true);
 			AddASprite(pReplace, type);
-		}
-		else {
+		} else {
 			AddASprite(p, type);
 		}
-	}
-	else {
+	} else {
+		log("spirte is null");
 		AddASprite(p, type);
 	}
 }
@@ -165,7 +162,7 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 
 void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 {
-	log("--------DQAnimation::AddASprite");
+	log("--------DQAnimation::AddASprite %x", p);
 	//CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
 	if (type == ACTORTYPE_WEAPON) {
 		if (m_sprite[eAnimPart_Weapon])	{
@@ -243,6 +240,7 @@ bool DQAnimation::isEnd()
 
 void DQAnimation::update(float dt)
 {
+	log("DQAnimation::update");
 	if (m_sprite[eAnimPart_Body] == NULL) return;
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
 
@@ -254,6 +252,7 @@ void DQAnimation::update(float dt)
 
 	int frameCount = m_sprite[eAnimPart_Body]->GetAFrames(m_animID);  //
 	float frameTime = m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
+	
 	if (m_frameTime > frameTime) {
 		// next frame
 		m_frame++;
@@ -288,6 +287,7 @@ void DQAnimation::update(float dt)
 			m_frame = 0;
 		}
 	}
+	log("DQAnimation::update-->m_frame: %d, frameCount: %d, m_frameTime: %.2f, m_loop:%d ", m_frame, frameCount, m_frameTime, m_loop);
 }
 
 void DQAnimation::MarkBeingCall(Point pos, const char* desc)
@@ -326,9 +326,11 @@ void DQAnimation::draw(int x, int y, bool isGray)
 	//log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
 	if (m_sprite[eAnimPart_Body] == NULL) return;
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
-	log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
 	if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
 		return;
+	//log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
+	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
+
 	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID, m_frame);
 	if (mIsMutiAsprite) {
 		int mountHeight = 0;
@@ -349,7 +351,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 					isShowPet = false;
 	}
 #endif
-}
+		}
 		for (int i = eAnimPart_Body; i < eAnimPart_Count; ++i) {
 			log("----draw---DQAnimation::draw---> part %d", i);
 #if 0
@@ -406,9 +408,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 		}
 #endif
 		}
-
-	}
-	else {
+	} else {
 		//如果是小师妹，根据主人性别与打坐类型，改变小师妹打坐方向
 		if(m_pHostEventHandler&&m_pHostEventHandler->getActorType() ==  ACTORTYPE_PET&&m_animID == ANIM_XSM_SIT2_LEFT) {
 #if 0

@@ -209,7 +209,7 @@ private:
 	SecondAgent* g_SecondAgent = NULL;
 public:
     // //create Update for behaviac
-    void Update(float dt);
+	virtual void update(float dt);
     static void addBehaviacAgentDeleteQueue(behaviac::Agent* pAgent);
 private:
     static void cleanBehaviacAgentDeleteQueue();

@@ -4,6 +4,7 @@
 #include "GameScene.h"
 //#include "Player.h"
 #include "ActorManager.h"
+#include "tinyxml2\tinyxml2.h"
 //#include "Hero.h"
 //#include "assert.h"
 //#include "CCFileUtils.h"
@@ -11,6 +12,8 @@
 //#include "ASpriteManager.h"
 //#include "CCResourceThread.h"
 //#include "DelayASpriteLoadManager.h"
+
+using namespace tinyxml2;
 
 #define ALWAYS_BS_NFM_1_BYTE	0
 #define ALWAYS_BS_NAF_1_BYTE    0
@@ -36,12 +39,41 @@ void arraycopy( char * src, int srcPos, char * dest, int destPos, int length )
 #define RENDER_IN_SUBPIXEL(__A__) ( (int)(__A__))
 #endif
 
+
+/*
+void TextureDrawInRect::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	TextureDemo::draw(renderer, transform, flags);
+
+	_renderCmd.init(_globalZOrder, transform, flags);
+	_renderCmd.func = CC_CALLBACK_0(TextureDrawInRect::onDraw, this, transform, flags);
+	renderer->addCommand(&_renderCmd);
+}
+
+void TextureDrawInRect::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	Director* director = Director::getInstance();
+	CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
+
+	auto s = Director::getInstance()->getWinSize();
+
+	auto rect1 = Rect(s.width / 2 - 80, 20, _tex1->getContentSize().width * 0.5f, _tex1->getContentSize().height * 2);
+	auto rect2 = Rect(s.width / 2 + 80, s.height / 2, _tex1->getContentSize().width * 2, _tex1->getContentSize().height * 0.5f);
+
+	_tex1->drawInRect(rect1);
+	_Tex2F->drawInRect(rect2);
+
+	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+}
+*/
 void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray)
 { 
-	log("----ASprite::DrawRegion texIdx[%d], texX[%d], texY[%d], texSizeX[%d], texSizeY[%d], flag[%d], posX[%d], posY[%d], rectWidth[%d], rectHeight[%d], opacity[%d]", 
+	log("---------ASprite::DrawRegion texIdx[%d], texX[%d], texY[%d], texSizeX[%d], texSizeY[%d], flag[%d], posX[%d], posY[%d], rectWidth[%d], rectHeight[%d], opacity[%d]", 
 		texIdx, texX, texY, texSizeX, texSizeY, flag, posX, posY, rectWidth, rectHeight, opacity);
-	if (!mIsTexAllLoaded)
-		return;
+	//if (!mIsTexAllLoaded)
+	//	return;
 #if 1
 	/*
 	//GL::bindTexture2D(_texture->getName());
@@ -318,10 +350,61 @@ int ASprite::GetAnimNumber ()
 }
 
 bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
-{
+{ 
+	bool ret = false;
+	mIsDataLoaded = false;
+	int imageIndex = 0;
 	char fileNameBuffer[256];
 	char plistfileNameBuffer[256];
 	ssize_t len = 0;
+	
+#if 0
+	//1113
+	sprintf(fileNameBuffer, "%s.bsprite" ,resName );
+	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
+		log("---file %s not find", fileNameBuffer);
+		return false;
+	}
+	char *data = (char*)FileUtils::getInstance()->getFileData(fileNameBuffer, "rb", &len);
+	LoadData(data);
+	
+	do {
+		sprintf(fileNameBuffer, "%s_%d.png" ,resName, imageIndex );
+
+		mIsTexAllLoaded = false;
+		if ( FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
+			TextureWrap* tw = new TextureWrap();
+			tw->fileName = fileNameBuffer;
+
+			TextureCache::getInstance()->addImageAsync(fileNameBuffer, CC_CALLBACK_1(ASprite::onAsyncLoadedTexture, this));
+			tw->isLoaded = true;
+			m_textures.push_back(tw);
+		} else {
+			char logError[512];
+			sprintf(logError, "File not found: %s", fileNameBuffer);
+			log(logError, "File not found");
+			break;
+		}
+		++imageIndex;
+	} while (1);
+
+	if (m_textures.empty()) {
+		sprintf(fileNameBuffer, "%s.png" ,resName );
+
+		std::string path = fileNameBuffer;
+		if (FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
+			m_texture = new TextureWrap();
+			m_texture->fileName = fileNameBuffer;
+
+			m_texture->isLoaded = true;
+			mIsTexAllLoaded = false;
+		} else {
+			return false;
+		}
+	}
+
+	return true;
+#endif
 	
 #if 0
 	std::string plist_content = FileUtils::getInstance()->getStringFromFile(fileNameBuffer);
@@ -400,8 +483,9 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 		++imageIndex;
 	}while (1);
 #endif
-#if 1
 
+#if 1
+	/*
 	sprintf(fileNameBuffer, "%s.bsprite", resName);
 	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
 		log("---file %s not find", fileNameBuffer);
@@ -409,20 +493,45 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 	} else
 		log("---find file %s", fileNameBuffer);
 	char *data = (char*)FileUtils::getInstance()->getFileData(fileNameBuffer, "rb", &len);
-	LoadData(data);
-	
-	if (m_textures.empty()){
-#if defined _WIN32 | WIN32
-		sprintf(fileNameBuffer, "%s.png" ,resName );
-#else
-		sprintf(fileNameBuffer, "%s.pvr.ccz" ,resName );
-#endif
-		sprintf(plistfileNameBuffer, "%s.plist", resName);
+	*/
+	//LoadData(data);
+	//分析plist并填充至动画组织结构
+	sprintf(plistfileNameBuffer, "%s.plist", resName);
 
-		if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
-			log("---ERROR---file %s not find", fileNameBuffer);
-			return false;
+	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(plistfileNameBuffer).c_str())){
+		log("---ERROR---file %s not find", plistfileNameBuffer);
+		return false;
+	}
+
+	//tinyxml2::XMLDocument doc;
+	tinyxml2::XMLDocument docXml;
+	XMLError errXml = docXml.LoadFile(plistfileNameBuffer);
+	log("ASprite::Load-->%s====%d", plistfileNameBuffer, errXml);
+	
+	if (XML_SUCCESS == errXml) {
+		for (XMLNode* ele = docXml.FirstChildElement("plist")->FirstChildElement("dict")->FirstChildElement("dict")->FirstChild();
+			ele;
+			ele = ele->NextSibling()){
+			std::string key = "key";
+			std::string value = "dict";
+			if (key == ele->Value()){
+				log("->%s\n", ele->ToElement()->GetText());
+				TextureWrap* tw = new TextureWrap();
+				tw->fileName = ele->ToElement()->GetText();
+				m_textures.push_back(tw);
+
+			}
+			/*
+			if (value == ele->Value()){
+				log("=>%s\n", ele->ToElement()->FirstChildElement("key")->GetText());
+			}
+			*/
 		}
+	}
+	
+	if (0){
+	//if (m_textures.empty()){
+		sprintf(fileNameBuffer, "%s.png" ,resName );
 		log("----ASprite::Load-->fileNameBuffer:%s", fileNameBuffer);
 		std::string plist_content = FileUtils::getInstance()->getStringFromFile(plistfileNameBuffer);
 			
@@ -470,7 +579,7 @@ void ASprite::LoadData(char* data)
 	offset +=2 ;
 
 	//读取生成标志位
-	int bs_flags =  ((data[offset] & 0xFF)    ) +
+	int bs_flags =  ((data[offset] & 0xFF)) +
 		((data[offset + 1] & 0xFF)<< 8) +
 		((data[offset + 2] & 0xFF)<<16) +
 		((data[offset + 3] & 0xFF)<<24);
@@ -508,7 +617,6 @@ void ASprite::LoadData(char* data)
 					_MarkerDesc[i] = descChar;
 					memset(descChar, 0, 1024);
 				}
-
 			}
 		}
 	}
@@ -652,6 +760,7 @@ void ASprite::onAsyncLoadedTexture(Texture2D* pTexture)
 
 void ASprite::tick(float deltaTime)
 {
+	log("ASprite tick");
 #if 0
 	if (mIsTexAllLoaded)
 		return;
@@ -906,15 +1015,15 @@ void ASprite::GetModuleRect(int * rc, int module, int posX, int posY, int flags)
 
 void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
-	log("-----ASprite:PaintAFrame anim:%d, aframe:%d, x:%d, y:%d, flag:%d, hx:%d, hy:%d, opacity:%d", anim, aframe, posX, posY, hx, hy, opacity);
 	if (!mIsTexAllLoaded || !mIsDataLoaded)
 		return;
 	if (GetAFrames(anim) <= aframe)
 		return;
-	log(".");
+
 	int off = (_anims_af_start[anim] + aframe) * 5;
 	int frame = _aframes[off] & 0xFFFF;
 
+	log("-----ASprite:PaintAFrame anim:%d, aframe:%d, off:%d, frame:%d", anim, aframe, off, frame);
 
 	//if ( this == GetSprite( 2, ACTORTYPE_SKILL_F ) )
 	//{
@@ -942,7 +1051,8 @@ void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, 
 void ASprite::PaintFrame( int frame, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
 	/*int nFModules = _frames_nfm[frame]&0xFF;*/
-	int nFModules = (_frames_nfm[frame]&0xFF);
+	int nFModules = (_frames_nfm[frame] & 0xFF);
+	log("------ASprite::PaintFrame==%d", nFModules);
 	
 	for (int fmodule = 0; fmodule < nFModules; fmodule++) {
 		PaintFModule( frame, fmodule, posX, posY, flags, hx, hy, opacity, isGray);
@@ -951,14 +1061,14 @@ void ASprite::PaintFrame( int frame, int posX, int posY, int flags, int hx, int 
 
 void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
-	log("-----ASprite:PaintFModule");
+	
 #if 1
 	int off = (_frames_fm_start[frame] + fmodule) << 2;
-	off += (_frames_fm_start[frame] + fmodule)<<2;
-	int fm_flags = (_fmodules[off+6]&0xFF) + ((_fmodules[off+7])<<8);
-	int index = (_fmodules[off]&0xFF) + ((_fmodules[off+1])<<8);
+	off += (_frames_fm_start[frame] + fmodule) << 2;
+	int fm_flags = (_fmodules[off + 6] & 0xFF) + ((_fmodules[off + 7]) << 8);
+	int index = (_fmodules[off] & 0xFF) + ((_fmodules[off+1]) << 8);
 
-	
+	log("-------ASprite:PaintFModule off:%d, index:%d", off, index);
 	//if (USE_INDEX_EX_FMODULES)
 	//	index |= ((fm_flags&FLAG_INDEX_EX_MASK)<<INDEX_EX_SHIFT);
 	{
@@ -996,7 +1106,7 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
 {
 #if 1
-	log("-----------ASprite::PaintModule----------name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
+	log("--------ASprite::PaintModule--name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
 	int texSizeX = _modules_w[module] & 0xFFFF;
 	int texSizeY = _modules_h[module] & 0xFFFF;
 	if (texSizeX <= 0 || texSizeY <= 0) return;

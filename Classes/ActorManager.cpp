@@ -34,10 +34,13 @@ long ActorManager::incClientActorID()
 
 void ActorManager::update(float dt)   //¸Ä
 {
+	log("ActorManager::update");
 	m_nDispPlayerNum = 0;
 	for (MAP_ACTORS::iterator iter = m_mapActors.begin(); iter != m_mapActors.end(); ++iter)
 	{
+		//Actor* pActor = iter->second;
 		Actor* pActor = iter->second;
+		Charactor* player = (Charactor*)pActor;
 		//pActor->setIsSheild(false);
 		pActor->update(dt);
 	}

@@ -47,156 +47,16 @@ bool GameScene::init()
 	m_map->autorelease();
 	m_map->setActorManager(m_actorManager);
 	m_actorManager->setMap(m_map);
-	//addChild(m_map, GAME_LAYER_MAP);
+	addChild(m_map, GAME_LAYER_MAP);
 	
 	auto winSize = Director::getInstance()->getWinSize();
 	log("winSize---->%d, %d", winSize.width, winSize.height);
 
-	MigSpriteNode::create("zhizhu.dat", "zhizhu.plist", "anim/", true, "walk_up", 0.1);
-	//TestMigSpriteNode::create();
-	/*
-	m_uiNode = Node::create();
-	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
-	//addChild(m_uiNode, GAME_LAYER_UI);
-	*/
-	/*
-	m_uiSprite = Sprite::create();
-	m_uiSprite->setPosition(Vec2(winSize.with / 2, winSize.height / 2));
-	addChild(m_uiSprite, GAME_LAYER_UI);
-	*/ 
-	/*
-	//Í¼Æ¬¶Ñµþ²âÊÔ´úÂë
-	auto sprite = MultiSprite::create("gem_light.png", "guangquan_lan.png");
-	addChild(sprite);
-	sprite->setPosition(100, 100);
-	*/
-#if 0
-	auto animCache = AnimationCache::getInstance();
-	auto test_animation0 = animCache->getAnimation("zhizhuhurt_up0");
-	auto anim0 = Animate::create(test_animation0);
-	auto seq = Sequence::create(anim0, nullptr);
-
-	// create an sprite without texture
-	auto grossini = Sprite::create();
-	
-	grossini->setPosition(Vec2(1 * s.width / 4, s.height / 2));
-	addChild(grossini);
-	auto pRepeatScale = RepeatForever::create(seq);
-	grossini->runAction(pRepeatScale);
-#endif	
-
-#if 1
-	Sprite *sprite;
-	char str[100] = { 0 };
-	std::array<int, 15> arr = { 0, 19, 8, 25, 12, 23, 24, 21, 26, 12, 20, 13, 20, 15, 31 };
-	std::array<int, 15> offX = { -40, 11, 19, 11, 17, -19, -13, -11, -30, 30, -28, -33, -53, 26, -51 };
-	std::array<int, 15> offY = { -23, -28, -56, -21, -43, -42, -33, -5, -26, -23, -11, -29, -45, -36, -58 };
-	std::array<int, 15> flip = { 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1, 0 };
-	std::array<int, 15> rotate = { 0, 270, 0, 270, 0, 0, 0, 0, 270, 0, 0, 0, 0, 0, 0 };
-
-	for (int i = 0; i < 15; i++)
-	{
-		sprintf(str, "zhizhu_%d.png", arr[i]);
-		sprite = Sprite::createWithSpriteFrameName(str);
-		if (NULL == sprite)
-			continue;
-		//sprite->setPosition(Vec2(s.width/6*(i%5+1), s.height*2/3 - s.height*(i/5)/3));
-		sprite->setRotation(rotate[i]);
-		sprite->setPosition(Vec2(300 + offX[i], 400 + offY[i]));
-		//sprite->setScaleX(flip[i]);
-		addChild(sprite, i);
-	}
-#endif
-
-#if 0
-	//integrate zhonggao
-	m_pRunState = new CZhongGaoState();
-	
-	if (m_pRunState){
-		//m_pRunState->autorelease();
-		addChild(m_pRunState);
-		m_pRunState->EnterState();
-	}
-#endif
-
-#if 0
-	//test flush correct
-	auto bbsprite = DQTestFlushSprite::create();
-	addChild(bbsprite);
-	//bbsprite->setPosition(100, 100);
-#endif
-
-#if 0
-	auto s = Director::getInstance()->getWinSize();
-
-	auto _sprite1 = MySprite::create("gem_dark.png");
-	addChild(_sprite1);
-	_sprite1->setPosition(Vec2(1 * s.width / 4, s.height / 2));
-	_sprite1->setScale(0.5);
-#endif
+	//MigSpriteNode::create("zhizhu.dat", "zhizhu.plist", "anim/", true, "walk_up", 0.1);
 
 #if 1
 	//monster²âÊÔ
-	//MonsterCfg::instance().init("monster");
-
-#endif
-#if 0
-	std::string plist_content = FileUtils::getInstance()->getStringFromFile("Sprite/monster/m16.plist");
-
-	Data image_content = FileUtils::getInstance()->getDataFromFile("Sprite/monster/m16.png");
-
-	Image* image = new (std::nothrow) Image();
-	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
-	Texture2D* texture = new (std::nothrow) Texture2D();
-	texture->initWithImage(image);
-	texture->autorelease();
-
-	CC_SAFE_RELEASE(image);
-
-	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
-	Vector<SpriteFrame*> animFrames(15);
-	
-		
-		char str[100] = { 0 };
-		for (int j = 1; j < 50; j++) {
-			sprintf(str, "%s_%04d.png", "attack/attack_up", j);
-			auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
-			log("--add to frame cache-->%s", str);
-			if (NULL != frame)
-				animFrames.pushBack(frame);
-		}
-	
-		auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
-#endif
-
-#if 0
-    auto frameCache = SpriteFrameCache::getInstance();
-    frameCache->addSpriteFramesWithFile("grossini.plist");
-
-	Vector<SpriteFrame*> animFrames(15);
-    char str[100] = {0};
-    for(int i = 1; i < 15; i++) {
-        sprintf(str, "grossini_dance_%02d.png",i);
-        auto frame = frameCache->getSpriteFrameByName(str);
-        animFrames.pushBack(frame);
-    }
-
-    auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
-
-    // Add an animation to the Cache
-    AnimationCache::getInstance()->addAnimation(animation, "dance");
-	// create an sprite without texture
-	auto grossini = Sprite::create();
-	//auto frame = frameCache->getSpriteFrameByName("grossini_dance_01.png");
-	//grossini->setSpriteFrame(frame);
-	/*
-	auto winSize = Director::getInstance()->getWinSize();
-	grossini->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
-	addChild(grossini);
-	*/
-	// run the animation
-	//grossini->runAction(RepeatForever::create(Animate::create(animation)));
-	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
+	MonsterCfg::instance().init("monster");
 #endif
 
 	setGameLayer(new BossGameFrontLayer());
@@ -210,7 +70,7 @@ bool GameScene::init()
 
 	//WBossGuai *lpGuai = NULL;
 	//lpGuai = WBoss4::BuildGuai();
-	/*
+	
 	CMonster * pMonster = CMonster::node();
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
@@ -226,19 +86,20 @@ bool GameScene::init()
 	monsterInfo->wildState = 0;
 
 	pMonster->onLookInfoMonster(monsterInfo);
-	*/
+	
 	return true;
 }
 
 //create Update for behaviac
-void GameScene::Update(float dt)
+void GameScene::update(float dt)
 {
 	//behaviac::Workspace::GetInstance()->LogFrames();
 	//behaviac::Workspace::GetInstance()->HandleRequests();
 	//m_NPC->btexec();
 	//log("UpdateLoop--->[%d, %d]\n", m_uiSprite->getPosition().x, m_uiSprite->getPosition().y);
+	log("GameScene::Update-->%f", dt);
 	{
-		//AspriteManager::instance().tick(dt);
+		AspriteManager::instance().tick(dt);
 		GameScene::GetActorManager()->update(dt);
 	}
 #if 0
@@ -259,10 +120,10 @@ GameScene::GameScene(void)
 {
 	//UIBatchRenderer::instance()->initilize();
 	m_pRunState = NULL;
-	schedule(schedule_selector(GameScene::Update), 1.f);
+	schedule(schedule_selector(GameScene::update), .2f);
 }
 GameScene::~GameScene(void){
-	log("=======>release gamescene");
+	//log("=======>release gamescene");
 }
 
 GameScene* GameScene::GetScene()
@@ -410,7 +271,7 @@ void GameScene::publishScore()
 
 void GameScene::gameover()
 {
-    unschedule(schedule_selector(GameScene::Update));
+    unschedule(schedule_selector(GameScene::update));
     unschedule(schedule_selector(GameScene::testLevel));
     publishScore(); //´æ´¢ÓÎÏ··ÖÊý
     cleanBehaviacAgentDeleteQueue();
@@ -452,7 +313,7 @@ void GameScene::pauseButtonCallBack(Ref* pSender)
                 child->onExit();
         }
 
-        unschedule(schedule_selector(GameScene::Update));
+        unschedule(schedule_selector(GameScene::update));
 
         ((Scene*)this->getParent())->getPhysicsWorld()->setAutoStep(false);
 
@@ -467,7 +328,7 @@ void GameScene::pauseButtonCallBack(Ref* pSender)
                 child->onEnter();
         }
 
-        schedule(schedule_selector(GameScene::Update), 0.1f);
+        schedule(schedule_selector(GameScene::update), 0.1f);
 
 
         ((Scene*)this->getParent())->getPhysicsWorld()->setAutoStep(true);
@@ -600,6 +461,349 @@ void GameScene::testLevel(float dt)
     m_level = oldlevel;
     levelUp((Level)m_level);//Éý¼¶
 	*/
+#if 0
+	m_uiNode = Node::create();
+	m_uiNode->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	//addChild(m_uiNode, GAME_LAYER_UI);
+
+	m_uiSprite = Sprite::create();
+	m_uiSprite->setPosition(Vec2(winSize.with / 2, winSize.height / 2));
+	addChild(m_uiSprite, GAME_LAYER_UI);
+
+	//Í¼Æ¬¶Ñµþ²âÊÔ´úÂë
+	auto sprite = MultiSprite::create("gem_light.png", "guangquan_lan.png");
+	addChild(sprite);
+	sprite->setPosition(100, 100);
+#endif
+
+#if 0
+	auto animCache = AnimationCache::getInstance();
+	auto test_animation0 = animCache->getAnimation("zhizhuhurt_up0");
+	auto anim0 = Animate::create(test_animation0);
+	auto seq = Sequence::create(anim0, nullptr);
+
+	// create an sprite without texture
+	auto grossini = Sprite::create();
+
+	grossini->setPosition(Vec2(1 * s.width / 4, s.height / 2));
+	addChild(grossini);
+	auto pRepeatScale = RepeatForever::create(seq);
+	grossini->runAction(pRepeatScale);
+#endif	
+
+#if 0
+	Sprite *sprite;
+	char str[100] = { 0 };
+	std::array<int, 15> arr = { 0, 19, 8, 25, 12, 23, 24, 21, 26, 12, 20, 13, 20, 15, 31 };
+	std::array<int, 15> offX = { -40, 11, 19, 11, 17, -19, -13, -11, -30, 30, -28, -33, -53, 26, -51 };
+	std::array<int, 15> offY = { -23, -28, -56, -21, -43, -42, -33, -5, -26, -23, -11, -29, -45, -36, -58 };
+	std::array<int, 15> flip = { 0, 0, -1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, -1, 0 };
+	std::array<int, 15> rotate = { 0, 270, 0, 270, 0, 0, 0, 0, 270, 0, 0, 0, 0, 0, 0 };
+
+	for (int i = 0; i < 15; i++)
+	{
+		sprintf(str, "zhizhu_%d.png", arr[i]);
+		sprite = Sprite::createWithSpriteFrameName(str);
+		if (NULL == sprite)
+			continue;
+		//sprite->setPosition(Vec2(s.width/6*(i%5+1), s.height*2/3 - s.height*(i/5)/3));
+		sprite->setRotation(rotate[i]);
+		sprite->setPosition(Vec2(300 + offX[i], 400 + offY[i]));
+		//sprite->setScaleX(flip[i]);
+		addChild(sprite, i);
+	}
+#endif
+
+#if 0
+	{
+		string monsterName = "zhizhu";
+		string xmlName = "anim/" + monsterName + ".xml";
+		string plistName = "anim/" + monsterName + ".plist";
+		string textureName = "anim/" + monsterName + ".dat";
+
+		auto frameCache = SpriteFrameCache::getInstance();
+		frameCache->addSpriteFramesWithFile(plistName->getCString());
+
+		//DQAnimationCache* cache = MigAnimationCache::getShared()->getAnimationCache(xmlName->getCString());
+		/*
+		if(cache){
+		if(node) {
+		MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
+		}
+		return true;
+		}
+
+		cache = new DQAnimationCache();
+		cache->plistName = plistName;
+		cache->xmlName = xmlName;
+		cache->textureName = textureName;
+		*/
+		//CC_SAFE_RETAIN(plistName);
+		//CC_SAFE_RETAIN(xmlName);
+		//CC_SAFE_RETAIN(textureName);
+		//load animation from bin
+		{
+#if(CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+			const char* full_name = UIFeiDiaoLayer::hel009(xmlName->getCString());
+#else
+			//const char* full_name = hel009(xmlName->getCString());
+			//const char* full_name = FileUtils::getInstance()->fullPathForFilename(xmlName->getCString());
+			auto fileUtiles = FileUtils::getInstance();
+			auto fragmentFullPath = fileUtiles->fullPathForFilename(xmlName->getCString());
+#endif
+			FILE* pfile = fopen(fragmentFullPath.c_str(), "rb");
+			//assert(pfile);
+			if (NULL == pfile)
+				log("=======================================%s", fragmentFullPath.c_str());
+			log("MigAnimationLoader::loadBin-0");
+			//bin info
+			sdafwefc(pfile);
+			//animation info
+			string animationName = sdafwefc(pfile);
+			log("cache-name=%s\n", animationName.c_str());
+			//sprite count
+			int spriteCount = hel001(pfile);
+			log("spriteCount=%d", spriteCount);
+			for (int i = 0; i < spriteCount; i++)
+			{
+#if 0
+				Vector<SpriteFrame*> animFrames(15);
+				char str[100] = { 0 };
+				for (int i = 1; i < 15; i++)
+				{
+					sprintf(str, "grossini_dance_%02d.png", i);
+					auto frame = frameCache->getSpriteFrameByName(str);
+
+					animFrames.pushBack(frame);
+				}
+
+				auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+
+				// Add an animation to the Cache
+				AnimationCache::getInstance()->addAnimation(animation, "dance");
+#endif			
+				/////////////////////////////////////////////////////////////////
+				//SpriteCache* spriteCache = new SpriteCache();
+				//spriteCache->name = new CCString(sdafwefc(pfile));
+				string actionName = sdafwefc(pfile);
+				log("spriteCache->name=%s", actionName.c_str());
+				//frame count
+				int frameCount = hel001(pfile);
+				log("frameCount=%d", frameCount);
+
+				for (int j = 0; j < frameCount; j++)
+				{
+					//log("------1");
+					//FrameCache* frameCache = new FrameCache();
+					//frameCache->duration = hel001(pfile);
+					//frameCache->flag = hel001(pfile);
+					//tile count
+					int duration = hel001(pfile);
+					int flag = hel001(pfile);
+					int tileCount = hel001(pfile);
+
+					Vector<SpriteFrame*> animFrames(30);
+					for (int k = 0; k < tileCount; k++)
+					{
+						/*
+						ModuleCache* moduleCache = new ModuleCache();
+						moduleCache->name = new CCString(sdafwefc(pfile));
+
+						moduleCache->offsetX = hel001(pfile);
+						moduleCache->offsetY = hel001(pfile);
+						moduleCache->flip = hel001(pfile);
+						moduleCache->rotate = hel001(pfile);
+						*/
+						string fileName = sdafwefc(pfile);
+						int offsetX = hel001(pfile);
+						int offsetY = hel001(pfile);
+						int flip = hel001(pfile);
+						int rotate = hel001(pfile);
+
+						log("------2- X:[%3d] Y:[%3d] Flip:[%3d] Rotate:[%3d] Duration[%3d]-%s",
+							offsetX,
+							offsetY,
+							flip,
+							rotate,
+							duration,
+							fileName.c_str());
+
+						//log("------2---%d", frameCache->modules.size());
+						//frameCache->modules.push_back(moduleCache);
+						//CC_SAFE_RELEASE_NULL(moduleCache);
+						//auto frame = frameCache->getSpriteFrameByName(moduleCache->name->getCString());
+						//animFrames.pushBack(frame);
+
+						auto frame = frameCache->getSpriteFrameByName(fileName);
+						frame->setOffset(Vec2(offsetX, offsetY));
+						frame->setRotated(rotate);
+						//frame->setOffset(Vec2(offsetX, offsetY));
+
+						animFrames.pushBack(frame);
+
+						//ModuleCache* moduleCache = (ModuleCache*)(pObj);
+						Sprite* pModuleSprite = Sprite::createWithSpriteFrameName(fileName);
+						Size size = pModuleSprite->getContentSize();
+						pModuleSprite->setAnchorPoint(Point(0.5, 0.5));
+						bool buf = true;
+						switch (rotate) {
+						case 0:
+							break;
+						case 90:
+							buf = false;
+							pModuleSprite->setRotation(90);
+							break;
+						case 180:
+							pModuleSprite->setRotation(180);
+							break;
+						case 270:
+							buf = false;
+							pModuleSprite->setRotation(270);
+							break;
+						default:
+							break;
+						}
+						switch (flip) {
+						case 0:
+							break;
+						case 1:
+							pModuleSprite->setScaleX(-1);
+							break;
+						case 2:
+							pModuleSprite->setScaleY(-1);
+							break;
+						default:
+							break;
+						}
+						pModuleSprite->setPositionX(offsetX + (buf ? size.width / 2 : size.height / 2));
+						pModuleSprite->setPositionY(-offsetY - (buf ? size.height / 2 : size.width / 2));
+						//pFrame->addModuleSprite(pModuleSprite);
+					}
+
+					auto animation = Animation::createWithSpriteFrames(animFrames, duration);
+					// Add an animation to the Cache
+					log("add -----> %s", (animationName + actionName + to_string(j)).c_str());
+					AnimationCache::getInstance()->addAnimation(animation, animationName + actionName + to_string(j));
+
+					int rx = hel001(pfile);
+					int ry = hel001(pfile);
+					int rw = hel001(pfile);
+					int rh = hel001(pfile);
+					//log("------3");
+					//frameCache->rectRed.setRect(rx, -ry-rh, rw, rh);
+					int gx = hel001(pfile);
+					int gy = hel001(pfile);
+					int gw = hel001(pfile);
+					int gh = hel001(pfile);
+					//log("------4");
+					//frameCache->rectGreen.setRect(gx, -gy-gh, gw, gh);
+					//spriteCache->frames.push_back(frameCache);
+
+					//CC_SAFE_RELEASE_NULL(frameCache);
+				}
+				//log("------6---%d", spriteCache->frames.size());
+				//cache->sprites.push_back(spriteCache);
+				//CC_SAFE_RELEASE_NULL(spriteCache);
+			}
+			//log("------7---%d", cache->sprites.size());
+			fclose(pfile);
+		}
+		//MigAnimationCache::getShared()->addAnimationCache(cache);
+		/*
+		if(node) {
+		MigAnimationCache::getShared()->createAnimationFromCache(node, xmlName->getCString(), useBatchSprite);
+		}
+		*/
+		log("MigAnimationLoader::loadBin-end");
+		//CC_SAFE_RELEASE_NULL(cache);
+		return true;
+	}
+#endif
+
+#if 0
+	//integrate zhonggao
+	m_pRunState = new CZhongGaoState();
+
+	if (m_pRunState){
+		//m_pRunState->autorelease();
+		addChild(m_pRunState);
+		m_pRunState->EnterState();
+	}
+#endif
+
+#if 0
+	//test flush correct
+	auto bbsprite = DQTestFlushSprite::create();
+	addChild(bbsprite);
+	//bbsprite->setPosition(100, 100);
+#endif
+
+#if 0
+	auto s = Director::getInstance()->getWinSize();
+
+	auto _sprite1 = MySprite::create("gem_dark.png");
+	addChild(_sprite1);
+	_sprite1->setPosition(Vec2(1 * s.width / 4, s.height / 2));
+	_sprite1->setScale(0.5);
+#endif
+#if 0
+	std::string plist_content = FileUtils::getInstance()->getStringFromFile("Sprite/monster/m16.plist");
+
+	Data image_content = FileUtils::getInstance()->getDataFromFile("Sprite/monster/m16.png");
+
+	Image* image = new (std::nothrow) Image();
+	image->initWithImageData((const uint8_t*)image_content.getBytes(), image_content.getSize());
+	Texture2D* texture = new (std::nothrow) Texture2D();
+	texture->initWithImage(image);
+	texture->autorelease();
+
+	CC_SAFE_RELEASE(image);
+
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFileContent(plist_content, texture);
+	Vector<SpriteFrame*> animFrames(15);
+
+	char str[100] = { 0 };
+	for (int j = 1; j < 50; j++) {
+		sprintf(str, "%s_%04d.png", "attack/attack_up", j);
+		auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(str);
+		log("--add to frame cache-->%s", str);
+		if (NULL != frame)
+			animFrames.pushBack(frame);
+	}
+
+	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+#endif
+
+#if 0
+	auto frameCache = SpriteFrameCache::getInstance();
+	frameCache->addSpriteFramesWithFile("grossini.plist");
+
+	Vector<SpriteFrame*> animFrames(15);
+	char str[100] = { 0 };
+	for (int i = 1; i < 15; i++) {
+		sprintf(str, "grossini_dance_%02d.png", i);
+		auto frame = frameCache->getSpriteFrameByName(str);
+		animFrames.pushBack(frame);
+	}
+
+	auto animation = Animation::createWithSpriteFrames(animFrames, 0.2f);
+
+	// Add an animation to the Cache
+	AnimationCache::getInstance()->addAnimation(animation, "dance");
+	// create an sprite without texture
+	auto grossini = Sprite::create();
+	//auto frame = frameCache->getSpriteFrameByName("grossini_dance_01.png");
+	//grossini->setSpriteFrame(frame);
+	/*
+	auto winSize = Director::getInstance()->getWinSize();
+	grossini->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+	addChild(grossini);
+	*/
+	// run the animation
+	//grossini->runAction(RepeatForever::create(Animate::create(animation)));
+	m_uiSprite->runAction(RepeatForever::create(Animate::create(animation)));
+#endif
+
 }
 
 void GameScene::resetBoss(float dt)

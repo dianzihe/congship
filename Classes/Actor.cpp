@@ -62,6 +62,7 @@ Actor* Actor::node(void)
 
 void Actor::update(float dt)
 {
+	log("Actor::update");
 	/*
 	CCObject* child;
 	CCARRAY_FOREACH(m_pChildren, child)
@@ -81,31 +82,25 @@ void Actor::update(float dt)
 	
 	//updateShowNamePos();
 #if 0
-	if ( m_pChildren ) 
-	{
+	if ( this->getChildren().size() )  {
 		// need to do
 		// bug: remove childe when update.....
 		int pos  = 0;	
-		while ( pos < (int)m_pChildren->count() )
+		while (pos < (int)getChildren().size())
 		{
-			CCObject* child = m_pChildren->objectAtIndex(pos);
+			//Object* child = m_pChildren->objectAtIndex(pos);
+			Object* child = getChildren().getIndex(pos);
 			child->update(dt);
 
-			if ( pos < (int)m_pChildren->count() )
-			{
+			if ( pos < (int)m_pChildren->count() ) {
 				CCObject* lastChild = m_pChildren->objectAtIndex(pos);
 
-				if ( child == lastChild )
-				{
+				if ( child == lastChild ) {
 					pos++;
-				}
-				else
-				{
+				} else {
 
 				}
-			}
-			else
-			{
+			} else{
 				pos++;
 			}			
 		}
@@ -114,7 +109,7 @@ void Actor::update(float dt)
 #endif
 
 	m_animation.update(dt);
-	//runAnimation->setPosition(getPosition());
+
 #if 0
 	if(m_SFXModule)
 	{
@@ -175,13 +170,15 @@ void Actor::update(float dt)
 
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	//log("---draw----actor::draw---->ID: %d, position [%d, %d]",getActorID(), pos_x, pos_y);
+	log("---draw----actor::draw---->ID: %d, position [%d, %d]", getActorID(), getPosition().x, getPosition().y);
 	//Node::visit();
+	
+	m_animation.visit();
 	/*
 	DQMap* curMap = GameScene::GetScene()->GetCurMap();
 	if(curMap == NULL)
-		return;
-	
+	return;
+
 	if(m_SFXModule)	{
 		m_SFXModule->RenderBack();
 	}
@@ -198,7 +195,7 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 		m_animation.setPosition(0, Object_Fly_Height);
 	}
 	m_animation.SetGray(!!mGrayInfo);
-	m_animation.visit();
+	
 	*/
 
 	/*
@@ -269,6 +266,24 @@ void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 
 void Actor::ChangeAnimation( int actionID, int dir, bool loop, int animaLayerIndex )
 {
+	if (m_animID != actionID || m_dir != dir) {
+		int flag = 0;
+		if (dir == eDirection_Left || dir == eDirection_LeftUp) {
+			flag |= ANIM_FLAG_FLIP_X;
+		}
+		int anim = GetAnimID(actionID, dir);
+
+		if (loop)
+			m_animation.setAnim(anim, flag, -1, animaLayerIndex);
+		else
+			m_animation.setAnim(anim, flag, 1, animaLayerIndex);
+	}
+
+	m_animID = actionID;
+	m_dir = dir;
+
+	return;
+
 	if (getCurrentAnimID() != actionID || m_dir != dir || getState() == eCharactorState_Run) {
 		runAnimation->stopAllActions();
 		log("-------------------------changeanimation");
@@ -343,8 +358,8 @@ void Actor::stopAction(){
 void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad)
 {
 	m_animation.SetHostEventHandler(this);
-	//m_animation.LoadASprite(id, type, sex, equiplevel, isMustLoad);
-	m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
+	m_animation.LoadASprite(id, type, sex, equiplevel, isMustLoad);
+	//m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
 }
 
 int Actor::GetAnimID(int state, int dir)
