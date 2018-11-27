@@ -21,7 +21,7 @@ using namespace CocosDenshion;
 //GameScene* GameScene::m_gamelayer = nullptr;
 
 const float GameScene::refresh_delay[] = { 2.0f, 1.5f, 1.0f, 0.5f, 0.2f }; //战机刷新间隔
-behaviac::vector<behaviac::Agent*>  GameScene::m_bt_agent_delete_queue;
+//behaviac::vector<behaviac::Agent*>  GameScene::m_bt_agent_delete_queue;
 
 // Initialize static members;
 GameScene* GameScene::inst = NULL;
@@ -99,7 +99,8 @@ void GameScene::update(float dt)
 	//log("UpdateLoop--->[%d, %d]\n", m_uiSprite->getPosition().x, m_uiSprite->getPosition().y);
 	log("GameScene::Update-->%f", dt);
 	{
-		AspriteManager::instance().tick(dt);
+		//处理未加载的图片
+		//AspriteManager::instance().tick(dt);
 		GameScene::GetActorManager()->update(dt);
 	}
 #if 0
@@ -114,6 +115,12 @@ void GameScene::update(float dt)
 #endif
 	behaviac::Workspace::GetInstance()->Update();
 	cleanBehaviacAgentDeleteQueue();
+}
+
+ActorManager* GameScene::GetActorManager()
+{
+	//return m_actorManager;
+	return GameScene::GetScene()->m_actorManager;
 }
 
 GameScene::GameScene(void)
@@ -141,11 +148,6 @@ DQMap* GameScene::GetMap()
 	return GameScene::GetScene()->m_map;
 }
 
-ActorManager* GameScene::GetActorManager()
-{
-	//return m_actorManager;
-	return GameScene::GetScene()->m_actorManager;
-}
 
 /*
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
@@ -1036,7 +1038,7 @@ Desc        : add agent to the delete queue and delete it after Update
 ******************************************************************/
 void GameScene::addBehaviacAgentDeleteQueue(behaviac::Agent* pAgent)
 {
-    m_bt_agent_delete_queue.push_back(pAgent);
+    //m_bt_agent_delete_queue.push_back(pAgent);
 }
 
 /******************************************************************
@@ -1049,12 +1051,14 @@ Desc        : remove all elements in the m_bt_agent_delete_queue
 ******************************************************************/
 void GameScene::cleanBehaviacAgentDeleteQueue()
 {
+	/*
     for (auto &p : m_bt_agent_delete_queue)
     {
         p->SetActive(false);
         behaviac::Agent::Destroy(p);
     }
     m_bt_agent_delete_queue.clear();
+	*/
 }
 /*
 GameScene* GameScene::create()

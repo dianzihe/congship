@@ -78,8 +78,6 @@ void Actor::update(float dt)
 	m_NameText->setVisible( !m_bIsSheild);
 	}
 	*/
-
-	
 	//updateShowNamePos();
 #if 0
 	if ( this->getChildren().size() )  {

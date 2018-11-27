@@ -45,8 +45,8 @@ void AppDelegate::initGLContextAttrs()
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8};
 
     GLView::setGLContextAttrs(glContextAttrs);
-	behaviac::Workspace::GetInstance()->SetFilePath("./exported");
-	behaviac::Workspace::GetInstance()->SetFileFormat(behaviac::Workspace::EFF_xml);
+	//behaviac::Workspace::GetInstance()->SetFilePath("./exported");
+	//behaviac::Workspace::GetInstance()->SetFileFormat(behaviac::Workspace::EFF_xml);
 }
 
 // if you want to use the package manager to install more packages,  

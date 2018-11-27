@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 #include "behaviac\behaviac.h"
-#include "SecondAgent.h"
+//#include "SecondAgent.h"
 #include "ActorManager.h"
 #include "Monster.h"
 #include "Singleton.h"
@@ -206,7 +206,7 @@ private:
     void resetBoss(float dt);
     NPC * m_NPC;
     Hero* m_Hero;
-	SecondAgent* g_SecondAgent = NULL;
+	//SecondAgent* g_SecondAgent = NULL;
 public:
     // //create Update for behaviac
 	virtual void update(float dt);
@@ -219,7 +219,7 @@ private:
     Author      : Quinn Pan
     Desc        : add some behaviac into the queue , and delete it
     ******************************************************************/
-    static behaviac::vector<behaviac::Agent*> m_bt_agent_delete_queue;
+    //static behaviac::vector<behaviac::Agent*> m_bt_agent_delete_queue;
 };
 
 #endif
