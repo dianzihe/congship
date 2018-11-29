@@ -287,10 +287,10 @@ ASprite::ASprite()
 	_frames_coll = NULL;
 
 	//_fmodules = NULL;
-	_anims_naf = NULL;
-	_anims_af_start = NULL;
-	_aframes = NULL;
-	m_clipRect = NULL;
+	//_anims_naf = NULL;
+	//_anims_af_start = NULL;
+	//_aframes = NULL;
+	//m_clipRect = NULL;
     //ResetClip();
 
 	m_lastUpdateTime = 0.f;
@@ -308,9 +308,9 @@ void ASprite::clear_patch()
 	//SAFE_DELETE_ARRAY( _fmodules );	
 
 	// free anims data
-	SAFE_DELETE_ARRAY( _anims_naf );	
-	SAFE_DELETE_ARRAY( _anims_af_start );	
-	SAFE_DELETE_ARRAY( _aframes );
+	//SAFE_DELETE_ARRAY( _anims_naf );	
+	//SAFE_DELETE_ARRAY( _anims_af_start );	
+	//SAFE_DELETE_ARRAY( _aframes );
 
 	SAFE_DELETE(m_clipRect);
 }
@@ -503,32 +503,85 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 		return false;
 	}
 
-	//tinyxml2::XMLDocument doc;
 	tinyxml2::XMLDocument docXml;
 	XMLError errXml = docXml.LoadFile(plistfileNameBuffer);
-	log("ASprite::Load-->%s====%d", plistfileNameBuffer, errXml);
 	
 	if (XML_SUCCESS == errXml) {
+		std::string current_anim_name = "";
+		int anims_dq_num = 0;
+
+		int zznum = 0;
 		for (XMLNode* ele = docXml.FirstChildElement("plist")->FirstChildElement("dict")->FirstChildElement("dict")->FirstChild();
 			ele;
 			ele = ele->NextSibling()){
+
+			zznum++;
 			std::string key = "key";
 			std::string value = "dict";
 			if (key == ele->Value()){
-				log("->%s\n", ele->ToElement()->GetText());
+				//log("->%s\n", ele->ToElement()->GetText());
+				/*
+					  attack        / attack_down_0004.png
+					     |                |         |
+					  anim_prefix     anim_name   file_no
+
+				*/
+				std::string tmpValue = ele->ToElement()->GetText();
+				size_t first_flash_index = tmpValue.find("/", 0);
+				string anim_prefix = tmpValue.substr(0, first_flash_index);
+
+				string filename = tmpValue.substr(first_flash_index + 1);
+				size_t second_underline_index = filename.find("_", anim_prefix.length() + 1);
+				string anim_name = filename.substr(0, second_underline_index);
+				size_t point_index = filename.find(".", anim_prefix.length() + 1);
+				string file_no = filename.substr(second_underline_index + 1, point_index - (second_underline_index + 1));
+				
+				log("ASprite::Load no: %d, ORIG:%s ,name:%s, no:%s", zznum, tmpValue.c_str(), anim_name.c_str(), file_no.c_str());
+				anims_dq_num++;
+				if (current_anim_name == "") {
+					current_anim_name = anim_name;
+					_anims_frame_start_index.push_back(zznum);
+					animnumber++;
+				}
+
+				if (current_anim_name != anim_name) {
+					log("---animName:%s Animnumber:%d", current_anim_name.c_str(), --anims_dq_num);
+					_real_anims_naf.push_back(anims_dq_num);
+					current_anim_name = anim_name;
+					_anims_frame_start_index.push_back(zznum);
+					animnumber++;
+					anims_dq_num = 1; 
+				}
+				
 				TextureWrap* tw = new TextureWrap();
 				tw->fileName = ele->ToElement()->GetText();
 				m_textures.push_back(tw);
-
+				/*通过文件来分析动画数量以及动画帧数*/
 			}
 			/*
+			//分析字段
 			if (value == ele->Value()){
 				log("=>%s\n", ele->ToElement()->FirstChildElement("key")->GetText());
 			}
 			*/
 		}
+		_real_anims_naf.push_back(anims_dq_num);
 	}
 	
+	for (vector<short>::const_iterator iter = _anims_frame_num.cbegin(); iter != _anims_frame_num.cend(); iter++)
+	{
+		log("-->%d", (*iter));
+	}
+	for (vector<short>::const_iterator iter = _anims_frame_start_index.cbegin(); iter != _anims_frame_start_index.cend(); iter++)
+	{
+		log("==>%d", (*iter));
+	}
+	for (vector<short>::const_iterator iter = _real_anims_naf.cbegin(); iter != _real_anims_naf.cend(); iter++)
+	{
+		log("++>%d", (*iter));
+	}
+	log("ASprite::Load-animnumber:%d", animnumber);
+
 	if (0){
 	//if (m_textures.empty()){
 		sprintf(fileNameBuffer, "%s.png" ,resName );
@@ -659,8 +712,8 @@ void ASprite::LoadData(char* data)
 	log("===========nAFrames:%d", nAFrames);
 	if (nAFrames > 0) {
 		int len = nAFrames*5 ;
-		_aframes = new short[len + 1];
-		memset(_aframes, 0, sizeof(short) * (len + 1));
+		//_aframes = new short[len + 1];
+		//memset(_aframes, 0, sizeof(short) * (len + 1));
 		//赋值动画帧
 		for (int i = 0; i < len; i++) {
 			_aframes[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
@@ -675,24 +728,24 @@ void ASprite::LoadData(char* data)
 	offset += 2 ;
 
 	if (nAnims > 0) {
-		_anims_naf      = new  short[nAnims];
-		_anims_af_start = new short[nAnims];
+		//_anims_frame_num = new  short[nAnims];
+		//_anims_frame_start_index = new short[nAnims];
 
-		memset(_anims_naf,      0, sizeof(short) * nAnims);
-		memset(_anims_af_start, 0, sizeof(short) * nAnims);
+		//memset(_anims_frame_num,      0, sizeof(short) * nAnims);
+		//memset(_anims_frame_start_index, 0, sizeof(short) * nAnims);
 		//赋值动画
 		for (int i = 0; i < nAnims; i++) {
-			_anims_naf[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
+			_anims_frame_num[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
 			offset += 2 ;
 
-			_anims_af_start[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
+			_anims_frame_start_index[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
 			offset += 2 ;
 
 			int realAnimNum = 0;
 			for(int j = 0; j < GetAFrames(i); ++j) {
 				realAnimNum += GetAFrameTime(i, j);
 			}
-			_real_anims_naf[i] = realAnimNum;
+			_anims_frame_num[i] = realAnimNum;
 		}
 	}	
 
@@ -803,7 +856,7 @@ int ASprite::GetAFrameTime(int anim, int aframe)
 {
 	if(anim < 0 || anim >= animnumber)
 		return 0;
-	return _aframes[(_anims_af_start[anim] + aframe) * 5 + 1] & 0xFFFF;
+	return _aframes[(_anims_frame_start_index[anim] + aframe) * 5 + 1] & 0xFFFF;
 }
 
 
@@ -811,14 +864,14 @@ int ASprite::GetAFrames(int anim)
 {
 	if(anim < 0 || anim >= animnumber)
 		return 0;
-	return _anims_naf[anim]&0xFF;
+	return _anims_frame_num[anim]&0xFF;
 }
 
 int ASprite::GetRealAFrames(int anim)
 {
 	if(anim < 0 || anim >= animnumber)
 		return 0;
-	return _real_anims_naf[anim];
+	return _anims_frame_num[anim];
 }
 
 int ASprite::GetFModules(int frame)
@@ -908,7 +961,7 @@ int ASprite::GetFrameModuleHeight(int frame, int fmodule)
 
 int ASprite::GetAnimFrame(int anim, int aframe)
 {
-	int off = (_anims_af_start[anim] + aframe) * 5;
+	int off = (_anims_frame_start_index[anim] + aframe) * 5;
 	return _aframes[off]&0xFFFF;
 }
 
@@ -1015,12 +1068,13 @@ void ASprite::GetModuleRect(int * rc, int module, int posX, int posY, int flags)
 
 void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
-	if (!mIsTexAllLoaded || !mIsDataLoaded)
-		return;
+	log("ASprite::PaintAFrame start  %d-%d", GetAFrames(anim), aframe);
+	//if (!mIsTexAllLoaded || !mIsDataLoaded)
+	//	return;
 	if (GetAFrames(anim) <= aframe)
 		return;
 
-	int off = (_anims_af_start[anim] + aframe) * 5;
+	int off = (_anims_frame_start_index[anim] + aframe) * 5;
 	int frame = _aframes[off] & 0xFFFF;
 
 	log("-----ASprite:PaintAFrame anim:%d, aframe:%d, off:%d, frame:%d", anim, aframe, off, frame);
@@ -1254,7 +1308,8 @@ bool ASprite::IsTextureLoaded()
 
 bool ASprite::IsDataLoaded() const
 {
-	return mIsDataLoaded;
+	//return mIsDataLoaded;
+	return true;
 }
 
 bool ASprite::IsTextureDelayLoad()

@@ -162,7 +162,7 @@ bool DQAnimation::addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, 
 
 void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 {
-	log("--------DQAnimation::AddASprite %x", p);
+	log("--------DQAnimation::AddASprite TYPE: %d, %x", type, p);
 	//CPlayer* pPlayer = dynamic_cast<CPlayer*>(m_pHostEventHandler);
 	if (type == ACTORTYPE_WEAPON) {
 		if (m_sprite[eAnimPart_Weapon])	{
@@ -199,10 +199,13 @@ void DQAnimation::AddASprite(ASprite* p, ACTORTYPE type)
 		if (m_sprite[eAnimPart_Body]) {
 			m_sprite[eAnimPart_Body]->release();
 		}
+		/*
 		if (p && m_pHostEventHandler && p->IsDataLoaded() == false) {
 			//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( p, m_pHostEventHandler->getActorID() );
 		}
+		*/
 		m_sprite[eAnimPart_Body] = p;
+		log("--------DQAnimation::AddASprite IMPORT: %d", m_sprite[eAnimPart_Body]->GetAnimNumber());
 	}
 }
 
@@ -212,13 +215,17 @@ void DQAnimation::setAnim(int id, int flag, int loop, int animaLayerIndex)
 	if (m_sprite[eAnimPart_Body] == NULL || id < 0) {
 		return;
 	}
+	log("======DQAnimation::setAnim");
+	/*
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false && m_pHostEventHandler) {
 		//DelayASpriteLoadManager::instance().AddDelayASpriteAndCallBack( m_sprite[eAnimPart_Body], m_pHostEventHandler->getActorID() );
 	}
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == true && (id + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber()) {
 		return;
 	}
+	*/
 	m_flipFlag = flag;
+	/*
 	if (loop == -1) {
 		if (id == m_animID) {
 			m_loop = loop;
@@ -226,6 +233,7 @@ void DQAnimation::setAnim(int id, int flag, int loop, int animaLayerIndex)
 			return;
 		}
 	}
+	*/
 	m_animID = id;
 	m_frame = 0;
 	m_frameTime = 0.0;
@@ -242,10 +250,11 @@ void DQAnimation::update(float dt)
 {
 	log("DQAnimation::update");
 	if (m_sprite[eAnimPart_Body] == NULL) return;
+	log("DQAnimation::update  not null -->%d  ", m_sprite[eAnimPart_Body]->GetAnimNumber());
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
 
 	if (isEnd()) return;
-	if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
+	if (m_animID < 0 /*|| (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber()*/)
 		return;
 
 	m_frameTime += dt;
@@ -323,13 +332,15 @@ void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags
 }
 void DQAnimation::draw(int x, int y, bool isGray)
 {
-	//log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
-	if (m_sprite[eAnimPart_Body] == NULL) return;
-	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
-	if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
-		return;
-	//log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
 	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
+	if (m_sprite[eAnimPart_Body] == NULL) return;
+	
+	//if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
+	
+	//if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
+	//	return;
+	//log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
+	log("----draw---DQAnimation");
 
 	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID, m_frame);
 	if (mIsMutiAsprite) {
