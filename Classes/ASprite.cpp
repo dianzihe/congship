@@ -515,7 +515,6 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 			ele;
 			ele = ele->NextSibling()){
 
-			zznum++;
 			std::string key = "key";
 			std::string value = "dict";
 			if (key == ele->Value()){
@@ -526,6 +525,8 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 					  anim_prefix     anim_name   file_no
 
 				*/
+				
+
 				std::string tmpValue = ele->ToElement()->GetText();
 				size_t first_flash_index = tmpValue.find("/", 0);
 				string anim_prefix = tmpValue.substr(0, first_flash_index);
@@ -557,6 +558,9 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 				tw->fileName = ele->ToElement()->GetText();
 				m_textures.push_back(tw);
 				/*通过文件来分析动画数量以及动画帧数*/
+
+
+				zznum++;
 			}
 			/*
 			//分析字段
@@ -716,7 +720,7 @@ void ASprite::LoadData(char* data)
 		//memset(_aframes, 0, sizeof(short) * (len + 1));
 		//赋值动画帧
 		for (int i = 0; i < len; i++) {
-			_aframes[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
+			//_aframes[i] = (short)((data[offset]&0xFF) + ((data[offset+1]&0xFF)<<8));
 			offset += 2 ;
 		}
 	}
@@ -854,24 +858,26 @@ void ASprite::tick(float deltaTime)
 
 int ASprite::GetAFrameTime(int anim, int aframe)
 {
+	log("ASprite::GetAFrameTime anim:%d , aframe:%d ", anim, aframe);
 	if(anim < 0 || anim >= animnumber)
 		return 0;
-	return _aframes[(_anims_frame_start_index[anim] + aframe) * 5 + 1] & 0xFFFF;
+	return _real_anims_naf[(_anims_frame_start_index[anim] + aframe) * 5 + 1] & 0xFFFF;
 }
 
 
 int ASprite::GetAFrames(int anim)
 {
-	if(anim < 0 || anim >= animnumber)
-		return 0;
-	return _anims_frame_num[anim]&0xFF;
+	log("ASprite::GetAFrames anim:%d --> %d", anim, _real_anims_naf[anim]);
+//	if(anim < 0 || anim >= animnumber)
+//		return 0;
+	return _real_anims_naf[anim] & 0xFF;
 }
 
 int ASprite::GetRealAFrames(int anim)
 {
 	if(anim < 0 || anim >= animnumber)
 		return 0;
-	return _anims_frame_num[anim];
+	return _real_anims_naf[anim];
 }
 
 int ASprite::GetFModules(int frame)
@@ -962,7 +968,7 @@ int ASprite::GetFrameModuleHeight(int frame, int fmodule)
 int ASprite::GetAnimFrame(int anim, int aframe)
 {
 	int off = (_anims_frame_start_index[anim] + aframe) * 5;
-	return _aframes[off]&0xFFFF;
+	return _real_anims_naf[off]&0xFFFF;
 }
 
 void ASprite::GetFrameRect(int * rc, int frame, int posX, int posY, int flags, int hx, int hy)
@@ -1074,10 +1080,10 @@ void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, 
 	if (GetAFrames(anim) <= aframe)
 		return;
 
-	int off = (_anims_frame_start_index[anim] + aframe) * 5;
-	int frame = _aframes[off] & 0xFFFF;
+	//int off = (_anims_frame_start_index[anim] + aframe) * 5;
+	//int frame = _aframes[off] & 0xFFFF;
 
-	log("-----ASprite:PaintAFrame anim:%d, aframe:%d, off:%d, frame:%d", anim, aframe, off, frame);
+	log("-----ASprite:PaintAFrame anim:%d, aframe:%d", anim, aframe);
 
 	//if ( this == GetSprite( 2, ACTORTYPE_SKILL_F ) )
 	//{
@@ -1089,7 +1095,7 @@ void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, 
 		frame |= ((_aframes[off + 4] & FLAG_INDEX_EX_MASK) << INDEX_EX_SHIFT);
 	}
 	//*/
-
+	/*
 	if ((flags & FLAG_FLIP_X) != 0)
 		hx += _aframes[off + 2];
 	else
@@ -1098,14 +1104,15 @@ void ASprite::PaintAFrame( int anim, int aframe, int posX, int posY, int flags, 
 		hy -= _aframes[off + 3];
 	else
 		hy += _aframes[off + 3];
-
-	PaintFrame( frame, posX - hx, posY - hy, flags ^ (_aframes[off + 4] & 0x000F), hx, hy, opacity, isGray);
+	*/
+	PaintFrame( aframe, posX - hx, posY - hy, flags /*^ (_aframes[off + 4] & 0x000F)*/, hx, hy, opacity, isGray);
 }
 
 void ASprite::PaintFrame( int frame, int posX, int posY, int flags, int hx, int hy, int opacity, bool isGray)
 {
 	/*int nFModules = _frames_nfm[frame]&0xFF;*/
-	int nFModules = (_frames_nfm[frame] & 0xFF);
+	//int nFModules = (_frames_nfm[frame] & 0xFF);
+	int nFModules = 1;
 	log("------ASprite::PaintFrame==%d", nFModules);
 	
 	for (int fmodule = 0; fmodule < nFModules; fmodule++) {
@@ -1117,14 +1124,16 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 {
 	
 #if 1
+	/*
 	int off = (_frames_fm_start[frame] + fmodule) << 2;
 	off += (_frames_fm_start[frame] + fmodule) << 2;
 	int fm_flags = (_fmodules[off + 6] & 0xFF) + ((_fmodules[off + 7]) << 8);
 	int index = (_fmodules[off] & 0xFF) + ((_fmodules[off+1]) << 8);
-
-	log("-------ASprite:PaintFModule off:%d, index:%d", off, index);
+	*/
+	log("-------ASprite:PaintFModule "/*, off, index*/);
 	//if (USE_INDEX_EX_FMODULES)
 	//	index |= ((fm_flags&FLAG_INDEX_EX_MASK)<<INDEX_EX_SHIFT);
+	if(0)
 	{
 		if ((flags & FLAG_FLIP_X) != 0)
 			posX -= GetFrameModuleX(frame, fmodule);
@@ -1147,10 +1156,11 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 	else ./*/
 	{
 		//BS_MODULES_WH_SHORT
-		if ((flags & FLAG_FLIP_X) != 0)	posX -= _modules_w[index]&0xFFFF;
-		if ((flags & FLAG_FLIP_Y) != 0)	posY -= _modules_h[index]&0xFFFF;
+		//if ((flags & FLAG_FLIP_X) != 0)	posX -= _modules_w[index]&0xFFFF;
+		//if ((flags & FLAG_FLIP_Y) != 0)	posY -= _modules_h[index]&0xFFFF;
 
-		PaintModule(frame ,index, posX, posY, flags ^ (fm_flags&0x0F), opacity, isGray);
+		//PaintModule(frame ,index, posX, posY, flags ^ (fm_flags&0x0F), opacity, isGray);
+		PaintModule(frame, 1, posX, posY, flags, opacity, isGray);
 	}
 #endif
 }
@@ -1161,6 +1171,7 @@ void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, 
 {
 #if 1
 	log("--------ASprite::PaintModule--name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
+	/*
 	int texSizeX = _modules_w[module] & 0xFFFF;
 	int texSizeY = _modules_h[module] & 0xFFFF;
 	if (texSizeX <= 0 || texSizeY <= 0) return;
@@ -1229,6 +1240,7 @@ void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, 
 			}
 		}
 	}
+	*/
 #endif
 }
 

@@ -167,7 +167,7 @@ public:
 	vector<short>	_anims_frame_num;	//动画的帧数量
 	vector<short>	_real_anims_naf;	//动画真实的帧数量，考虑到定帧
 	vector<short>	_anims_frame_start_index; //动画的起始帧
-	vector<short>	_aframes;			//存放动画的帧描述块   块=（编号（从1开始） + 时间(默认1) + ox + oy + flag(默认0)） 
+	//vector<short>	_aframes;			//存放动画的帧描述块   块=（编号（从1开始） + 时间(默认1) + ox + oy + flag(默认0)） 
 
 	int animnumber;
 	
