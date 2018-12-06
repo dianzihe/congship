@@ -11,6 +11,8 @@ class ASprite;
 #define ANIM_FLAG_ROT_90            (1<<2)
 #define ANIMATION_PET_POS_X			30						//坐骑上的宠物偏移量
 
+//const float DEFAULT_DELAY_PER_FRAME = 0.01666666666667;
+
 enum AnimPart
 {
 	eAnimPart_Body = 0,
@@ -51,22 +53,26 @@ public:
 	static map<string, string> TransToAnimationDesc(const vector<string> &strList);
 
 
+	void updateAnimation(float dt);
+	void updateSprite(float d);
+	bool runAnimation(const char *name, unsigned int loop, bool backToDefault);
+	bool runAnimation(int index, unsigned int loop, bool backToDefault);
+	//void runAnimation(MigSprite *pSprite, unsigned int loop, bool backToDefault);
+
 	/**
 	* @brief 获取一个简单的动画
 	*
 	*/
 	//static cwSngSprite *GetSampleAnimation(const string &iwconame, const string &animationName, float delay = 0.1);
-
 	//void addAnimationToCharater(const string &actorName, float aniDelay = 0.2, bool filter = false);
-
 	//WAnimationManagerSng::addAnimationToCharater(iwco_name, "melee_attack1", lpGuai, MonsterAnimationType::DEF_MOVE, desc, 0.1);
 	
 	void SetHostEventHandler( Actor* hostHandler );
 	void LoadASprite(int id, ACTORTYPE type = ACTORTYPE_ANIMATION, int sex = 0, int equipLevel = 1, bool isMustLoad = false);	//
 	bool addAnimation(int id, ACTORTYPE type, int sex, int equiplevel, bool isMustLoad);
 	void setAnim( int id, int flag = 0, int loop = -1, int animaLayerIndex = 0 ); // -1：loop 1：noloop
-	int    getAnim(){ return m_animID;};
-	void   setAnimID(int animID) { m_animID = animID; }
+	int  getAnim(){ return m_animID;};
+	void setAnimID(int animID) { m_animID = animID; }
 	virtual void update(float dt);
 	//virtual void draw();
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)override;
@@ -119,16 +125,31 @@ public:
 
 	static AnimMatcher _AnimMatcher;
 	mark_info   m_markInfo;
-	int			m_loop;
+
+	//当前的动作类型
 	int			m_animID;
 	int			m_animaLayerIndex;
+
+	//当前显示的图片编号
 	int			m_frame;
 	float		m_frameTime;
+
 	int			m_flipFlag;
 	int			m_HostCamp;
 	int			m_HostSex;
 
 	bool		mIsMutiAsprite;
 	bool		mIsGray;
+
+	float m_elapsed;
+	float m_spriteTotalDuration;
+
+	bool m_bAnimationDone;
+
+	unsigned int m_loop;
+	unsigned int m_excutedLoop;
+	
+	float m_delayPerUnit;
+
 };
 

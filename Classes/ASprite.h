@@ -137,8 +137,12 @@ public:
 	void onAsyncLoadedTexture(Texture2D* pTexture);
 	void ReleaseTextureToDelayLoad();
 	
+	std::vector<int>* m_frameSplitTimes;
+
 	/*¥¶¿Ì—”≥Ÿº”‘ÿÕº∆¨*/
 	void tick(float deltaTime);
+
+	Texture2D*           zz_texture;
 
 	// To Be Abandon
 	TextureWrap* m_texture;
@@ -190,5 +194,8 @@ public:
 
 	float m_lastUpdateTime;
 	float m_totalUpdateTime;
+
+protected:
+	CustomCommand _customCommand;
 };
 

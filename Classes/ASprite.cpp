@@ -70,14 +70,21 @@ void TextureDrawInRect::onDraw(const Mat4 &transform, uint32_t flags)
 */
 void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray)
 { 
-	log("---------ASprite::DrawRegion texIdx[%d], texX[%d], texY[%d], texSizeX[%d], texSizeY[%d], flag[%d], posX[%d], posY[%d], rectWidth[%d], rectHeight[%d], opacity[%d]", 
+	log("---------ASprite::DrawRegion File: texIdx[%d], texX[%d], texY[%d], texSizeX[%d], texSizeY[%d], flag[%d], posX[%d], posY[%d], rectWidth[%d], rectHeight[%d], opacity[%d]", 
 		texIdx, texX, texY, texSizeX, texSizeY, flag, posX, posY, rectWidth, rectHeight, opacity);
 	//if (!mIsTexAllLoaded)
 	//	return;
 #if 1
-	/*
-	//GL::bindTexture2D(_texture->getName());
-	GL::bindTexture2D(m_texture->texture->getName());
+
+	//drawRegion只显示图片
+	//根据texIdx来获取显示文件名称
+
+	SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(m_textures[texIdx]->fileName.c_str());
+	Texture2D *texture = spriteFrame->getTexture();
+
+	GL::bindTexture2D(texture->getName());
+	log("ASprite::DrawRegion %s", m_textures[texIdx]->fileName.c_str());
+	//GL::bindTexture2D(m_textures[texIdx]->fileName.c_str());
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
 	
 	V3F_C4B_T2F_Quad quad;
@@ -98,10 +105,13 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
 
 
-#define kQuadSize sizeof(_quad.bl) 
-	size_t offset = (size_t)&_quad;
+#define kQuadSize sizeof(quad.bl) 
+	size_t offset = (size_t)&quad;
 
 	offset = (size_t)&quad;
+//#define kQuadSize sizeof(_quad.bl) 
+//	size_t offset = (size_t)&_quad;
+
 	// vertex
 	int diff = offsetof(V3F_C4B_T2F, vertices);
 	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
@@ -119,7 +129,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 
 	CHECK_GL_ERROR_DEBUG();
 	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
-	*/
+	
 #else
 
 	Sprite _RenderSprite;
@@ -499,9 +509,10 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 	sprintf(plistfileNameBuffer, "%s.plist", resName);
 
 	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(plistfileNameBuffer).c_str())){
-		log("---ERROR---file %s not find", plistfileNameBuffer);
+		log("ASprite::Load---ERROR---file %s not find", plistfileNameBuffer);
 		return false;
 	}
+	SpriteFrameCache::getInstance()->addSpriteFramesWithFile(plistfileNameBuffer);
 
 	tinyxml2::XMLDocument docXml;
 	XMLError errXml = docXml.LoadFile(plistfileNameBuffer);
@@ -525,8 +536,6 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 					  anim_prefix     anim_name   file_no
 
 				*/
-				
-
 				std::string tmpValue = ele->ToElement()->GetText();
 				size_t first_flash_index = tmpValue.find("/", 0);
 				string anim_prefix = tmpValue.substr(0, first_flash_index);
@@ -557,10 +566,11 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 				TextureWrap* tw = new TextureWrap();
 				tw->fileName = ele->ToElement()->GetText();
 				m_textures.push_back(tw);
+
 				/*通过文件来分析动画数量以及动画帧数*/
 
-
-				zznum++;
+				//m_frameSplitTimes->push_back(zznum);
+				zznum += 1/*pFrame->getDuration()*/;
 			}
 			/*
 			//分析字段
@@ -569,6 +579,7 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 			}
 			*/
 		}
+		//m_frameSplitTimes->push_back(zznum);
 		_real_anims_naf.push_back(anims_dq_num);
 	}
 	
@@ -1171,6 +1182,19 @@ void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, 
 {
 #if 1
 	log("--------ASprite::PaintModule--name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
+	
+	DrawRegion(1,
+		1,
+		1,
+		1,
+		1,
+		flags,
+		1,
+		1,
+		1,
+		1,
+		opacity, isGray);
+	
 	/*
 	int texSizeX = _modules_w[module] & 0xFFFF;
 	int texSizeY = _modules_h[module] & 0xFFFF;

@@ -26,6 +26,8 @@ DQAnimation::DQAnimation(void)
 	m_opacity = 255;
 	m_frame = 0;
 	m_animID = 0;
+	//m_delayPerUnit = DEFAULT_DELAY_PER_FRAME;
+	m_elapsed = (0);
 }
 
 DQAnimation::~DQAnimation(void)
@@ -239,6 +241,12 @@ void DQAnimation::setAnim(int id, int flag, int loop, int animaLayerIndex)
 	m_frameTime = 0.0;
 	m_loop = loop;
 	m_animaLayerIndex = animaLayerIndex;
+
+	m_elapsed = 0;
+	m_excutedLoop = 0;
+	m_bAnimationDone = false;
+	//获取某个动作的全部时长
+	m_spriteTotalDuration = m_sprite[eAnimPart_Body]->GetAFrames(m_animID) * m_delayPerUnit;
 }
 
 bool DQAnimation::isEnd()
@@ -248,7 +256,9 @@ bool DQAnimation::isEnd()
 
 void DQAnimation::update(float dt)
 {
-	log("DQAnimation::update");
+	//通过参数来确定需要显示图片的名字
+	//图片的名字应该由，角色ID，动作类型，动作方向，当前图片来决定
+	//此工作由update来执行
 	if (m_sprite[eAnimPart_Body] == NULL) return;
 	log("DQAnimation::update  not null -->%d  ", m_sprite[eAnimPart_Body]->GetAnimNumber());
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
@@ -260,20 +270,25 @@ void DQAnimation::update(float dt)
 	m_frameTime += dt;
 
 	int frameCount = m_sprite[eAnimPart_Body]->GetAFrames(m_animID);  //
-	float frameTime = m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
+	//总的显示时间
+	//float frameTime = m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
+	float frameTime = m_sprite[eAnimPart_Body]->GetAFrames(m_animID) * GetBaseFrameTime(m_animID);
 	
-	if (m_frameTime > frameTime) {
+
+
+	if (m_frameTime < frameTime) {
 		// next frame
 		m_frame++;
 		m_frameTime -= frameTime;
 
+		/*
 		if (m_markInfo.m_markExist) {
 			m_markInfo.m_markExist = false;
 			Point pos = GetMarkLOC();
 			const char* desc = GetMarkDesc();
 			MarkBeingCall(pos, desc);
 		}
-
+		*/
 		// clear frameTime
 		// where less frame , e.g. debug
 		if (m_frameTime > 1.0) {
@@ -297,6 +312,93 @@ void DQAnimation::update(float dt)
 		}
 	}
 	log("DQAnimation::update-->m_frame: %d, frameCount: %d, m_frameTime: %.2f, m_loop:%d ", m_frame, frameCount, m_frameTime, m_loop);
+}
+
+/*
+	需要解决如下问题：
+	1，需要根据loop数来确定需要显示的图片
+		比如：被击：完成整个过程后才进行响应
+			  IDLE/ATTACK/MOVE：随时可中断进行响应
+			  DEAD：只执行一次
+		loop数在setAnim进行设置
+
+
+	执行流程：
+		变量：当前的显示的图片，已运行的时间，整个动画需要运行的时间
+		图片的显示时间有可能不一致
+		比如：
+			图1--图2----图3--------图4--图5--图6----图7
+   m_elapsed--------->
+*/
+void DQAnimation::updateAnimation(float dt)
+{
+	bool done = false;
+	m_elapsed += dt;
+
+	int frameCount = m_sprite[eAnimPart_Body]->GetAFrames(m_animID);  //
+	float frameTime = m_sprite[eAnimPart_Body]->GetAFrames(m_animID);
+
+	//？秒钟换一张图片
+	float buf = m_elapsed / m_spriteTotalDuration;
+	unsigned int loopCount = (unsigned int)(buf);
+
+	/*
+	if (m_excutedLoop < loopCount) {
+		if (m_excutedLoop == m_loop - 1) {
+			done = true;
+		}
+		m_excutedLoop++;
+		if (m_excutedLoop >= m_loop && m_loop > 0) {
+			if (m_bOnSpriteEndSkipToDefault) {
+				setCurrentSprite(pDefaultSprite);
+				m_loop = 0;
+				buf = 0;
+			} else {
+				m_excutedLoop = m_loop;
+			}
+		}
+	}
+	if (m_excutedLoop >= m_loop && m_loop > 0) {
+		buf = 1 - 0.000001;
+	}
+	*/
+
+	updateSprite(fmodf(buf, 1.0));
+
+	/*
+	if ((m_bNewFrame || tempFrame != m_pCurFrame) && m_pCurFrame->getFlag() > 0) {
+		onKeyFrame();
+		m_bNewFrame = false;
+	}
+	if (done) {
+		onAnimationDone();
+	}
+	*/
+}
+void DQAnimation::updateSprite(float d)
+{
+	//if (!m_pCurSprite)
+	//	return;
+	//assert(d >= 0 && d <= 1);//d鎬绘槸鍦?0~1涔嬮棿
+	/*
+	float p = d * m_pCurSprite->getTotalDelayUnits();
+	MigFrame* newFrame = NULL;
+	CCArray* array = m_pCurSprite->getAllFrames();
+	for (int i = 0; i < array->count(); i++)
+	{
+		MigFrame* pFrame = (MigFrame*)(array->objectAtIndex(i));
+		if (p >= m_pCurSprite->m_frameSplitTimes->at(i) && p < m_pCurSprite->m_frameSplitTimes->at(i + 1))
+		{
+			newFrame = pFrame;
+			break;
+		}
+	}
+	if (newFrame != m_pCurFrame)
+	{
+		m_pCurFrame = newFrame;
+		displayFrame(m_pCurFrame);
+	}
+	*/
 }
 
 void DQAnimation::MarkBeingCall(Point pos, const char* desc)
@@ -688,6 +790,7 @@ bool DQAnimation::GetAnimRect(Rect& retRect, int animId, AnimPart nAnimPart /*= 
 
 float DQAnimation::GetBaseFrameTime(int animId)
 {
+	log("DQAnimation::GetBaseFrameTime");
 	if (m_sprite[eAnimPart_Body] && m_sprite[eAnimPart_Body]->mSpriteName.at(0) == 'd') // ACTORTYPE_WEAPONSFX
 	{
 		return 0.07f;
