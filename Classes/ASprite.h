@@ -80,7 +80,7 @@ struct TextureWrap
 	
 };
 
-class ASprite : public Ref
+class ASprite : public Sprite
 {
 public:	
 	typedef std::vector<TextureWrap*> TextureVector;
@@ -174,7 +174,9 @@ public:
 	//vector<short>	_aframes;			//存放动画的帧描述块   块=（编号（从1开始） + 时间(默认1) + ox + oy + flag(默认0)） 
 
 	int animnumber;
-	
+
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	void onDraw(const Mat4 &transform, uint32_t flags);
 	void DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray = false);
 
 	Rect* m_clipRect;

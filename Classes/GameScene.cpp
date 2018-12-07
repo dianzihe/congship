@@ -68,9 +68,16 @@ bool GameScene::init()
 
 	addChild(getGameLayer(), 0);
 
+#if 0
+	auto _sprite1 = MySprite::create("gem_dark.png");
+	addChild(_sprite1);
+	_sprite1->setPosition(Vec2(1 * s.width / 4, s.height / 2));
+	_sprite1->setScale(0.5);
+#endif
+
 	//WBossGuai *lpGuai = NULL;
 	//lpGuai = WBoss4::BuildGuai();
-	
+#if 1
 	CMonster * pMonster = CMonster::node();
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
@@ -86,7 +93,7 @@ bool GameScene::init()
 	monsterInfo->wildState = 0;
 
 	pMonster->onLookInfoMonster(monsterInfo);
-	
+#endif	
 	return true;
 }
 
@@ -740,7 +747,7 @@ void GameScene::testLevel(float dt)
 	//bbsprite->setPosition(100, 100);
 #endif
 
-#if 0
+#if 1
 	auto s = Director::getInstance()->getWinSize();
 
 	auto _sprite1 = MySprite::create("gem_dark.png");
@@ -748,7 +755,8 @@ void GameScene::testLevel(float dt)
 	_sprite1->setPosition(Vec2(1 * s.width / 4, s.height / 2));
 	_sprite1->setScale(0.5);
 #endif
-#if 0
+
+#if 1
 	std::string plist_content = FileUtils::getInstance()->getStringFromFile("Sprite/monster/m16.plist");
 
 	Data image_content = FileUtils::getInstance()->getDataFromFile("Sprite/monster/m16.png");

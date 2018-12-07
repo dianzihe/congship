@@ -260,7 +260,7 @@ void DQAnimation::update(float dt)
 	//图片的名字应该由，角色ID，动作类型，动作方向，当前图片来决定
 	//此工作由update来执行
 	if (m_sprite[eAnimPart_Body] == NULL) return;
-	log("DQAnimation::update  not null -->%d  ", m_sprite[eAnimPart_Body]->GetAnimNumber());
+	
 	if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
 
 	if (isEnd()) return;
@@ -274,8 +274,13 @@ void DQAnimation::update(float dt)
 	//float frameTime = m_sprite[eAnimPart_Body]->GetAFrameTime(m_animID, m_frame) * GetBaseFrameTime(m_animID);
 	float frameTime = m_sprite[eAnimPart_Body]->GetAFrames(m_animID) * GetBaseFrameTime(m_animID);
 	
+	m_frame++;
 
+	if (m_frame >= frameCount)
+		m_frame = 0;
 
+	
+#if 0
 	if (m_frameTime < frameTime) {
 		// next frame
 		m_frame++;
@@ -311,7 +316,8 @@ void DQAnimation::update(float dt)
 			m_frame = 0;
 		}
 	}
-	log("DQAnimation::update-->m_frame: %d, frameCount: %d, m_frameTime: %.2f, m_loop:%d ", m_frame, frameCount, m_frameTime, m_loop);
+#endif
+	log("DQAnimation::update-->m_animID %d, m_frame: %d, frameCount: %d, m_frameTime: %.2f, m_loop:%d ", m_animID,  m_frame, frameCount, m_frameTime, m_loop);
 }
 
 /*
@@ -549,6 +555,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 	}
 #endif
 		}
+		m_sprite[eAnimPart_Body]->visit();
 		m_sprite[eAnimPart_Body]->PaintAFrame(m_animID, m_frame, x, y, m_flipFlag, 0, 0, m_opacity, isGray);
 	}
 }

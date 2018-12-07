@@ -74,7 +74,7 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 		texIdx, texX, texY, texSizeX, texSizeY, flag, posX, posY, rectWidth, rectHeight, opacity);
 	//if (!mIsTexAllLoaded)
 	//	return;
-#if 1
+#if 0
 
 	//drawRegion只显示图片
 	//根据texIdx来获取显示文件名称
@@ -280,6 +280,72 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 		}
 	}
 #endif
+}
+
+
+void ASprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	log("ASprite::draw----custom");
+	/*
+	_customCommand.init(_globalZOrder, transform, flags);
+	_customCommand.func = CC_CALLBACK_0(ASprite::onDraw, this, transform, flags);
+	renderer->addCommand(&_customCommand);
+	*/
+}
+
+void ASprite::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	//getGLProgram()->use();
+	//getGLProgram()->setUniformsForBuiltins(transform);
+
+	GL::blendFunc(_blendFunc.src, _blendFunc.dst);
+
+	_texture = Director::getInstance()->getTextureCache()->addImage("gem_wood.png");
+	_texture->retain();
+
+	//GL::bindTexture2D(_texture->getName());
+	GL::bindTexture2D(_texture->getName());
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
+
+	V3F_C4B_T2F_Quad quad;
+	//reset to custome 
+	quad.bl.vertices = Vec3(0, 0, 0);
+	quad.br.vertices = Vec3(53, 0, 0);
+	quad.tl.vertices = Vec3(0, 53, 0);
+	quad.tr.vertices = Vec3(53, 53, 0);
+
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = Color4B(255, 255, 255, 255);
+
+	quad.bl.texCoords = Tex2F(0.0f, 1.0f);
+	quad.br.texCoords = Tex2F(1.0f, 1.0f);
+	quad.tl.texCoords = Tex2F(0.0f, 0.0f);
+	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
+
+
+#define kQuadSize sizeof(_quad.bl) 
+	size_t offset = (size_t)&_quad;
+
+	offset = (size_t)&quad;
+	// vertex
+	int diff = offsetof(V3F_C4B_T2F, vertices);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// texCoords
+	diff = offsetof(V3F_C4B_T2F, texCoords);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// color
+	diff = offsetof(V3F_C4B_T2F, colors);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+
+	CHECK_GL_ERROR_DEBUG();
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 }
 
 ASprite::ASprite()
@@ -1180,7 +1246,7 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 
 void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
 {
-#if 1
+#if 0
 	log("--------ASprite::PaintModule--name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
 	
 	DrawRegion(1,
