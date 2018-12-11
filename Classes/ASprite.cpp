@@ -40,7 +40,7 @@ void arraycopy( char * src, int srcPos, char * dest, int destPos, int length )
 #endif
 
 
-/*
+ /*
 void TextureDrawInRect::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
 	TextureDemo::draw(renderer, transform, flags);
@@ -72,6 +72,12 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 { 
 	log("---------ASprite::DrawRegion File: texIdx[%d], texX[%d], texY[%d], texSizeX[%d], texSizeY[%d], flag[%d], posX[%d], posY[%d], rectWidth[%d], rectHeight[%d], opacity[%d]", 
 		texIdx, texX, texY, texSizeX, texSizeY, flag, posX, posY, rectWidth, rectHeight, opacity);
+	m_pDrawNode->removeAllChildrenWithCleanup(true);
+	log("ASprite::draw----custom-->%d", _anims.size());
+	if (nullptr == _anims[texIdx])
+		log("ASprite::draw---- is null");
+	else
+		m_pDrawNode->addChild(_anims[texIdx]);
 	//if (!mIsTexAllLoaded)
 	//	return;
 #if 0
@@ -282,24 +288,16 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 #endif
 }
 
-
+/*
 void ASprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	m_pDrawNode->removeAllChildrenWithCleanup(true);
-	log("ASprite::draw----custom-->%d", _anims.size());
-	if (nullptr == _anims[4])
-		log("ASprite::draw---- is null");
-	else
-		m_pDrawNode->addChild(_anims[4]);
 	//_anims[4]->setPosition(100, 100);
 
-	/*
 	_customCommand.init(_globalZOrder, transform, flags);
 	_customCommand.func = CC_CALLBACK_0(ASprite::onDraw, this, transform, flags);
 	renderer->addCommand(&_customCommand);
-	*/
 }
-
+*/
 void ASprite::onDraw(const Mat4 &transform, uint32_t flags)
 {
 	//getGLProgram()->use();
@@ -1229,10 +1227,10 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 
 void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
 {
-#if 0
+#if 1
 	log("--------ASprite::PaintModule--name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
 	
-	DrawRegion(1,
+	DrawRegion(frame,
 		1,
 		1,
 		1,

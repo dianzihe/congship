@@ -176,7 +176,9 @@ public:
 
 	int animnumber;
 
+	/*
 	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	*/
 	void onDraw(const Mat4 &transform, uint32_t flags);
 	void DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray = false);
 
