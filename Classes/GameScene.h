@@ -144,6 +144,10 @@ public:
 
 	}
 	//virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags);
+	/*
+	virtual void draw(Renderer *renderer, const Mat4 &transform, uint32_t flags) override;
+	void onDraw(const Mat4 &transform, uint32_t flags);
+	*/
 	static GameScene* GetScene();
 	static ActorManager* GetActorManager();
 	static DQMap* GetMap();
@@ -166,6 +170,11 @@ public:
 	Sprite*			m_uiSprite;
 	GAME_STATE		m_eGameState;
 	CRunState*		m_pRunState;
+
+	/*
+	CustomCommand _customCommand;
+	BlendFunc   _blendFunc;
+	*/
    // static GameScene* sharedGameLayer() { return m_gamelayer; } //获取该游戏层单例对象
 
 private:

@@ -285,7 +285,14 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 
 void ASprite::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("ASprite::draw----custom");
+	m_pDrawNode->removeAllChildrenWithCleanup(true);
+	log("ASprite::draw----custom-->%d", _anims.size());
+	if (nullptr == _anims[4])
+		log("ASprite::draw---- is null");
+	else
+		m_pDrawNode->addChild(_anims[4]);
+	//_anims[4]->setPosition(100, 100);
+
 	/*
 	_customCommand.init(_globalZOrder, transform, flags);
 	_customCommand.func = CC_CALLBACK_0(ASprite::onDraw, this, transform, flags);
@@ -298,54 +305,15 @@ void ASprite::onDraw(const Mat4 &transform, uint32_t flags)
 	//getGLProgram()->use();
 	//getGLProgram()->setUniformsForBuiltins(transform);
 
-	GL::blendFunc(_blendFunc.src, _blendFunc.dst);
+	//GL::blendFunc(_blendFunc.src, _blendFunc.dst);
 
-	_texture = Director::getInstance()->getTextureCache()->addImage("gem_wood.png");
-	_texture->retain();
+	SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(m_textures[4]->fileName.c_str());
+	auto sprite = Sprite::create(m_textures[4]->fileName.c_str());
+	addChild(sprite);
 
-	//GL::bindTexture2D(_texture->getName());
-	GL::bindTexture2D(_texture->getName());
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
-
-	V3F_C4B_T2F_Quad quad;
-	//reset to custome 
-	quad.bl.vertices = Vec3(0, 0, 0);
-	quad.br.vertices = Vec3(53, 0, 0);
-	quad.tl.vertices = Vec3(0, 53, 0);
-	quad.tr.vertices = Vec3(53, 53, 0);
-
-	quad.bl.colors =
-		quad.br.colors =
-		quad.tl.colors =
-		quad.tr.colors = Color4B(255, 255, 255, 255);
-
-	quad.bl.texCoords = Tex2F(0.0f, 1.0f);
-	quad.br.texCoords = Tex2F(1.0f, 1.0f);
-	quad.tl.texCoords = Tex2F(0.0f, 0.0f);
-	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
-
-
-#define kQuadSize sizeof(_quad.bl) 
-	size_t offset = (size_t)&_quad;
-
-	offset = (size_t)&quad;
-	// vertex
-	int diff = offsetof(V3F_C4B_T2F, vertices);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
-
-	// texCoords
-	diff = offsetof(V3F_C4B_T2F, texCoords);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
-
-	// color
-	diff = offsetof(V3F_C4B_T2F, colors);
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
-
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
-
-	CHECK_GL_ERROR_DEBUG();
-	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
+	sprite->setPosition(100, 100);
+	
+	log("ASprite::draw----custom");
 }
 
 ASprite::ASprite()
@@ -371,6 +339,9 @@ ASprite::ASprite()
 
 	m_lastUpdateTime = 0.f;
 	m_totalUpdateTime = 0.f;
+
+	_anims.reserve(50);
+
 }
 
 void ASprite::clear_patch()
@@ -561,6 +532,10 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 #endif
 
 #if 1
+
+	m_pDrawNode = Node::create();
+	GameScene::GetScene()->addChild(m_pDrawNode);
+
 	/*
 	sprintf(fileNameBuffer, "%s.bsprite", resName);
 	if (!FileUtils::getInstance()->isFileExist(FileUtils::getInstance()->fullPathForFilename(fileNameBuffer).c_str())){
@@ -602,17 +577,25 @@ bool ASprite::Load(const char* resName, ACTORTYPE actorType, bool isMustLoad)
 					  anim_prefix     anim_name   file_no
 
 				*/
-				std::string tmpValue = ele->ToElement()->GetText();
-				size_t first_flash_index = tmpValue.find("/", 0);
-				string anim_prefix = tmpValue.substr(0, first_flash_index);
+				std::string fullFileName= ele->ToElement()->GetText();
+				/* to do : ugly*/
+				SpriteFrame *spriteFrame = SpriteFrameCache::getInstance()->getSpriteFrameByName(fullFileName);
+				auto sprite = Sprite::createWithSpriteFrame(spriteFrame);
+				sprite->retain();
+				_anims.push_back(sprite);
 
-				string filename = tmpValue.substr(first_flash_index + 1);
+				size_t first_flash_index = fullFileName.find("/", 0);
+				string anim_prefix = fullFileName.substr(0, first_flash_index);
+
+				string filename = fullFileName.substr(first_flash_index + 1);
+				
+
 				size_t second_underline_index = filename.find("_", anim_prefix.length() + 1);
 				string anim_name = filename.substr(0, second_underline_index);
 				size_t point_index = filename.find(".", anim_prefix.length() + 1);
 				string file_no = filename.substr(second_underline_index + 1, point_index - (second_underline_index + 1));
 				
-				log("ASprite::Load no: %d, ORIG:%s ,name:%s, no:%s", zznum, tmpValue.c_str(), anim_name.c_str(), file_no.c_str());
+				log("ASprite::Load no: %d, ORIG:%s ,name:%s, no:%s", zznum, fullFileName.c_str(), anim_name.c_str(), file_no.c_str());
 				anims_dq_num++;
 				if (current_anim_name == "") {
 					current_anim_name = anim_name;

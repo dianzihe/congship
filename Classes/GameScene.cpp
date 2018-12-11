@@ -154,14 +154,77 @@ DQMap* GameScene::GetMap()
 {
 	return GameScene::GetScene()->m_map;
 }
-
-
 /*
 void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags){
 	UIBatchRenderer::instance()->flush();
 	if (m_pRunState)
 		m_pRunState->OnDraw();
 
+}
+*/
+/*
+void GameScene::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	_blendFunc = BlendFunc::ALPHA_PREMULTIPLIED;
+	setGLProgramState(GLProgramState::getOrCreateWithGLProgramName(GLProgram::SHADER_NAME_POSITION_COLOR));
+	_customCommand.init(_globalZOrder, transform, flags);
+	_customCommand.func = CC_CALLBACK_0(GameScene::onDraw, this, transform, flags);
+	renderer->addCommand(&_customCommand);
+	
+}
+
+void GameScene::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	//getGLProgram()->use();
+	//getGLProgram()->setUniformsForBuiltins(transform);
+
+	//GL::blendFunc(_blendFunc.src, _blendFunc.dst);
+
+	Texture2D *_texture = Director::getInstance()->getTextureCache()->addImage("gem_wood.png");
+	//_texture->retain();
+
+	//GL::bindTexture2D(_texture->getName());
+	GL::bindTexture2D(_texture->getName());
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POS_COLOR_TEX);
+
+	V3F_C4B_T2F_Quad quad;
+	//reset to custome 
+	quad.bl.vertices = Vec3(0, 0, 0);
+	quad.br.vertices = Vec3(53, 0, 0);
+	quad.tl.vertices = Vec3(0, 53, 0);
+	quad.tr.vertices = Vec3(53, 53, 0);
+
+	quad.bl.colors =
+		quad.br.colors =
+		quad.tl.colors =
+		quad.tr.colors = Color4B(255, 255, 255, 255);
+
+	quad.bl.texCoords = Tex2F(0.0f, 1.0f);
+	quad.br.texCoords = Tex2F(1.0f, 1.0f);
+	quad.tl.texCoords = Tex2F(0.0f, 0.0f);
+	quad.tr.texCoords = Tex2F(1.0f, 0.0f);
+
+
+#define kQuadSize sizeof(quad.bl) 
+	size_t offset = (size_t)&quad;
+	offset = (size_t)&quad;
+	// vertex
+	int diff = offsetof(V3F_C4B_T2F, vertices);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// texCoords
+	diff = offsetof(V3F_C4B_T2F, texCoords);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, kQuadSize, (void*)(offset + diff));
+
+	// color
+	diff = offsetof(V3F_C4B_T2F, colors);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, (void*)(offset + diff));
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, quadIndices);
+
+	CHECK_GL_ERROR_DEBUG();
+	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
 }
 */
 /*
