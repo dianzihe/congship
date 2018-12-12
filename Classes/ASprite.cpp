@@ -40,46 +40,114 @@ void arraycopy( char * src, int srcPos, char * dest, int destPos, int length )
 #endif
 
 
- /*
-void TextureDrawInRect::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
-{
-	TextureDemo::draw(renderer, transform, flags);
-
-	_renderCmd.init(_globalZOrder, transform, flags);
-	_renderCmd.func = CC_CALLBACK_0(TextureDrawInRect::onDraw, this, transform, flags);
-	renderer->addCommand(&_renderCmd);
-}
-
-void TextureDrawInRect::onDraw(const Mat4 &transform, uint32_t flags)
-{
-	Director* director = Director::getInstance();
-	CCASSERT(nullptr != director, "Director is null when setting matrix stack");
-	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
-
-	auto s = Director::getInstance()->getWinSize();
-
-	auto rect1 = Rect(s.width / 2 - 80, 20, _tex1->getContentSize().width * 0.5f, _tex1->getContentSize().height * 2);
-	auto rect2 = Rect(s.width / 2 + 80, s.height / 2, _tex1->getContentSize().width * 2, _tex1->getContentSize().height * 0.5f);
-
-	_tex1->drawInRect(rect1);
-	_Tex2F->drawInRect(rect2);
-
-	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
-}
+/*
+	1，需要显示的图片位置
+	2，当前显示的位置
+	3，是否需要反转
+	4，flag
+	5，透明度
+	6，灰度
 */
+void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
+{
+#if 1
+	//log("--------ASprite::PaintModule--name=%s f=%d size=%d posx=%d posy=%d", 
+	//	m_textures[frame]->fileName.c_str(), frame, _anims.size(), posX, posY);
+
+	m_pDrawNode->removeAllChildrenWithCleanup(true);
+	if (nullptr == _anims[frame]) {
+		log("ASprite::draw---- is null");
+	}
+	else {
+		m_pDrawNode->addChild(_anims[frame]);
+		_anims[frame]->setPosition(posX, posY);
+	}
+
+	/*
+	int texSizeX = _modules_w[module] & 0xFFFF;
+	int texSizeY = _modules_h[module] & 0xFFFF;
+	if (texSizeX <= 0 || texSizeY <= 0) return;
+
+	const int texX = _modules_x[module];
+	const int texY = _modules_y[module];
+
+	if (_modules_flag[module] != MOUDLE_MARK) {
+		if(m_textures.empty()) {
+			int rectWidth(texSizeX), rectHeight(texSizeY);
+			DrawRegion( 0, texX, texY, texSizeX, texSizeY, flags, posX, posY, rectWidth, rectHeight, opacity, isGray );
+		} else {
+			int perHeight = m_textureSquareSize;
+			int texIdx = texY / perHeight;
+			int realTexY = texY % perHeight;
+			int realTexSizeY = realTexY + texSizeY;
+			int rectWidth;
+			int rectHeight;
+			int rectX;
+			int rectY;
+			if( realTexSizeY > perHeight) {
+				rectX = posX;
+				rectY = posY + realTexSizeY - perHeight;
+				rectWidth = texSizeX;
+				rectHeight = perHeight - realTexY;
+				DrawRegion( texIdx,
+					texX,
+					realTexY,
+					texSizeX,
+					perHeight - realTexY,
+					flags,
+					rectX,
+					rectY,
+					rectWidth,
+					rectHeight,
+					opacity,isGray );
+
+				rectX = posX;
+				rectY = posY;
+				rectWidth = texSizeX;
+				rectHeight = realTexSizeY - perHeight;
+				DrawRegion( texIdx + 1,
+					texX,
+					0,
+					texSizeX,
+					realTexSizeY - perHeight,
+					flags,
+					rectX,
+					rectY,
+					rectWidth,
+					rectHeight,
+					opacity, isGray );
+			} else {
+				int rectWidth(texSizeX), rectHeight(texSizeY);
+				DrawRegion( texIdx,
+					texX,
+					realTexY,
+					texSizeX,
+					texSizeY,
+					flags,
+					posX,
+					posY,
+					rectWidth,
+					rectHeight,
+					opacity, isGray );
+			}
+		}
+	}
+	*/
+#endif
+}
+int ASprite::getAnimStartAddr(int animID) {
+
+	return _anims_frame_start_index[animID];
+}
+
 void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texSizeY, int flag, int posX, int posY, int rectWidth, int rectHeight, int opacity, bool isGray)
 { 
 	log("---------ASprite::DrawRegion File: texIdx[%d], texX[%d], texY[%d], texSizeX[%d], texSizeY[%d], flag[%d], posX[%d], posY[%d], rectWidth[%d], rectHeight[%d], opacity[%d]", 
 		texIdx, texX, texY, texSizeX, texSizeY, flag, posX, posY, rectWidth, rectHeight, opacity);
-	m_pDrawNode->removeAllChildrenWithCleanup(true);
-	log("ASprite::draw----custom-->%d", _anims.size());
-	if (nullptr == _anims[texIdx])
-		log("ASprite::draw---- is null");
-	else
-		m_pDrawNode->addChild(_anims[texIdx]);
 	//if (!mIsTexAllLoaded)
 	//	return;
+
+	//todo: use opengl api draw 
 #if 0
 
 	//drawRegion只显示图片
@@ -135,9 +203,9 @@ void ASprite::DrawRegion( int texIdx, int texX, int texY, int texSizeX, int texS
 
 	CHECK_GL_ERROR_DEBUG();
 	CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 4);
-	
-#else
+#endif
 
+#if 0
 	Sprite _RenderSprite;
 	
 	Rect rect;
@@ -916,7 +984,7 @@ void ASprite::tick(float deltaTime)
 
 int ASprite::GetAFrameTime(int anim, int aframe)
 {
-	log("ASprite::GetAFrameTime anim:%d , aframe:%d ", anim, aframe);
+	//log("ASprite::GetAFrameTime anim:%d , aframe:%d ", anim, aframe);
 	if(anim < 0 || anim >= animnumber)
 		return 0;
 	return _real_anims_naf[(_anims_frame_start_index[anim] + aframe) * 5 + 1] & 0xFFFF;
@@ -925,7 +993,7 @@ int ASprite::GetAFrameTime(int anim, int aframe)
 
 int ASprite::GetAFrames(int anim)
 {
-	log("ASprite::GetAFrames anim:%d --> %d", anim, _real_anims_naf[anim]);
+	//log("ASprite::GetAFrames anim:%d --> %d", anim, _real_anims_naf[anim]);
 //	if(anim < 0 || anim >= animnumber)
 //		return 0;
 	return _real_anims_naf[anim] & 0xFF;
@@ -1225,96 +1293,6 @@ void ASprite::PaintFModule( int frame, int fmodule, int posX, int posY, int flag
 
 
 
-void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
-{
-#if 1
-	log("--------ASprite::PaintModule--name=%s f=%d module=%d posx=%d posy=%d",this->mSpriteName.c_str(), frame, module, posX, posY);
-	
-	DrawRegion(frame,
-		1,
-		1,
-		1,
-		1,
-		flags,
-		1,
-		1,
-		1,
-		1,
-		opacity, isGray);
-	
-	/*
-	int texSizeX = _modules_w[module] & 0xFFFF;
-	int texSizeY = _modules_h[module] & 0xFFFF;
-	if (texSizeX <= 0 || texSizeY <= 0) return;
-
-	const int texX = _modules_x[module];
-	const int texY = _modules_y[module];
-
-	if (_modules_flag[module] != MOUDLE_MARK) {
-		if(m_textures.empty()) {
-			int rectWidth(texSizeX), rectHeight(texSizeY);
-			DrawRegion( 0, texX, texY, texSizeX, texSizeY, flags, posX, posY, rectWidth, rectHeight, opacity, isGray );
-		} else {
-			int perHeight = m_textureSquareSize;
-			int texIdx = texY / perHeight;
-			int realTexY = texY % perHeight;
-			int realTexSizeY = realTexY + texSizeY;
-			int rectWidth;
-			int rectHeight;
-			int rectX;
-			int rectY;
-			if( realTexSizeY > perHeight) {
-				rectX = posX;
-				rectY = posY + realTexSizeY - perHeight;
-				rectWidth = texSizeX;
-				rectHeight = perHeight - realTexY;
-				DrawRegion( texIdx,
-					texX,
-					realTexY,
-					texSizeX,
-					perHeight - realTexY,
-					flags,
-					rectX,
-					rectY,
-					rectWidth,
-					rectHeight,
-					opacity,isGray );
-
-				rectX = posX;
-				rectY = posY;
-				rectWidth = texSizeX;
-				rectHeight = realTexSizeY - perHeight;
-				DrawRegion( texIdx + 1,
-					texX, 
-					0, 
-					texSizeX, 
-					realTexSizeY - perHeight,
-					flags,
-					rectX,
-					rectY,
-					rectWidth, 
-					rectHeight,
-					opacity, isGray );
-			} else {
-				int rectWidth(texSizeX), rectHeight(texSizeY);
-				DrawRegion( texIdx,
-					texX,
-					realTexY,
-					texSizeX,
-					texSizeY,
-					flags,
-					posX, 
-					posY, 
-					rectWidth,
-					rectHeight,
-					opacity, isGray );
-			}
-		}
-	}
-	*/
-#endif
-}
-
 void ASprite::SetClip( const Rect& rect )
 {
     
@@ -1429,3 +1407,32 @@ void ASprite::ReleaseTextureToDelayLoad()
 		pTexture->isLoaded = false;
 	}
 }
+
+/*
+void TextureDrawInRect::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
+{
+	TextureDemo::draw(renderer, transform, flags);
+
+	_renderCmd.init(_globalZOrder, transform, flags);
+	_renderCmd.func = CC_CALLBACK_0(TextureDrawInRect::onDraw, this, transform, flags);
+	renderer->addCommand(&_renderCmd);
+}
+
+void TextureDrawInRect::onDraw(const Mat4 &transform, uint32_t flags)
+{
+	Director* director = Director::getInstance();
+	CCASSERT(nullptr != director, "Director is null when setting matrix stack");
+	director->pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+	director->loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW, transform);
+
+	auto s = Director::getInstance()->getWinSize();
+
+	auto rect1 = Rect(s.width / 2 - 80, 20, _tex1->getContentSize().width * 0.5f, _tex1->getContentSize().height * 2);
+	auto rect2 = Rect(s.width / 2 + 80, s.height / 2, _tex1->getContentSize().width * 2, _tex1->getContentSize().height * 0.5f);
+
+	_tex1->drawInRect(rect1);
+	_Tex2F->drawInRect(rect2);
+
+	director->popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
+}
+*/

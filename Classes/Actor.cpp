@@ -62,7 +62,7 @@ Actor* Actor::node(void)
 
 void Actor::update(float dt)
 {
-	log("Actor::update");
+	//log("Actor::update");
 	/*
 	CCObject* child;
 	CCARRAY_FOREACH(m_pChildren, child)
@@ -168,7 +168,7 @@ void Actor::update(float dt)
 
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("---draw----actor::draw---->ID: %d, position [%d, %d]", getActorID(), getPosition().x, getPosition().y);
+	//log("---draw----actor::draw---->ID: %d, position [%d, %d]", getActorID(), getPosition().x, getPosition().y);
 	//Node::visit();
 	
 	m_animation.visit();
@@ -387,7 +387,7 @@ int Actor::GetAnimID(int state, int dir)
 
 void Actor::SetNewPos(  Point& pos )
 {
-	log("Actor::SetNewPos--->[%f, %f]", pos.x, pos.y);
+	log("Actor::SetNewPos--->[%.2f, %.2f]", pos.x, pos.y);
 	setPosition(pos);
 
 	//getParent()->reorderChild(this, GetZOrder());

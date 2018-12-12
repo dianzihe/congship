@@ -113,7 +113,7 @@ bool Charactor::init( void )
 
 void Charactor::update(float dt)
 {
-	log("---->charactor update");
+	//log("---->charactor update");
 	m_pGameCMDSystem->UpdateCMDSystem();
 	Actor::update(dt);
 	
@@ -129,7 +129,7 @@ void Charactor::update(float dt)
 
 void Charactor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("---->Charactor::draw->ID: %d, position [%d, %d]", getActorID(), getPosition().x, getPosition().y);
+	//log("---->Charactor::draw->ID: %d, position [%d, %d]", getActorID(), getPosition().x, getPosition().y);
 	Actor::draw(renderer, transform, flags);
 
 	/*

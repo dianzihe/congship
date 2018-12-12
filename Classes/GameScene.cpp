@@ -39,7 +39,7 @@ bool GameScene::init()
 
 	// create UI elements
 	AspriteManager::instance().initilize();
-	PlayerLayerCfg::instance().init("playerlayer");
+	//PlayerLayerCfg::instance().init("playerlayer");
 
 	m_actorManager = new ActorManager();
 	log("GameScene---m_actorManager---->%x", m_actorManager);
@@ -56,7 +56,7 @@ bool GameScene::init()
 
 #if 1
 	//monster≤‚ ‘
-	MonsterCfg::instance().init("monster");
+	//MonsterCfg::instance().init("monster");
 #endif
 
 	setGameLayer(new BossGameFrontLayer());

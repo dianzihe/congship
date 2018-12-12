@@ -162,7 +162,7 @@ void CMonster::onLookInfoMonster( LookInfoMonster* pLookInfoMonster )
 
 void CMonster::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	log("CMonster::draw-> position [%d, %d]", getPosition().x, getPosition().y);
+	//log("CMonster::draw-> position [%d, %d]", getPosition().x, getPosition().y);
 	Charactor::draw(renderer, transform, flags);
 }
 

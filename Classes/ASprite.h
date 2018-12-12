@@ -136,6 +136,7 @@ public:
 	void onLoadData(Ref* obj);
 	void onAsyncLoadedTexture(Texture2D* pTexture);
 	void ReleaseTextureToDelayLoad();
+	int getAnimStartAddr(int animID);
 	
 	std::vector<int>* m_frameSplitTimes;
 

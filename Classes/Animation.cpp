@@ -276,10 +276,10 @@ void DQAnimation::update(float dt)
 	
 	m_frame++;
 
+	/*if key frame ; need callback*/
 	if (m_frame >= frameCount)
 		m_frame = 0;
 
-	
 #if 0
 	if (m_frameTime < frameTime) {
 		// next frame
@@ -406,7 +406,6 @@ void DQAnimation::updateSprite(float d)
 	}
 	*/
 }
-
 void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 {
 	if (m_pHostEventHandler)
@@ -436,20 +435,19 @@ void DQAnimation::MarkBeingCall(Point pos, const char* desc)
 }
 void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	draw(0, 0, false);
+	draw(100, 100, false);
 }
 void DQAnimation::draw(int x, int y, bool isGray)
 {
-	log("----draw---DQAnimation::draw mIsMutiAsprite:%d, m_animID:%d, mIsMutiAsprite:%d", mIsMutiAsprite, m_animID, mIsMutiAsprite);
+	log("----draw---DQAnimation::draw  POS:-->[%2f, %2f], m_animID:%d, mIsMutiAsprite:%d",
+		getPosition().x, getPosition().y, m_animID, mIsMutiAsprite);
 	if (m_sprite[eAnimPart_Body] == NULL) return;
 	
 	//if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
-	
 	//if (m_animID < 0 || (m_animID + 1) > m_sprite[eAnimPart_Body]->GetAnimNumber())
 	//	return;
 	//log("------------------------2=====%d,eAnimPart_Count:%d", m_sprite[eAnimPart_Body]->GetAnimNumber(), eAnimPart_Count);
-	log("----draw---DQAnimation");
-
+	 
 	m_markInfo = m_sprite[eAnimPart_Body]->CheckMarkExs(m_animID, m_frame);
 	if (mIsMutiAsprite) {
 		int mountHeight = 0;
@@ -555,10 +553,32 @@ void DQAnimation::draw(int x, int y, bool isGray)
 	}
 #endif
 		}
-		m_sprite[eAnimPart_Body]->visit();
-		m_sprite[eAnimPart_Body]->PaintAFrame(m_animID, m_frame, x, y, m_flipFlag, 0, 0, m_opacity, isGray);
+		//(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
+		m_sprite[eAnimPart_Body]->PaintModule(
+			m_sprite[eAnimPart_Body]->getAnimStartAddr(m_animID) + m_frame,
+			1, x, y, m_flipFlag, m_opacity, isGray);
 	}
 }
+
+float DQAnimation::GetBaseFrameTime(int animId)
+{
+	//log("DQAnimation::GetBaseFrameTime");
+	if (m_sprite[eAnimPart_Body] && m_sprite[eAnimPart_Body]->mSpriteName.at(0) == 'd') // ACTORTYPE_WEAPONSFX
+	{
+		return 0.07f;
+	}
+	if (m_HostCamp >= 0 && m_HostCamp < 4) {
+		if (animId >= ANIM_PLAYER_ATTACK1_DOWN && animId < ANIM_PLAYER_DEAD_DOWN) {
+			return 0.07f;
+		}
+	}
+	if (m_pHostEventHandler &&
+		(m_pHostEventHandler->getActorType() == ACTORTYPE_NPC ||
+			m_pHostEventHandler->getActorType() == ACTORTYPE_MONSTER))
+		return 0.15f;
+	return 0.1f;
+}
+
 void DQAnimation::ChangeToReplaceASprite(Actor* host, ASprite* origin, ASprite* pReplace, ACTORTYPE type, GrayPart gpart)
 {
 	if (origin == NULL || pReplace == NULL || pReplace == origin)
@@ -795,26 +815,6 @@ bool DQAnimation::GetAnimRect(Rect& retRect, int animId, AnimPart nAnimPart /*= 
 	return true;
 }
 
-float DQAnimation::GetBaseFrameTime(int animId)
-{
-	log("DQAnimation::GetBaseFrameTime");
-	if (m_sprite[eAnimPart_Body] && m_sprite[eAnimPart_Body]->mSpriteName.at(0) == 'd') // ACTORTYPE_WEAPONSFX
-	{
-		return 0.07f;
-	}
-	if (m_HostCamp >= 0 && m_HostCamp < 4)
-	{
-		if (animId >= ANIM_PLAYER_ATTACK1_DOWN && animId < ANIM_PLAYER_DEAD_DOWN)
-		{
-			return 0.07f;
-		}
-	}
-	if (m_pHostEventHandler &&
-		(m_pHostEventHandler->getActorType() == ACTORTYPE_NPC ||
-		m_pHostEventHandler->getActorType() == ACTORTYPE_MONSTER))
-		return 0.15f;
-	return 0.1f;
-}
 
 //DQAnimation::AnimMatcher Animation::_AnimMatcher;
 

@@ -158,7 +158,6 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 				log("MoveToNextPos-->4");
 				ResetNextPos();
 			} else {
-				
 				int newDir = 0;
 				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
 				log("MoveToNextPos-->5--->%d", newDir);
