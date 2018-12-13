@@ -118,18 +118,20 @@ bool _isTextUTF8(const char* str, size_t length)
 void SET_DIR_BY_TWOPOINT(const Point &p1, const Point &p2, int& dir)
 {
 	Point p3 = p2 - p1;
-	//log("SET_DIR_BY_TWOPOINT-->[%.2f, %.2f]-->%.2f--%.2f", p3.x, p3.y, fabs(p3.x), fabs(p3.y));
+	log("SET_DIR_BY_TWOPOINT-->[%.2f, %.2f]-[%.2f, %.2f]->[%.2f, %.2f]", p1.x, p1.y, 
+		p2.x, p2.y,
+		fabs(p3.x), fabs(p3.y));
 	if (!(fabs(p3.x) < FLT_EPSILON && fabs(p3.y) < FLT_EPSILON))
 	{
 		double r = ccpAngleSigned(Vec2(10, 0), p3);
-		//log("SET_DIR_BY_TWOPOINT-->r:%.2f", r);
+		log("SET_DIR_BY_TWOPOINT-->r:%.2f", r);
 		if (r < 0) 
 			r += (FLOAT_PI * 2);
 		r = r + FLOAT_PI / 8 - 0.01f;
 		int quadrant = (int)(r / (FLOAT_PI / 4));
-		//log("SET_DIR_BY_TWOPOINT-->r:%d", quadrant);
+		log("SET_DIR_BY_TWOPOINT-->r:%d", quadrant);
 		dir = quadrantToDir[quadrant];
-		//log("SET_DIR_BY_TWOPOINT-->dir:%d", dir);
+		log("SET_DIR_BY_TWOPOINT-->dir:%d", dir);
 	}
 }
 

@@ -150,8 +150,9 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 				}
 				*/
 			} else {
-				log("MoveToNextPos-->3--->[%.2f, %.2f]", x, y);
+				log("MoveToNextPos-->3--->[%.2f, %.2f]--[%.2f, %.2f]", GetNextPos().x, GetNextPos().y, x, y);
 				m_pHost->SetNewPos(Point(x,y));
+				log("MoveToNextPos-->3--->[%.2f, %.2f]", GetNextPos().x, GetNextPos().y);
 			}
 
 			if(IsNear(GetNextPos(), realSpeed)) {
@@ -159,6 +160,7 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 				ResetNextPos();
 			} else {
 				int newDir = 0;
+				log("MoveToNextPos-->5--->[%.2f, %.2f]", GetNextPos().x, GetNextPos().y);
 				SET_DIR_BY_TWOPOINT(m_pHost->getPosition(), GetNextPos(), newDir);
 				log("MoveToNextPos-->5--->%d", newDir);
 				//m_pHost->GetStateMachine()->setState(eCharactorState_Run, newDir);
