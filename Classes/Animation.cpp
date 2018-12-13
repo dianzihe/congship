@@ -439,8 +439,9 @@ void DQAnimation::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags
 }
 void DQAnimation::draw(int x, int y, bool isGray)
 {
-	log("----draw---DQAnimation::draw  POS:-->[%2f, %2f], m_animID:%d, mIsMutiAsprite:%d",
-		getPosition().x, getPosition().y, m_animID, mIsMutiAsprite);
+	log("----draw---DQAnimation::draw  POS:-->[%.2f, %.2f], m_animID:%d, mIsMutiAsprite:%d",
+		getPosition().x, getPosition().y, 
+		m_animID, mIsMutiAsprite);
 	if (m_sprite[eAnimPart_Body] == NULL) return;
 	
 	//if (m_sprite[eAnimPart_Body]->IsDataLoaded() == false) return;
@@ -556,7 +557,7 @@ void DQAnimation::draw(int x, int y, bool isGray)
 		//(int frame, int module, int posX, int posY, int flags, int opacity, bool isGray)
 		m_sprite[eAnimPart_Body]->PaintModule(
 			m_sprite[eAnimPart_Body]->getAnimStartAddr(m_animID) + m_frame,
-			1, x, y, m_flipFlag, m_opacity, isGray);
+			1, getPosition().x, getPosition().y, m_flipFlag, m_opacity, isGray);
 	}
 }
 

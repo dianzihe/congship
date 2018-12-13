@@ -166,7 +166,6 @@ void Charactor::onStateEnter( int stateToEnter, int stateParam /*= 0 */ )
 	case eCharactorState_Death:
 	{
 		GetMotionManager()->StopMotion();
-		//Target::instance().HideTargetInfo();
 	}
 	break;
 	case eCharactorState_DeleteSelf:

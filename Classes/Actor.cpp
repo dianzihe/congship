@@ -168,9 +168,9 @@ void Actor::update(float dt)
 
 void Actor::draw(Renderer *renderer, const Mat4 &transform, uint32_t flags)
 {
-	//log("---draw----actor::draw---->ID: %d, position [%d, %d]", getActorID(), getPosition().x, getPosition().y);
+	//log("---draw----actor::draw---->ID: %d, position [%.2f, %.2f]", getActorID(), getPosition().x, getPosition().y);
 	//Node::visit();
-	
+	m_animation.setPosition(getPosition());
 	m_animation.visit();
 	/*
 	DQMap* curMap = GameScene::GetScene()->GetCurMap();
@@ -357,6 +357,7 @@ void Actor::addAnimationSprite(int id, ACTORTYPE type, int sex, int equiplevel, 
 {
 	m_animation.SetHostEventHandler(this);
 	m_animation.LoadASprite(id, type, sex, equiplevel, isMustLoad);
+	m_animation.setPosition(getPosition());
 	//m_animation.addAnimation(id, type, sex, equiplevel, isMustLoad);
 }
 

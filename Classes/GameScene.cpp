@@ -82,11 +82,11 @@ bool GameScene::init()
 	LookInfoMonster *monsterInfo = new LookInfoMonster();
 	monsterInfo->monster_data_id = 13;
 	monsterInfo->id = 17750;
-	monsterInfo->move_target_x = 100;
-	monsterInfo->move_target_y = 100;
-	monsterInfo->move_speed = 2;
+	monsterInfo->move_target_x = 88;
+	monsterInfo->move_target_y = 94;
+	monsterInfo->move_speed = 10;
 	monsterInfo->x = 50;
-	monsterInfo->y = 100;
+	monsterInfo->y = 50;
 	monsterInfo->lifePercent = 80;
 	monsterInfo->faction = 0;
 	monsterInfo->charState = 0;

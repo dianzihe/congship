@@ -85,7 +85,7 @@ bool RoutingModule::IsNear( const Point& pos, float speed )
 
 void RoutingModule::MoveToNextPos(float realSpeed)
 {	
-	log("RoutingModule::MoveToNextPos-->[.%2f, .%2f]->[.%2f, %.2f]", 
+	log("RoutingModule::MoveToNextPos-->[%.2f, %.2f]->[%.2f, %.2f]", 
 		m_pHost->getPosition().x, m_pHost->getPosition().y,
 		GetNextPos().x, GetNextPos().y);
 	if(GetNextPos().x >= 0.) {
@@ -95,7 +95,7 @@ void RoutingModule::MoveToNextPos(float realSpeed)
 		float l = sqrtf(xoff * xoff + yoff * yoff);
 		if(l < 0.0001f ) {
 			log("MoveToNextPos-->1");
-			//m_pHost->SetNewPos(GetNextPos());
+			m_pHost->SetNewPos(GetNextPos());
 			if( m_path.size() ) {
 				SetNextPos(Point( m_path.front().x, m_path.front().y));
 				m_path.pop_front();

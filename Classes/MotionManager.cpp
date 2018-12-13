@@ -43,6 +43,7 @@ DQMotionManager::~DQMotionManager()
 
 void DQMotionManager::Update(float dt)
 {
+	log("DQMotionManager::Update----------");
 	if(mNewMotion != mCurMotion){
 		if(mMotionModule[mCurMotion])
 			mMotionModule[mCurMotion]->ExitMotion();

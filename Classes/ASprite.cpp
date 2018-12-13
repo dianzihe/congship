@@ -57,8 +57,7 @@ void ASprite::PaintModule(int frame, int module, int posX, int posY, int flags, 
 	m_pDrawNode->removeAllChildrenWithCleanup(true);
 	if (nullptr == _anims[frame]) {
 		log("ASprite::draw---- is null");
-	}
-	else {
+	} else {
 		m_pDrawNode->addChild(_anims[frame]);
 		_anims[frame]->setPosition(posX, posY);
 	}
