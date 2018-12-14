@@ -2,14 +2,15 @@
 
 static int quadrantToDir[9] =
 {
+	6, //eDirection_Down,		// 6
+	7, //eDirection_RightDown,  // 7
+
 	0, //eDirection_Right,		// 0
 	1, //eDirection_RightUp,	// 1
 	2, //eDirection_Up,			// 2
 	3, //eDirection_LeftUp,		// 3
 	4, //eDirection_Left,		// 4
 	5, //eDirection_LeftDown,	// 5
-	6, //eDirection_Down,		// 6
-	7, //eDirection_RightDown,  // 7
 	8  //eDirection_Right,		// 8
 };
 
@@ -135,3 +136,34 @@ void SET_DIR_BY_TWOPOINT(const Point &p1, const Point &p2, int& dir)
 	}
 }
 
+int DQ_SET_DIR_BY_TWOPOINT(const Point &pos1, const Point &pos2) {
+	double angle = atan(((pos2.y - pos1.y)) / - (pos2.x - pos1.x));
+	double angle22d5 = FLOAT_PI / 8;
+	double angle67d5 = FLOAT_PI / 2 - angle22d5;
+
+	if (angle > -angle22d5 && angle <= angle22d5) {
+		if (pos1.x < pos2.x) {
+			return   2;
+		} else {
+			return   6;
+		}
+	} else if (angle > angle22d5 && angle <= angle67d5) {
+		if (pos1.x < pos2.x) {
+			return   1;
+		} else {
+			return   5;
+		}
+	} else if (angle > -angle67d5 && angle <= -angle22d5) {
+		if (pos1.x < pos2.x) {
+			return   3;
+		} else {
+			return   7;
+		}
+	} else {
+		if (pos1.y < pos2.y) {
+			return   4;
+		} else {
+			return   0;
+		}
+	}
+}

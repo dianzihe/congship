@@ -3,19 +3,19 @@
 
 enum eDirection
 {
-	eDirection_NULL = 0x0000,
-	eDirection_Left = 0x0001,
-	eDirection_Right = 0x0002,
-	eDirection_XMask = eDirection_Left | eDirection_Right,
-	eDirection_Up = 0x0004,
-	eDirection_Down = 0x0008,
-	eDirection_YMask = eDirection_Up | eDirection_Down,
+	eDirection_Down = 0,
+	eDirection_RightDown = 1,
 
-	eDirection_LeftUp = eDirection_Left | eDirection_Up,
-	eDirection_RightUp = eDirection_Right | eDirection_Up,
-	eDirection_LeftDown = eDirection_Left | eDirection_Down,
-	eDirection_RightDown = eDirection_Right | eDirection_Down,
+	eDirection_Right = 2,
+	eDirection_RightUp = 3,
 
+	eDirection_Up = 4,
+	eDirection_LeftUp = 5,
+
+	eDirection_Left = 6,
+	eDirection_LeftDown = 7,
+
+	eDirection_NULL = 8,
 };
 /*
 enum AinmDirection

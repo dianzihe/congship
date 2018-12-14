@@ -31,6 +31,15 @@ bool GameScene::init()
 	if (!Scene::init())
 		return false;
 	
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(2, 1)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(2, 2)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(1, 2)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(0, 2)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(0, 1)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(0, 0)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(1, 0)));
+	log("-->%d", DQ_SET_DIR_BY_TWOPOINT(Point(1, 1), Point(2, 0)));
+	
 	//¼ÓÔØplistÎÄ¼þ
 	SpriteFrameCache::getInstance()->addSpriteFramesWithFile("shoot.plist");
 	auto s = Director::getInstance()->getWinSize();

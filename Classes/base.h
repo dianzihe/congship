@@ -107,6 +107,7 @@ void ReadObjectBuff(char*& buf, ObjectBuff& value);
 #define GET_SPEED_SUB(v1, v2, speed) (speed * fabsf(v1) / sqrtf(v1*v1 + v2*v2))
 
 void SET_DIR_BY_TWOPOINT(const Point &p1, const Point &p2, int& dir);
+int DQ_SET_DIR_BY_TWOPOINT(const Point &pos1, const Point &pos2);
 /*
 #define GET_SPEED_SUB(v1, v2, speed) (speed * fabsf(v1) / sqrtf(v1*v1 + v2*v2))
 
